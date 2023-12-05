@@ -30,8 +30,21 @@ starts a simulation locally or on remote
 
 `-c` completions
 
-`-d` destination folder defaults to .citros/runs
+`-o` destination folder defaults to .citros/runs
 
+`-d` dockerized - we will run dockerzed version of the simulation (can run parallel simulations on the same machine)
+
+`-p` parallelism ? do we need it or can we know how many cpu available and devide it by the requested number of cpus per cpu 8 (available cpu) / 2 (requested cpu) = 4 (number of parallel runs)
+
+`-r` remote run
+
+`-s` simulation name
+
+`-t` time limit
+
+`-v` verbose
+
+`-w` workflow
 
 --- 
 `citros batch list`
