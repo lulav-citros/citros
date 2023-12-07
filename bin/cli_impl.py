@@ -17,8 +17,33 @@ from data_access import data_access as _data_access
 
 ############################# CLI implementation ##############################
 def init(args, argv):
-    # TODO[critical]: implement init
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    from citros import Citros
+
+    """
+    :param args.dir
+    :param args.debug:
+    :param args.verbose:
+    :param args.project_name:
+    """
+    with Citros(
+        user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug, on_init=True
+    ) as citros:
+        if citros.check_project(True):
+            citros.print(
+                f"The directory {Path(args.dir).resolve()} has already been initialized.",
+                color="yellow",
+            )
+            return
+
+        citros.update_git_exclude(citros.USER_PROJ_DIR, ".citros*")
+
+        citros.update_git_exclude(citros.CITROS_REPO_DIR, "runs/")
+
+        # citros.save_user_commit_hash()
+
+        success = citros.internal_sync(True)
+
+        citros.print(f"Intialized Citros repository.", color="green")
 
 
 def doctor(args, argv):
@@ -90,42 +115,3 @@ def report_generate(args, argv):
 def report_validate(args, argv):
     # TODO[critical]: implement report_validate
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
-
-
-from citros import Citros
-
-
-def init_citros(args, argv):
-    """
-    :param args.dir
-    :param args.debug:
-    :param args.verbose:
-    :param args.project_name:
-    """
-    with Citros(
-        user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug, on_init=True
-    ) as citros:
-        if citros.check_project(True):
-            citros.print(
-                f"The directory {Path(args.dir).resolve()} has already been initialized.",
-                color="yellow",
-            )
-            return
-
-        citros.update_git_exclude(citros.USER_PROJ_DIR, ".citros*")
-
-        citros.update_git_exclude(citros.CITROS_REPO_DIR, "runs/")
-
-        citros.save_user_commit_hash()
-
-        citros.copy_user_templates()
-
-        success = citros.internal_sync(True)
-
-        if success:
-            citros.try_commit("first commit")
-        else:
-            # sanity - should never happen.
-            citros.print(f"internal_sync on init failed.", color="red")
-
-        citros.print(f"Intialized Citros repository.", color="green")

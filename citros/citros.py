@@ -606,11 +606,11 @@ class Citros:
                 destination = file_destination_pair[1]
                 shutil.copy2(md_file_path, f"{destination}/README.md")
 
-    def save_user_commit_hash(self):
-        user_commit, _ = self.get_git_info(self.root_dir)
+    # def save_user_commit_hash(self):
+    #     user_commit, _ = self.get_git_info(self.root_dir)
 
-        with open(Path(self.citros_dir, "user_commit"), "w") as file:
-            file.write(user_commit)
+    #     with open(Path(self.citros_dir, "user_commit"), "w") as file:
+    #         file.write(user_commit)
 
     def internal_sync(self, on_init=False):
         # no synching or validation is done on the cluster - there is no user code.

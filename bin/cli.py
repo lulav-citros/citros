@@ -1,4 +1,5 @@
 import argparse
+import importlib_resources
 from bin.cli_impl import *
 from rich_argparse import RichHelpFormatter
 from rich import print, inspect, print_json
@@ -32,7 +33,11 @@ def parser_init(main_sub):
     parser = main_sub.add_parser(
         "init",
         description=Panel(
-            Markdown(open("bin/doc/init.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("init.md"), "r"
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
         ),
         epilog=EPILOG,
@@ -53,7 +58,11 @@ def parser_doctor(main_sub):
     parser = main_sub.add_parser(
         "doctor",
         description=Panel(
-            Markdown(open("bin/doc/doctor.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("doctor.md"), "r"
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -74,7 +83,13 @@ def parser_doctor(main_sub):
 def parser_run(main_sub):
     parser = main_sub.add_parser(
         "run",
-        description=Panel(Markdown(open("bin/doc/run.md", "r").read())),
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("run.md"), "r"
+                ).read()
+            ),
+        ),
         epilog=EPILOG,
         help="run section",
         formatter_class=RichHelpFormatter,
@@ -93,7 +108,11 @@ def parser_batch(main_sub):
     parser = main_sub.add_parser(
         "batch",
         description=Panel(
-            Markdown(open("bin/doc/batch.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("batch.md"), "r"
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
         ),
         epilog=EPILOG,
@@ -105,7 +124,12 @@ def parser_batch(main_sub):
     data_access_parser = data_subparser.add_parser(
         "list",
         description=Panel(
-            Markdown(open("bin/doc/batch/list.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("batch/list.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
         ),
         epilog=EPILOG,
@@ -123,7 +147,12 @@ def parser_batch(main_sub):
     data_create_subparser = data_subparser.add_parser(
         "get",
         description=Panel(
-            Markdown(open("bin/doc/batch/get.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("batch/get.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
         ),
         epilog=EPILOG,
@@ -141,7 +170,12 @@ def parser_batch(main_sub):
     data_status_subparser = data_subparser.add_parser(
         "delete",
         description=Panel(
-            Markdown(open("bin/doc/batch/delete.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("batch/delete.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
         ),
         epilog=EPILOG,
@@ -161,7 +195,12 @@ def parser_data(main_sub):
     parser = main_sub.add_parser(
         "data",
         description=Panel(
-            Markdown(open("bin/doc/data.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("data.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -174,7 +213,12 @@ def parser_data(main_sub):
     data_access_parser = data_subparser.add_parser(
         "access",
         description=Panel(
-            Markdown(open("bin/doc/data/access.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("data/access.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -203,7 +247,12 @@ def parser_data(main_sub):
     data_create_subparser = data_subparser.add_parser(
         "create",
         description=Panel(
-            Markdown(open("bin/doc/data/create.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("data/create.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -222,7 +271,12 @@ def parser_data(main_sub):
     data_status_subparser = data_subparser.add_parser(
         "status",
         description=Panel(
-            Markdown(open("bin/doc/data/status.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("data/status.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -241,7 +295,12 @@ def parser_data(main_sub):
     data_clean_subparser = data_subparser.add_parser(
         "clean",
         description=Panel(
-            Markdown(open("bin/doc/data/clean.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("data/clean.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -262,7 +321,12 @@ def parser_report(main_sub):
     parser = main_sub.add_parser(
         "report",
         description=Panel(
-            Markdown(open("bin/doc/report.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath("report.md"),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -275,7 +339,14 @@ def parser_report(main_sub):
     generate_parser = subparser.add_parser(
         "generate",
         description=Panel(
-            Markdown(open("bin/doc/report/generate.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath(
+                        "report/generate.md"
+                    ),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
@@ -297,7 +368,14 @@ def parser_report(main_sub):
     validate_parser = subparser.add_parser(
         "validate",
         description=Panel(
-            Markdown(open("bin/doc/report/validate.md", "r").read()),
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath(
+                        "report/validate.md"
+                    ),
+                    "r",
+                ).read()
+            ),
             subtitle=f"[{citros_version}]",
             title="description",
         ),
