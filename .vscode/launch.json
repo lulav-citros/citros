@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: citros login",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["login"],
+        },
+        {
+            "name": "Python: citros logout",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["logout"],
+        },
+        {
+            "name": "Python: citros authenticate",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["authenticate", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY2l0cm9zX2FkbWluIiwidXNlcl9pZCI6IjE5NzhjODU4LTRjYmEtNDYyNS04NjdlLTUwMjM2ZmRjNmQ5MSIsInVzZXJfbmFtZSI6InNoYWxldiIsImNpdHJvc19yb2xlIjoidXNlciIsIm9yZ2FuaXphdGlvbl9pZCI6ImU5MTVkNjM5LTYzNzItNDVlNC04NTVkLWE4YzliN2Q2YWIwMiIsIm9yZ2FuaXphdGlvbl90eXBlIjoiTUFOQUdFIiwiZG9tYWluX3ByZWZpeCI6Imx1bGF2IiwiZXhwIjoxNjgzNzA1OTUzLCJpYXQiOjE2ODM2MTk1NTMsImF1ZCI6InBvc3RncmFwaGlsZSIsImlzcyI6InBvc3RncmFwaGlsZSJ9.hKgx2YlDMhH23pGCZGh3YqaaX3wTikjBBypIr_dM8tg"],
+        }
+    ]
+}

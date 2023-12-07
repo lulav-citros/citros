@@ -1,0 +1,5 @@
+numeric_dynamics:
+  ros__parameters:
+    dt: 0.01
+    init_angle: 30.0
+    init_speed: 50.0
