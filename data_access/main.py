@@ -3,10 +3,8 @@ from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi_utils.timing import add_timing_middleware, record_timing
 import logging
 from citros.batch import Batch, NoBatchFoundException
-from .config import ROOT_DIR
+from .config import config
 import uvicorn
-
-
 
 app = FastAPI()
 
@@ -14,7 +12,7 @@ app = FastAPI()
 @app.get('/{simulation}/{batch_name}')
 async def get_batch(simulation, batch_name):    
     try:
-        batch = Batch(ROOT_DIR, simulation, batch_name)
+        batch = Batch(config.ROOT_DIR, simulation, batch_name)
         return batch.data    
     except NoBatchFoundException:
         raise HTTPException(status_code=404, detail="Item not found")            

@@ -14,7 +14,8 @@ from bin import __version__ as citros_version
 install()
 
 # PANNEL = ""
-PANNEL = Panel.fit(f'''[green]████████████████████████████████████████████████████████████
+PANNEL = Panel.fit(
+f'''[green]████████████████████████████████████████████████████████████
 ██      ███        ██        ██       ████      ████      ██
 █  ████  █████  ████████  █████  ████  ██  ████  ██  ███████
 █  ███████████  ████████  █████       ███  ████  ███      ██
@@ -23,7 +24,7 @@ PANNEL = Panel.fit(f'''[green]████████████████�
 ████████████████████████████████████████████████████████████''',  
     subtitle=f"[{citros_version}]"
 )
-EPILOG = Markdown('Read more at [citros](https://citros.io)')
+EPILOG =  Markdown('Read more at [citros](https://citros.io)')
 
 def parser_init(main_sub):
     parser = main_sub.add_parser(
@@ -41,7 +42,7 @@ def parser_init(main_sub):
 def parser_doctor(main_sub):
     parser = main_sub.add_parser(
         "doctor", 
-        description=Panel(Markdown(open('bin/doc/doctor.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/doctor.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="doctor section",
         formatter_class=RichHelpFormatter,
@@ -110,7 +111,7 @@ def parser_batch(main_sub):
 def parser_data(main_sub):
     parser = main_sub.add_parser(
         "data", 
-        description=Panel(Markdown(open('bin/doc/data.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/data.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="data section",
         formatter_class=RichHelpFormatter,
@@ -119,13 +120,13 @@ def parser_data(main_sub):
     
     data_access_parser = data_subparser.add_parser(
         'access',
-        description=Panel(Markdown(open('bin/doc/data/access.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/data/access.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros data access section",
         formatter_class=RichHelpFormatter
     )
     data_access_parser.add_argument("-dir", default=".", help="The working dir of the project")
-    data_access_parser.add_argument("-H", "--host", default="localhost", help="host")
+    data_access_parser.add_argument("-H", "--host", default="0.0.0.0", help="host")
     data_access_parser.add_argument("-p", "--port", default="8000", help="post to listen to")
     data_access_parser.add_argument("-t", "--time", action='store_true', help="print request times")
     data_access_parser.add_argument("-d", "--debug", action='store_true', help="set logging level to debug")
@@ -134,7 +135,7 @@ def parser_data(main_sub):
     
     data_create_subparser = data_subparser.add_parser(
         'create',
-        description=Panel(Markdown(open('bin/doc/data/create.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/data/create.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros data create section",
         formatter_class=RichHelpFormatter
@@ -145,7 +146,7 @@ def parser_data(main_sub):
     
     data_status_subparser = data_subparser.add_parser(
         'status',
-        description=Panel(Markdown(open('bin/doc/data/status.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/data/status.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros data status section",
         formatter_class=RichHelpFormatter
@@ -156,7 +157,7 @@ def parser_data(main_sub):
     
     data_clean_subparser = data_subparser.add_parser(
         'clean',
-        description=Panel(Markdown(open('bin/doc/data/clean.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/data/clean.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros data clean section",
         formatter_class=RichHelpFormatter
@@ -168,7 +169,7 @@ def parser_data(main_sub):
 def parser_report(main_sub):
     parser = main_sub.add_parser(
         "report", 
-        description=Panel(Markdown(open('bin/doc/report.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/report.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="report section",
         formatter_class=RichHelpFormatter,
@@ -177,7 +178,7 @@ def parser_report(main_sub):
     
     generate_parser = subparser.add_parser(
         'generate',
-        description=Panel(Markdown(open('bin/doc/report/generate.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/report/generate.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros report generate section",
         formatter_class=RichHelpFormatter
@@ -189,7 +190,7 @@ def parser_report(main_sub):
     
     validate_parser = subparser.add_parser(
         'validate',
-        description=Panel(Markdown(open('bin/doc/report/validate.md', 'r').read()), subtitle=f"[{citros_version}]"),
+        description=Panel(Markdown(open('bin/doc/report/validate.md', 'r').read()), subtitle=f"[{citros_version}]", title="description"),
         epilog=EPILOG,
         help="citros report validate section",
         formatter_class=RichHelpFormatter

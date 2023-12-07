@@ -1,6 +1,7 @@
 
 import path
 import sys
+from pathlib import Path
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -77,7 +78,7 @@ def report_validate(args, argv):
 
 
 
-
+from citros import Citros
 
 
 
@@ -89,21 +90,9 @@ def init_citros(args, argv):
 	:param args.project_name:
 	"""   
 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug, on_init=True) as citros:
-		citros_path = citros.CITROS_REPO_DIR
-
-		if not is_git_repo(citros.USER_PROJ_DIR):
-			citros.print(f"The project directory `{citros.USER_PROJ_DIR}` is not a valid git repo.{linesep}" + \
-						 f"If you are running inside a devcontainer, make sure the directory " + \
-						 f"is not a git submodule.", color='red')
-			return
-
+		
 		if citros.check_project(True):
 			citros.print(f"The directory {Path(args.dir).resolve()} has already been initialized.", color='yellow')
-
-			# check .git was not corrupted or deleted
-			if not is_git_repo(citros_path):
-				citros.print(f"The Citros directory {citros_path} is not a valid git repository.", color='red')
-				return
 
 			citros_remote = citros.get_citros_remote()
 			if citros_remote:
@@ -196,9 +185,7 @@ def init_citros(args, argv):
 
 				citros.copy_user_templates()
 
-				# write the repo id to file
-				with open(citros.REPO_ID_FILE, 'w') as file:
-					file.write(citros.repo_id)
+				
      
 				success = citros.internal_sync(True)
 
@@ -217,325 +204,3 @@ def init_citros(args, argv):
 				  				 f"See log file under {citros.CLI_LOGS_DIR} for details.", color='red')
 
 		citros.print(f"Intialized Citros repository.", color='green')
-
-
-# def setup_ssh(args, argv):
-# 	with Citros(verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.utils.is_connected():
-# 			citros.print(f"No internet connection. Check your connection and try again.", color='red')
-# 			return
-
-# 		if not citros.isAuthenticated():
-# 			citros.print(f"Cannot setup ssh while not logged in. Login and try again.", color='red')
-# 			return
-
-# 	title = input("Please provide a descriptive title for the new ssh key (e.g. 'Personal laptop'): ")
-	
-# 	if not citros.utils.is_valid_file_name(title):
-# 		citros.print(f"Invalid title. Please try again.", color='red')
-# 		return
-	
-# 	citros.setup_ssh(title)
-
-
-# def status(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros: 
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot check status. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		if not citros.verify_citros_branch():
-# 			citros.print(f"Check out the correct branch and try again.", color='red')
-# 			return
-
-# 		citros.internal_sync()
-
-# 		citros.print_git_output(git.Repo(citros.CITROS_REPO_DIR).git.status())
-
-
-# def add_remote(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros: 
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot add remote. {args.dir} has not been initialized.", color='red')
-# 			return
-
-# 		citros_remote = citros.upsert_repo_to_citros()
-# 		if citros_remote:
-# 			citros.add_remote(citros.CITROS_REPO_DIR, 'origin', citros_remote)
-# 			citros.print(f"Successfully added remote [{citros_remote}].", color='magenta')
-
-# 			# since this couldn't be done during an offline init, we do it now
-# 			citros.set_default_citros_branch()
-# 		else:
-# 			citros.print(f"Failed to get citros remote url.", color='red')
-
-
-# def commit(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros: 
-#         if not citros.is_initialized:
-#             citros.print(f"Cannot commit. {args.dir} has not been initialized.", color='red')
-#             return
-		
-#         if not citros.verify_citros_branch():
-#             citros.print(f"Check out the correct branch and try again.", color='red')
-#             return
-
-#         citros.try_commit(args.message)
-        
-
-# def push(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-#         if not citros.is_initialized:
-#             citros.print(f"Cannot push. {args.dir} has not been initialized.", color='red')
-#             return
-		
-#         if not citros.utils.is_connected():
-#             citros.print(f"No internet connection. Check your connection and try again.", color='red')
-#             return
-
-#         if not citros.verify_citros_branch():
-#             citros.print(f"Check out the correct branch and try again.", color='red')
-#             return
-
-#         citros.git_push()
-
-
-# def pull(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-#         if not citros.is_initialized:
-#             citros.print(f"Cannot pull. {args.dir} has not been initialized.", color='red')
-#             return
-		
-#         if not citros.utils.is_connected():
-#             citros.print(f"No internet connection. Check your connection and try again.", color='red')
-#             return
-		
-#         if not citros.verify_citros_branch():
-#             citros.print(f"Check out the correct branch and try again.", color='red')
-#             return
-
-#         citros.git_pull()
-
-
-# def diff(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot diff. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		if not citros.verify_citros_branch():
-# 			citros.print(f"Check out the correct branch and try again.", color='red')
-# 			return
-
-# 		citros.git_diff()
-
-
-# def checkout(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot checkout. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		if args.branch:
-# 			citros.checkout_branch(args.branch)
-# 		else:
-# 			citros.print("Please provide a branch name to checkout:", color='red')
-# 			citros.print("citros checkout -b <branch name>", color='cyan')
-
-
-# def merge(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot merge. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		local_branches = citros.get_local_branch_names(include_current=False)
-
-# 		if not local_branches:
-# 			citros.print(f"Cannot merge: no other branches exist in your repository.", color='red')
-# 			return
-		
-# 		branch_names_q = generate_question("list", "local_branches", 
-#             "Please choose the branch you wish to merge into the current branch:", local_branches )
-
-# 		answers = prompt([branch_names_q])  # use default style
-# 		branch_name = answers.get("local_branches")
-
-# 		citros.merge_branch(branch_name)
-
-
-# def discard(args, argv):
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot discard. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		citros.discard_changes(args.files, args.ALL)
-		
-
-# def login(args, argv): 
-#     with Citros(verbose=args.verbose, debug=args.debug) as citros:       
-#         username, password = args.username, args.password
-
-#         if args.local:
-#             citros.is_local_init = True
-
-#         if not citros.isAuthenticated() and (args.username is None or args.password is None):
-#             username = input("email: ")
-#             password = getpass()     
-#         resp = citros.login(username, password)
-#         if resp:
-#             citros.print("User logged in.", color='green')
-#         else:
-#             citros.print("Failed to log in. Please try again.", color='red')
-
-    
-# def logout(args, argv):
-#     with Citros(verbose=args.verbose, debug=args.debug) as citros: 
-#         citros.logout() 
-#         citros.print("User logged out.")
-
-
-# def list_project(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-#         if not citros.is_initialized:
-#             citros.print(f"Cannot list. {args.dir} has not been initialized.", color='red')
-#             return
-
-#         simulations = citros.get_simulations()
-#         i = 1
-#         for s in simulations:
-#             citros.print(f"{str(i)}. {s}")
-#             i = i + 1
-
-
-# def run(args, argv):
-# 	"""
-# 	:param args.dir
-# 	:param args.simulation_name:
-# 	:param args.batch_id:
-# 	:param args.run_id:
-# 	:param args.remote:
-# 	:param args.completions:
-# 	:param args.debug:
-# 	:param args.batch_name:
-# 	:param args.batch_message:
-# 	:param args.verbose:
-#     :param args.key:
-#     :param args.lan_traffic:
-#     :param args.branch
-#     :param args.commit
-# 	"""   
-# 	sim_name, batch_id, run_id = args.simulation_name, args.batch_id, args.run_id
-# 	remote, completions = args.remote, args.completions
-	
-# 	with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-# 		if not citros.is_initialized:
-# 			citros.print(f"Cannot run. {args.dir} has not been initialized.", color='red')
-# 			return
-		
-# 		if args.key:
-# 			citros.set_auth_key(args.key, args.dir)
-		
-# 		if not citros.verify_citros_branch(batch_id):
-# 			citros.print(f"Check out the correct branch and try again.", color='red')
-# 			return
-                
-# 		if not citros.check_ros_build(citros.USER_PROJ_DIR):
-# 			citros.print(f"Cannot run. `install` directory was not found.", color='red')
-# 			citros.print(f"Run `colcon build` first.", color='cyan')
-# 			return
-
-# 		loggedin = citros.isAuthenticated()
-
-# 		if remote and not loggedin:
-# 			citros.print(f"Cannot run remotely - please log in first.", color='red')
-# 			return
-
-# 		success = citros.internal_sync(False)
-
-# 		if not success:
-# 			citros.print(f"internal_sync before run failed. Cannot run.{linesep}" + \
-# 						 f"Fix the errors in your project configuration files and try again.", color='red')
-# 			return
-
-# 		success = citros.set_batch_name_and_message(args.batch_name, args.batch_message)
-
-# 		if not success:
-# 			citros.print(f"Please try again with all required command parameters.", color='yellow')
-# 			return
-		
-# 		citros.SUPPRESS_ROS_LAN_TRAFFIC = not args.lan_traffic
-
-# 		if batch_id:
-# 			if not citros.CITROS_ENVIRONMENT == 'CLUSTER':
-# 				raise ValueError("cannot run batch on non CLUSTER environment.")
-# 			citros.run_simulation_by_k8s(batch_id, run_id)
-# 		elif sim_name:
-# 			citros.run_simulation(sim_name, completions, remote, args.commit, args.branch)
-# 		else:
-# 			# simulation is chosen by the user 
-# 			run_interactively(citros, completions, remote, args.commit, args.branch)
-
-
-# def run_interactively(citros : Citros, completions, remote, commit_hash, branch_name):
-#     sim_names = citros.get_simulations()
-    
-#     # sanity check - should never happen because internal_sync will fail if there 
-#     #                isn't at least one simulation file.
-#     if not sim_names:
-#         citros.print(f"There are currently no simulations in your {citros.SIMS_DIR} folder. \
-#                 	 Please create at least one simulation for your project.", color='red')
-#         return
-    
-#     sim_names_q = generate_question("list", "sim_names", 
-#                                     "Please choose the simulation you wish to run:", sim_names )
-#     #completions_q = generate_question("input", "completions", "Please enter number of completions:",
-#     #                                  NumberValidator, lambda val: int(val))
-#     answers = prompt([sim_names_q])  # use default style
-#     sim_name = answers.get("sim_names")
-
-#     citros.run_simulation(sim_name, completions, remote, commit_hash, branch_name)
-
-
-# def docker_build(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-#         if not citros.is_initialized:
-#             citros.print(f"{args.dir} has not been initialized.",color='red')
-#             return
-		
-#         if not citros.verify_citros_branch():
-#             citros.print(f"Check out the correct branch and try again.", color='red')
-#             return
-        
-#         citros.build_docker_image([f"{args.image_name}:{args.tag}"])
-
-
-# def docker_build_push(args, argv):
-#     with Citros(user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug) as citros:
-#         if not citros.is_initialized:
-#             citros.print(f"{args.dir} has not been initialized.",color='red')
-#             return
-
-#         if not citros.utils.is_connected():
-#             citros.print(f"No internet connection. Check your connection and try again.", color='red')
-#             return
-
-#         if not citros.verify_citros_branch():
-#             citros.print(f"Check out the correct branch and try again.", color='red')
-#             return
-
-#         if not citros.isAuthenticated():
-#             citros.print(f"Please log in to Citros first.", color='red')
-#             return
-        
-#         if not citros.is_logged_in_to_docker():
-#             citros.print("Logging in to docker...")
-#             if not citros.docker_login():
-#                 return
-        
-#         success = citros.build_and_push_docker_image(args.image_name)
-
-#         if not success:
-#             citros.print(f"Failed to build or push.", color='red')
-

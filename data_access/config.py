@@ -1,8 +1,13 @@
 import os
-from dotenv import load_dotenv
+from decouple import config as _conf
 
-load_dotenv()
-
-# the directory where `citros run` records all data to
-ROOT_DIR=os.getenv("ROOT_DIR", os.path.join(os.getcwd(), 'tmp'))
-# print("ROOT_DIR", ROOT_DIR)
+class config:
+    CITROS_DIR:str = _conf("CITROS_DIR", None)
+    """
+    the directory where `.citros` is located.
+    """
+    
+    ROOT_DIR:str = _conf("ROOT_DIR", default=os.path.join(os.getcwd(), 'tmp'), cast=str)
+    """
+    the directory where `citros run` records all data to
+    """

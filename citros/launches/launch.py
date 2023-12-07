@@ -112,7 +112,7 @@ def generate_launch_description(citros : Citros):
     bag_folder = citros.BAG_DIR
     bag_cmd = ['ros2', 'bag', 'record', '-a', '-o', bag_folder]
     
-    mcap = citros.STORAGE_TYPE == 'MCAP'
+    mcap = citros.config.STORAGE_TYPE == 'MCAP'
     if mcap:
         bag_cmd.append('-s')
         bag_cmd.append('mcap')
