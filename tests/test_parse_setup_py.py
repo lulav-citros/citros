@@ -9,15 +9,17 @@ NUM_TEST_RUNS = 10
 
 faker = Faker()
 
+
 def generate_random_version():
     return f"{random.randint(1, 10)}.{random.randint(0, 9)}.{random.randint(0, 9)}"
+
 
 def valid_setup_py_content():
     package_name = f"my_package_{faker.pystr(min_chars=5, max_chars=20)}"
     maintainer = faker.name()
     maintainer_email = faker.ascii_free_email()
-    version=generate_random_version()
-    description=faker.sentence()
+    version = generate_random_version()
+    description = faker.sentence()
     content = f"""
 import os
 from glob import glob
@@ -59,9 +61,13 @@ def generate_setup_py():
         yield valid_setup_py_content()
 
 
-@pytest.mark.parametrize("valid_setup_py_content, maintainer, maintainer_email, version, description", generate_setup_py())
-def test_parse_setup_py(valid_setup_py_content, maintainer, maintainer_email, version, description):
-    
+@pytest.mark.parametrize(
+    "valid_setup_py_content, maintainer, maintainer_email, version, description",
+    generate_setup_py(),
+)
+def test_parse_setup_py(
+    valid_setup_py_content, maintainer, maintainer_email, version, description
+):
     with tempfile.TemporaryDirectory() as tmpdir:
         setup_path = os.path.join(tmpdir, "setup.py")
         with open(setup_path, "w") as f:
@@ -74,4 +80,3 @@ def test_parse_setup_py(valid_setup_py_content, maintainer, maintainer_email, ve
         assert result["maintainer"] == maintainer
         assert result["maintainer_email"] == maintainer_email
         assert result["description"] == description
-

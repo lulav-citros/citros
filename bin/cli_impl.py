@@ -112,25 +112,20 @@ def init_citros(args, argv):
             )
             return
 
-        if not citros.isAuthenticated():
-            citros.set_divergent_branches_reconcile_config(repo)
+        citros.update_git_exclude(citros.USER_PROJ_DIR, ".citros*")
 
-            citros.update_git_exclude(citros.USER_PROJ_DIR, ".citros*")
+        citros.update_git_exclude(citros.CITROS_REPO_DIR, "runs/")
 
-            citros.update_git_exclude(citros.CITROS_REPO_DIR, "runs/")
+        citros.save_user_commit_hash()
 
-            citros.checkout_user_branch_if_different(check_remote=False)
+        citros.copy_user_templates()
 
-            citros.save_user_commit_hash()
+        success = citros.internal_sync(True)
 
-            citros.copy_user_templates()
-
-            success = citros.internal_sync(True)
-
-            if success:
-                citros.try_commit("first commit")
-            else:
-                # sanity - should never happen.
-                citros.print(f"internal_sync on init failed.", color="red")
+        if success:
+            citros.try_commit("first commit")
+        else:
+            # sanity - should never happen.
+            citros.print(f"internal_sync on init failed.", color="red")
 
         citros.print(f"Intialized Citros repository.", color="green")

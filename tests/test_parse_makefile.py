@@ -14,13 +14,17 @@ faker = Faker()
 def generate_cmake_content(executables):
     content = "\n".join([f"add_executable({exe} src/{exe}.cpp)" for exe in executables])
     install_targets = " ".join(executables)
-    content += f"\n\ninstall(TARGETS {install_targets} DESTINATION lib/${{PROJECT_NAME}})\n"
+    content += (
+        f"\n\ninstall(TARGETS {install_targets} DESTINATION lib/${{PROJECT_NAME}})\n"
+    )
     return content
 
 
 def cmake_data():
     for _ in range(NUM_TEST_RUNS):
-        executables = [faker.pystr_format() for _ in range(faker.random_int(min=1, max=5))]
+        executables = [
+            faker.pystr_format() for _ in range(faker.random_int(min=1, max=5))
+        ]
         yield executables, generate_cmake_content(executables)
 
 
@@ -57,7 +61,10 @@ def test_parse_makefile_no_install():
         with Citros(debug=True) as citros:
             with pytest.raises(ValueError) as e:
                 citros.parser_ros2.parse_makefile(tmpdir)
-            assert str(e.value) == f"{cmake_path} is not formatted correctly: `add_executable` with no 'install' command."
+            assert (
+                str(e.value)
+                == f"{cmake_path} is not formatted correctly: `add_executable` with no 'install' command."
+            )
 
 
 def test_parse_makefile_no_targets():
@@ -73,7 +80,7 @@ def test_parse_makefile_no_targets():
         # installs some common cmake functionality for other cmake files.
         assert result["cmake"] == cmake_path
         assert result["nodes"] == []
-            
+
 
 def test_parse_makefile_multiline_install():
     executables = [faker.pystr_format() for _ in range(faker.random_int(min=1, max=5))]
@@ -87,7 +94,7 @@ def test_parse_makefile_multiline_install():
             f.write("DESTINATION lib/${PROJECT_NAME})")
 
         with Citros(debug=True) as citros:
-              result = citros.parser_ros2.parse_makefile(tmpdir)
+            result = citros.parser_ros2.parse_makefile(tmpdir)
 
         assert result["cmake"] == cmake_path
         nodes = result["nodes"]
@@ -105,12 +112,12 @@ def test_parse_makefile_multiline_install():
 
 def test_gleb_makefile():
     with Citros(debug=True) as citros:
-        result = citros.parser_ros2.parse_makefile('input/gleb')
+        result = citros.parser_ros2.parse_makefile("input/gleb")
 
-        assert result["cmake"] == 'input/gleb/CMakeLists.txt'
+        assert result["cmake"] == "input/gleb/CMakeLists.txt"
         nodes = result["nodes"]
         assert len(nodes) == 1
-        
+
         node = nodes[0]
         assert "name" in node
         assert node["name"] == "turtlebot3_fake_node"
@@ -124,9 +131,9 @@ def test_gleb_makefile():
 
 def test_micro_ros_agent_makefile():
     with Citros(debug=True) as citros:
-        result = citros.parser_ros2.parse_makefile('input/micro_ros_agent')
+        result = citros.parser_ros2.parse_makefile("input/micro_ros_agent")
 
-        assert result["cmake"] == 'input/micro_ros_agent/CMakeLists.txt'
+        assert result["cmake"] == "input/micro_ros_agent/CMakeLists.txt"
         nodes = result["nodes"]
         assert len(nodes) == 1
 
@@ -143,31 +150,30 @@ def test_micro_ros_agent_makefile():
 
 def test_px4_makefile():
     with Citros(debug=True) as citros:
-        result = citros.parser_ros2.parse_makefile('input/px4_msgs')
+        result = citros.parser_ros2.parse_makefile("input/px4_msgs")
 
-        assert result["cmake"] == 'input/px4_msgs/CMakeLists.txt'
+        assert result["cmake"] == "input/px4_msgs/CMakeLists.txt"
         nodes = result["nodes"]
         assert len(nodes) == 0
 
 
 def test_multiple_assignments_makefile():
     with Citros(debug=True) as citros:
-        result = citros.parser_ros2.parse_makefile('input/moveit2_planning')
+        result = citros.parser_ros2.parse_makefile("input/moveit2_planning")
 
-        assert result["cmake"] == 'input/moveit2_planning/CMakeLists.txt'
-        
+        assert result["cmake"] == "input/moveit2_planning/CMakeLists.txt"
+
         nodes = result["nodes"]
         assert len(nodes) == 14
 
 
 def test_multiple_installs_makefile():
     with Citros(debug=True) as citros:
-        result = citros.parser_ros2.parse_makefile('input/moveit2_setup')
+        result = citros.parser_ros2.parse_makefile("input/moveit2_setup")
 
-        assert result["cmake"] == 'input/moveit2_setup/CMakeLists.txt'
-        
+        assert result["cmake"] == "input/moveit2_setup/CMakeLists.txt"
+
         nodes = result["nodes"]
         assert len(nodes) == 1
 
         assert nodes[0]["name"] == "moveit_setup_simulation"
-
