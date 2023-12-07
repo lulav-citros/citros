@@ -1,3 +1,17 @@
+
+# Table of Contents
+
+- [Git Commit Guidelines](#git-commit-guidelines)
+  - [Commit Message Format](#commit-message-format)
+  - [Example](#example)
+  - [Allowed Types](#allowed-types)
+- [Versioning locally](#versioning-locally)
+- [Install locally](#install-locally)
+- [Structure](#structure)
+- [DevOps](#devops)
+- [Testing](#testing)
+
+
 # Git Commit Guidelines
 
 The official doc [git-commit-guidlines] or [commit-message-format]
@@ -60,3 +74,16 @@ $ python3 -m pip install -e .
 [commit-message-format]: https://python-semantic-release.readthedocs.io/en/latest/commit-parsing.html
 
 [git-commit-guidlines]: https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits
+
+
+
+# Structure
+- `bin`: contain all cli related code 
+- `citros`: contains all citros related code
+- `reports`: contains all reports related code
+- `data_access`: data access code. 
+- `data_analysis` data analysis code 
+
+# DevOps
+
+# Testing
