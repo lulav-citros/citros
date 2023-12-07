@@ -49,7 +49,7 @@ def main(args, argv):
          
     if args.time:
         logger = logging.getLogger('citros.data_access')
-        add_timing_middleware(app, record=logger.debug, prefix="app", exclude="untimed")
+        add_timing_middleware(app, record=logger.info, prefix="app", exclude="untimed")
     
     logging.getLogger("uvicorn.error").setLevel(level=loglevel)
     uvicorn.run(app, host=args.host, port=int(args.port), log_level=loglevel)

@@ -804,3 +804,5 @@ class Citros:
         self.print(msg, color='blue')
 
         self.run_batch(batch_id, completions, self._batch_message)
+        
+
