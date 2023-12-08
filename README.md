@@ -211,6 +211,10 @@ citros report generate notebook.ipynb simulation/batch_run_name
 # generate a report from report_name as specified unser .citros/reports/report_name.json
 citros report generate 
     [-n] report_name *IF NOT PROVIDED A PROMPT WILL FOLLOW
+
+
+citros report validate
+    [-p] path to report
 ``` 
 
 ## Observability
@@ -222,6 +226,9 @@ citros observability
     [-t] #topic
     [-v] #verbose
 ```
+
+
+
 
 
 

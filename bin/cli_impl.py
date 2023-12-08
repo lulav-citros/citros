@@ -1,5 +1,6 @@
 import path
 import sys
+from citros import Citros
 from pathlib import Path
 from rich import print, inspect, print_json
 from rich.rule import Rule
@@ -13,6 +14,23 @@ from rich_argparse import RichHelpFormatter
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
 from data_access import data_access as _data_access
+
+from InquirerPy import prompt
+from prompt_toolkit.validation import Validator, ValidationError
+
+
+class NumberValidator(Validator):
+    """
+    small helper class for validating user input during an interactive session.
+    """
+
+    def validate(self, document):
+        try:
+            int(document.text)
+        except ValueError:
+            raise ValidationError(
+                message="Please enter a number", cursor_position=len(document.text)
+            )
 
 
 ############################# CLI implementation ##############################
@@ -42,26 +60,101 @@ def init(args, argv):
 
 def run(args, argv):
     """
-    :param args.dir:
+    :param args.simulation_name:
+    :param args.run_id:
+    :param args.completions:
+
+    :param args.batch_name:
+    :param args.batch_message:
+
+    :param args.lan_traffic:
+
     :param args.debug:
     :param args.verbose:
     """
-    from citros import Citros
 
     citros = Citros(verbose=args.verbose, debug=args.debug)
 
     is_project_exists = citros.check_citros_exists()
+    if not is_project_exists:
+        print(
+            f"[red]The directory {Path(args.dir).resolve()} has not been initialized with CITROS."
+        )
+        print('  (use "citros init" to init the directory)')
+        return
 
-    success = citros.run()
-    if success:
-        if is_project_exists:
-            print(
-                f"[green]The directory {Path(args.dir).resolve()} has already been initialized."
-            )
-        else:
-            print(f"[green]Intialized Citros repository.")
+    success = citros.check_project()
+    if not success:
+        print(f"[red].citros is corappted :(")
+        print(f"Fix the errors in your project configuration files and try again.")
+
+    success = citros.check_batch_name_and_message(args.batch_name, args.batch_message)
+    if not success:
+        print(f"[yellow]Please try again with all required command parameters.")
+        return
+
+    if not args.lan_traffic:
+        citros.utils.suppress_ros_lan_traffic()
+
+    if args.simulation_name:
+        citros.run_simulation(args.simulation_name, args.completions)
     else:
-        print(f"[red]Could not initialize citros.")
+        # simulation is chosen by the user
+        run_interactively(citros, args.completions)
+
+
+def generate_question(type, name, message, choices=None, validator=None, filter=None):
+    if type not in [
+        "list",
+        "raw_list",
+        "expand",
+        "confirm",
+        "check_box",
+        "input",
+        "password",
+        "editor",
+    ]:
+        print("question type not supported.")
+        return {}
+
+    if type == "list":
+        if not choices:
+            print("Nothing to choose from.")
+            return {}
+        return {"type": type, "name": name, "message": message, "choices": choices}
+    elif type == "input":
+        return {
+            f"type": type,
+            f"name": name,
+            f"message": message,
+            f"validate": validator,
+            f"filter": filter,
+        }
+    else:
+        raise NotImplementedError()
+
+
+def run_interactively(citros: Citros, completions, commit_hash, branch_name):
+    sim_names = citros.get_simulations()
+
+    # sanity check - should never happen because internal_sync will fail if there
+    #                isn't at least one simulation file.
+    if not sim_names:
+        print(
+            f"[red]There are currently no simulations in your {citros.SIMS_DIR} folder. \
+                	 Please create at least one simulation for your project."
+        )
+        return
+
+    sim_names_q = generate_question(
+        "list", "sim_names", "Please choose the simulation you wish to run:", sim_names
+    )
+    # completions_q = generate_question("input", "completions", "Please enter number of completions:",
+    #                                  NumberValidator, lambda val: int(val))
+    answers = prompt([sim_names_q])  # use default style
+    sim_name = answers.get("sim_names")
+
+    citros.run_simulation(sim_name, completions, commit_hash, branch_name)
 
 
 def doctor(args, argv):

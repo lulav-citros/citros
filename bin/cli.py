@@ -13,7 +13,7 @@ from rich_argparse import RichHelpFormatter
 from rich.traceback import install
 from bin import __version__ as citros_version
 
-from .parsers import parser_simulation, parser_parameter, parser_data
+from .parsers import parser_simulation, parser_parameter, parser_data, parser_report
 
 
 install()
@@ -99,90 +99,35 @@ def parser_run(main_sub):
     )
     parser.add_argument("-dir", default=".", help="The working dir of the project")
     parser.add_argument(
+        "-n", "--batch_name", nargs="?", default=None, help="a name for the run"
+    )
+    parser.add_argument(
+        "-m", "--batch_message", nargs="?", default=None, help="a message for the run"
+    )
+    parser.add_argument(
+        "-l",
+        "--lan_traffic",
+        action="store_true",
+        help="receive LAN ROS traffic in your simulation.",
+    )
+    parser.add_argument(
+        "-s", "--simulation_name", nargs="?", default=None, help="Simulation name"
+    )
+    parser.add_argument("-i", "--run_id", nargs="?", default="", help="run id")
+    parser.add_argument(
+        "-c",
+        "--completions",
+        nargs="?",
+        default=1,
+        help="number of times to run the simulation",
+    )
+    parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.set_defaults(func=run)
-
-
-def parser_report(main_sub):
-    parser = main_sub.add_parser(
-        "report",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("report.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="report section",
-        formatter_class=RichHelpFormatter,
-    )
-    subparser = parser.add_subparsers(dest="type")
-
-    generate_parser = subparser.add_parser(
-        "generate",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath(
-                        "report/generate.md"
-                    ),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros report generate section",
-        formatter_class=RichHelpFormatter,
-    )
-    generate_parser.add_argument(
-        "-dir", default=".", help="The working dir of the project"
-    )
-    generate_parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    generate_parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    generate_parser.set_defaults(func=report_generate)
-
-    validate_parser = subparser.add_parser(
-        "validate",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath(
-                        "report/validate.md"
-                    ),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros report validate section",
-        formatter_class=RichHelpFormatter,
-    )
-    validate_parser.add_argument(
-        "-dir", default=".", help="The working dir of the project"
-    )
-    validate_parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    validate_parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    validate_parser.set_defaults(func=report_validate)
 
 
 def main():
@@ -204,8 +149,8 @@ def main():
     parser_run(subparsers)
     parser_simulation(subparsers)
     parser_parameter(subparsers)
-
     parser_data(subparsers)
+
     parser_report(subparsers)
 
     args, argv = parser.parse_known_args()

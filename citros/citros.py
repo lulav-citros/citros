@@ -1,5 +1,6 @@
 import os
 import sys
+import git
 import glob
 import json
 import time
@@ -160,43 +161,50 @@ class Citros:
 
         print(f"[{color}]{message}[/{color}]")
 
-    def set_batch_name_and_message(self, batch_name, batch_message):
-        with open(self._router()["citros"]["settings"]["path"], "r") as file:
+    def check_batch_name_and_message(self, batch_name, batch_message):
+        with open(self._router()["citros"]["settings.json"], "r") as file:
             settings = json.load(file)
 
-        if not batch_message and self.utils.str_to_bool(settings["force_message"]):
-            self.print("Please supply a batch message (-m <message>).", color="yellow")
-            self.print("You may turn off mandating of batch message in settings.json")
-            return False
-
         if not batch_name and self.utils.str_to_bool(settings["force_batch_name"]):
-            self.print("Please supply a batch name (-n <name>).", color="yellow")
-            self.print("You may turn off mandating of batch name in settings.json")
+            print("[red]Please supply a batch name (-n <name>).")
+            print('   (You may run "citros run -n <name> ")')
+            print("   or")
+            print(
+                '   (You may turn off mandating of batch name in ".citros/settings.json")'
+            )
             return False
 
-        self._batch_name = batch_name
-        self._batch_message = batch_message
+        if not batch_message and self.utils.str_to_bool(settings["force_message"]):
+            print("[yellow]Please supply a batch message (-m <message>).")
+            print('   (You may run "citros run -m <message>")')
+            print("or")
+            print(
+                '   (You may turn off mandating of batch message in ".citos/settings.json")'
+            )
+            return False
+
         return True
 
-    def check_batch_name(self):
+    def check_simualtion_run_name(self, name):
         batch_name_idx = 1
 
-        if not self._batch_name or not self.utils.is_valid_file_name(self._batch_name):
-            self._batch_name = self.utils.get_foramtted_datetime()
+        if not name or not self.utils.is_valid_file_name(name):
+            name = self.utils.get_foramtted_datetime()
 
         # avoid duplicate batch dir names
         elif Path(
             self._router()["citros"]["runs"]["path"],
             self._sim_name,
-            self._batch_name,
+            name,
         ).exists():
             while Path(
                 self._router()["citros"]["runs"]["path"],
                 self._sim_name,
-                f"{self._batch_name}_{str(batch_name_idx)}",
+                f"{name}_{str(batch_name_idx)}",
             ).exists():
                 batch_name_idx = batch_name_idx + 1
-            self._batch_name = f"{self._batch_name}_{str(batch_name_idx)}"
+            name = f"{name}_{str(batch_name_idx)}"
+        return name
 
     def set_logger(
         self, log_dir: Path, file_name="citros.log", batch_id=None, run_id=None
@@ -634,9 +642,25 @@ class Citros:
                 )  # add more as needed.
                 file.write(ignores)
 
-    def get_user_commit_hash(self):
-        user_commit, _ = self.get_git_info(self.root_dir)
-        return user_commit
+    def get_git_info(self, repo_path="."):
+        try:
+            repo = git.Repo(repo_path)
+        except:
+            return None, None
+
+        try:
+            latest_commit_hash = repo.head.commit.hexsha
+        except:
+            # empty repo (https://github.com/lulav/citros_cli/issues/51)
+            latest_commit_hash = None
+
+        current_branch_name = repo.active_branch.name
+
+        return latest_commit_hash, current_branch_name
+
+    def get_user_git_info(self):
+        commit, branch = self.get_git_info(self.root_dir)
+        return commit, branch
 
     def init(self, root_dir=None):
         self.root_dir = Path(root_dir) if root_dir is not None else self.root_dir
@@ -735,7 +759,7 @@ class Citros:
 
         return True
 
-    ############################## RUN ########################################
+    ############################## RUN Operations ############################
 
     def create_sim_run_dir(self, run_id):
         run_dir = Path(
@@ -838,6 +862,7 @@ class Citros:
         self.save_run_info()
         self.save_system_vars()
 
+    ############################## RUN ########################################
     def single_simulation_run(self, batch_id, run_id):
         # running inside ROS workspace context.
         from launch import LaunchService
@@ -908,27 +933,18 @@ class Citros:
 
         self.print(f" - Finished [{batch_id}] batch.", color="blue")
 
-    def run_simulation(self, sim_name, completions, remote, commit):
+    def run_simulation(self, sim_name, completions, commit=None, branch=None):
         completions = int(completions)
 
-        cpu = self.get_simulation_info(sim_name)["CPU"]
-        gpu = self.get_simulation_info(sim_name)["GPU"]
-        mem = self.get_simulation_info(sim_name)["MEM"]
-        timeout = self.get_simulation_info(sim_name)["timeout"]
+        sim = self.get_simulation_info(sim_name)
+        cpu = sim["CPU"]
+        gpu = sim["GPU"]
+        mem = sim["MEM"]
+        timeout = sim["timeout"]
+        storage_type = sim.get("storage_type", self.config.STORAGE_TYPE)
+        commit, branch = self.get_user_git_info()
 
-        storage_type = self.get_simulation_info(sim_name).get(
-            "storage_type", self.config.STORAGE_TYPE
-        )
-
-        user_commit, user_branch = self.get_git_info(self._router()["path"])
-        citros_commit, citros_branch = self.get_git_info(
-            self._router()["citros"]["path"]
-        )
-
-        latest_tag = ""
-
-        self._sim_name = sim_name
-        self.check_batch_name()
+        sim_name = self.check_simualtion_run_name(sim_name)
 
         self.systemStatsRecorder = SystemStatsRecorder(
             Path(self.SIM_RUN_DIR, "metrics.csv")
