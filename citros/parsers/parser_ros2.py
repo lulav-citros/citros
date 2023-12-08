@@ -21,8 +21,6 @@ class parser_ros2(parser_base):
         self.log = citros.log
         self.project = None
         self.print = citros.print
-        self.ignore_list = []
-        self.get_ignore_list = citros.get_ignore_list
 
     ################################ Any lang #################################
 
@@ -481,11 +479,6 @@ class parser_ros2(parser_base):
                 os.path.join(package_path, "**", "*.launch.py"), recursive=True
             )
 
-            # filter ignored files
-            package_launch_paths = [
-                plp for plp in package_launch_paths if plp not in self.ignore_list
-            ]
-
             packages.append(
                 {
                     "name": parsed_data["package_name"],
@@ -613,8 +606,6 @@ class parser_ros2(parser_base):
         return str(directory) in str(file)
 
     def get_project_package_paths(self, project_path: str):
-        self.log.debug(f"ignore list = {self.ignore_list}")
-
         pkg_xmls = glob.glob(
             os.path.join(project_path, "**", "src", "**", "package.xml"), recursive=True
         )
@@ -625,9 +616,6 @@ class parser_ros2(parser_base):
 
         # save paths relative to project path
         package_paths = [os.path.relpath(pp, project_path) for pp in package_paths]
-
-        # filter files from ignore list
-        package_paths = [pp for pp in package_paths if pp not in self.ignore_list]
 
         return package_paths
 
@@ -645,11 +633,6 @@ class parser_ros2(parser_base):
         project_launch_paths = project_launch_paths + glob.glob(
             os.path.join(project_path, "launch", "*.launch.py")
         )
-
-        # filter ignored files
-        project_launch_paths = [
-            plp for plp in project_launch_paths if plp not in self.ignore_list
-        ]
 
         return project_launch_paths
 
@@ -676,8 +659,6 @@ class parser_ros2(parser_base):
         """
         packages = []
         launches = []
-
-        self.ignore_list = self.get_ignore_list()
 
         if not self.project:
             self._setup_project(project_name, project_path)
@@ -729,16 +710,7 @@ class parser_ros2(parser_base):
             )
             return msg_paths
 
-    def generate_default_params_setup(
-        self, project_json, params_setup_json, override_existing=False
-    ):
-        if Path(params_setup_json).exists() and not override_existing:
-            self.print(
-                f"File {params_setup_json} already exists, avoiding override by default file.",
-                only_verbose=True,
-            )
-            return
-
+    def generate_default_params_setup(self, project_json, override_existing=False):
         with open(project_json, "r") as f:
             data = json.load(f)
 
@@ -767,9 +739,9 @@ class parser_ros2(parser_base):
                         parameter["name"]
                     ] = parameter["value"]
                 json_data["packages"][package["name"]] = node_dict
-
-        with open(params_setup_json, "w") as f:
-            json.dump(json_data, f, indent=4)
+        return json_data
+        # with open(params_setup_json, "w") as f:
+        #     json.dump(json_data, f, indent=4)
 
     ####################### verify user defined functions #######################
 

@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 import json
 import time
 import shutil
@@ -20,6 +21,7 @@ from .citros_utils import citros_utils
 from .citros_batch import citros_batch
 from .citros_params import citros_params
 from .citros_events import citros_events
+from rich import print, print_json, inspect
 
 
 class Citros:
@@ -29,7 +31,7 @@ class Citros:
     resource leaks and unexpected behavior.
     """
 
-    def __init__(self, root_dir=".", verbose=False, debug=False, on_init=False):
+    def __init__(self, root_dir=None, verbose=False, debug=False):
         """
         Initialize Citros instance.
 
@@ -44,180 +46,32 @@ class Citros:
         """
         self.config = config
 
-        # the main dir that contains .citros folder
+        # self.root_dir = ROOT_DIR -> search for .citros in `root_dir` ancestors -> root_dir
         self.root_dir: Path = (
             None if self.config.ROOT_DIR is None else Path(self.config.ROOT_DIR)
-        )  # USER_PROJ_DIR
-        # path to .citros folder
-        self.citros_dir: Path = (
-            None if self.root_dir is None else Path(self.root_dir, ".citros")
-        )  # CITROS_REPO_DIR
+        )
+        if self.root_dir is None:
+            citros_dir = self._find_citros_in_ancestors(root_dir)
+            # print("1", citros_dir)
+            if citros_dir == self.config.CITROS_HOME_DIR:
+                citros_dir = None
 
-        # if ROOT_DIR is provided we dont need to search for it.
-        if not self.root_dir:
-            if on_init:
-                # on initialization it is clear where .citros is going
-                self.root_dir = Path(root_dir).expanduser().resolve()
-                self.citros_dir = (
-                    None if self.root_dir is None else Path(self.root_dir, ".citros")
-                )
-
-                assert (
-                    self.root_dir and self.root_dir.name != ".citros"
-                ), "cannot create .citros inside .citros"
+            if citros_dir is not None:
+                self.root_dir = Path(citros_dir.parent)
             else:
-                # if not initializing then lets search for .citros in ancestors.
-                self.citros_dir = self.find_citros_in_ancestors(root_dir)
-                if self.citros_dir is not None:
-                    self.root_dir = self.citros_dir.parent
-                else:
-                    # for commands that don't need initialization, e.g. login,
-                    # it's ok that these paths remain uninitialized.
-                    self.citros_dir = Path("UNINITIALIZED")
-                    self.root_dir = Path("UNINITIALIZED")
+                self.root_dir = Path(Path.cwd())
 
-        self.root_dir_routs = {
-            "path": self.root_dir,
-            "citros": {
-                "path": self.citros_dir,
-                "project": Path(self.citros_dir, "project.json"),
-                "settings": Path(self.citros_dir, "settings.json"),
-                "simulations": {"path": Path(self.citros_dir, "simulations")},
-                "parameters": {
-                    "path": Path(self.citros_dir, "parameter_setups"),
-                    "functions": {
-                        "path": Path(self.citros_dir, "parameter_setups", "functions"),
-                    },
-                },
-                "notebooks": {"path": Path(self.citros_dir, "notebooks")},
-                "reports": {"path": Path(self.citros_dir, "reports")},
-                "runs": {
-                    "path": self.config.RECORDINGS_DIR
-                    if self.config.RECORDINGS_DIR is not None
-                    else Path(self.citros_dir, "runs")
-                },
-                "logs": {"path": Path(self.config.CITROS_HOME_DIR, "logs")},
-            },
-        }
+        if not self.root_dir:
+            self.log.error("problem!!!")
 
-        # default files to copy
-        self.md_files_and_destinations = [
-            (
-                "README_functions.md",
-                self.root_dir_routs["citros"]["parameters"]["functions"]["path"],
-            ),
-            ("README_notebooks.md", self.root_dir_routs["citros"]["notebooks"]["path"]),
-            (
-                "README_parameter_setups.md",
-                self.root_dir_routs["citros"]["parameters"]["path"],
-            ),
-            (
-                "README_simulations.md",
-                self.root_dir_routs["citros"]["simulations"]["path"],
-            ),
-            ("README_reports.md", self.root_dir_routs["citros"]["reports"]["path"]),
-        ]
-
-        # set via create_sim_run_dir, do not set directly
-        self.SIM_RUN_DIR = None
-        self.BAG_DIR = None
-        self.MSGS_DIR = None
-
-        # set via set_batch_name_and_message, do not set directly
-        self._batch_name = ""
-        self._batch_message = ""
-
-        self._sim_name = None
-
-        self.CITROS_ENVIRONMENT = config.CITROS_ENVIRONMENT
-
+        # logs
         self.log = None
-
         self.log_level = "debug" if debug else "info"
-
-        self.set_logger(self.root_dir_routs["citros"]["logs"]["path"])
+        self.set_logger(self._router()["citros"]["logs"]["path"])
 
         self._init_components()
 
-        self.systemStatsRecorder = SystemStatsRecorder(
-            Path(self.SIM_RUN_DIR, "metrics.csv"), self.config.STATS_INTERVAL
-        )
-
-    def _init_components(self):
-        self.events = citros_events(self)
-        self.parser_ros2 = parser_ros2(self)
-        self.params = citros_params(self)
-        self.utils = citros_utils(self)
-        self.batch = citros_batch(self)
-
-    def print(self, message, only_debug=False, only_verbose=False, color="default"):
-        if (only_debug and self.log_level != "debug") or (
-            only_verbose and not self.config.VERBOSE
-        ):
-            return
-
-        print(f"[{color}]{message}[/{color}]")
-
-    def set_batch_name_and_message(self, batch_name, batch_message):
-        with open(self.root_dir_routs["citros"]["settings"]["path"], "r") as file:
-            settings = json.load(file)
-
-        if not batch_message and self.utils.str_to_bool(settings["force_message"]):
-            self.print("Please supply a batch message (-m <message>).", color="yellow")
-            self.print("You may turn off mandating of batch message in settings.json")
-            return False
-
-        if not batch_name and self.utils.str_to_bool(settings["force_batch_name"]):
-            self.print("Please supply a batch name (-n <name>).", color="yellow")
-            self.print("You may turn off mandating of batch name in settings.json")
-            return False
-
-        self._batch_name = batch_name
-        self._batch_message = batch_message
-        return True
-
-    def check_batch_name(self):
-        batch_name_idx = 1
-
-        if not self._batch_name or not self.utils.is_valid_file_name(self._batch_name):
-            self._batch_name = self.utils.get_foramtted_datetime()
-
-        # avoid duplicate batch dir names
-        elif Path(
-            self.root_dir_routs["citros"]["runs"]["path"],
-            self._sim_name,
-            self._batch_name,
-        ).exists():
-            while Path(
-                self.root_dir_routs["citros"]["runs"]["path"],
-                self._sim_name,
-                f"{self._batch_name}_{str(batch_name_idx)}",
-            ).exists():
-                batch_name_idx = batch_name_idx + 1
-            self._batch_name = f"{self._batch_name}_{str(batch_name_idx)}"
-
-    def set_logger(
-        self, log_dir: Path, file_name="citros.log", batch_id=None, run_id=None
-    ):
-        self._batch_id = batch_id
-        self._run_id = run_id
-
-        # log directory might not exist yet when calling from constructor
-        if not Path(log_dir).exists():
-            log_dir.mkdir(parents=True)
-
-        on_cluster = self.CITROS_ENVIRONMENT == "CLUSTER"
-        log_file = str(Path(log_dir, file_name))
-        self.log = get_logger(
-            f"{citros_meta.__title__}:{citros_meta.__version__}",
-            self._batch_id,
-            self._run_id,
-            self.log_level,
-            log_file,
-            on_cluster,
-        )
-
-    def handle_exceptions(self, e, exit=False):
+    def _handle_exceptions(self, e, exit=False):
         """
         Handles exceptions and logs them.
 
@@ -225,7 +79,7 @@ class Citros:
         e: Exception to handle.
         """
         self.print(
-            f'An exception was raised. See log file under {self.root_dir_routs["citros"]["logs"]["path"]} for details'
+            f'An exception was raised. See log file under {self._router()["citros"]["logs"]["path"]} for details'
             + f" (or use the -d flag to log to the terminal).",
             color="red",
         )
@@ -258,26 +112,149 @@ class Citros:
         self.systemStatsRecorder.stop()
 
         if exc_type is not None:
-            self.handle_exceptions(exc_val, exit=True)
+            self._handle_exceptions(exc_val, exit=True)
+
+    def _router(self, root_dir=None):
+        if root_dir is None:
+            root_dir = self.root_dir
+
+        citros_dir: Path = (
+            None if self.root_dir is None else Path(self.root_dir, ".citros")
+        )
+        return {
+            "path": root_dir,
+            "citros": {
+                "path": citros_dir,
+                "project.json": Path(citros_dir, "project.json"),
+                "settings.json": Path(citros_dir, "settings.json"),
+                "simulations": {"path": Path(citros_dir, "simulations")},
+                "parameters": {
+                    "path": Path(citros_dir, "parameter_setups"),
+                    "functions": {
+                        "path": Path(citros_dir, "parameter_setups", "functions"),
+                    },
+                },
+                "notebooks": {"path": Path(citros_dir, "notebooks")},
+                "reports": {"path": Path(citros_dir, "reports")},
+                "runs": {
+                    "path": self.config.RECORDINGS_DIR
+                    if self.config.RECORDINGS_DIR is not None
+                    else Path(citros_dir, "runs"),
+                },
+                "logs": {"path": Path(self.config.CITROS_HOME_DIR, "logs")},
+            },
+        }
+
+    def _init_components(self):
+        self.events = citros_events(self)
+        self.parser_ros2 = parser_ros2(self)
+        self.params = citros_params(self)
+        self.utils = citros_utils(self)
+        self.batch = citros_batch(self)
+
+    def print(self, message, only_debug=False, only_verbose=False, color="default"):
+        if (only_debug and self.log_level != "debug") or (
+            only_verbose and not self.config.VERBOSE
+        ):
+            return
+
+        print(f"[{color}]{message}[/{color}]")
+
+    def set_batch_name_and_message(self, batch_name, batch_message):
+        with open(self._router()["citros"]["settings"]["path"], "r") as file:
+            settings = json.load(file)
+
+        if not batch_message and self.utils.str_to_bool(settings["force_message"]):
+            self.print("Please supply a batch message (-m <message>).", color="yellow")
+            self.print("You may turn off mandating of batch message in settings.json")
+            return False
+
+        if not batch_name and self.utils.str_to_bool(settings["force_batch_name"]):
+            self.print("Please supply a batch name (-n <name>).", color="yellow")
+            self.print("You may turn off mandating of batch name in settings.json")
+            return False
+
+        self._batch_name = batch_name
+        self._batch_message = batch_message
+        return True
+
+    def check_batch_name(self):
+        batch_name_idx = 1
+
+        if not self._batch_name or not self.utils.is_valid_file_name(self._batch_name):
+            self._batch_name = self.utils.get_foramtted_datetime()
+
+        # avoid duplicate batch dir names
+        elif Path(
+            self._router()["citros"]["runs"]["path"],
+            self._sim_name,
+            self._batch_name,
+        ).exists():
+            while Path(
+                self._router()["citros"]["runs"]["path"],
+                self._sim_name,
+                f"{self._batch_name}_{str(batch_name_idx)}",
+            ).exists():
+                batch_name_idx = batch_name_idx + 1
+            self._batch_name = f"{self._batch_name}_{str(batch_name_idx)}"
+
+    def set_logger(
+        self, log_dir: Path, file_name="citros.log", batch_id=None, run_id=None
+    ):
+        self._batch_id = batch_id
+        self._run_id = run_id
+
+        # log directory might not exist yet when calling from constructor
+        if not Path(log_dir).exists():
+            log_dir.mkdir(parents=True)
+
+        log_file = str(Path(log_dir, file_name))
+        self.log = get_logger(
+            f"{citros_meta.__title__}:{citros_meta.__version__}",
+            self._batch_id,
+            self._run_id,
+            self.log_level,
+            log_file,
+            False,
+        )
 
         # commented out 10/8/2023 due to a hang on Gleb's computer.
         # self.check_latest_version()
 
-    def find_citros_in_ancestors(self, proj_dir=""):
+    def _find_citros_in_ancestors(self, proj_dir=""):
         current_dir = (
             Path.cwd() if not proj_dir else Path(proj_dir).expanduser().resolve()
         )
-
+        # print("current_dir", current_dir)
         # Ensure we don't go into an infinite loop at the root directory
         while current_dir != current_dir.parent:
             citros_dir = current_dir / ".citros"
+            # print("citros_dir", citros_dir)
             if citros_dir.exists():
                 return citros_dir.expanduser().resolve()
             current_dir = current_dir.parent
 
         return None
 
+    ############################# .CITROS FOLDER DB ###########################
     ####################### simulation attributes getters #####################
+
+    def get_simulations(self):
+        """get list of simulations from .citros/simulations
+
+        Returns:
+            [ste]: list of simulaiton names
+        """
+        path = self._router()["citros"]["simulations"]["path"]
+        sims = []
+        if path.is_dir():
+            if self._has_files(path):
+                for file in path.iterdir():
+                    if not str(file).endswith(".json"):
+                        continue
+                    sim = file.name.split(".")[0]
+                    sims.append(sim)
+        return sims
 
     def get_simulation_info(self, simulation_name: str):
         if not simulation_name.endswith(".json"):
@@ -286,7 +263,7 @@ class Citros:
         try:
             with open(
                 Path(
-                    self.root_dir_routs["citros"]["simulations"]["path"],
+                    self._router()["citros"]["simulations"]["path"],
                     simulation_name,
                 ),
                 "r",
@@ -299,7 +276,7 @@ class Citros:
         return data
 
     def get_package_name(self, launch_name: str):
-        with open(self.root_dir_routs["path"], "r") as f:
+        with open(self._router()["path"], "r") as f:
             data = json.load(f)
 
         for package in data["packages"]:
@@ -311,20 +288,6 @@ class Citros:
 
         # If no matching launch or package is found
         return None
-
-    ############################### .CITROS FOLDER DB #########################
-
-    def get_simulations(self):
-        path = self.root_dir_routs["citros"]["simulations"]["path"]
-        sims = []
-        if path.is_dir():
-            if self._has_files(path):
-                for file in path.iterdir():
-                    if not str(file).endswith(".json"):
-                        continue
-                    sim = file.name.split(".")[0]
-                    sims.append(sim)
-        return sims
 
     #################### initialization and validation ########################
 
@@ -421,7 +384,18 @@ class Citros:
             # empty folder is valid
             return True
 
-    def _get_launches_info(self, proj_json: Path):
+    def _get_launches(self, proj_json: Path):
+        """returns a list of launch objects
+
+        Args:
+            proj_json (Path): path to project.json file
+
+        Returns:
+            [{
+                package: str,
+                name: str
+            }]: array of launch info
+        """
         with open(proj_json, "r") as file:
             data = json.load(file)
 
@@ -430,11 +404,22 @@ class Citros:
         for package in data.get("packages", []):
             for launch in package.get("launches", []):
                 if "name" in launch:
-                    launch_info.append((package.get("name", ""), launch["name"]))
+                    # launch_info.append((package.get("name", ""), launch["name"]))
+                    launch_info.append(
+                        {"package": package.get("name", ""), "name": launch["name"]}
+                    )
 
         return launch_info
 
     def _check_sim_file_contents(self, sim_file):
+        """checks sim file validity
+
+        Args:
+            sim_file (str): simulation file path
+
+        Returns:
+            bool: True if ok
+        """
         with open(sim_file, "r") as file:
             sim_data = json.load(file)
 
@@ -442,7 +427,7 @@ class Citros:
         launch_file = sim_data["launch"]["file"]
 
         if not Path(
-            self.root_dir_routs["citros"]["parameters"]["path"], param_setup
+            self._router()["citros"]["parameters"]["path"], param_setup
         ).exists():
             self.print(
                 f"Could not find parameter setup file {param_setup} referenced in {sim_file}.",
@@ -451,7 +436,8 @@ class Citros:
             return False
 
         all_launch_names = [
-            launch[1] for launch in self._get_launches_info(self.root_dir_routs["path"])
+            launch["name"]
+            for launch in self._get_launches(self._router()["citros"]["project.json"])
         ]
         if launch_file not in all_launch_names:
             self.print(
@@ -462,25 +448,25 @@ class Citros:
 
         return True
 
-    def _validate_citros_files(self, create_default_if_empty: bool):
+    def _validate_citros_files(self, create_default_if_empty: bool = True):
         """
         Assumption: project.json exists.
         """
         success = self._validate_dir(
-            self.root_dir_routs["citros"]["parameters"]["path"],
+            self._router()["citros"]["parameters"]["path"],
             "schema_param_setup.json",
             None,
         )
 
         success = success and self._validate_dir(
-            self.root_dir_routs["citros"]["simulations"]["path"],
+            self._router()["citros"]["simulations"]["path"],
             "schema_simulation.json",
             "default_simulation.json",
             create_default_if_empty,
         )
 
         success = success and self._validate_file(
-            self.root_dir_routs["citros"]["settings"]["path"],
+            self._router()["citros"]["settings.json"],
             "schema_settings.json",
             "default_settings.json",
             True,
@@ -488,189 +474,245 @@ class Citros:
         return success
 
     def _create_folders(self):
-        if not self.citros_dir.is_dir():
-            self.citros_dir.mkdir(parents=True)
+        """
+        creates .citros foder
+        .citros
+         |-simulations
+         |-parameters
+         |- |-functions
+         |-notebooks
+         |-reports
+         |-runs
+        """
+        # .citros
+        if not self._router()["citros"]["path"].is_dir():
+            self._router()["citros"]["path"].mkdir(parents=True)
 
-        if not self.root_dir_routs["citros"]["simulations"]["path"].is_dir():
-            self.root_dir_routs["citros"]["simulations"]["path"].mkdir(parents=True)
+        # .citros/simulations
+        if not self._router()["citros"]["simulations"]["path"].is_dir():
+            self._router()["citros"]["simulations"]["path"].mkdir(parents=True)
 
-        if not self.root_dir_routs["citros"]["parameters"]["path"].is_dir():
-            self.root_dir_routs["citros"]["parameters"]["path"].mkdir(parents=True)
+        # .citros/parameters
+        if not self._router()["citros"]["parameters"]["path"].is_dir():
+            self._router()["citros"]["parameters"]["path"].mkdir(parents=True)
 
-        if not self.root_dir_routs["citros"]["parameters"]["functions"][
-            "path"
-        ].is_dir():
-            self.root_dir_routs["citros"]["parameters"]["functions"]["path"].mkdir(
+        # .citros/parameters/functions
+        if not self._router()["citros"]["parameters"]["functions"]["path"].is_dir():
+            self._router()["citros"]["parameters"]["functions"]["path"].mkdir(
                 parents=True
             )
 
-        if not self.root_dir_routs["citros"]["notebooks"]["path"].is_dir():
-            self.root_dir_routs["citros"]["notebooks"]["path"].mkdir(parents=True)
+        # .citros/notebooks
+        if not self._router()["citros"]["notebooks"]["path"].is_dir():
+            self._router()["citros"]["notebooks"]["path"].mkdir(parents=True)
 
-        if not self.root_dir_routs["citros"]["runs"]["path"].is_dir():
-            self.root_dir_routs["citros"]["runs"]["path"].mkdir(parents=True)
+        # .citros/reports
+        if not self._router()["citros"]["reports"]["path"].is_dir():
+            self._router()["citros"]["reports"]["path"].mkdir(parents=True)
 
-        if not self.root_dir_routs["citros"]["reports"]["path"].is_dir():
-            self.root_dir_routs["citros"]["reports"]["path"].mkdir(parents=True)
+        # .citros/runs
+        if not self._router()["citros"]["runs"]["path"].is_dir():
+            self._router()["citros"]["runs"]["path"].mkdir(parents=True)
 
-    def _get_project_name(self):
-        proj_file_path = self.root_dir_routs["path"]
-        if proj_file_path.exists():
-            with open(proj_file_path, "r") as proj_file:
-                proj_file_data = json.load(proj_file)
-                return proj_file_data.get("name", "")
-
-        # return user's project directory name by default
-        return self.root_dir.name
-
-    def _create_simulations(self):
+    def _populate_citros_folder(self):
         """
-        create a default simulation.json for every launch file in the project.
+        populate .citros with default files
         """
-        if self.root_dir_routs["path"].exists():
-            launch_infos = self._get_launches_info(self.root_dir_routs["path"])
-            if not launch_infos:
-                self.log.warning("No launch files found in user's project.")
-                self.print(
-                    "No launch files found. If you have launch files in your project, "
-                    + "make sure they are of the form *.launch.py",
-                    color="yellow",
-                )
-                return
-
-            for package_name, launch_file in launch_infos:
-                launch_name = launch_file.split(".")[0]
-
-                sim_file_path = Path(
-                    self.root_dir_routs["citros"]["simulations"]["path"],
-                    f"simulation_{launch_name}.json",
-                )
-
-                # avoid overwrite
-                if sim_file_path.exists():
-                    continue
-
-                sim_file_path = str(sim_file_path)
-
-                with self.utils.get_data_file_path(
-                    "defaults", "default_simulation.json"
-                ) as default_file:
-                    self._copy_default_file(default_file, sim_file_path)
-
-                    with open(sim_file_path, "r") as sim_file:
-                        sim_json = json.load(sim_file)
-
-                    sim_json["launch"]["file"] = launch_file
-                    sim_json["launch"]["package"] = package_name
-
-                    with open(sim_file_path, "w") as sim_file:
-                        json.dump(sim_json, sim_file, indent=4)
-
-    def _create_gitignore(self):
-        if not Path(self.citros_dir, ".gitignore").exists():
-            with open(Path(self.citros_dir, ".gitignore"), "w") as file:
-                ignores = linesep.join(
-                    ["runs/", "auth", "__pycache__/"]
-                )  # add more as needed.
-                file.write(ignores)
-
-    def get_ignore_list(self):
-        if Path(self.citros_dir, ".citrosignore").exists():
-            with open(Path(self.citros_dir, ".citrosignore"), "r") as file:
-                lines = [line.strip() for line in file if "#" not in line]
-                self.log.debug(f".citrosignore contenrs: {lines}")
-                return lines
-        else:
-            self.log.debug(f"Could not find .citrosignore in {self.citros_dir}")
-            return []
-
-    def _copy_examples_and_markdown(self):
-        destination = self.root_dir_routs["citros"]["parameters"]["functions"]["path"]
+        destination = self._router()["citros"]["parameters"]["functions"]["path"]
         if not Path(destination, "my_func.py").exists():  # avoid overwriting
             with self.utils.get_data_file_path(
                 "sample_code", "my_func.py"
             ) as source_file_path:
                 shutil.copy2(source_file_path, destination)
 
-        destination = self.citros_dir
+        destination = self._router()["citros"]["path"]
         if not Path(destination, ".citrosignore").exists():  # avoid overwriting
             with self.utils.get_data_file_path(
                 "misc", ".citrosignore"
             ) as source_file_path:
                 shutil.copy2(source_file_path, destination)
 
-        for file_destination_pair in self.md_files_and_destinations:
+        md_files_and_destinations = [
+            (
+                "README_functions.md",
+                self._router()["citros"]["parameters"]["functions"]["path"],
+            ),
+            ("README_notebooks.md", self._router()["citros"]["notebooks"]["path"]),
+            (
+                "README_parameter_setups.md",
+                self._router()["citros"]["parameters"]["path"],
+            ),
+            (
+                "README_simulations.md",
+                self._router()["citros"]["simulations"]["path"],
+            ),
+            ("README_reports.md", self._router()["citros"]["reports"]["path"]),
+        ]
+
+        for file_destination_pair in md_files_and_destinations:
             with self.utils.get_data_file_path(
                 "markdown", file_destination_pair[0]
             ) as md_file_path:
                 destination = file_destination_pair[1]
                 shutil.copy2(md_file_path, f"{destination}/README.md")
 
-    # def save_user_commit_hash(self):
-    #     user_commit, _ = self.get_git_info(self.root_dir)
+    def _get_project_name(self):
+        """generate name for the project
 
-    #     with open(Path(self.citros_dir, "user_commit"), "w") as file:
-    #         file.write(user_commit)
+        Returns:
+            str: name
+        """
+        proj_file_path = self._router()["citros"]["project.json"]
+        if proj_file_path.exists():
+            with open(proj_file_path, "r") as proj_file:
+                proj_file_data = json.load(proj_file)
+                return proj_file_data.get("name", "")
 
-    def internal_sync(self, on_init=False):
-        # no synching or validation is done on the cluster - there is no user code.
-        if self.CITROS_ENVIRONMENT == "CLUSTER":
-            return True
+        # return user's project directory name by default
+        return self._router()["path"].name
 
-        if on_init:
-            self._create_gitignore()
+    def _create_simulations(self):
+        """
+        create a default simulation.json for every launch file in the project.
+        """
+        if not self._router()["path"].exists():
+            self.log.error(f"{self._router()['path'].name} folder doesnt exists.")
+            return None
+
+        launch_infos = self._get_launches(self._router()["citros"]["project.json"])
+        if not launch_infos:
+            self.log.warning("No launch files found in user's project.")
+            self.print(
+                "No launch files found. If you have launch files in your project, "
+                + "make sure they are of the form *.launch.py",
+                color="yellow",
+            )
+            return
+        # inspect(launch_infos)
+        for launch in launch_infos:
+            package_name = launch["package"]
+            launch_file = launch["name"]
+            # package_name, launch_file = (
+            #     launch["launch"]["package"],
+            #     launch["launch"]["name"].split(".")[0],
+            # )
+
+            launch_name = launch_file.split(".")[0]
+
+            sim_file_path = Path(
+                self._router()["citros"]["simulations"]["path"],
+                f"simulation_{launch_name}.json",
+            )
+
+            # avoid overwrite
+            if sim_file_path.exists():
+                continue
+
+            sim_file_path = str(sim_file_path)
+
+            with self.utils.get_data_file_path(
+                "defaults", "default_simulation.json"
+            ) as default_file:
+                self._copy_default_file(default_file, sim_file_path)
+
+                with open(sim_file_path, "r") as sim_file:
+                    sim_json = json.load(sim_file)
+
+                sim_json["launch"]["file"] = launch_file
+                sim_json["launch"]["package"] = package_name
+
+                with open(sim_file_path, "w") as sim_file:
+                    json.dump(sim_json, sim_file, indent=4)
+
+    def _create_gitignore(self):
+        if not Path(self._router()["citros"]["path"], ".gitignore").exists():
+            with open(
+                Path(self._router()["citros"]["path"], ".gitignore"), "w"
+            ) as file:
+                ignores = linesep.join(
+                    ["runs/", "auth", "__pycache__/"]
+                )  # add more as needed.
+                file.write(ignores)
+
+    def get_user_commit_hash(self):
+        user_commit, _ = self.get_git_info(self.root_dir)
+        return user_commit
+
+    def init(self, root_dir=None):
+        self.root_dir = Path(root_dir) if root_dir is not None else self.root_dir
 
         self._create_folders()
 
-        self._copy_examples_and_markdown()
+        self._create_gitignore()
 
-        self.sync_project(self._get_project_name())
+        self._populate_citros_folder()
+
+        project_name = self._get_project_name()
+
+        self.sync_project_json(project_name)
 
         self._create_simulations()
 
-        success = self._validate_citros_files(on_init)
+        return self.check_project()
+
+    def check_citros_exists(self):
+        return Path(self._router()["citros"]["path"]).exists()
+
+    def check_project(self):
+        """validate project.json
+
+        Returns:
+            bool: True if all ok
+        """
+        if not self.check_citros_exists():
+            return False
+
+        success = self._validate_citros_files()
 
         success = success and self.parser_ros2.check_user_defined_functions(
-            self.root_dir_routs["citros"]["parameters"]["path"]
+            self._router()["citros"]["parameters"]["path"]
         )
 
         at_least_one_sim = False
 
-        for file in self.root_dir_routs["citros"]["simulations"]["path"].iterdir():
+        for file in self._router()["citros"]["simulations"]["path"].iterdir():
             if str(file).endswith(".json"):
                 at_least_one_sim = True
                 success = success and self._check_sim_file_contents(file)
 
         if not at_least_one_sim:
             self.log.error(
-                f'No simulation file found in {self.root_dir_routs["citros"]["simulations"]["path"]}'
+                f'No simulation file found in {self._router()["citros"]["simulations"]["path"]}'
             )
             self.print("You must supply at least one simulation file.", color="red")
             success = False
 
-        self.save_user_commit_hash()
-
         return success
 
-    def check_project(self, on_init=False):
-        if self.citros_dir.exists():
-            self.internal_sync(on_init)
-            return True
-        else:
-            return False
-
-    def sync_project(self, name):
+    def sync_project_json(self, name):
+        """_summary_
+        generate .citros/project.json out of ros2 project data
+        generate .citros/parameters/default_param_setup.json
+        Args:
+            name (str): project name
+        """
+        # get data from ros2
         project_data = self.parser_ros2.parse(str(self.root_dir), name)
-        with open(self.root_dir_routs["path"], "w") as file:
+        with open(self._router()["citros"]["project.json"], "w") as file:
             json.dump(project_data, file, sort_keys=True, indent=4)
 
-        self.parser_ros2.generate_default_params_setup(
-            self.root_dir_routs["path"],
+        # get default parameter setup and write it to file.
+        default_parameter_setup = self.parser_ros2.generate_default_params_setup(
+            self._router()["citros"]["project.json"]
+        )
+        with open(
             Path(
-                self.root_dir_routs["citros"]["parameters"]["path"],
+                self._router()["citros"]["parameters"]["path"],
                 "default_param_setup.json",
             ),
-        )
+            "w",
+        ) as f:
+            json.dump(default_parameter_setup, f, indent=4)
 
     def check_ros_build(self, project_path):
         package_paths = self.parser_ros2.get_project_package_paths(project_path)
@@ -697,7 +739,7 @@ class Citros:
 
     def create_sim_run_dir(self, run_id):
         run_dir = Path(
-            self.root_dir_routs["citros"]["runs"],
+            self._router()["citros"]["runs"],
             self._sim_name,
             self._batch_name,
             str(run_id),
@@ -786,9 +828,7 @@ class Citros:
             self.log.warning(f"Failed to find the ros logs directory.")
 
     def copy_citros_log(self):
-        log_file_path = Path(
-            self.root_dir_routs["citros"]["logs"]["path"], "citros.log"
-        )
+        log_file_path = Path(self._router()["citros"]["logs"]["path"], "citros.log")
         self.utils.copy_files([log_file_path], self.SIM_RUN_DIR)
 
     def save_run_data(self):
@@ -868,7 +908,7 @@ class Citros:
 
         self.print(f" - Finished [{batch_id}] batch.", color="blue")
 
-    def run_simulation(self, sim_name, completions, remote, commit_hash, branch_name):
+    def run_simulation(self, sim_name, completions, remote, commit):
         completions = int(completions)
 
         cpu = self.get_simulation_info(sim_name)["CPU"]
@@ -880,13 +920,19 @@ class Citros:
             "storage_type", self.config.STORAGE_TYPE
         )
 
-        user_commit, user_branch = self.get_git_info(self.root_dir)
-        citros_commit, citros_branch = self.get_git_info(self.citros_dir)
+        user_commit, user_branch = self.get_git_info(self._router()["path"])
+        citros_commit, citros_branch = self.get_git_info(
+            self._router()["citros"]["path"]
+        )
 
         latest_tag = ""
 
         self._sim_name = sim_name
         self.check_batch_name()
+
+        self.systemStatsRecorder = SystemStatsRecorder(
+            Path(self.SIM_RUN_DIR, "metrics.csv")
+        )
 
         batch_id = self.batch.generate_batch_id()
 

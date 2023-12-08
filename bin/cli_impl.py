@@ -25,25 +25,20 @@ def init(args, argv):
     :param args.verbose:
     :param args.project_name:
     """
-    with Citros(
-        user_proj_dir=args.dir, verbose=args.verbose, debug=args.debug, on_init=True
-    ) as citros:
-        if citros.check_project(True):
-            citros.print(
-                f"The directory {Path(args.dir).resolve()} has already been initialized.",
-                color="yellow",
+    citros = Citros(verbose=args.verbose, debug=args.debug)
+
+    is_project_exists = citros.check_citros_exists()
+
+    success = citros.init()
+    if success:
+        if is_project_exists:
+            print(
+                f"[green]The directory {Path(args.dir).resolve()} has already been initialized."
             )
-            return
-
-        citros.update_git_exclude(citros.USER_PROJ_DIR, ".citros*")
-
-        citros.update_git_exclude(citros.CITROS_REPO_DIR, "runs/")
-
-        # citros.save_user_commit_hash()
-
-        success = citros.internal_sync(True)
-
-        citros.print(f"Intialized Citros repository.", color="green")
+        else:
+            print(f"[green]Intialized Citros repository.")
+    else:
+        print(f"[red]Could not initialize citros.")
 
 
 def doctor(args, argv):
