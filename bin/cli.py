@@ -13,6 +13,9 @@ from rich_argparse import RichHelpFormatter
 from rich.traceback import install
 from bin import __version__ as citros_version
 
+from .parsers import parser_simulation, parser_parameter, parser_data
+
+
 install()
 
 # PANNEL = ""
@@ -102,219 +105,6 @@ def parser_run(main_sub):
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.set_defaults(func=run)
-
-
-def parser_batch(main_sub):
-    parser = main_sub.add_parser(
-        "batch",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("batch.md"), "r"
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-        ),
-        epilog=EPILOG,
-        help="batch section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_subparser = parser.add_subparsers(dest="type")
-
-    data_access_parser = data_subparser.add_parser(
-        "list",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("batch/list.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-        ),
-        epilog=EPILOG,
-        help="citros batch list section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_access_parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_access_parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_access_parser.set_defaults(func=batch_list)
-
-    data_create_subparser = data_subparser.add_parser(
-        "get",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("batch/get.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-        ),
-        epilog=EPILOG,
-        help="citros batch get section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_create_subparser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_create_subparser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_create_subparser.set_defaults(func=batch_get)
-
-    data_status_subparser = data_subparser.add_parser(
-        "delete",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("batch/delete.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-        ),
-        epilog=EPILOG,
-        help="citros batch delete section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_status_subparser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_status_subparser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_status_subparser.set_defaults(func=batch_delete)
-
-
-def parser_data(main_sub):
-    parser = main_sub.add_parser(
-        "data",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("data.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="data section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_subparser = parser.add_subparsers(dest="type")
-
-    data_access_parser = data_subparser.add_parser(
-        "access",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("data/access.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros data access section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_access_parser.add_argument(
-        "-dir", default=".", help="The working dir of the project"
-    )
-    data_access_parser.add_argument("-H", "--host", default="0.0.0.0", help="host")
-    data_access_parser.add_argument(
-        "-p", "--port", default="8000", help="post to listen to"
-    )
-    data_access_parser.add_argument(
-        "-t", "--time", action="store_true", help="print request times"
-    )
-    data_access_parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_access_parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_access_parser.set_defaults(func=data_access)
-
-    data_create_subparser = data_subparser.add_parser(
-        "create",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("data/create.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros data create section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_create_subparser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_create_subparser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_create_subparser.set_defaults(func=data_create)
-
-    data_status_subparser = data_subparser.add_parser(
-        "status",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("data/status.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros data status section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_status_subparser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_status_subparser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_status_subparser.set_defaults(func=data_status)
-
-    data_clean_subparser = data_subparser.add_parser(
-        "clean",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc").joinpath("data/clean.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=EPILOG,
-        help="citros data clean section",
-        formatter_class=RichHelpFormatter,
-    )
-    data_clean_subparser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    data_clean_subparser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    data_clean_subparser.set_defaults(func=data_clean)
 
 
 def parser_report(main_sub):
@@ -412,7 +202,9 @@ def main():
     parser_init(subparsers)
     parser_doctor(subparsers)
     parser_run(subparsers)
-    parser_batch(subparsers)
+    parser_simulation(subparsers)
+    parser_parameter(subparsers)
+
     parser_data(subparsers)
     parser_report(subparsers)
 

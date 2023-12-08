@@ -1,15 +1,23 @@
 # cli
 CITROS cli
 
+# projest main directories:
+- `.citros` - contain all the citros information
+- `/runs` - contain all the generated data 
+
 # Commands
 
 - citros [init](#initialization)
 - citros [doctor](#doctor)
 - citros [run](#run)
+- citros [simulation](#simulation)
+- citros [parameters](#parameters)
+- citros [launch](#launch)
 - citros [batch](#batch)
 - citros [data](#data-access)
 - citros [report](#reports)
 - citros [observability](#observability)
+- usefull [usefull](#usefull)
 
 ---
 ## initialization
@@ -55,39 +63,97 @@ citros run
     [-w] #workflow
 ```
 
+## Simulation
+all simulation operations
+```bash
+citros simulation
+    [-n] simulaiton name 
+# prompt simulation list to choose from
+# after shoosing simulation prompt another question 
+# run/info/delete
 
+citros simulation run
+    [-n] simulaiton name 
+# prompt another question 
+# run/info/delete
 
+citros simulation list 
+    [-m] match pattern
+# list all simulations list
+```
 
-## Batch
-all batch operations
-```python
-#get the data for a batch run
-citros batch get <id>
+## Parameters
+all parameters operations
+```bash
+# ROS2 parameter
+citros parameter
+    [-n] name
+    [-p] package 
+    [-n] node 
+    [-m] match pattern
+# List the parameters for each package/node in the project
 
-#lists all batches + status
-citros batch list
+#.citros 
+citros parameter setup     
+    [-n] name
+# get parameter setup details
+# if nothing specified prompt a list of all the parameter setups to choose from
 
-# delete a batch run
-citros batch delete <id> | <simulation>/<name>
+citros parameter setup new     
+    [-n] name
+    [-m] match pattern
+    [-c] #copy from [parameter setup name]
+# create new parameter setup
+
+citros parameter setup list    
+    [-m] match pattern
+# List all the parameter setups and match pattern
+```
+
+## Launch
+all lauch operations
+```bash
+
+citros launch 
+    [-n] name
+    [-m] match pattern
+# list all the launch files
 ```
 
 ## Data access
 This DB will be used wo store the indexed bags for the 
 
-    
 ```bash
+citros data
+    [-d | --dir] # data directory (.cittros/runs)
+# return a snapshot of the /runs folder
+# how many runs, and a detail about each run/simulation
+
+citros data list 
+    [-d | --dir] # data directory
+    [-s] simulation
+
+
+##################
+### Hot reload ###
+##################
 # starts server to listen for data access requests.
-citros data access
+citros data service
+    [-d | --dir] # data directory
     [-p] #port
     [-v] #verbose
     [-D] #dockerized
 
 # prints the available data (db status) size, mem, how many batches loaded, etc...
-citros data status
+citros data service status
+    [-d | --dir] # data directory
 
-# create a new DB instance 
+
+# DB related
+# create a new PGDB instance 
 # creates all permissions and tables needed for CITROS
-citros data create
+citros data db create
+    [-d | --dir] # data directory
     [-n] #name of the DB
     [-p] #port of the DB
     [-u] #user of the DB
@@ -95,8 +161,12 @@ citros data create
     [-v] #verbose
     [-D] #dockerized
 
+# prints the available data (db status) size, mem, how many batches loaded, etc...
+citros data db status
+    [-d | --dir] # data directory
+
 # clean the DB from data that wasend used for more then -d days -h hours -m minutes
-citros data clean
+citros data db clean
     [-d] #days
     [-h] #hours
     [-m] #minutes
@@ -136,9 +206,11 @@ this report can be shared trough CITROR or sent as a file.
 ```bash
 # generate a signed report from a list of notebooks and use the data from the batch run specified.
 citros report generate notebook.ipynb simulation/batch_run_name
+    [-n] report_name *IF NOT PROVIDED A PROMPT WILL FOLLOW
 
 # generate a report from report_name as specified unser .citros/reports/report_name.json
-citros report generator report_name
+citros report generate 
+    [-n] report_name *IF NOT PROVIDED A PROMPT WILL FOLLOW
 ``` 
 
 ## Observability
@@ -153,6 +225,32 @@ citros observability
 
 
 
+# usefull
+```bash
+# build
+docker build -t citros .
+
+# run 
+citros data access
+# or all commands can run inside docker
+# run citros cli inside docker
+docker run -it -p 8000:8000 citros data access
+```
+
+
+
+
+
+
+---
+---
+---
+---
+---
+---
+---
+---
+---
 
 # CLI Overview
 
@@ -174,13 +272,3 @@ We are dedicated to enriching your ROS project simulation experience, and this p
 6. [Citros Repository Configuration](doc/configuration/config_params.md)
 7. [User Templates](doc/user_templates.md)
 
-
-
-# usefull
-```bash
-# build
-docker build -t citros .
-
-# run
-docker run -it -p 8000:8000 citros data access
-```

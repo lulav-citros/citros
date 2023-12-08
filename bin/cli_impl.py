@@ -17,14 +17,13 @@ from data_access import data_access as _data_access
 
 ############################# CLI implementation ##############################
 def init(args, argv):
-    from citros import Citros
-
     """
-    :param args.dir
+    :param args.dir:
     :param args.debug:
     :param args.verbose:
-    :param args.project_name:
     """
+    from citros import Citros
+
     citros = Citros(verbose=args.verbose, debug=args.debug)
 
     is_project_exists = citros.check_citros_exists()
@@ -41,34 +40,74 @@ def init(args, argv):
         print(f"[red]Could not initialize citros.")
 
 
+def run(args, argv):
+    """
+    :param args.dir:
+    :param args.debug:
+    :param args.verbose:
+    """
+    from citros import Citros
+
+    citros = Citros(verbose=args.verbose, debug=args.debug)
+
+    is_project_exists = citros.check_citros_exists()
+
+    success = citros.run()
+    if success:
+        if is_project_exists:
+            print(
+                f"[green]The directory {Path(args.dir).resolve()} has already been initialized."
+            )
+        else:
+            print(f"[green]Intialized Citros repository.")
+    else:
+        print(f"[red]Could not initialize citros.")
+
+
 def doctor(args, argv):
     # TODO[critical]: implement doctor
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def run(args, argv):
-    # TODO[critical]: implement run
+############################# Simulation implementation ##############################
+def simulation_list(args, argv):
+    # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-############################# BATCH implementation ##############################
-def batch_list(args, argv):
-    # TODO[critical]: implement batch_list
+def simulation_run(args, argv):
+    # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def batch_get(args, argv):
-    # TODO[critical]: implement batch_get
+############################# Simulation implementation ##############################
+def parameter_setup_new(args, argv):
+    # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def batch_delete(args, argv):
-    # TODO[critical]: implement batch_delete
+def parameter_setup_list(args, argv):
+    # TODO[critical]: implement data_status
+    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+
+
+def parameter_setup(args, argv):
+    # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 ############################# DATA implementation ##############################
-def data_access(args, argv):
+def data(args, argv):
+    # TODO[critical]: implement data_status
+    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+
+
+def data_list(args, argv):
+    # TODO[critical]: implement data_status
+    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+
+
+def data_service(args, argv):
     """
     :param args.dir
     :param args.debug:
@@ -86,17 +125,22 @@ API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation"
     _data_access(args, argv)
 
 
-def data_status(args, argv):
+def data_service_status(args, argv):
     # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def data_create(args, argv):
+def data_db_create(args, argv):
+    # TODO[critical]: implement data_status
+    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+
+
+def data_db_status(args, argv):
     # TODO[critical]: implement data_create
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def data_clean(args, argv):
+def data_db_clean(args, argv):
     # TODO[critical]: implement data_clean
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
