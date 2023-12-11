@@ -61,6 +61,19 @@ citros run
     [-v] #verbose
 
     [-w] #workflow
+
+
+examples:
+
+citros run
+# will start one simulation on the local machine
+
+citros run -c 10
+# starts up to 10 docker with the simulations. 
+# depents on parallelism = floor([system resources]/[simulaiton.cpu])
+
+citros run -c 10 -r
+# starts up to simulaiton remotely. (github?)
 ```
 
 ## Simulation

@@ -38,7 +38,7 @@ def main(args, argv):
     """_summary_
 
     :param args.debug:
-        :param args.verbose:
+    :param args.verbose:
     :param args.time:
     :param args.host:
     :param args.port:

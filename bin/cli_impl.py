@@ -10,6 +10,7 @@ from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
+from citros.utils import str_to_bool, suppress_ros_lan_traffic
 
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
@@ -40,22 +41,10 @@ def init(args, argv):
     :param args.debug:
     :param args.verbose:
     """
-    from citros import Citros
-
-    citros = Citros(verbose=args.verbose, debug=args.debug)
-
-    is_project_exists = citros.check_citros_exists()
-
-    success = citros.init()
-    if success:
-        if is_project_exists:
-            print(
-                f"[green]The directory {Path(args.dir).resolve()} has already been initialized."
-            )
-        else:
-            print(f"[green]Intialized Citros repository.")
-    else:
-        print(f"[red]Could not initialize citros.")
+    print(f'initializing CITROS at "{Path(args.dir).resolve()}". ')
+    citros = Citros(new=True, root=args.dir, verbose=args.verbose, debug=args.debug)
+    if args.debug:
+        print("[green]done initializing CITROS")
 
 
 def run(args, argv):
@@ -72,70 +61,54 @@ def run(args, argv):
     :param args.debug:
     :param args.verbose:
     """
+    citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
 
-    citros = Citros(verbose=args.verbose, debug=args.debug)
+    if args.debug:
+        print("[green]done initializing CITROS")
 
-    is_project_exists = citros.check_citros_exists()
-    if not is_project_exists:
+    batch_name = args.batch_name
+    batch_message = args.batch_message
+
+    if not batch_name and str_to_bool(citros.settings["force_batch_name"]):
+        print("[red]Please supply a batch name with flag -n <name>.")
         print(
-            f"[red]The directory {Path(args.dir).resolve()} has not been initialized with CITROS."
+            Panel.fit(
+                Padding('You may run [green]"citros run -n <name>" ', 1), title="help"
+            )
         )
-        print('  (use "citros init" to init the directory)')
-        return
+        return False
 
-    success = citros.check_project()
-    if not success:
-        print(f"[red].citros is corappted :(")
-        print(f"Fix the errors in your project configuration files and try again.")
-
-    success = citros.check_batch_name_and_message(args.batch_name, args.batch_message)
-    if not success:
-        print(f"[yellow]Please try again with all required command parameters.")
-        return
+    if not batch_message and str_to_bool(citros.settings["force_message"]):
+        print("[red]Please supply a batch message with flag -m <message>.")
+        print(
+            Panel.fit(
+                Padding('You may run [green]"citros run -m <message>"', 1), title="help"
+            )
+        )
+        return False
 
     if not args.lan_traffic:
-        citros.utils.suppress_ros_lan_traffic()
+        suppress_ros_lan_traffic()
 
-    if args.simulation_name:
-        citros.run_simulation(args.simulation_name, args.completions)
-    else:
-        # simulation is chosen by the user
-        run_interactively(citros, args.completions)
-
-
-def generate_question(type, name, message, choices=None, validator=None, filter=None):
-    if type not in [
-        "list",
-        "raw_list",
-        "expand",
-        "confirm",
-        "check_box",
-        "input",
-        "password",
-        "editor",
-    ]:
-        print("question type not supported.")
-        return {}
-
-    if type == "list":
-        if not choices:
-            print("Nothing to choose from.")
-            return {}
-        return {"type": type, "name": name, "message": message, "choices": choices}
-    elif type == "input":
-        return {
-            f"type": type,
-            f"name": name,
-            f"message": message,
-            f"validate": validator,
-            f"filter": filter,
-        }
-    else:
-        raise NotImplementedError()
+    simulation = choose_simulation(
+        citros,
+        args.simulation_name,
+    )
+    simulation.run(
+        name=batch_name,
+        message=batch_message,
+    )
 
 
-def run_interactively(citros: Citros, completions, commit_hash, branch_name):
-    sim_names = citros.get_simulations()
+# helper function
+def choose_simulation(citros: Citros, simulation_name):
+    simulations_dict = {}
+    for s in citros.simulations:
+        simulations_dict[s.name] = s
+
+    if simulation_name:
+        return simulations_dict[simulation_name]
+    sim_names = simulations_dict.keys()
 
     # sanity check - should never happen because internal_sync will fail if there
     #                isn't at least one simulation file.
@@ -146,15 +119,20 @@ def run_interactively(citros: Citros, completions, commit_hash, branch_name):
         )
         return
 
-    sim_names_q = generate_question(
-        "list", "sim_names", "Please choose the simulation you wish to run:", sim_names
+    # interactive
+    answers = prompt(
+        [
+            {
+                "type": "list",
+                "name": "sim_names",
+                "message": "Please choose the simulation you wish to run:",
+                "choices": sim_names,
+            }
+        ]
     )
-    # completions_q = generate_question("input", "completions", "Please enter number of completions:",
-    #                                  NumberValidator, lambda val: int(val))
-    answers = prompt([sim_names_q])  # use default style
-    sim_name = answers.get("sim_names")
 
-    citros.run_simulation(sim_name, completions, commit_hash, branch_name)
+    sim_name = answers.get("sim_names")
+    return simulations_dict[sim_name]
 
 
 def doctor(args, argv):
@@ -211,8 +189,9 @@ def data_service(args, argv):
     # print(Panel(Markdown(open("bin/data.md", "r").read()), title="[green]CITROS", subtitle=f"[{citros_version}]"))
     print(
         Panel.fit(
-            f"""[green]CITROS[/green] started data-access service at [green]http://{args.host}:{args.port}.
-API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation"""
+            f"""started at [green]http://{args.host}:{args.port}[/green].
+API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation""",
+            title="[green]CITROS service",
         )
     )
     _data_access(args, argv)

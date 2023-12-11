@@ -1,4 +1,5 @@
 import glob
+from rich import inspect
 import yaml
 import os
 import ast
@@ -9,18 +10,17 @@ from pathlib import Path
 
 import xml.etree.ElementTree as ET
 
-from .parser_base import parser_base
+from .parser_base import ParserBase
 
 
-class parser_ros2(parser_base):
+class ParserRos2(ParserBase):
     """
     Class to parse ROS2 package files (XML, CMakeLists.txt, setup.py etc).
     """
 
-    def __init__(self, citros) -> None:
-        self.log = citros.log
+    def __init__(self, log):
+        self.log = log
         self.project = None
-        self.print = citros.print
 
     ################################ Any lang #################################
 
@@ -51,7 +51,7 @@ class parser_ros2(parser_base):
         maintainer = root.find("maintainer")
         maintainer_email = maintainer.attrib["email"] if maintainer is not None else ""
         description = root.find("description")
-        license = root.find("license")
+
         export = root.find("export")
         build_type = export.find("build_type") if export is not None else None
 
@@ -62,7 +62,6 @@ class parser_ros2(parser_base):
             "maintainer": maintainer.text if maintainer is not None else "",
             "maintainer_email": maintainer_email,
             "description": description.text if description is not None else "",
-            "license": license.text if license is not None else "",
             "nodes": [],
             "build_type": build_type.text if build_type is not None else None,
         }
@@ -111,7 +110,7 @@ class parser_ros2(parser_base):
             install_target_nodes.append(
                 {"name": node_name, "entry_point": "", "path": "", "parameters": []}
             )
-            self.print(f"     node: {node_name}", only_verbose=True)
+            # print(f"     node: {node_name}")
 
         def unquote(string):
             if string.startswith('"') and string.endswith('"'):
@@ -375,7 +374,7 @@ class parser_ros2(parser_base):
                     console_script
                 )
 
-                self.print(f"    node: {node_name}", only_verbose=True)
+                # print(f"    node: {node_name}")
 
                 nodes.append(
                     {
@@ -393,7 +392,6 @@ class parser_ros2(parser_base):
             "maintainer": parameters.get("maintainer", ""),
             "maintainer_email": parameters.get("maintainer_email", ""),
             "description": parameters.get("description", ""),
-            "license": parameters.get("license", ""),
             "nodes": nodes,
         }
 
@@ -408,13 +406,13 @@ class parser_ros2(parser_base):
         packages = []
         for package_path in package_paths:
             self.log.debug(f"package_path: {package_path}")
-            self.print(f"parsing package: {package_path}", only_verbose=True)
+            # print(f"parsing package: {package_path}")
 
             parsed_data = None
             try:
                 parsed_data = self.parse_xml(package_path)
             except ET.ParseError as e:
-                self.print(
+                print(
                     f"The path `{package_path}` doesn't contain xml, probably not a package. Skipping."
                 )
                 continue
@@ -432,7 +430,7 @@ class parser_ros2(parser_base):
             else:
                 msg = f"Build type {parsed_data['build_type']} not allowed for ROS 2. Skipping `{package_path}`."
                 self.log.error(msg)
-                self.print(msg, color="yellow")
+                print(msg, color="yellow")
                 continue
 
             all_parameters = {}
@@ -489,8 +487,6 @@ class parser_ros2(parser_base):
                     "maintainer": parsed_data.get("maintainer", ""),
                     "maintainer_email": parsed_data.get("maintainer_email", ""),
                     "description": parsed_data.get("description", ""),
-                    "license": parsed_data.get("license", ""),
-                    "readme": f"{package_path}{os.path.sep}README.md",
                     "git": "",
                     "launches": self.get_project_launch_files(package_launch_paths),
                     "nodes": parsed_data.get("nodes", []),
@@ -581,14 +577,12 @@ class parser_ros2(parser_base):
             self.log.error(f"could not open file {path}")
             return ""
 
-    def _setup_project(self, project_name, project_path):
+    def _setup_project(self, project_path):
         from citros_meta import __version__
 
         self.project = {
             "citros_cli_version": __version__,
             "cover": "",
-            "name": project_name,
-            "image": project_name,
             "tags": [],
             "is_active": True,
             "description": "",
@@ -596,8 +590,6 @@ class parser_ros2(parser_base):
             # "path": project_path,
             "packages": None,
             "launches": None,
-            "readme": None,
-            "license": None,
         }
 
     def _is_descendant(self, file_path, directory_path):
@@ -636,7 +628,7 @@ class parser_ros2(parser_base):
 
         return project_launch_paths
 
-    def parse(self, project_path: str, project_name: str):
+    def parse(self, project_path: str):
         """
         parses the project with the given name under the given path.
 
@@ -651,8 +643,7 @@ class parser_ros2(parser_base):
                which is a descendant of the project directory.
 
         param: project_path - the project directory's full path
-        param: project_name - a possible alternate name for the project,
-                              in case a name different than the project directory's name is required.
+
 
         Returns:
         a dictionary holding all metadata for the project.
@@ -661,9 +652,10 @@ class parser_ros2(parser_base):
         launches = []
 
         if not self.project:
-            self._setup_project(project_name, project_path)
+            self._setup_project(project_path)
 
         package_paths = self.get_project_package_paths(project_path)
+
         project_launch_paths = self.get_project_launch_paths(
             project_path, package_paths
         )
@@ -674,12 +666,6 @@ class parser_ros2(parser_base):
         self.project["description"] = self.get_project_description(project_path)
         self.project["packages"] = packages
         self.project["launches"] = launches
-        self.project["readme"] = self.get_file_content(
-            os.path.join(project_path, "README.md")
-        )
-        self.project["license"] = self.get_file_content(
-            os.path.join(project_path, "LICENSE")
-        )
 
         return self.project
 
@@ -710,11 +696,8 @@ class parser_ros2(parser_base):
             )
             return msg_paths
 
-    def generate_default_params_setup(self, project_json, override_existing=False):
-        with open(project_json, "r") as f:
-            data = json.load(f)
-
-        packages = data["packages"]
+    def generate_default_params_setup(self, citros, override_existing=False):
+        packages = citros["packages"]
 
         json_data = {"packages": {}}
 
@@ -757,10 +740,10 @@ class parser_ros2(parser_base):
         except Exception as e:
             msg = f"exception was raise while trying to find function `{function_name}` in file {file_path}."
             self.log.error(f"{msg}\n{e}")
-            self.print(f"{msg}", color="red")
+            print(f"{msg}", color="red")
             return False
 
-        self.print(
+        print(
             f"Could not find the user-defined function `{function_name}` in {file_path}.",
             color="red",
         )

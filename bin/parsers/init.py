@@ -16,30 +16,26 @@ from bin import __version__ as citros_version
 install()
 
 
-# citros simulation
-def parser_launch(subparser, epilog=None):
-    description_path = "launch.md"
-    help = "launch section"
-
-    parser = subparser.add_parser(
-        "launch",
+def parser_init(main_sub, epilog=None):
+    parser = main_sub.add_parser(
+        "init",
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
-                    "r",
+                    importlib_resources.files(f"data.doc").joinpath("init.md"), "r"
                 ).read()
             ),
             subtitle=f"[{citros_version}]",
-            title="description",
         ),
         epilog=epilog,
-        help=help,
+        help="init section",
         formatter_class=RichHelpFormatter,
     )
-    parser.add_argument("-n", "--name", default=None, help="name of simulation")
-    parser.add_argument("-m", "--match", default=None, help="match simulation pattern")
-
-    subparser = parser.add_subparsers(dest="type")
-
-    return parser
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=init)
