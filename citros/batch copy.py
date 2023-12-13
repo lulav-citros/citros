@@ -1,42 +1,26 @@
 import os
 import json
 import logging
-from pathlib import Path
-from rich.logging import RichHandler
 
-from .simulation import Simulation
+from rich.logging import RichHandler
 
 
 class NoBatchFoundException(Exception):
     def __init__(self, message="No batch found."):
         super().__init__(message)
 
-# * create new batch for running simulations
 # to be able to run simulation Batch needs to have a simulation 
 # Batch(simulation : Simulation)
 
-# * create new batch for reading data from previous runs
 # To be able to interact with recorded batches
 # Batch(path: Path, index: int) # path data/simulation/batch, 
 # index = -1 will get the latest batch run from this dir
 # index = n will get the n's batch run
 class Batch:
-    def __init__(self, 
-                 root, # the base recordings dir
-                 simulation: Simulation, 
-                 name : str ="citros",
-                 mesaage: str ="CITROS is AWESOME!!!", 
-                 index: int = -1, # default to take the last version of a runs
-                 log=None):
+    def __init__(self, root, simulation_name, batch_name, log=None):
         self.root = root
-        if root is None or simulation is None:
-            raise Exception("Error: root dir is None, batch needs is to operate")
-        if simulation is None or simulation is None:
-            raise Exception("Error: simulation is None, batch needs is to operate")
-        
-        now = datetime.today().strftime('%Y%m%d%H%M%S')
-        
-        self.batch_dir = Path(root) / simulation_name / batch_name
+        if root is None or simulation_name is None or batch_name is None:
+            raise Exception("root, simulation_name, batch_name cant be None.")
         self.batch_dir = os.path.join(root, simulation_name, batch_name)
 
         if log is None:
@@ -50,7 +34,7 @@ class Batch:
         else:
             self.log = log
 
-        code, message = self._validate()
+        code, message = self._check_batch_run_folder_status()
         if code == 404:
             raise NoBatchFoundException
 
@@ -75,32 +59,23 @@ class Batch:
             "updated_at": "",
         }
 
-        self._load()
+        self._extract_batch_run_from_folder()
 
     def __str__(self):
         # print_json(data=self.data)
         return json.dumps(self.data, indent=4)
 
-    ###################
-    ##### private #####
-    ###################
-    
     # verify that the batch folder is ok:
     # - all json is correct.
     # - all files is intact.
     # - if files is signed check all signings (sha)
-    def _validate(self):
+    def _check_batch_run_folder_status(self):
         if os.path.exists(self.batch_dir) == False:
             return 404, "there is no folder for this batch."
         # TODO[critical]: add checks.
         return True, None
 
-    def _new(self):
-        
-        pass
-    
-    
-    def _load(self):
+    def _extract_batch_run_from_folder(self):
         batch_info = os.path.join(self.batch_dir, "info.json")
 
         try:
@@ -118,14 +93,3 @@ class Batch:
     # start loading data to PG
     def load_data():
         pass
-
-    ###################
-    ##### public #####
-    ###################
-    def run(self, name, message, completions=1):
-        #TODO: complete this
-        self.simulation.run(
-            name=name,
-            message=message,
-        )
-        

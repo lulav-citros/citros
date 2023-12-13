@@ -94,10 +94,14 @@ def run(args, argv):
         citros,
         args.simulation_name,
     )
-    simulation.run(
-        name=batch_name,
-        message=batch_message,
-    )
+    
+    # TODO: batch = Batch(simulation)
+    # TODO: batch.run(name, message, completions=10)
+    
+    # simulation.run(
+    #     name=batch_name,
+    #     message=batch_message,
+    # )
 
 
 # helper function

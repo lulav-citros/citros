@@ -1,5 +1,7 @@
 import json
 import glob
+import shutil
+import importlib_resources
 
 from os import linesep
 from pathlib import Path
@@ -12,8 +14,7 @@ from .settings import Settings
 from .simulation import Simulation
 from .parameter_setup import ParameterSetup
 from .citros_obj import CitrosObj, CitrosException, NoFoundException, NoValidException
-import importlib_resources
-import shutil
+
 from rich.traceback import install
 from rich.logging import RichHandler
 from rich import print, inspect, print_json

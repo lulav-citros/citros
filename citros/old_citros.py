@@ -21,8 +21,8 @@ from .parsers import parser_ros2
 from .logger import get_logger, shutdown
 from .utils import citros_utils
 from .citros_batch import citros_batch
-from .citros_params import citros_params
-from .citros_events import citros_events
+from .ros.params import citros_params
+from .events import citros_events
 from rich import print, print_json, inspect
 
 
@@ -308,7 +308,7 @@ class Citros:
     def single_simulation_run(self, batch_id, run_id):
         # running inside ROS workspace context.
         from launch import LaunchService
-        from citros.launches import generate_launch_description
+        from citros.ros import generate_launch_description
 
         self.print(f" + + running simulation [{run_id}]", color="blue")
 

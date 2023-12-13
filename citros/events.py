@@ -20,6 +20,15 @@ from pathlib import Path
 from os import linesep
 from typing import Optional
 
+from rich.traceback import install
+from rich.logging import RichHandler
+from rich import print, inspect, print_json
+from rich.panel import Panel
+from rich.padding import Padding
+
+install()
+
+from .config import config
 
 class FileSpanExporter(SpanExporter):
     """
@@ -64,20 +73,22 @@ class FileSpanExporter(SpanExporter):
         return True
 
 
-class citros_events:
+class EventsOTLP:
     """
     Handles event tracing using OpenTelemetry
     (or the console on the user's local environment).
     """
 
-    def __init__(self, citros):
-        self.citros = citros
+    def __init__(self, log=None, destination=None, otlp_url=None):        
+        self.log = log
+        self.otlp_url = otlp_url # "localhost:3417"
+        self.destination = destination
         self.seq = 0
 
         # if the trace was started on the cluster by a different entity (e.g. the worker),
-        # its context is given by an environment variable.
-        if "CITROS_TRACE_CONTEXT" in os.environ:
-            self.otlp_context = {"traceparent": os.environ["CITROS_TRACE_CONTEXT"]}
+        # its context is given by an environment variable.            
+        if config.TRACE_CONTEXT:
+            self.otlp_context = {"traceparent": config.TRACE_CONTEXT}
         else:
             self.otlp_context = None
 
@@ -93,16 +104,17 @@ class citros_events:
 
         # the citros run dir is only created before a simulation run,
         # so it must be retrieved dynamically.
-        file_exporter = FileSpanExporter(lambda: self.citros.SIM_RUN_DIR)
-        file_processor = BatchSpanProcessor(file_exporter)
-        provider.add_span_processor(file_processor)
-        self.file_processor = file_processor
+        if self.destination:
+            file_exporter = FileSpanExporter(lambda: self.destination)
+            file_processor = BatchSpanProcessor(file_exporter)
+            provider.add_span_processor(file_processor)
+            self.file_processor = file_processor
 
-        if self.citros.CITROS_ENVIRONMENT == "CLUSTER":
+        if self.otlp_url:
             # when running in the cluster, the telop collector (k8s deamonset)
             # is allways local for the pod it is running on.
             otlp_exporter = OTLPSpanExporter(
-                endpoint=self.citros.OPEN_TELEMETRY_URL, insecure=True
+                endpoint=self.self.otlp_url, insecure=True
             )
             otlp_processor = BatchSpanProcessor(otlp_exporter)
             provider.add_span_processor(otlp_processor)
@@ -150,9 +162,6 @@ class citros_events:
         span.set_attribute("emit-sequence", self.seq)
         self.seq = self.seq + 1
 
-        user_id, org_id = self.citros.get_user_ids()
-        span.set_attribute("user-id", user_id)
-        span.set_attribute("organization-id", org_id)
 
     def emit(self, batch_run_id, sid, event_type, tag, message, metadata):
         """
@@ -173,8 +182,11 @@ class citros_events:
         try:
             if isinstance(metadata, dict):
                 metadata = json.dumps(metadata)
-        except Exception as e:
-            self.citros.handle_exceptions(e)
+        except Exception as e:            
+            if self.log:
+                self.log.exception(e)
+            else:
+                print(e)
             metadata = None
 
         if metadata is None:

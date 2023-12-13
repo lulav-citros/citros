@@ -11,11 +11,14 @@ from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
+from datetime import datetime
 
-from .utils import validate_dir
+from .utils import suppress_ros_lan_traffic, validate_dir
 from .parameter_setup import ParameterSetup
 from .citros_obj import CitrosObj, CitrosException, NoFoundException, NoValidException
+from .events import EventsOTLP
 
+from .config import config
 
 class Simulation(CitrosObj):
     """Object representing .citros/simulations/name.json file."""
@@ -23,22 +26,40 @@ class Simulation(CitrosObj):
     ##################
     ##### public #####
     ##################
-    def run(self, name, message, batch_id=str(uuid.uuid4()), run_id=0):
+    def run(self, root, run_id=0):
         """Run simulation."""
+        
+        events = EventsOTLP(self)
+        
+        
         # running inside ROS workspace context.
         from launch import LaunchService
-        from citros.launches import generate_launch_description
+        from citros.ros import generate_launch_description
 
-        self.print(f" + + running simulation [{run_id}]", color="blue")
+        print(f" + + running simulation [{run_id}]")
 
-        self.create_sim_run_dir(run_id)
+        now = datetime.today().strftime('%Y%m%d%H%M%S')
+        # data/{sim}/{run name}/{date time}
+        if config.RECORDINGS_DIR:
+            simulation_rec_dir = Path(config.RECORDINGS_DIR) / self.name / name / now
+        else:
+            simulation_rec_dir = self.root_citros / 'data' / self.name / name / now
+        
+        if self.verbose:            
+            print(f'simulation run dir = "{simulation_rec_dir}]"')
+        
+        # create .citros/data if not exists
+        simulation_rec_dir.mkdir(parents=True, exist_ok=True)
+        # TODO: create simulation_rec_dir / batch.json 
+        
+        
+        # self.create_sim_run_dir(run_id)
+        # self.set_logger(self.SIM_RUN_DIR, "citros_sim_launch.log", batch_id, run_id)
 
-        self.set_logger(self.SIM_RUN_DIR, "citros_sim_launch.log", batch_id, run_id)
+        if config.SUPPRESS_ROS_LAN_TRAFFIC:
+            suppress_ros_lan_traffic()
 
-        if self.config.SUPPRESS_ROS_LAN_TRAFFIC:
-            self.utils.suppress_ros_lan_traffic()
-
-        launch_description = generate_launch_description(self)
+        launch_description = generate_launch_description(self, name, message)
 
         if launch_description is None:
             msg = (
@@ -56,10 +77,10 @@ class Simulation(CitrosObj):
 
         self.systemStatsRecorder.stop()
 
-        color = "blue" if ret == 0 else "red"
-        self.print(
-            f" - - Finished simulation run_id = [{run_id}] with return code [{ret}].",
-            color=color,
+        
+        print(
+            f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation run_id = [{run_id}] with return code [{ret}].",
+
         )
 
         self.save_run_data()
@@ -74,24 +95,6 @@ class Simulation(CitrosObj):
             self.events.done(
                 batch_id, run_id, message=f"Finished simulation. Return code = [{ret}]."
             )
-
-    def run_batch(
-        self,
-        name,
-        message,
-        completions=1,
-    ):
-        """Run simulation."""
-
-        if self.debug:
-            print(
-                f"{self.__class__.__name__}.run_batch(name={self.name}, name={name}, message={message}, completions={completions})",
-            )
-
-        print("[red]vova run_batch running!!!!!!!!!TODOTODOTODO")
-
-        # self.events.on_startup()
-        # self.systemStatsRecorder.start()
 
     # overriding
     def path(self):

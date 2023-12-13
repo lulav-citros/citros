@@ -1,13 +1,18 @@
 import os
 from typing import cast
 
-from citros import Citros
+from simulation import Simulation
 
 
 ################################
 # Entrypoint
 ################################
-def generate_launch_description(citros: Citros):
+def generate_launch_description(simulation: Simulation, 
+                                name: str, 
+                                message: str, 
+                                batch_id:str, 
+                                run_id: int, 
+                                destination: str):
     """
     Generates a ROS2 LaunchDescription for a simulation run.
 
@@ -47,16 +52,13 @@ def generate_launch_description(citros: Citros):
     from launch.events import Shutdown, process
     from launch.actions import SetLaunchConfiguration
 
-    simulation_name = str(citros._sim_name)
-    simulation_run_dir = str(citros.SIM_RUN_DIR)
-    batch_run_id = str(citros._batch_id)
-    simulation_run_id = str(citros._run_id)
+    # simulation_name = str(simulation.name)
 
-    citros.log.debug(
-        f"generate_launch_description. batch_run_id: {batch_run_id}, simulation_run_id: {simulation_run_id}."
+    simulation.log.debug(
+        f"generate_launch_description. name: {name}, message: {message}, batch_id: {batch_id}, run_id: {run_id}, destination: {destination}."
     )
 
-    citros.events.init(
+    simulation.events.init(
         batch_run_id=batch_run_id,
         sid=simulation_run_id,
         tag="INIT",
@@ -66,29 +68,22 @@ def generate_launch_description(citros: Citros):
 
     ld = LaunchDescription([LogInfo(msg="CITROS launch file!")])
 
-    ld.add_action(SetLaunchConfiguration("simulation_name", simulation_name))
+    ld.add_action(SetLaunchConfiguration("simulation_name", simulation.name))
     ld.add_action(SetLaunchConfiguration("simulation_run_dir", simulation_run_dir))
 
     ld.add_action(SetLaunchConfiguration("batch_run_id", batch_run_id))
     ld.add_action(SetLaunchConfiguration("simulation_run_id", simulation_run_id))
 
-    batch = citros.batch.get_batch(batch_run_id, simulation_name)
-
-    if not batch:
-        citros.log.error(f"unknown batch id [{batch_run_id}]")
-        return
-
-    # default timeout to 10 minutes.
-    timeout = str(600)
+    batch = simulation.batch.get_batch(batch_run_id, simulation_name)
 
     # override with simulation value
-    timeout_from_client = batch["timeout"]
+    timeout_from_client = simulation["timeout"]
     if float(timeout_from_client) > 1:
         timeout = str(timeout_from_client)
     ld.add_action(SetLaunchConfiguration("timeout", timeout))
 
-    citros.log.info(
-        f"initializing simulation, batch_id: {batch_run_id}, run_id: {simulation_run_id}, timeout: {timeout}"
+    simulation.log.info(
+        f"initializing simulation: {simulation.name} ,name: {name}, batch_id: {batch_id}, run_id: {run_id}, timeout: {timeout}"
     )
 
     ################################
@@ -109,7 +104,6 @@ def generate_launch_description(citros: Citros):
         )
     )
 
-    #
     ld.add_action(
         DeclareLaunchArgument(
             "simulation_run_dir",
@@ -148,8 +142,8 @@ def generate_launch_description(citros: Citros):
     # the simulation run directory is created ad-hoc before the call to generate_launch_description.
     bag_folder = citros.BAG_DIR
     bag_cmd = ["ros2", "bag", "record", "-a", "-o", bag_folder]
-
-    mcap = citros.config.STORAGE_TYPE == "MCAP"
+    
+    mcap = simulation["storage_type"] == "MCAP"
     if mcap:
         bag_cmd.append("-s")
         bag_cmd.append("mcap")
@@ -182,7 +176,7 @@ def generate_launch_description(citros: Citros):
     ################################
 
     def launch_setup(context, *args, **kwargs):
-        citros.log.debug("launch_setup")
+        simulation.log.debug("launch_setup")
 
         simulation_name = LaunchConfiguration("simulation_name").perform(context)
         simulation_run_dir = LaunchConfiguration("simulation_run_dir").perform(context)
@@ -191,11 +185,11 @@ def generate_launch_description(citros: Citros):
         simulation_run_id = LaunchConfiguration("simulation_run_id").perform(context)
 
         # config
-        config = citros.params.init_params(
+        config = simulation.params.init_params(
             simulation_name, simulation_run_dir, int(simulation_run_id)
         )
         # send event with the config to CiTROS
-        citros.events.starting(
+        simulation.events.starting(
             batch_run_id=batch_run_id,
             sid=simulation_run_id,
             tag="CONFIG",

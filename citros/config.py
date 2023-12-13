@@ -53,3 +53,9 @@ class config:
     """
     the url for opentelemetry
     """
+    
+    TRACE_CONTEXT = _conf("TRACE_CONTEXT", None)
+    """
+    if the trace was started on the cluster by a different entity (e.g. the worker),
+    its context is given by an environment variable.
+    """

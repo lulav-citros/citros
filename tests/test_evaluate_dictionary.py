@@ -1,7 +1,7 @@
 import pytest
 import numpy
 from pathlib import Path
-from citros.citros_params import citros_params
+from tmp.citros.citros.ros.params import citros_params
 
 
 class MockCitros:
