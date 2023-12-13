@@ -37,6 +37,7 @@ class Simulation(CitrosObj):
         from citros.ros import generate_launch_description
 
         self.log.info(f"running simulation [{self.name}]")
+        # print(f"running simulation [{self.name}]")
 
         if self.verbose:
             self.log.info(f'simulation run dir = "{simulation_rec_dir}]"')
@@ -124,7 +125,7 @@ class Simulation(CitrosObj):
 
         # validate json schema is correct
         success = validate_dir(
-            self.root_citros / "simulaitons", "schema_simulation.json", self.log
+            self.root_citros / "simulations", "schema_simulation.json", self.log
         )
 
         if not success:

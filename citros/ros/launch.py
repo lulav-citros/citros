@@ -155,28 +155,28 @@ def generate_launch_description(simulation: Simulation, destination: str, events
     record_proccess = ExecuteProcess(
         cmd=bag_cmd, 
         name="citros_bag_recorder", 
-        # output="screen",
+        output="screen",
         log_cmd=True,
     )
     ld.add_action(record_proccess)
 
-    ################################
-    # STD LOG on ros events.
-    ################################
-    # Setup a custom event handler for all stdout/stderr from processes.
-    # Later, this will be a configurable, but always present, extension to the LaunchService.
-    def on_output(event: Event) -> None:
-        for line in event.text.decode().splitlines():
-            # log files will be written to ROS_LOGS_DIR rather than CLI_LOGS _DIR
-            simulation.log.info(f"[ROS][{cast(process.ProcessIO, event).process_name}]{line}")
+    # ################################
+    # # STD LOG on ros events.
+    # ################################
+    # # Setup a custom event handler for all stdout/stderr from processes.
+    # # Later, this will be a configurable, but always present, extension to the LaunchService.
+    # def on_output(event: Event) -> None:
+    #     for line in event.text.decode().splitlines():
+    #         # log files will be written to ROS_LOGS_DIR rather than CLI_LOGS _DIR
+    #         simulation.log.info(f"[ROS][{cast(process.ProcessIO, event).process_name}]{line}")
 
-    ld.add_action(RegisterEventHandler(
-        OnProcessIO(
-                on_stdout=on_output,
-                on_stderr=on_output,
-            )
-        )
-    )
+    # ld.add_action(RegisterEventHandler(
+    #     OnProcessIO(
+    #             on_stdout=on_output,
+    #             on_stderr=on_output,
+    #         )
+    #     )
+    # )
 
     ################################
     # User launch file
