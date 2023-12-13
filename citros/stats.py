@@ -3,7 +3,6 @@ import time
 import psutil
 import threading
 
-from .config import config
 
 
 # Example:
@@ -11,7 +10,7 @@ from .config import config
 # stats.start()
 # stats.stop()
 class SystemStatsRecorder:
-    def __init__(self, file_name, interval=config.STATS_INTERVAL):
+    def __init__(self, file_name, interval=1):
         self.file_name = file_name
         self.interval = interval
         with open(file_name, "w") as file:
@@ -31,8 +30,11 @@ class SystemStatsRecorder:
 
     def start(self):
         self.stop_flag.clear()
+        # self.thread = threading.Thread(
+        #     target=self._run, args=(self.interval, self.file_name)
+        # )
         self.thread = threading.Thread(
-            target=self._run, args=(self.interval, self.file_name)
+            target=self._run
         )
         self.thread.start()
 

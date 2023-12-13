@@ -15,7 +15,6 @@ from os import linesep
 from pathlib import Path
 from datetime import datetime
 
-from .config import config
 
 ################################## hash ###################################
 
@@ -64,13 +63,13 @@ def check_ssh_key_pair():
 ############################## Network ####################################
 
 
-def suppress_ros_lan_traffic():
+def suppress_ros_lan_traffic(ros_domain_id):
     """
     avoid seeing ros traffic from other simulations on the same LAN.
     """
     if "ROS_DOMAIN_ID" not in os.environ:
         # anything between 0 and 101
-        os.environ["ROS_DOMAIN_ID"] = str(config.ROS_DOMAIN_ID)
+        os.environ["ROS_DOMAIN_ID"] = str(ros_domain_id)
 
 
 ########################### file and format utils #########################
@@ -247,8 +246,8 @@ def get_git_info(self, repo_path="."):
     return latest_commit_hash, current_branch_name
 
 
-def get_user_git_info(self, dir):
-    commit, branch = self.get_git_info(dir)
+def get_user_git_info(dir):
+    commit, branch = get_git_info(dir)
     return commit, branch
 
 

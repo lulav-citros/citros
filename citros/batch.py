@@ -3,8 +3,8 @@ import json
 import logging
 from pathlib import Path
 from datetime import datetime
+from rich import print, inspect, print_json
 from rich.logging import RichHandler
-from citros import config
 
 from citros.utils import get_user_git_info
 
@@ -104,7 +104,7 @@ class Batch:
 
     def __setitem__(self, key, newvalue):
         self.data[key] = newvalue
-        self.save()
+        self._save()
 
     ###################
     ##### private #####
@@ -118,8 +118,12 @@ class Batch:
         return True, None
 
     def _new(self):
+        
+        self.batch_dir.mkdir(parents=True, exist_ok=True)
+        
         commit, branch = get_user_git_info(self.simulation.root)
-
+        
+        # inspect(self.simulation)
         self.data = {
             "simulation": self.simulation.name,
             "name": self.name,
@@ -127,7 +131,7 @@ class Batch:
             "gpu": self.simulation["GPU"],
             "cpu": self.simulation["CPU"],
             "memory": self.simulation["MEM"],
-            "timeout": self.simulation["TIMEOUT"],
+            "timeout": self.simulation["timeout"],
             "commit": commit,
             "branch": branch,
             "storage_type": self.simulation["storage_type"],  # SQLITE, MCAP
@@ -183,21 +187,16 @@ class Batch:
         return self.batch_dir / "info.json"
 
     def run(
-        self,
-        name: str,
-        message: str,
+        self,        
         completions: int = 1,
-        suppress_ros_lan_traffic: bool = False,
+        ros_domain_id: int = None,
+        trace_context: str = None,
     ):
         print("batch.run")
 
         self["completions"] = completions
         self["status"] = "RUNNING"
 
-        self._save()
-
-        self.batch_dir.mkdir(parents=True, exist_ok=True)
-
-        ret = self.simulation.run(suppress_ros_lan_traffic)
+        ret = self.simulation.run(self.batch_dir / "0", trace_context=trace_context, ros_domain_id=ros_domain_id)
 
         return ret

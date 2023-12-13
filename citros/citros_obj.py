@@ -10,11 +10,13 @@ class CitrosException(Exception):
     def __init__(self, message="Simulation exception."):
         super().__init__(message)
 
-
-class NoFoundException(CitrosException):
+class CitrosNotFoundException(CitrosException):
     def __init__(self, message="No batch found."):
         super().__init__(message)
-
+        
+class FileNotFoundException(CitrosException):
+    def __init__(self, message="No batch found."):
+        super().__init__(message)
 
 class NoValidException(CitrosException):
     def __init__(self, message="No batch found."):
@@ -166,10 +168,10 @@ class CitrosObj:
 
     def _load(self):
         if not Path(self.root_citros).exists():
-            raise FileNotFoundError(f'"{self.root_citros}" does not exist.')
+            raise CitrosNotFoundException(f'"{self.root_citros}" does not exist.')
 
         if not Path(self.path()).exists():
-            raise FileNotFoundError(f'"{self.path()}" does not exist.')
+            raise FileNotFoundException(f'"{self.path()}" does not exist.')
 
         """Load .json file."""
         with open(self.path(), "r") as file:

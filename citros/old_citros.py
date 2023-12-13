@@ -14,7 +14,7 @@ import subprocess
 import citros_meta
 from os import linesep
 from pathlib import Path
-from .config import config
+from ..bin.config import config
 
 from .stats import SystemStatsRecorder
 from .parsers import parser_ros2

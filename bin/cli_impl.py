@@ -1,6 +1,6 @@
 import path
 import sys
-from citros import Citros, config
+from citros import Citros
 from pathlib import Path
 from rich import print, inspect, print_json
 from rich.rule import Rule
@@ -12,6 +12,10 @@ from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 from citros.utils import str_to_bool, suppress_ros_lan_traffic
 from citros.batch import Batch
+
+from .config import config
+
+from citros import CitrosNotFoundException
 
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
@@ -62,7 +66,12 @@ def run(args, argv):
     :param args.debug:
     :param args.verbose:
     """
-    citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+    except CitrosNotFoundException:
+        print(f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.')
+        return
+        
 
     if args.debug:
         print("[green]done initializing CITROS")
@@ -88,15 +97,10 @@ def run(args, argv):
         )
         return False
 
-    if not args.lan_traffic:
-        suppress_ros_lan_traffic()
-
     simulation = choose_simulation(
         citros,
         args.simulation_name,
     )
-
-    config.RECORDINGS_DIR
 
     root_rec_dir = f"{args.dir}/.citros/data"
     if config.RECORDINGS_DIR:
@@ -106,11 +110,12 @@ def run(args, argv):
         root_rec_dir,
         simulation,
         name=batch_name,
-        messge=batch_message,
+        mesaage=batch_message
     )
     batch.run(
-        completions=10,
-        suppress_ros_lan_traffic=config.SUPPRESS_ROS_LAN_TRAFFIC,
+        10, 
+        ros_domain_id=config.ROS_DOMAIN_ID,
+        trace_context=config.TRACE_CONTEXT
     )
 
 

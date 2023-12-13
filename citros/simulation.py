@@ -4,6 +4,7 @@ import sys
 import uuid
 import shutil
 from pathlib import Path
+from citros.stats import SystemStatsRecorder
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -16,10 +17,8 @@ from datetime import datetime
 
 from .utils import suppress_ros_lan_traffic, validate_dir
 from .parameter_setup import ParameterSetup
-from .citros_obj import CitrosObj, CitrosException, NoFoundException, NoValidException
+from .citros_obj import CitrosObj, CitrosException, CitrosNotFoundException, FileNotFoundException, NoValidException
 from .events import EventsOTLP
-
-from .config import config
 
 
 class Simulation(CitrosObj):
@@ -28,10 +27,10 @@ class Simulation(CitrosObj):
     ##################
     ##### public #####
     ##################
-    def run(self, simulation_rec_dir, suppress_ros_lan_traffic=False):
+    def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
         """Run simulation."""
 
-        events = EventsOTLP(self)
+        events = EventsOTLP(self, trace_context)
 
         # running inside ROS workspace context.
         from launch import LaunchService
@@ -47,8 +46,8 @@ class Simulation(CitrosObj):
         # create .citros/data if not exists
         simulation_rec_dir.mkdir(parents=True, exist_ok=True)
 
-        if suppress_ros_lan_traffic:
-            suppress_ros_lan_traffic()
+        if ros_domain_id:
+            suppress_ros_lan_traffic(ros_domain_id)
 
         launch_description = generate_launch_description(
             self, simulation_rec_dir, events
@@ -59,20 +58,22 @@ class Simulation(CitrosObj):
             self.log.error(msg)
             return
 
-        launch_service = LaunchService(debug=(self.log_level == "debug"))
+        launch_service = LaunchService(debug=self.debug)
         launch_service.include_launch_description(launch_description)
 
-        self.systemStatsRecorder.start()
+        systemStatsRecorder = SystemStatsRecorder(f"{simulation_rec_dir}/stats.json")
+        systemStatsRecorder.start()
 
         ret = launch_service.run()
 
-        self.systemStatsRecorder.stop()
+        systemStatsRecorder.stop()
 
         print(
             f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation with return code [{ret}].",
         )
 
-        self.save_run_data()
+        # TODO!
+        # self.save_run_data()
 
         if ret != 0:
             events.error(
@@ -162,7 +163,7 @@ class Simulation(CitrosObj):
             super()._load()
         except FileNotFoundError as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
-            raise NoFoundException(f"simulation file {self.file} does not exist.")
+            raise FileNotFoundException(f"simulation file {self.file} does not exist.")
 
     # overriding
     def _new(self):

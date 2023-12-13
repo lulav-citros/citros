@@ -28,7 +28,6 @@ from rich.padding import Padding
 
 install()
 
-from .config import config
 
 class FileSpanExporter(SpanExporter):
     """
@@ -79,7 +78,7 @@ class EventsOTLP:
     (or the console on the user's local environment).
     """
 
-    def __init__(self, log=None, destination=None, otlp_url=None):        
+    def __init__(self, log=None, destination=None, otlp_url=None, trace_context=None):        
         self.log = log
         self.otlp_url = otlp_url # "localhost:3417"
         self.destination = destination
@@ -87,8 +86,8 @@ class EventsOTLP:
 
         # if the trace was started on the cluster by a different entity (e.g. the worker),
         # its context is given by an environment variable.            
-        if config.TRACE_CONTEXT:
-            self.otlp_context = {"traceparent": config.TRACE_CONTEXT}
+        if trace_context:            
+            self.otlp_context = {"traceparent": trace_context}
         else:
             self.otlp_context = None
 
@@ -150,10 +149,10 @@ class EventsOTLP:
         return PROPAGATOR.extract(metadata, getter=DefaultGetter())
 
     def set_span_attributes(
-        self, span, batch_run_id, sid, event_type, tag, message, metadata
+        self, span, event_type, tag, message, metadata
     ):
-        span.set_attribute("batch-run-id", batch_run_id)
-        span.set_attribute("sid", sid)
+        # span.set_attribute("batch-run-id", batch_run_id)
+        # span.set_attribute("sid", sid)
         span.set_attribute("event-type", event_type)
         span.set_attribute("tag", tag)
         span.set_attribute("message", message)
@@ -163,14 +162,13 @@ class EventsOTLP:
         self.seq = self.seq + 1
 
 
-    def emit(self, batch_run_id, sid, event_type, tag, message, metadata):
+    def emit(self, event_type, tag, message, metadata):
         """
         Creates a new span and sets its attributes with the given arguments.
         If self.otlp_context has not been set, the span will be started as the root span.
         Else, the span will be started with the span in the self.otlp_context as parent.
 
-        :param batch_run_id: batch run id
-        :param sid: sequence-id of the simulation
+        
         :param event: event type
         :param tag: tag - can be any string
         :param message: a message for the event
@@ -195,7 +193,7 @@ class EventsOTLP:
         if self.otlp_context is None:
             with self.tracer.start_as_current_span(event_type) as span:
                 self.set_span_attributes(
-                    span, batch_run_id, sid, event_type, tag, message, metadata
+                    span, event_type, tag, message, metadata
                 )
                 self.otlp_context = self.serialize_current_context()
         else:
@@ -205,113 +203,104 @@ class EventsOTLP:
 
             with trace.use_span(span, end_on_exit=True):
                 self.set_span_attributes(
-                    span, batch_run_id, sid, event_type, tag, message, metadata
+                    span, event_type, tag, message, metadata
                 )
                 self.otlp_context = self.serialize_current_context()
 
-    def schedule(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def schedule(self, tag="", message="", metadata=None):
         """
         Sends event of type SCHEDULE to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "SCHEDULE", tag, message, metadata)
+        self.emit("SCHEDULE", tag, message, metadata)
 
-    def creating(self, batch_run_id, sid="", tag="", message="", metadata=None):
+    def creating(self, tag="", message="", metadata=None):
         """
         Sends event of type CREATING to CiTROS
 
-        :param batch_run_id: batch run id
-        :param sid: sequence-id of the simulation
+        
         :param tag: tag - can be any string
         :param message: a message for the event
         :param metadata: some dict object containing metadata.
         """
-        self.emit(batch_run_id, sid, "CREATING", tag, message, metadata)
+        self.emit("CREATING", tag, message, metadata)
 
-    def init(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def init(self, tag="", message="", metadata=None):
         """
         Sends event of type INIT to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "INIT", tag, message, metadata)
+        self.emit("INIT", tag, message, metadata)
 
-    def starting(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def starting(self, tag="", message="", metadata=None):
         """
         Sends event of type STARTING to CiTROS
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "STARTING", tag, message, metadata)
+        self.emit("STARTING", tag, message, metadata)
 
-    def running(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def running(self, tag="", message="", metadata=None):
         """
         Sends event of type RUNNING to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "RUNNING", tag, message, metadata)
+        self.emit("RUNNING", tag, message, metadata)
 
-    def terminating(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def terminating(self, tag="", message="", metadata=None):
         """
         Sends event of type TERMINATING to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "TERMINATING", tag, message, metadata)
+        self.emit("TERMINATING", tag, message, metadata)
 
-    def stopping(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def stopping(self, tag="", message="", metadata=None):
         """
         Sends event of type STOPPING to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "STOPPING", tag, message, metadata)
+        self.emit("STOPPING", tag, message, metadata)
 
-    def done(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def done(self, tag="", message="", metadata=None):
         """
         Sends event of type DONE to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "DONE", tag, message, metadata)
+        self.emit("DONE", tag, message, metadata)
 
-    def error(self, batch_run_id, sid, tag="", message="", metadata=None):
+    def error(self, tag="", message="", metadata=None):
         """
         Sends event of type ERROR to CiTROS
 
-        :param batch_run_id:
-        :param sid:
+        
         :param tag:  (Default value = "")
         :param message:  (Default value = "")
         :param metadata:  (Default value = None)
         """
-        self.emit(batch_run_id, sid, "ERROR", tag, message, metadata)
+        self.emit("ERROR", tag, message, metadata)

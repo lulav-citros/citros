@@ -39,11 +39,6 @@ class config:
     options: [SQLITE3, MCAP]
     """
 
-    SUPPRESS_ROS_LAN_TRAFFIC: bool = _conf("SUPPRESS_ROS_LAN_TRAFFIC", False, cast=bool)
-    """
-    avoid seeing ros traffic from other simulations on the same LAN.
-    """
-
     ROS_DOMAIN_ID: int = _conf("ROS_DOMAIN_ID", 42, cast=int)
     """
     the domain id for ros to use. 

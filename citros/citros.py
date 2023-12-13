@@ -13,7 +13,7 @@ from citros.utils import validate_dir, validate_file
 from .settings import Settings
 from .simulation import Simulation
 from .parameter_setup import ParameterSetup
-from .citros_obj import CitrosObj, CitrosException, NoFoundException, NoValidException
+from .citros_obj import CitrosObj, CitrosException, FileNotFoundException, CitrosNotFoundException,NoValidException
 
 from rich.traceback import install
 from rich.logging import RichHandler
@@ -102,7 +102,7 @@ class Citros(CitrosObj):
             super()._load()
         except FileNotFoundError as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
-            raise NoFoundException(f"simulation file {self.file} does not exist.")
+            raise FileNotFoundException(f"simulation file {self.file} does not exist.")
 
         # loads the settings.json file
         self.settings = Settings(
