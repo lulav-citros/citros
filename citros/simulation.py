@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 import uuid
 import shutil
 from pathlib import Path
@@ -20,51 +21,41 @@ from .events import EventsOTLP
 
 from .config import config
 
+
 class Simulation(CitrosObj):
     """Object representing .citros/simulations/name.json file."""
 
     ##################
     ##### public #####
     ##################
-    def run(self, root, run_id=0):
+    def run(self, simulation_rec_dir, suppress_ros_lan_traffic=False):
         """Run simulation."""
-        
+
         events = EventsOTLP(self)
-        
-        
+
         # running inside ROS workspace context.
         from launch import LaunchService
         from citros.ros import generate_launch_description
 
-        print(f" + + running simulation [{run_id}]")
+        self.log.info(f"running simulation [{self.name}]")
 
-        now = datetime.today().strftime('%Y%m%d%H%M%S')
-        # data/{sim}/{run name}/{date time}
-        if config.RECORDINGS_DIR:
-            simulation_rec_dir = Path(config.RECORDINGS_DIR) / self.name / name / now
+        if self.verbose:
+            self.log.info(f'simulation run dir = "{simulation_rec_dir}]"')
         else:
-            simulation_rec_dir = self.root_citros / 'data' / self.name / name / now
-        
-        if self.verbose:            
-            print(f'simulation run dir = "{simulation_rec_dir}]"')
-        
+            self.log.debug(f'simulation run dir = "{simulation_rec_dir}]"')
+
         # create .citros/data if not exists
         simulation_rec_dir.mkdir(parents=True, exist_ok=True)
-        # TODO: create simulation_rec_dir / batch.json 
-        
-        
-        # self.create_sim_run_dir(run_id)
-        # self.set_logger(self.SIM_RUN_DIR, "citros_sim_launch.log", batch_id, run_id)
 
-        if config.SUPPRESS_ROS_LAN_TRAFFIC:
+        if suppress_ros_lan_traffic:
             suppress_ros_lan_traffic()
 
-        launch_description = generate_launch_description(self, name, message)
+        launch_description = generate_launch_description(
+            self, simulation_rec_dir, events
+        )
 
         if launch_description is None:
-            msg = (
-                f"Couldn't run run_id:[{run_id}]. Failed to create launch_description."
-            )
+            msg = f"ERROR. Failed to create launch_description."
             self.log.error(msg)
             return
 
@@ -77,24 +68,27 @@ class Simulation(CitrosObj):
 
         self.systemStatsRecorder.stop()
 
-        
         print(
-            f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation run_id = [{run_id}] with return code [{ret}].",
-
+            f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation with return code [{ret}].",
         )
 
         self.save_run_data()
 
         if ret != 0:
-            self.events.error(
-                batch_id, run_id, message=f"Finished simulation. Return code = [{ret}]."
+            events.error(
+                # batch_id,
+                # run_id,
+                message=f"Finished simulation. Return code = [{ret}].",
             )
-            self.events.on_shutdown()
-            sys.exit(ret)
+            events.on_shutdown()
+            # sys.exit(ret)
         else:
-            self.events.done(
-                batch_id, run_id, message=f"Finished simulation. Return code = [{ret}]."
+            events.done(
+                # batch_id,
+                # run_id,
+                message=f"Finished simulation. Return code = [{ret}].",
             )
+        return ret
 
     # overriding
     def path(self):

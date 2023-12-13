@@ -2,7 +2,11 @@ import os
 import json
 import logging
 from pathlib import Path
+from datetime import datetime
 from rich.logging import RichHandler
+from citros import config
+
+from citros.utils import get_user_git_info
 
 from .simulation import Simulation
 
@@ -11,33 +15,33 @@ class NoBatchFoundException(Exception):
     def __init__(self, message="No batch found."):
         super().__init__(message)
 
+
 # * create new batch for running simulations
-# to be able to run simulation Batch needs to have a simulation 
+# to be able to run simulation Batch needs to have a simulation
 # Batch(simulation : Simulation)
+
 
 # * create new batch for reading data from previous runs
 # To be able to interact with recorded batches
-# Batch(path: Path, index: int) # path data/simulation/batch, 
+# Batch(path: Path, index: int) # path data/simulation/batch,
 # index = -1 will get the latest batch run from this dir
 # index = n will get the n's batch run
 class Batch:
-    def __init__(self, 
-                 root, # the base recordings dir
-                 simulation: Simulation, 
-                 name : str ="citros",
-                 mesaage: str ="CITROS is AWESOME!!!", 
-                 index: int = -1, # default to take the last version of a runs
-                 log=None):
-        self.root = root
-        if root is None or simulation is None:
+    def __init__(
+        self,
+        root,  # the base recordings dir
+        simulation,  # if type(simulation) str then it is the name of the simulation if type(simulation) Simulation then it is the simulation object
+        name: str = "citros",
+        mesaage: str = "CITROS is AWESOME!!!",
+        index: int = -1,  # default to take the last version of a runs
+        log=None,
+    ):
+        if root is None:
             raise Exception("Error: root dir is None, batch needs is to operate")
-        if simulation is None or simulation is None:
+        if simulation is None:
             raise Exception("Error: simulation is None, batch needs is to operate")
-        
-        now = datetime.today().strftime('%Y%m%d%H%M%S')
-        
-        self.batch_dir = Path(root) / simulation_name / batch_name
-        self.batch_dir = os.path.join(root, simulation_name, batch_name)
+        if type(simulation) is not str and not Simulation:
+            raise Exception("Error: simulation is not a string or Simulation object")
 
         if log is None:
             logging.basicConfig(
@@ -50,58 +54,108 @@ class Batch:
         else:
             self.log = log
 
-        code, message = self._validate()
-        if code == 404:
-            raise NoBatchFoundException
+        self.root = root
+        self.simulation = simulation
+        self.name = name
+        self.message = mesaage
+        self.index = index
 
-        self.data = {
-            "simulation": simulation_name,
-            "name": batch_name,
-            "message": "",
-            "gpu": "",
-            "cpu": "",
-            "memory": "",
-            "timeout": "",
-            "commit": "",
-            "branch": "",
-            "storage_type": "MCAP",  # SQLITE, MCAP
-            "completions": "",
-            "parallelism": "",
-            "status": "",
-            "metadata": "",
-            "data_last_access": "",
-            "data_status": "UNLOADED",  # LOADED, UNLOADED, LOADING, ERROR
-            "created_at": "",
-            "updated_at": "",
-        }
+        simulation_name = simulation if type(simulation) is str else simulation.name
+        now = datetime.today().strftime("%Y%m%d%H%M%S")
 
-        self._load()
+        self.batch_dir = Path(root) / simulation_name / name / now
+
+        self.data = {}
+
+        # when simulation is a string then we are creating loading a batch from a path
+        if type(simulation) is str:
+            self._load()
+        # when simulation is a Simulation then we are creating new batch and starting a simulations
+        else:
+            self._new()
+
+        self._validate()
 
     def __str__(self):
         # print_json(data=self.data)
         return json.dumps(self.data, indent=4)
 
+    def __getitem__(self, key):
+        """get element from object
+
+        Args:
+            key (str): the element key
+
+        Returns:
+            str: the element value
+        """
+        return self.data[key]
+
+    def get(self, key, default=None):
+        """get element from object
+
+        Args:
+            key (str): the element key
+
+        Returns:
+            str: the element value
+        """
+        return self.data.get(key, default)
+
+    def __setitem__(self, key, newvalue):
+        self.data[key] = newvalue
+        self.save()
+
     ###################
     ##### private #####
     ###################
-    
+
     # verify that the batch folder is ok:
     # - all json is correct.
     # - all files is intact.
     # - if files is signed check all signings (sha)
     def _validate(self):
-        if os.path.exists(self.batch_dir) == False:
-            return 404, "there is no folder for this batch."
-        # TODO[critical]: add checks.
         return True, None
 
     def _new(self):
-        
-        pass
-    
-    
+        commit, branch = get_user_git_info(self.simulation.root)
+
+        self.data = {
+            "simulation": self.simulation.name,
+            "name": self.name,
+            "message": self.message,
+            "gpu": self.simulation["GPU"],
+            "cpu": self.simulation["CPU"],
+            "memory": self.simulation["MEM"],
+            "timeout": self.simulation["TIMEOUT"],
+            "commit": commit,
+            "branch": branch,
+            "storage_type": self.simulation["storage_type"],  # SQLITE, MCAP
+            # will be filled at runtime
+            "completions": "",
+            "status": "",
+            "metadata": "",
+            "data_last_access": "",
+            "data_status": "UNLOADED",  # LOADED, UNLOADED, LOADING, ERROR
+            "created_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+            "updated_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
+        self._save()
+
+    def _save(self):
+        self.data["updated_at"]: datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(self.path(), "w") as file:
+            json.dump(self.data, file, indent=4, sort_keys=True)
+
     def _load(self):
-        batch_info = os.path.join(self.batch_dir, "info.json")
+        if not self.batch_dir.exists():
+            raise NoBatchFoundException(f'No batch fount at "{self.batch_dir}"')
+
+        batch_info = self.path()
+
+        # TODO: use self.index to load the last batch run
 
         try:
             with open(batch_info, "r") as file:
@@ -115,17 +169,35 @@ class Batch:
 
         # TODO[critical]: add all simulations to the batch {... simulations: [sim1, ...]}
 
-    # start loading data to PG
-    def load_data():
-        pass
+    ###################
+    ##### public ######
+    ###################
+    def path(self):
+        """return the full path to the current main file.
 
-    ###################
-    ##### public #####
-    ###################
-    def run(self, name, message, completions=1):
-        #TODO: complete this
-        self.simulation.run(
-            name=name,
-            message=message,
-        )
-        
+        default to ".citros/project.json"
+
+        Returns:
+            str: the full path to the current main file.
+        """
+        return self.batch_dir / "info.json"
+
+    def run(
+        self,
+        name: str,
+        message: str,
+        completions: int = 1,
+        suppress_ros_lan_traffic: bool = False,
+    ):
+        print("batch.run")
+
+        self["completions"] = completions
+        self["status"] = "RUNNING"
+
+        self._save()
+
+        self.batch_dir.mkdir(parents=True, exist_ok=True)
+
+        ret = self.simulation.run(suppress_ros_lan_traffic)
+
+        return ret

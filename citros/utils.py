@@ -247,8 +247,8 @@ def get_git_info(self, repo_path="."):
     return latest_commit_hash, current_branch_name
 
 
-def get_user_git_info(self):
-    commit, branch = self.get_git_info(self.root_dir)
+def get_user_git_info(self, dir):
+    commit, branch = self.get_git_info(dir)
     return commit, branch
 
 

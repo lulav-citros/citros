@@ -1,6 +1,6 @@
 import path
 import sys
-from citros import Citros
+from citros import Citros, config
 from pathlib import Path
 from rich import print, inspect, print_json
 from rich.rule import Rule
@@ -11,6 +11,7 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 from citros.utils import str_to_bool, suppress_ros_lan_traffic
+from citros.batch import Batch
 
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
@@ -94,14 +95,23 @@ def run(args, argv):
         citros,
         args.simulation_name,
     )
-    
-    # TODO: batch = Batch(simulation)
-    # TODO: batch.run(name, message, completions=10)
-    
-    # simulation.run(
-    #     name=batch_name,
-    #     message=batch_message,
-    # )
+
+    config.RECORDINGS_DIR
+
+    root_rec_dir = f"{args.dir}/.citros/data"
+    if config.RECORDINGS_DIR:
+        root_rec_dir = config.RECORDINGS_DIR
+
+    batch = Batch(
+        root_rec_dir,
+        simulation,
+        name=batch_name,
+        messge=batch_message,
+    )
+    batch.run(
+        completions=10,
+        suppress_ros_lan_traffic=config.SUPPRESS_ROS_LAN_TRAFFIC,
+    )
 
 
 # helper function
