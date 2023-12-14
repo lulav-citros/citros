@@ -42,7 +42,7 @@ def execute_notebooks(notebook_paths, output_folder):
             nbformat.write(nb_node, nb_file)
 
 
-def render_notebooks_to_pdf(notebook_paths, output_folder, css_file_path = 'styles/default_style.css'):
+def render_notebooks_to_pdf(notebook_paths, output_folder, css_file_path = 'data/reports/teplates/default_style.css'):
     html_exporter = HTMLExporter()
 
     for notebook_path in notebook_paths:
