@@ -16,7 +16,6 @@ async def get_batch(simulation, batch_name):
     except NoBatchFoundException:
         raise HTTPException(status_code=404, detail="Item not found")
 
-
 def load_batch_run(simulation: str, batch_name: str, message=""):
     # TODO[critical] call to hot reload
     pass

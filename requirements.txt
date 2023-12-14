@@ -35,3 +35,4 @@ uvicorn
 fastapi-utils
 python-dotenv
 rich_argparse
+glob2

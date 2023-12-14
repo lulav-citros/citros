@@ -1,4 +1,5 @@
 import os
+import glob
 import json
 import logging
 from pathlib import Path
@@ -28,6 +29,12 @@ class NoBatchFoundException(Exception):
 # index = -1 will get the latest batch run from this dir
 # index = n will get the n's batch run
 class Batch:
+    def __exit__(self):
+        self.log.debug(
+            f"{self.__class__.__name__}.__exit__()",
+        )
+        shutdown_log()
+
     def __init__(
         self,
         root,  # the base recordings dir
@@ -55,8 +62,10 @@ class Batch:
         self.index = index
 
         simulation_name = simulation if type(simulation) is str else simulation.name
-        now = datetime.today().strftime("%Y%m%d%H%M%S")
-        self.batch_dir = Path(root) / simulation_name / name / now
+        self.batch_dir = Path(root) / simulation_name / name
+        if type(simulation) is Simulation:  # create new batch
+            now = datetime.today().strftime("%Y%m%d%H%M%S")
+            self.batch_dir = Path(root) / simulation_name / name / now
 
         self._init_log(log)
 
@@ -182,10 +191,12 @@ class Batch:
 
         batch_info = self.path()
 
+        self.log.debug(f"loading version: {batch_info}")
+
         # TODO: use self.index to load the last batch run
 
         try:
-            with open(batch_info, "r") as file:
+            with open(Path(batch_info), "r") as file:
                 batch_run = json.load(file)
 
                 self.data.update(batch_run)
@@ -207,7 +218,11 @@ class Batch:
         Returns:
             str: the full path to the current main file.
         """
-        return self.batch_dir / "info.json"
+        versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+
+        batch_version = versions[self.index]
+
+        return Path(batch_version) / "info.json"
 
     def run(
         self,
