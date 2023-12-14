@@ -27,6 +27,7 @@ class ParameterSetup(CitrosObj):
     # overriding
     def _validate(self):
         """Validate parameter_setup.json file."""
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._validate()")
 
         success = validate_dir(
             self.root_citros / "parameter_setups", "schema_param_setup.json", self.log
@@ -35,6 +36,7 @@ class ParameterSetup(CitrosObj):
         return success
 
     def _new(self):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._new()")
         path = self.path()
 
         # avoid overwrite

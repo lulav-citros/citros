@@ -48,6 +48,7 @@ def get_logger(
     logger_name,
     log_level="info",
     log_file=".citros/logs/citros.log",
+    verbose=False,
 ):
     logger = logging.getLogger(logger_name)
     logger.setLevel(str_to_log_level(log_level))
@@ -56,7 +57,7 @@ def get_logger(
     logger.addHandler(file_handler)
 
     # write to console when debugging
-    if log_level == "debug":
+    if verbose:
         # logger.addHandler(get_console_handler())
         logger.addHandler(get_rich_hangler())
 

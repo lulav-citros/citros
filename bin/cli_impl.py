@@ -110,7 +110,9 @@ def run(args, argv):
         root_rec_dir,
         simulation,
         name=batch_name,
-        mesaage=batch_message
+        mesaage=batch_message,
+        verbose=args.verbose, 
+        debug=args.debug
     )
     batch.run(
         10, 
