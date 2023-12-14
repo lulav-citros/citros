@@ -19,7 +19,13 @@ from .logger import get_logger, shutdown_log
 
 from .utils import suppress_ros_lan_traffic, validate_dir
 from .parameter_setup import ParameterSetup
-from .citros_obj import CitrosObj, CitrosException, CitrosNotFoundException, FileNotFoundException, NoValidException
+from .citros_obj import (
+    CitrosObj,
+    CitrosException,
+    CitrosNotFoundException,
+    FileNotFoundException,
+    NoValidException,
+)
 from .events import EventsOTLP
 
 
@@ -30,15 +36,17 @@ class Simulation(CitrosObj):
     ##### public #####
     ##################
     def _get_simulation_run_log(self, simulation_rec_dir):
-        return get_logger(__name__,
+        return get_logger(
+            __name__,
             log_level=os.environ.get("LOGLEVEL", "DEBUG" if self.debug else "INFO"),
             log_file=str(simulation_rec_dir / "citros.log"),
-            verbose=self.verbose
+            verbose=self.verbose,
         )
-        
+
     def copy_ros_log(self, destination: str):
-        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_ros_log()")        
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_ros_log()")
         from .utils import get_last_created_file, copy_files, rename_file
+
         ros_logs_dir_path = get_last_created_file(
             Path("~/.ros/log/").expanduser(), dirs=True
         )
@@ -49,23 +57,27 @@ class Simulation(CitrosObj):
         log_file_path = Path(ros_logs_dir_path, "launch.log")
         copy_files([log_file_path], destination, self.log)
         new_file_path = Path(destination, log_file_path.name)
-        rename_file(new_file_path, "ros.log")        
-    
+        rename_file(new_file_path, "ros.log")
+
     def copy_msg_files(self, destination: str):
-        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_msg_files()")        
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_msg_files()")
         from .utils import copy_files
         from .parsers import ParserRos2
+
         msg_paths = ParserRos2(self.log).get_msg_files(self.root)
         for msg_path in msg_paths:
             # assuming msg files are under package_name/msg/
             package_name = Path(msg_path).parent.parent.name
             target_dir = Path(destination, package_name, "msg")
             copy_files([msg_path], str(target_dir), self.log, True)
-    
+
     def save_system_vars(self, destination: str):
         import subprocess
         from os import linesep
-        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.save_system_vars()")
+
+        self.log.debug(
+            f"{'   '*self.level}{self.__class__.__name__}.save_system_vars()"
+        )
         # Get all environment variables
         env_vars = dict(os.environ)
 
@@ -83,14 +95,14 @@ class Simulation(CitrosObj):
 
         with open(Path(destination, "environment.json"), "w") as f:
             json.dump(data, f, indent=4)
-                 
+
     def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
-        """Run simulation."""                        
+        """Run simulation."""
         # create .citros/data if not exists
         simulation_rec_dir.mkdir(parents=True, exist_ok=True)
-        
+
         self.log = self._get_simulation_run_log(simulation_rec_dir)
-        
+
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.run()")
         events = EventsOTLP(self, trace_context)
 
@@ -119,7 +131,7 @@ class Simulation(CitrosObj):
             self.log.error(msg)
             return
 
-        launch_service = LaunchService(debug=False) #self.debug)
+        launch_service = LaunchService(debug=False)  # self.debug)
         launch_service.include_launch_description(launch_description)
 
         systemStatsRecorder = SystemStatsRecorder(f"{simulation_rec_dir}/stats.csv")
@@ -136,7 +148,7 @@ class Simulation(CitrosObj):
         self.copy_ros_log(simulation_rec_dir)
         self.copy_msg_files(simulation_rec_dir)
         self.save_system_vars(simulation_rec_dir)
-        
+
         # TODO!
         # self.save_run_data()
 
@@ -181,7 +193,7 @@ class Simulation(CitrosObj):
     # overriding
     def _validate(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._validate()")
-        
+
         """Validate simulation.json file."""
         Path(self.root).mkdir(parents=True, exist_ok=True)
 
@@ -224,7 +236,7 @@ class Simulation(CitrosObj):
     # overriding
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._load()")
-        
+
         try:
             # loads self.path()
             super()._load()
