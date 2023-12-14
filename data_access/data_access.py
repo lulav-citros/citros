@@ -7,12 +7,11 @@ import uvicorn
 
 app = FastAPI()
 
-
 # get batch info
 @app.get("/{simulation}/{batch_name}")
 async def get_batch(simulation, batch_name):
     try:
-        batch = Batch(config.ROOT_DIR, simulation, batch_name)
+        batch = Batch(app.root, simulation, batch_name, debug=app.debug, verbose=app.verbose)
         return batch.data
     except NoBatchFoundException:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -34,33 +33,24 @@ async def request_access_batch(
     return {"message": "Batch run {simulation}/{batch_name} is loading. please wait"}
 
 
-def main(args, argv):
-    """_summary_
-
-    :param args.debug:
-    :param args.verbose:
-    :param args.time:
-    :param args.host:
-    :param args.port:
-    """
-    # print("data args, argv", args, argv, args.debug, args.verbose)
-
+def data_access(root, time=False, host="localhost", port=8080, debug=False, verbose=False):
+    
+    app.root = root
+    app.debug = debug
+    app.verbose = verbose
+    
     loglevel = logging._nameToLevel["ERROR"]
-    if args.debug:
+    if debug:
         loglevel = logging._nameToLevel["DEBUG"]
-        logging.basicConfig(level=logging.DEBUG)
-    if args.verbose:
+        # logging.basicConfig(level=logging.DEBUG)
+    if verbose:
         loglevel = logging._nameToLevel["INFO"]
-        logging.basicConfig(level=logging.INFO)
-    logging.basicConfig(level=logging.ERROR)  # second call do nothing...
+        # logging.basicConfig(level=logging.INFO)
+    # logging.basicConfig(level=logging.ERROR)  # second call do nothing...
 
-    if args.time:
+    if time:
         logger = logging.getLogger("citros.data_access")
         add_timing_middleware(app, record=logger.info, prefix="app", exclude="untimed")
 
-    logging.getLogger("uvicorn.error").setLevel(level=loglevel)
-    uvicorn.run(app, host=args.host, port=int(args.port), log_level=loglevel)
-
-
-if __name__ == "__main__":
-    main()
+    # logging.getLogger("uvicorn.error").setLevel(level=loglevel)
+    uvicorn.run(app, host=host, port=int(port), log_level=loglevel)

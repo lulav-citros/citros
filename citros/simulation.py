@@ -37,6 +37,7 @@ class Simulation(CitrosObj):
         )
         
     def copy_ros_log(self, destination: str):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_ros_log()")        
         from .utils import get_last_created_file, copy_files, rename_file
         ros_logs_dir_path = get_last_created_file(
             Path("~/.ros/log/").expanduser(), dirs=True
@@ -49,7 +50,40 @@ class Simulation(CitrosObj):
         copy_files([log_file_path], destination, self.log)
         new_file_path = Path(destination, log_file_path.name)
         rename_file(new_file_path, "ros.log")        
-            
+    
+    def copy_msg_files(self, destination: str):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_msg_files()")        
+        from .utils import copy_files
+        from .parsers import ParserRos2
+        msg_paths = ParserRos2(self.log).get_msg_files(self.root)
+        for msg_path in msg_paths:
+            # assuming msg files are under package_name/msg/
+            package_name = Path(msg_path).parent.parent.name
+            target_dir = Path(destination, package_name, "msg")
+            copy_files([msg_path], str(target_dir), self.log, True)
+    
+    def save_system_vars(self, destination: str):
+        import subprocess
+        from os import linesep
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.save_system_vars()")
+        # Get all environment variables
+        env_vars = dict(os.environ)
+
+        pip_freeze_output = subprocess.run(
+            ["pip", "freeze"], capture_output=True, text=True
+        )
+
+        if pip_freeze_output.returncode != 0:
+            self.log.error("pip freeze failed: " + pip_freeze_output.stderr)
+            python_packages = []
+        else:
+            python_packages = pip_freeze_output.stdout.split(linesep)
+
+        data = {"environment_variables": env_vars, "python_packages": python_packages}
+
+        with open(Path(destination, "environment.json"), "w") as f:
+            json.dump(data, f, indent=4)
+                 
     def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
         """Run simulation."""                        
         # create .citros/data if not exists
@@ -72,11 +106,10 @@ class Simulation(CitrosObj):
         else:
             self.log.debug(f'simulation run dir = "{simulation_rec_dir}]"')
 
-        
-
         if ros_domain_id:
             suppress_ros_lan_traffic(ros_domain_id)
 
+        # launch
         launch_description = generate_launch_description(
             self, simulation_rec_dir, events
         )
@@ -101,22 +134,20 @@ class Simulation(CitrosObj):
         )
 
         self.copy_ros_log(simulation_rec_dir)
+        self.copy_msg_files(simulation_rec_dir)
+        self.save_system_vars(simulation_rec_dir)
         
         # TODO!
         # self.save_run_data()
 
         if ret != 0:
             events.error(
-                # batch_id,
-                # run_id,
                 message=f"Finished simulation. Return code = [{ret}].",
             )
             events.on_shutdown()
             # sys.exit(ret)
         else:
             events.done(
-                # batch_id,
-                # run_id,
                 message=f"Finished simulation. Return code = [{ret}].",
             )
         return ret

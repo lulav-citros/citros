@@ -6,6 +6,6 @@
 # ╚██████╗██║   ██║   ██║  ██║╚██████╔╝███████║
 #  ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 # ==============================================
-from .main import main as data_access
+from .data_access import data_access
 
 __all__ = [data_access]

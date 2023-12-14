@@ -207,15 +207,19 @@ def data_service(args, argv):
     :param args.project_name:
     """
 
-    # print(Panel(Markdown(open("bin/data.md", "r").read()), title="[green]CITROS", subtitle=f"[{citros_version}]"))
+    root = Path(args.dir).expanduser().resolve() / ".citros/data"
     print(
         Panel.fit(
             f"""started at [green]http://{args.host}:{args.port}[/green].
-API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation""",
+API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation
+Listening on: [green]{str(root)}""",
+
             title="[green]CITROS service",
         )
     )
-    _data_access(args, argv)
+    
+    
+    _data_access(str(root), time=args.time, host=args.host, port=int(args.port), debug=args.debug, verbose=args.verbose)
 
 
 def data_service_status(args, argv):

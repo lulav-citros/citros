@@ -59,9 +59,7 @@ class Batch:
         
         self._init_log(log)
 
-        self.log.debug(
-            f"{self.__class__.__name__}.init()",
-        )
+        self.log.debug(f"{self.__class__.__name__}.init()",)
         
         self.data = {}
 
@@ -133,7 +131,7 @@ class Batch:
         return True, None
 
     def _new(self):
-        
+        self.log.debug(f"{self.__class__.__name__}._new()",)
         self.batch_dir.mkdir(parents=True, exist_ok=True)
         
         commit, branch = get_user_git_info(self.simulation.root)
@@ -163,12 +161,14 @@ class Batch:
         self._save()
 
     def _save(self):
+        self.log.debug(f"{self.__class__.__name__}._save()",)
         self.data["updated_at"]: datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
         with open(self.path(), "w") as file:
             json.dump(self.data, file, indent=4, sort_keys=True)
 
     def _load(self):
+        self.log.debug(f"{self.__class__.__name__}._load()",)
         if not self.batch_dir.exists():
             raise NoBatchFoundException(f'No batch fount at "{self.batch_dir}"')
 
