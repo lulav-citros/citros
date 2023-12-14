@@ -35,3 +35,9 @@ uvicorn
 fastapi-utils
 python-dotenv
 rich_argparse
+nbconvert
+PyPDF2
+reportlab
+cryptography
+weasyprint
+jupiter

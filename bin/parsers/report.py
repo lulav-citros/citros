@@ -39,6 +39,11 @@ def parser_report_generate(subparser, epilog=None):
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
+    parser.add_argument("-e", "--execute", action="store_true", help="Execute notebooks")
+    parser.add_argument("-r", "--render", action="store_true", help="Render notebooks to PDF")
+    parser.add_argument("-s", "--sign", action="store_true", help="Sign PDFs")
+    parser.add_argument("paths", nargs='*', help="All paths in the order of key, notebooks, style (optional), settings, output")
+
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
@@ -70,6 +75,8 @@ def parser_report_validate(subparser, epilog=None):
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
+    parser.add_argument("-c", "--check", action="store_true", help="Verify PDF signatures")
+    parser.add_argument("paths", nargs='*', help="Path to the public key file for verification, followed by paths to PDF files to be verified")
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )

@@ -20,6 +20,7 @@ from citros import CitrosNotFoundException
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
 from data_access import data_access as _data_access
+from report import report as _report
 
 from InquirerPy import prompt
 from prompt_toolkit.validation import Validator, ValidationError
@@ -237,11 +238,70 @@ def data_db_clean(args, argv):
 
 
 ############################# REPORT implementation ##############################
-def report_generate(args, argv):
-    # TODO[critical]: implement report_generate
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
+def report_generate(args, argv):
+    print('ARGS:')
+    print(args)
+    
+    report_args = []
+    paths = args.paths
+    current_index = 0
+
+    if args.execute:
+        report_args.append('-e')
+
+    if args.render:
+        report_args.append('-r')
+
+    if args.sign:
+        report_args.append('-s')
+        key_path = paths[current_index]
+        if not key_path:
+            print("Error: Missing key for signing.")
+            return
+        report_args.append(key_path)
+        current_index += 1
+
+    notebook_paths = paths[current_index:-3] 
+    style_path = None
+    settings_path = None
+    output_folder = None
+
+    if args.render:
+        style_path = paths[-3]
+        current_index += 1
+
+    settings_path = paths[-2]
+    output_folder = paths[-1]
+
+    report_args.extend(notebook_paths)
+    if style_path:
+        report_args.append(style_path)
+    report_args.append(settings_path)
+    report_args.append(output_folder)
+
+    _report(report_args)
 
 def report_validate(args, argv):
-    # TODO[critical]: implement report_validate
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    check_flag = '-c' if args.check else ''
+    paths = args.paths 
+
+    if not paths:
+        print("Error: No paths provided for validation.")
+        sys.exit(1)
+
+    key_path = paths[0]
+    pdf_paths_to_check = paths[1:]
+
+    if not key_path:
+        print("Error: Missing key for validation.")
+        sys.exit(1)
+
+    if not pdf_paths_to_check:
+        print("Error: No PDF paths provided for validation.")
+        sys.exit(1)
+
+    validate_args = [check_flag, key_path] + pdf_paths_to_check
+    validate_args = [arg for arg in validate_args if arg]
+
+    _report(validate_args)
