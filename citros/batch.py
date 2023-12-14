@@ -11,6 +11,7 @@ from citros.utils import get_user_git_info
 from .simulation import Simulation
 from .logger import get_logger, shutdown_log
 
+
 class NoBatchFoundException(Exception):
     def __init__(self, message="No batch found."):
         super().__init__(message)
@@ -46,23 +47,23 @@ class Batch:
             raise Exception("Error: simulation is None, batch needs is to operate")
         if type(simulation) is not str and not Simulation:
             raise Exception("Error: simulation is not a string or Simulation object")
-        
+
         self.root = root
         self.simulation = simulation
         self.name = name
         self.message = mesaage
         self.index = index
-        
+
         simulation_name = simulation if type(simulation) is str else simulation.name
         now = datetime.today().strftime("%Y%m%d%H%M%S")
         self.batch_dir = Path(root) / simulation_name / name / now
-        
+
         self._init_log(log)
 
         self.log.debug(
             f"{self.__class__.__name__}.init()",
         )
-        
+
         self.data = {}
 
         # when simulation is a string then we are creating loading a batch from a path
@@ -109,22 +110,21 @@ class Batch:
     ###################
     def _init_log(self, log=None):
         self.log = log
-        if self.log is None:            
-            if type(self.simulation) is Simulation: # creating new 
-                self.batch_dir.mkdir(parents=True, exist_ok=True)                
+        if self.log is None:
+            if type(self.simulation) is Simulation:  # creating new
+                self.batch_dir.mkdir(parents=True, exist_ok=True)
                 log_dir = self.batch_dir
             else:
                 Path.home().joinpath(".citros/logs").mkdir(parents=True, exist_ok=True)
-                log_dir = Path.home().joinpath(".citros/logs")                    
-                
+                log_dir = Path.home().joinpath(".citros/logs")
+
             self.log = get_logger(
                 __name__,
                 log_level=os.environ.get("LOGLEVEL", "DEBUG" if self.debug else "INFO"),
                 log_file=str(log_dir / "citros.log"),
-                verbose=self.verbose
+                verbose=self.verbose,
             )
 
-            
     # verify that the batch folder is ok:
     # - all json is correct.
     # - all files is intact.
@@ -133,11 +133,10 @@ class Batch:
         return True, None
 
     def _new(self):
-        
         self.batch_dir.mkdir(parents=True, exist_ok=True)
-        
+
         commit, branch = get_user_git_info(self.simulation.root)
-        
+
         # inspect(self.simulation)
         self.data = {
             "simulation": self.simulation.name,
@@ -202,19 +201,21 @@ class Batch:
         return self.batch_dir / "info.json"
 
     def run(
-        self,        
+        self,
         completions: int = 1,
         ros_domain_id: int = None,
         trace_context: str = None,
-    ):        
+    ):
         self.log.debug(f"{self.__class__.__name__}.run()")
 
         self["completions"] = completions
         self["status"] = "RUNNING"
-        
+
         sim_dir = self.batch_dir / "0"
-        # create log that will write to the simulation dir. 
-        ret = self.simulation.run(sim_dir, trace_context=trace_context, ros_domain_id=ros_domain_id)
+        # create log that will write to the simulation dir.
+        ret = self.simulation.run(
+            sim_dir, trace_context=trace_context, ros_domain_id=ros_domain_id
+        )
 
         self.log.debug(f"{self.__class__.__name__}.run(): ret {ret}")
         return ret

@@ -104,7 +104,7 @@ class Citros(CitrosObj):
     # overriding
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
-        
+
         # loads the main file (project.json)
         try:
             self.log.debug(f"loading .citros/project.json")
@@ -112,7 +112,7 @@ class Citros(CitrosObj):
         except FileNotFoundError as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
             raise FileNotFoundException(f"simulation file {self.file} does not exist.")
-        
+
         # loads the settings.json file
         self.log.debug(f"loading .citros/settings.json")
         self.settings = Settings(
@@ -167,12 +167,12 @@ class Citros(CitrosObj):
     # overriding
     def _new(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._new()")
-        
+
         # create the .citros folder
         Path(self.root_citros).mkdir(parents=True, exist_ok=True)
 
-        # settings        
-        self.log.debug(f"creating .citros/settings.json")   
+        # settings
+        self.log.debug(f"creating .citros/settings.json")
         self.settings = Settings(
             "settings",
             root=self.root,
@@ -193,8 +193,8 @@ class Citros(CitrosObj):
         self.data = project_data
         self._save()
 
-        # parameter setups        
-        self.log.debug(f"creating .citros/parameter_setups/default_param_setup.json")   
+        # parameter setups
+        self.log.debug(f"creating .citros/parameter_setups/default_param_setup.json")
         self.parameter_setups = ParameterSetup(
             "default_param_setup",
             root=self.root,
@@ -210,8 +210,8 @@ class Citros(CitrosObj):
             "parameter_setups/README.md"
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
-        
-        # create simulation per launch file as default        
+
+        # create simulation per launch file as default
         self.log.debug(f"creating .citros/simulations/*")
         (self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
         self._create_simulations()
@@ -220,30 +220,30 @@ class Citros(CitrosObj):
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
 
-        self.log.debug(f"creating .citros/.gitignore")        
+        self.log.debug(f"creating .citros/.gitignore")
         self._create_gitignore()
 
-        self.log.debug(f"creating .citros/notebooks")   
+        self.log.debug(f"creating .citros/notebooks")
         (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "notebooks/README.md"
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
         # TODO: copy some sample notebooks.
-        
-        self.log.debug(f"creating .citros/data")   
+
+        self.log.debug(f"creating .citros/data")
         (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "data/README.md"
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
-        
-        self.log.debug(f"creating .citros/reports")   
+
+        self.log.debug(f"creating .citros/reports")
         (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "reports/README.md"
         ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")        
+            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")
 
     #################
     ##### utils #####
@@ -313,6 +313,6 @@ class Citros(CitrosObj):
         if not Path(self.root, ".gitignore").exists():
             with open(Path(self.root, ".gitignore"), "w") as file:
                 ignores = linesep.join(
-                    ["data/", "auth", "__pycache__/"]
+                    ["data/", "auth", "__pycache__/", "tmp/", "logs/"]
                 )  # add more as needed.
                 file.write(ignores)
