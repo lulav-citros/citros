@@ -4,19 +4,23 @@ import logging
 from pathlib import Path
 from rich.logging import RichHandler
 from rich import print, inspect, print_json
+import logger
 
 
 class CitrosException(Exception):
     def __init__(self, message="Simulation exception."):
         super().__init__(message)
 
+
 class CitrosNotFoundException(CitrosException):
     def __init__(self, message="No batch found."):
         super().__init__(message)
-        
+
+
 class FileNotFoundException(CitrosException):
     def __init__(self, message="No batch found."):
         super().__init__(message)
+
 
 class NoValidException(CitrosException):
     def __init__(self, message="No batch found."):
@@ -24,7 +28,7 @@ class NoValidException(CitrosException):
 
 
 class CitrosObj:
-    """Object representing .citros/*.json file."""
+    """Object representing .citros/*.json filew."""
 
     #####################
     ##### overrides #####
@@ -34,7 +38,7 @@ class CitrosObj:
         name: str,
         root=None,
         new=False,
-        log=None,
+        log: logging.Logger | None = None,
         citros=None,
         verbose=False,
         debug=False,
@@ -89,13 +93,11 @@ class CitrosObj:
             self.citros = self
 
         if log is None:
-            logging.basicConfig(
-                level=os.environ.get("LOGLEVEL", "INFO"),
-                format="%(message)s",
-                datefmt="[%X]",
-                handlers=[RichHandler(rich_tracebacks=True)],
+            self.log = logger.get_logger(
+                __name__,
+                log_level=os.environ.get("LOGLEVEL", "INFO"),
+                log_file=str(self.root_citros / "citros.log"),
             )
-            self.log = logging.getLogger(__name__)
         else:
             self.log = log
 

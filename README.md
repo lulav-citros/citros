@@ -1,3 +1,14 @@
+log
+
+
+citros comands... will:
+
+citros_imp -> prints all cli stuff to screen and file.
+all Citros implementation will print only to the given logger (can be configured with handlers and formatters)
+all logs from cli willbe written to .citros/citros.log
+this file shoule be in .gitignore
+
+
 # cli
 CITROS cli
 

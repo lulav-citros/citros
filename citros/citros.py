@@ -13,7 +13,13 @@ from citros.utils import validate_dir, validate_file
 from .settings import Settings
 from .simulation import Simulation
 from .parameter_setup import ParameterSetup
-from .citros_obj import CitrosObj, CitrosException, FileNotFoundException, CitrosNotFoundException,NoValidException
+from .citros_obj import (
+    CitrosObj,
+    CitrosException,
+    FileNotFoundException,
+    CitrosNotFoundException,
+    NoValidException,
+)
 
 from rich.traceback import install
 from rich.logging import RichHandler
@@ -230,6 +236,9 @@ class Citros(CitrosObj):
             "reports/README.md"
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")
+
+        # .citros/logs
+        (self.root_citros / "logs").mkdir(parents=True, exist_ok=True)
 
     #################
     ##### utils #####
