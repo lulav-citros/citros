@@ -2,19 +2,31 @@ from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi_utils.timing import add_timing_middleware, record_timing
 import logging
 from citros.batch import Batch, NoBatchFoundException
+from citros import get_logger, shutdown_log
 from .config import config
 import uvicorn
+import os
+from pathlib import Path
 
 app = FastAPI()
+
 
 # get batch info
 @app.get("/{simulation}/{batch_name}")
 async def get_batch(simulation, batch_name):
     try:
-        batch = Batch(app.root, simulation, batch_name, debug=app.debug, verbose=app.verbose)
+        batch = Batch(
+            app.root,
+            simulation,
+            batch_name,
+            log=app.log,
+            debug=app.debug,
+            verbose=app.verbose,
+        )
         return batch.data
     except NoBatchFoundException:
         raise HTTPException(status_code=404, detail="Item not found")
+
 
 def load_batch_run(simulation: str, batch_name: str, message=""):
     # TODO[critical] call to hot reload
@@ -32,16 +44,23 @@ async def request_access_batch(
     return {"message": "Batch run {simulation}/{batch_name} is loading. please wait"}
 
 
-def data_access(root, time=False, host="localhost", port=8080, debug=False, verbose=False):
-    
+def data_access(
+    root, time=False, host="localhost", port=8080, debug=False, verbose=False
+):
     app.root = root
     app.debug = debug
     app.verbose = verbose
-    
+    app.log = get_logger(
+        __name__,
+        log_level=os.environ.get("LOGLEVEL", "DEBUG" if debug else "INFO"),
+        log_file=str(Path(root) / "citros.log"),
+        verbose=verbose,
+    )
+
     loglevel = logging._nameToLevel["ERROR"]
-    if debug:
-        loglevel = logging._nameToLevel["DEBUG"]
-        # logging.basicConfig(level=logging.DEBUG)
+    # if debug:
+    #     loglevel = logging._nameToLevel["DEBUG"]
+    # logging.basicConfig(level=logging.DEBUG)
     if verbose:
         loglevel = logging._nameToLevel["INFO"]
         # logging.basicConfig(level=logging.INFO)
@@ -51,5 +70,7 @@ def data_access(root, time=False, host="localhost", port=8080, debug=False, verb
         logger = logging.getLogger("citros.data_access")
         add_timing_middleware(app, record=logger.info, prefix="app", exclude="untimed")
 
-    # logging.getLogger("uvicorn.error").setLevel(level=loglevel)
+    from fastapi.logger import logger as fastapi_logger
+
+    # app.log.
     uvicorn.run(app, host=host, port=int(port), log_level=loglevel)
