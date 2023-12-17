@@ -2,6 +2,13 @@
 
 
 
+## v0.0.10 (2023-12-17)
+
+### Fix
+
+* fix(requierments.txt): added fastapi ([`3bdbefc`](https://github.com/lulav-citros/citros/commit/3bdbefc1b82919a48d2dc963b67e04c49432a2cb))
+
+
 ## v0.0.9 (2023-12-17)
 
 ### Fix
