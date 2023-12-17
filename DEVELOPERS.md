@@ -25,7 +25,8 @@ The official doc [git-commit-guidlines] or [commit-message-format]
 ```
 
 example: 
-
+ 
+ 
 ```bash 
 git commit -m "docs(readme.md): change
 
