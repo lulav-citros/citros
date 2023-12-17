@@ -2,6 +2,15 @@
 
 
 
+## v0.0.7 (2023-12-17)
+
+### Fix
+
+* fix(setup): added requierments
+Remove unnecessary dependencies from
+requirements.txt ([`9a48b99`](https://github.com/lulav-citros/citros/commit/9a48b99a0cc2a6777addd0f3d0401aed6fc9850c))
+
+
 ## v0.0.6 (2023-12-17)
 
 ### Fix
