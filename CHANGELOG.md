@@ -2,6 +2,13 @@
 
 
 
+## v0.0.3 (2023-12-17)
+
+### Fix
+
+* fix(gitignore): fix gitignore ([`66f8916`](https://github.com/lulav-citros/citros/commit/66f8916b902f9156445b99de708b75c8956b5b75))
+
+
 ## v0.0.2 (2023-12-17)
 
 ### Fix
