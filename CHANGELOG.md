@@ -2,6 +2,17 @@
 
 
 
+## v0.0.9 (2023-12-17)
+
+### Fix
+
+* fix(type): typo ([`5c4f921`](https://github.com/lulav-citros/citros/commit/5c4f921d8a6bd691fc0cfeaba85527689cf5e1b8))
+
+### Unknown
+
+* fix(setup.: typo ([`fe3931c`](https://github.com/lulav-citros/citros/commit/fe3931c04c64985006f5e1eb2c51a6e9adb303b5))
+
+
 ## v0.0.8 (2023-12-17)
 
 ### Fix
