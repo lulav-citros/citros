@@ -273,7 +273,8 @@ class Simulation(CitrosObj):
             "MEM": 265,
             "storage_type": "MCAP",
         }
-        self.data = default | self.data
+        # self.data = default | self.data
+        self.data.update(default)
         self._save()
 
     ###################
