@@ -2,6 +2,13 @@
 
 
 
+## v0.0.14 (2023-12-17)
+
+### Fix
+
+* fix(log): parameter in CitrosObj constructor ([`166ac87`](https://github.com/lulav-citros/citros/commit/166ac87d32056d7e35858a91822bdd59b3558c52))
+
+
 ## v0.0.13 (2023-12-17)
 
 ### Fix
