@@ -145,7 +145,7 @@ class Citros(CitrosObj):
             )
 
         # loads the simulations
-        for file in glob.glob("*.json", root_dir=f"{self.root_citros}/simulations/"):
+        for file in glob.glob(f"{self.root_citros}/simulations/*.json"):
             # self.simulations.append(Simulation(self.root, file, self.log, citros=self))
             self.log.debug(f"loading simulation: {file}")
             self.simulations.append(
