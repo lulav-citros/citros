@@ -2,6 +2,15 @@
 
 
 
+## v0.0.16 (2023-12-17)
+
+### Fix
+
+* fix(Update): support python 3.8
+
+update data initialization in Simulation class ([`ec5175f`](https://github.com/lulav-citros/citros/commit/ec5175f6ad3ffb02f52fe7a2d062b0b247d817d2))
+
+
 ## v0.0.15 (2023-12-17)
 
 ### Fix
