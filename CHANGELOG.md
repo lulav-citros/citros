@@ -2,6 +2,13 @@
 
 
 
+## v0.0.19 (2023-12-17)
+
+### Fix
+
+* fix(citros): Refactor file paths in Citros class ([`0907920`](https://github.com/lulav-citros/citros/commit/0907920f5004e319802fcd5c47cd43e6568866c1))
+
+
 ## v0.0.18 (2023-12-17)
 
 ### Fix
