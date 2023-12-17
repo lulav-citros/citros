@@ -68,6 +68,7 @@ setup(
         "python-on-whales",
         "importlib-resources",
         "citros-data-analysis",
+        "path",
     ],
     py_modules=["citros", "citros_meta", "data"],
     project_urls={
