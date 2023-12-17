@@ -313,6 +313,6 @@ class Citros(CitrosObj):
         if not Path(self.root, ".gitignore").exists():
             with open(Path(self.root, ".gitignore"), "w") as file:
                 ignores = linesep.join(
-                    ["data/", "auth", "__pycache__/", "tmp/", "logs/"]
+                    [".citros/data/", ".citros/logs/"]
                 )  # add more as needed.
                 file.write(ignores)
