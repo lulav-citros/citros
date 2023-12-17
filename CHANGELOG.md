@@ -2,6 +2,13 @@
 
 
 
+## v0.0.18 (2023-12-17)
+
+### Fix
+
+* fix(citros): python 3.8 support ([`d188178`](https://github.com/lulav-citros/citros/commit/d1881782fc1d4364194c9509579bc41d84b38b5a))
+
+
 ## v0.0.17 (2023-12-17)
 
 ### Fix
