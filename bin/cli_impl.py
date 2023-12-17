@@ -12,7 +12,15 @@ from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 from citros.utils import str_to_bool, suppress_ros_lan_traffic
 from citros.batch import Batch
+from rich.table import Table
+from rich.console import Console
+from rich import pretty
+import json
 
+pretty.install()
+
+
+import glob
 from .config import config
 
 from citros import CitrosNotFoundException
@@ -21,7 +29,7 @@ directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
 from data_access import data_access as _data_access
 
-from InquirerPy import prompt
+from InquirerPy import prompt, inquirer
 from prompt_toolkit.validation import Validator, ValidationError
 
 
@@ -69,9 +77,10 @@ def run(args, argv):
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
-        print(f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.')
+        print(
+            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+        )
         return
-        
 
     if args.debug:
         print("[green]done initializing CITROS")
@@ -111,13 +120,11 @@ def run(args, argv):
         simulation,
         name=batch_name,
         mesaage=batch_message,
-        verbose=args.verbose, 
-        debug=args.debug
+        verbose=args.verbose,
+        debug=args.debug,
     )
     batch.run(
-        10, 
-        ros_domain_id=config.ROS_DOMAIN_ID,
-        trace_context=config.TRACE_CONTEXT
+        10, ros_domain_id=config.ROS_DOMAIN_ID, trace_context=config.TRACE_CONTEXT
     )
 
 
@@ -190,13 +197,86 @@ def parameter_setup(args, argv):
 
 ############################# DATA implementation ##############################
 def data(args, argv):
-    # TODO[critical]: implement data_status
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    # -s simulation
+    # -n name
+    # -i version index
+    # print batch info.
+    root = Path(args.dir).expanduser().resolve() / ".citros/data"
+
+    # simulation
+    simulations_glob = sorted(glob.glob(f"{str(root)}/*"))
+    simulations = []
+    for sim in simulations_glob:
+        if Path(sim).is_dir():
+            simulations.append(str(sim).split("/")[-1])
+
+    chosen_simulation = inquirer.fuzzy(
+        message="Select Simulation:", choices=simulations, default="", border=True
+    ).execute()
+
+    # batch
+    batch_glob = sorted(glob.glob(f"{str(root / chosen_simulation)}/*"))
+    batches = []
+    for batch in batch_glob:
+        if Path(batch).is_dir():
+            batches.append(str(batch).split("/")[-1])
+
+    chosen_batch = inquirer.fuzzy(
+        message="Select Batch:", choices=batches, default="", border=True
+    ).execute()
+
+    # version
+    version_glob = sorted(glob.glob(f"{str(root / chosen_simulation/ chosen_batch)}/*"))
+    versions = []
+    for version in version_glob:
+        if Path(version).is_dir():
+            versions.append(str(version).split("/")[-1])
+
+    version = inquirer.fuzzy(
+        message="Select Version:", choices=versions, default="", border=True
+    ).execute()
+
+    root / chosen_simulation / chosen_batch / version
+
+    batch = Batch(
+        root,
+        chosen_simulation,
+        name=chosen_batch,
+        debug=args.debug,
+        verbose=args.verbose,
+    )
+    # inspect(batch)
+    console = Console()
+    console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
+    console.print_json(data=batch.data)
+
+    return
 
 
 def data_list(args, argv):
-    # TODO[critical]: implement data_status
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    root = Path(args.dir).expanduser().resolve() / ".citros/data"
+
+    table = Table(title="Simulation Runs")
+    table.add_column("Simulation", style="cyan", no_wrap=True)
+    table.add_column("Run name", style="magenta")
+    table.add_column("Versions", justify="right", style="green")
+    table.add_column("Data", justify="right", style="green")
+
+    simulations = sorted(glob.glob(f"{str(root)}/*"))
+    for sim in simulations:
+        names = sorted(glob.glob(f"{sim}/*"))
+        for name in names:
+            versions = sorted(glob.glob(f"{name}/*"))
+            for version in versions:
+                table.add_row(
+                    sim.split("/")[-1],
+                    name.split("/")[-1],
+                    version.split("/")[-1],
+                    "vova",
+                )
+
+    console = Console()
+    console.print(table)
 
 
 def data_service(args, argv):
@@ -213,13 +293,18 @@ def data_service(args, argv):
             f"""started at [green]http://{args.host}:{args.port}[/green].
 API: open [green]http://{args.host}:{args.port}/redoc[/green] for documantation
 Listening on: [green]{str(root)}""",
-
             title="[green]CITROS service",
         )
     )
-    
-    
-    _data_access(str(root), time=args.time, host=args.host, port=int(args.port), debug=args.debug, verbose=args.verbose)
+
+    _data_access(
+        str(root),
+        time=args.time,
+        host=args.host,
+        port=int(args.port),
+        debug=args.debug,
+        verbose=args.verbose,
+    )
 
 
 def data_service_status(args, argv):
