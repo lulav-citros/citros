@@ -2,6 +2,15 @@
 
 
 
+## v0.0.17 (2023-12-17)
+
+### Fix
+
+* fix(citros.py): python 3.8 support
+
+Fix file path in parameter_setups loading ([`ed8876e`](https://github.com/lulav-citros/citros/commit/ed8876ee28332e1f35743a42a22256e0af9371ac))
+
+
 ## v0.0.16 (2023-12-17)
 
 ### Fix
