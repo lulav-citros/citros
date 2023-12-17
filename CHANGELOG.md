@@ -2,6 +2,24 @@
 
 
 
+## v0.0.2 (2023-12-17)
+
+### Fix
+
+* fix(version): update version ([`c0a79f0`](https://github.com/lulav-citros/citros/commit/c0a79f00352b567da8fc63f3fc345b7c1f2d9c25))
+
+### Unknown
+
+* Merge pull request #4 from lulav-citros/dev
+
+Add command line arguments for working directory, ([`62833a0`](https://github.com/lulav-citros/citros/commit/62833a03ace749cca17eae7a7499f1955b1066cf))
+
+* Add command line arguments for working directory,
+debug mode, and verbose mode ([`259e5ab`](https://github.com/lulav-citros/citros/commit/259e5ab6a7dce64be3d992372f0cb9a22d5e6c39))
+
+* Remove PyPI test workflow ([`390ef84`](https://github.com/lulav-citros/citros/commit/390ef84ef28af8b1b31092520c626183896aa172))
+
+
 ## v0.0.1 (2023-12-17)
 
 ### Documentation
