@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Schema for the ROS parameter setup json file",
+    "definitions": {
+        "generalObject": {
+            "type": "object",
+            "not": {
+                "required": [
+                    "function"
+                ]
+            },
+            "additionalProperties": {
+                "$ref": "#/definitions/parameterValue"
+            }
+        },
+        "functionObject": {
+            "type": "object",
+            "required": [
+                "function",
+                "args"
+            ],
+            "properties": {
+                "function": {
+                    "description": "Path to the function",
+                    "type": "string",
+                    "pattern": "^(numpy..+|.*:.+)$"
+                },
+                "args": {
+                    "description": "Arguments for the function",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parameterValue"
+                    }
+                }
+            }
+        },
+        "parameterValue": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "number"
+                },
+                {
+                    "type": "boolean"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/parameterValue"
+                    }
+                },
+                {
+                    "$ref": "#/definitions/generalObject"
+                },
+                {
+                    "$ref": "#/definitions/functionObject"
+                }
+            ]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "packages": {
+            "description": "A dictionary of all packages in the project",
+            "type": "object",
+            "patternProperties": {
+                "^.*$": {
+                    "description": "Any package name",
+                    "type": "object",
+                    "patternProperties": {
+                        "^.*$": {
+                            "description": "Any node name",
+                            "type": "object",
+                            "properties": {
+                                "ros__parameters": {
+                                    "description": "Parameters of the node",
+                                    "type": "object",
+                                    "patternProperties": {
+                                        "^.*$": {
+                                            "description": "Any parameter name",
+                                            "$ref": "#/definitions/parameterValue"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

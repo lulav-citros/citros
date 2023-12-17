@@ -1,0 +1,5 @@
+analytic_dynamics:
+  ros__parameters:
+    dt: 0.01
+    init_angle: 46.20593076183825
+    init_speed: 52.0
