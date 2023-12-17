@@ -2,6 +2,15 @@
 
 
 
+## v0.0.15 (2023-12-17)
+
+### Fix
+
+* fix(parameter_Setup): Update parameter setup
+
+using update() method to support python 3.8 ([`e19c855`](https://github.com/lulav-citros/citros/commit/e19c85507fd809451deb9354f7f62c438934180f))
+
+
 ## v0.0.14 (2023-12-17)
 
 ### Fix
