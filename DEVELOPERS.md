@@ -51,6 +51,7 @@ minor types = ["feat"]
 patch types = ["fix", "perf"]
 ```
 
+
 # Versioning locally
 we are working with [semantic-release] for versioning our package. 
 
