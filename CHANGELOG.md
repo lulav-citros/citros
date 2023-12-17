@@ -2,6 +2,15 @@
 
 
 
+## v0.0.4 (2023-12-17)
+
+### Fix
+
+* fix(requirements):
+
+Update requirements.txt with new package versions ([`df82feb`](https://github.com/lulav-citros/citros/commit/df82feb81c14ab007a57ac2912bf0314a108ee20))
+
+
 ## v0.0.3 (2023-12-17)
 
 ### Fix
