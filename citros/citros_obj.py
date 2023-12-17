@@ -39,7 +39,7 @@ class CitrosObj:
         name: str,
         root=None,
         new=False,
-        log: logging.Logger | None = None,
+        log=None,
         citros=None,
         verbose=False,
         debug=False,
