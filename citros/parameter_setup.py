@@ -51,7 +51,8 @@ class ParameterSetup(CitrosObj):
         default_parameter_setup = self.parser_ros2.generate_default_params_setup(
             self.citros
         )
-        self.data = default_parameter_setup | self.data
+        # self.data = default_parameter_setup | self.data
+        self.data.update(default_parameter_setup)
         self._save()
 
         # copy functions
