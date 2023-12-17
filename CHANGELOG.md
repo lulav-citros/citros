@@ -2,6 +2,13 @@
 
 
 
+## v0.0.12 (2023-12-17)
+
+### Fix
+
+* fix(requierments.txt): Update fastapi dependencies ([`fc7ff8f`](https://github.com/lulav-citros/citros/commit/fc7ff8facf50c7ae7630b4e6e744cb8cd0bc4123))
+
+
 ## v0.0.11 (2023-12-17)
 
 ### Fix
