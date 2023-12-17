@@ -37,6 +37,13 @@ def parser_data_list(parent_subparser, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
     parser.set_defaults(func=data_list)
 
     return parser
@@ -278,6 +285,13 @@ def parser_data(main_sub, epilog=None):
         epilog=epilog,
         help=help,
         formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.set_defaults(func=data)
 

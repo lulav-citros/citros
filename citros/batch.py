@@ -66,12 +66,18 @@ class Batch:
         if type(simulation) is Simulation:  # create new batch
             now = datetime.today().strftime("%Y%m%d%H%M%S")
             self.batch_dir = Path(root) / simulation_name / name / now
+        else:
+            versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+            batch_version = versions[self.index]            
+            self.batch_dir = Path(batch_version)
 
         self._init_log(log)
 
         self.log.debug(
             f"{self.__class__.__name__}.init()",
         )
+
+        self.log.debug(f"self.batch_dir:{str(self.batch_dir)}")
 
         self.data = {}
 
@@ -218,11 +224,10 @@ class Batch:
         Returns:
             str: the full path to the current main file.
         """
-        versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+        # versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+        # batch_version = versions[self.index]
 
-        batch_version = versions[self.index]
-
-        return Path(batch_version) / "info.json"
+        return self.batch_dir / "info.json"
 
     def run(
         self,
