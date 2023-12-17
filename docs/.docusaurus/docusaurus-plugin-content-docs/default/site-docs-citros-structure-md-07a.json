@@ -1,0 +1,23 @@
+{
+  "unversionedId": "citros_structure",
+  "id": "citros_structure",
+  "title": "CITROS Repository File Structure",
+  "description": "The following folder and file structure is automatically generated for you (when you run citros init):",
+  "source": "@site/docs/citros_structure.md",
+  "sourceDirName": ".",
+  "slug": "/citros_structure",
+  "permalink": "/doc/docs/citros_structure",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "gettingStartedSidebar",
+  "previous": {
+    "title": "CLI Commands",
+    "permalink": "/doc/docs/cli_commands"
+  },
+  "next": {
+    "title": "Adding Functions to Parameter Setup",
+    "permalink": "/doc/docs/config_params"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "unversionedId": "cli_commands",
+  "id": "cli_commands",
+  "title": "CLI Commands",
+  "description": "Command init",
+  "source": "@site/docs/cli_commands.md",
+  "sourceDirName": ".",
+  "slug": "/cli_commands",
+  "permalink": "/doc/docs/cli_commands",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "gettingStartedSidebar",
+  "previous": {
+    "title": "CLI Installation",
+    "permalink": "/doc/docs/cli_install"
+  },
+  "next": {
+    "title": "CITROS Repository File Structure",
+    "permalink": "/doc/docs/citros_structure"
+  }
+}

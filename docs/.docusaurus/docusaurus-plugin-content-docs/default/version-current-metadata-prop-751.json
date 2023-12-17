@@ -1,0 +1,108 @@
+{
+  "pluginId": "default",
+  "version": "current",
+  "label": "Next",
+  "banner": null,
+  "badge": false,
+  "noIndex": false,
+  "className": "docs-version-current",
+  "isLast": true,
+  "docsSidebars": {
+    "gettingStartedSidebar": [
+      {
+        "type": "category",
+        "label": "CITROS CLI",
+        "items": [
+          {
+            "type": "link",
+            "label": "Quick Start",
+            "href": "/doc/docs/cli_quickstart",
+            "docId": "cli_quickstart"
+          },
+          {
+            "type": "link",
+            "label": "Installation",
+            "href": "/doc/docs/cli_install",
+            "docId": "cli_install"
+          }
+        ],
+        "collapsed": true,
+        "collapsible": true,
+        "href": "/doc/docs/"
+      },
+      {
+        "type": "link",
+        "label": "CLI Commands",
+        "href": "/doc/docs/cli_commands",
+        "docId": "cli_commands"
+      },
+      {
+        "type": "link",
+        "label": "CITROS Repository Directory and File Structure",
+        "href": "/doc/docs/citros_structure",
+        "docId": "citros_structure"
+      },
+      {
+        "type": "link",
+        "label": "Adding Functions to Parameter Setup",
+        "href": "/doc/docs/config_params",
+        "docId": "config_params"
+      },
+      {
+        "type": "link",
+        "label": "User Templates",
+        "href": "/doc/docs/user_templates",
+        "docId": "user_templates"
+      }
+    ]
+  },
+  "docs": {
+    "citros_structure": {
+      "id": "citros_structure",
+      "title": "CITROS Repository File Structure",
+      "description": "The following folder and file structure is automatically generated for you (when you run citros init):",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "cli_commands": {
+      "id": "cli_commands",
+      "title": "CLI Commands",
+      "description": "Command init",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "cli_install": {
+      "id": "cli_install",
+      "title": "CLI Installation",
+      "description": "The following document will guide you through CITROS CLI installation.",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "cli_quickstart": {
+      "id": "cli_quickstart",
+      "title": "Quick Start",
+      "description": "In essence, the CITROS CLI is a collection of numerous commands, but to quickly get started with running a simulation once using the default parameter values, only two straightforward commands are required:",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "config_params": {
+      "id": "config_params",
+      "title": "Adding Functions to Parameter Setup",
+      "description": "In order to define a function in your parameter setup file, simply replace any constant parameter value with a function object.",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "index": {
+      "id": "index",
+      "title": "CLI Overview",
+      "description": "Welcome to CITROS CLI. CITROS serves as an innovative platform for executing ROS project simulations, automating integration, and conducting in-depth performance analysis.",
+      "sidebar": "gettingStartedSidebar"
+    },
+    "not_in_use/cli_install_advenced": {
+      "id": "not_in_use/cli_install_advenced",
+      "title": "CLI Installation",
+      "description": "The following document will guide you through CITROS CLI installation."
+    },
+    "user_templates": {
+      "id": "user_templates",
+      "title": "User Templates",
+      "description": "The CITROS CLI provides a convenient way to automatically copy any predefined files (e.g. notebooks)",
+      "sidebar": "gettingStartedSidebar"
+    }
+  }
+}

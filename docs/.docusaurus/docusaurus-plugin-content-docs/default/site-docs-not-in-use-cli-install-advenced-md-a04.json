@@ -1,0 +1,14 @@
+{
+  "unversionedId": "not_in_use/cli_install_advenced",
+  "id": "not_in_use/cli_install_advenced",
+  "title": "CLI Installation",
+  "description": "The following document will guide you through CITROS CLI installation.",
+  "source": "@site/docs/not_in_use/cli_install_advenced.md",
+  "sourceDirName": "not_in_use",
+  "slug": "/not_in_use/cli_install_advenced",
+  "permalink": "/doc/docs/not_in_use/cli_install_advenced",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

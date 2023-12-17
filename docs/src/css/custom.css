@@ -1,0 +1,93 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+ @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #01ab55;
+  --ifm-color-primary-dark: #019a4c;
+  --ifm-color-primary-darker: #019148;
+  --ifm-color-primary-darkest: #01783b;
+  --ifm-color-primary-light: #01bc5d;
+  --ifm-color-primary-lighter: #01c562;
+  --ifm-color-primary-lightest: #01de6e;
+
+  /* --ifm-color-info-contrast-background: #fdf8ee; for description 
+  --ifm-color-info-dark: #4cd480; */
+   /* --ifm-color-info-contrast-foreground:  */
+
+  --card-bg-color: #f2f3f5;
+  --ifm-menu-color-background-active: #ebf8f2;
+  --ifm-menu-color-active: #0aae5c;
+  --ifm-code-font-size: 95%;
+  /* --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1); */
+  --docusaurus-highlighted-code-line-bg: #f6f8fa;
+  --ifm-font-family-base: 'Lato', sans-serif;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  /* --ifm-background-color: #d80b90;
+  --ifm-background-surface-color: #00eaff;
+  --ifm-button-background-color: #da5d47;
+  --ifm-footer-background-color: #4413d4; 
+  --ifm-footer-color: #4413d4;*/
+  /* --ifm-color-info-contrast-background: #474019; for description 
+  --ifm-color-info-dark: #4cd465; */
+  --docusaurus-highlighted-code-line-bg: #212b36;
+  --card-bg-color: #212b36;
+  background-color: #0d1116;
+  --ifm-navbar-background-color: #05060d;
+  --ifm-menu-color-background-active: #12322c;
+  /*--ifm-tabs-color-active: #9a0190;
+  navbar-link-active-color: #d41313;*/
+
+  --ifm-color-primary: #01ab55;
+  --ifm-color-primary-dark: #019a4c;
+  --ifm-color-primary-darker: #019148;
+  --ifm-color-primary-darkest: #01783b;
+  --ifm-color-primary-light: #01bc5d;
+  --ifm-color-primary-lighter: #01c562;
+  --ifm-color-primary-lightest: #01de6e;
+
+   /* --ifm-color-info-contrast-foreground:   */
+
+  /* --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3); */
+  /* --docusaurus-highlighted-code-line-bg: rgba(242, 2, 2, 0.844); */
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #05060d;
+}
+
+.hero {
+  /* background-image: url("/static/img/citros_banner.png"); */
+  background-color: #0d1116;
+  color: white;
+  /* background-repeat: no-repeat; */
+  /* background-size: cover; */
+}
+
+.card {
+  background-color: var(--card-bg-color); /*Adjust the color as needed */
+  /* background-image: url("https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg") */
+}
+
+.codeBlock_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+  /* --ifm-pre-background: #ff0000; */
+  background-color: var(--docusaurus-highlighted-code-line-bg);
+}
+
+pre[class*="language-"] {
+  background-color: var(--docusaurus-highlighted-code-line-bg);
+}

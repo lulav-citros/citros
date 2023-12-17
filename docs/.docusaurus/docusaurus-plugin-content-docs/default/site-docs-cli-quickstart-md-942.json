@@ -1,0 +1,23 @@
+{
+  "unversionedId": "cli_quickstart",
+  "id": "cli_quickstart",
+  "title": "Quick Start",
+  "description": "In essence, the CITROS CLI is a collection of numerous commands, but to quickly get started with running a simulation once using the default parameter values, only two straightforward commands are required:",
+  "source": "@site/docs/cli_quickstart.md",
+  "sourceDirName": ".",
+  "slug": "/cli_quickstart",
+  "permalink": "/doc/docs/cli_quickstart",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "gettingStartedSidebar",
+  "previous": {
+    "title": "CLI Overview",
+    "permalink": "/doc/docs/"
+  },
+  "next": {
+    "title": "CLI Installation",
+    "permalink": "/doc/docs/cli_install"
+  }
+}

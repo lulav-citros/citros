@@ -1,0 +1,269 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "label": "Next",
+          "banner": null,
+          "badge": false,
+          "noIndex": false,
+          "className": "docs-version-current",
+          "path": "/doc/docs",
+          "tagsPath": "/doc/docs/tags",
+          "isLast": true,
+          "routePriority": -1,
+          "sidebarFilePath": "/Users/mashtaka/dev/lulav-citros/citros/docs/sidebarsCLI.js",
+          "contentPath": "/Users/mashtaka/dev/lulav-citros/citros/docs/docs",
+          "contentPathLocalized": "/Users/mashtaka/dev/lulav-citros/citros/docs/i18n/en/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "citros_structure",
+              "id": "citros_structure",
+              "title": "CITROS Repository File Structure",
+              "description": "The following folder and file structure is automatically generated for you (when you run citros init):",
+              "source": "@site/docs/citros_structure.md",
+              "sourceDirName": ".",
+              "slug": "/citros_structure",
+              "permalink": "/doc/docs/citros_structure",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "CLI Commands",
+                "permalink": "/doc/docs/cli_commands"
+              },
+              "next": {
+                "title": "Adding Functions to Parameter Setup",
+                "permalink": "/doc/docs/config_params"
+              }
+            },
+            {
+              "unversionedId": "cli_commands",
+              "id": "cli_commands",
+              "title": "CLI Commands",
+              "description": "Command init",
+              "source": "@site/docs/cli_commands.md",
+              "sourceDirName": ".",
+              "slug": "/cli_commands",
+              "permalink": "/doc/docs/cli_commands",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "CLI Installation",
+                "permalink": "/doc/docs/cli_install"
+              },
+              "next": {
+                "title": "CITROS Repository File Structure",
+                "permalink": "/doc/docs/citros_structure"
+              }
+            },
+            {
+              "unversionedId": "cli_install",
+              "id": "cli_install",
+              "title": "CLI Installation",
+              "description": "The following document will guide you through CITROS CLI installation.",
+              "source": "@site/docs/cli_install.md",
+              "sourceDirName": ".",
+              "slug": "/cli_install",
+              "permalink": "/doc/docs/cli_install",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "Quick Start",
+                "permalink": "/doc/docs/cli_quickstart"
+              },
+              "next": {
+                "title": "CLI Commands",
+                "permalink": "/doc/docs/cli_commands"
+              }
+            },
+            {
+              "unversionedId": "cli_quickstart",
+              "id": "cli_quickstart",
+              "title": "Quick Start",
+              "description": "In essence, the CITROS CLI is a collection of numerous commands, but to quickly get started with running a simulation once using the default parameter values, only two straightforward commands are required:",
+              "source": "@site/docs/cli_quickstart.md",
+              "sourceDirName": ".",
+              "slug": "/cli_quickstart",
+              "permalink": "/doc/docs/cli_quickstart",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "CLI Overview",
+                "permalink": "/doc/docs/"
+              },
+              "next": {
+                "title": "CLI Installation",
+                "permalink": "/doc/docs/cli_install"
+              }
+            },
+            {
+              "unversionedId": "config_params",
+              "id": "config_params",
+              "title": "Adding Functions to Parameter Setup",
+              "description": "In order to define a function in your parameter setup file, simply replace any constant parameter value with a function object.",
+              "source": "@site/docs/config_params.md",
+              "sourceDirName": ".",
+              "slug": "/config_params",
+              "permalink": "/doc/docs/config_params",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "CITROS Repository File Structure",
+                "permalink": "/doc/docs/citros_structure"
+              },
+              "next": {
+                "title": "User Templates",
+                "permalink": "/doc/docs/user_templates"
+              }
+            },
+            {
+              "unversionedId": "index",
+              "id": "index",
+              "title": "CLI Overview",
+              "description": "Welcome to CITROS CLI. CITROS serves as an innovative platform for executing ROS project simulations, automating integration, and conducting in-depth performance analysis.",
+              "source": "@site/docs/index.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/doc/docs/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "next": {
+                "title": "Quick Start",
+                "permalink": "/doc/docs/cli_quickstart"
+              }
+            },
+            {
+              "unversionedId": "not_in_use/cli_install_advenced",
+              "id": "not_in_use/cli_install_advenced",
+              "title": "CLI Installation",
+              "description": "The following document will guide you through CITROS CLI installation.",
+              "source": "@site/docs/not_in_use/cli_install_advenced.md",
+              "sourceDirName": "not_in_use",
+              "slug": "/not_in_use/cli_install_advenced",
+              "permalink": "/doc/docs/not_in_use/cli_install_advenced",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {}
+            },
+            {
+              "unversionedId": "user_templates",
+              "id": "user_templates",
+              "title": "User Templates",
+              "description": "The CITROS CLI provides a convenient way to automatically copy any predefined files (e.g. notebooks)",
+              "source": "@site/docs/user_templates.md",
+              "sourceDirName": ".",
+              "slug": "/user_templates",
+              "permalink": "/doc/docs/user_templates",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "frontMatter": {},
+              "sidebar": "gettingStartedSidebar",
+              "previous": {
+                "title": "Adding Functions to Parameter Setup",
+                "permalink": "/doc/docs/config_params"
+              }
+            }
+          ],
+          "drafts": [],
+          "sidebars": {
+            "gettingStartedSidebar": [
+              {
+                "type": "category",
+                "label": "CITROS CLI",
+                "link": {
+                  "type": "doc",
+                  "id": "index"
+                },
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "cli_quickstart",
+                    "label": "Quick Start",
+                    "translatable": true
+                  },
+                  {
+                    "type": "doc",
+                    "id": "cli_install",
+                    "label": "Installation",
+                    "translatable": true
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              },
+              {
+                "type": "doc",
+                "label": "CLI Commands",
+                "id": "cli_commands",
+                "translatable": true
+              },
+              {
+                "type": "doc",
+                "label": "CITROS Repository Directory and File Structure",
+                "id": "citros_structure",
+                "translatable": true
+              },
+              {
+                "type": "doc",
+                "label": "Adding Functions to Parameter Setup",
+                "id": "config_params",
+                "translatable": true
+              },
+              {
+                "type": "doc",
+                "label": "User Templates",
+                "id": "user_templates",
+                "translatable": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-blog": {
+    "default": {
+      "blogSidebarTitle": "Recent posts",
+      "blogPosts": [],
+      "blogListPaginated": [],
+      "blogTags": {},
+      "blogTagsListPath": "/doc/blog/tags",
+      "blogTagsPaginated": []
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "default": [
+      {
+        "type": "jsx",
+        "permalink": "/doc/",
+        "source": "@site/src/pages/index.tsx"
+      }
+    ]
+  },
+  "docusaurus-plugin-debug": {},
+  "docusaurus-theme-classic": {},
+  "docusaurus-theme-mermaid": {},
+  "docusaurus-bootstrap-plugin": {},
+  "docusaurus-mdx-fallback-plugin": {}
+}

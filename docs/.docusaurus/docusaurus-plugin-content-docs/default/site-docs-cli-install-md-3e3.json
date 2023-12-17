@@ -1,0 +1,23 @@
+{
+  "unversionedId": "cli_install",
+  "id": "cli_install",
+  "title": "CLI Installation",
+  "description": "The following document will guide you through CITROS CLI installation.",
+  "source": "@site/docs/cli_install.md",
+  "sourceDirName": ".",
+  "slug": "/cli_install",
+  "permalink": "/doc/docs/cli_install",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "gettingStartedSidebar",
+  "previous": {
+    "title": "Quick Start",
+    "permalink": "/doc/docs/cli_quickstart"
+  },
+  "next": {
+    "title": "CLI Commands",
+    "permalink": "/doc/docs/cli_commands"
+  }
+}

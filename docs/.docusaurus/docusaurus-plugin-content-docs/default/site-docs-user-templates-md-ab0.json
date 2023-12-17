@@ -1,0 +1,19 @@
+{
+  "unversionedId": "user_templates",
+  "id": "user_templates",
+  "title": "User Templates",
+  "description": "The CITROS CLI provides a convenient way to automatically copy any predefined files (e.g. notebooks)",
+  "source": "@site/docs/user_templates.md",
+  "sourceDirName": ".",
+  "slug": "/user_templates",
+  "permalink": "/doc/docs/user_templates",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "gettingStartedSidebar",
+  "previous": {
+    "title": "Adding Functions to Parameter Setup",
+    "permalink": "/doc/docs/config_params"
+  }
+}
