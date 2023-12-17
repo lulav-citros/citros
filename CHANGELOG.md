@@ -2,6 +2,13 @@
 
 
 
+## v0.0.8 (2023-12-17)
+
+### Fix
+
+* fix(setup): Add requirements.txt to MANIFEST.in ([`0919a52`](https://github.com/lulav-citros/citros/commit/0919a52861a1e0bd6f8af9140da4ada50667036e))
+
+
 ## v0.0.7 (2023-12-17)
 
 ### Fix
