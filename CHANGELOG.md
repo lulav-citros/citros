@@ -2,6 +2,13 @@
 
 
 
+## v0.0.13 (2023-12-17)
+
+### Fix
+
+* fix(data): addede data doc module ([`2b36bbe`](https://github.com/lulav-citros/citros/commit/2b36bbe0e73b5e2631326b27df5d7d8fe77f97fd))
+
+
 ## v0.0.12 (2023-12-17)
 
 ### Fix
