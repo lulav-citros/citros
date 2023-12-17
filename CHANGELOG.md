@@ -2,6 +2,19 @@
 
 
 
+## v0.0.11 (2023-12-17)
+
+### Fix
+
+* fix(requierments.txt): Update fastapi dependencies ([`a2df896`](https://github.com/lulav-citros/citros/commit/a2df896c145c1cb102df2b881e017518aa633ba4))
+
+* fix(requierments.txt): Update fastapi dependencies ([`8fd8132`](https://github.com/lulav-citros/citros/commit/8fd81329534031afaf1836c48fc1b404bb60c8cd))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:lulav-citros/cli ([`96458ac`](https://github.com/lulav-citros/citros/commit/96458ac953d2875ea8cd4588f7fb7720cfc59619))
+
+
 ## v0.0.10 (2023-12-17)
 
 ### Fix
