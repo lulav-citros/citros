@@ -1,3 +1,4 @@
+import path
 import sys
 from citros import Citros
 from pathlib import Path
@@ -24,7 +25,7 @@ from .config import config
 
 from citros import CitrosNotFoundException
 
-directory = Path(__file__).abspath()
+directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
 from data_access import data_access as _data_access
 
