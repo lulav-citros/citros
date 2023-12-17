@@ -2,6 +2,13 @@
 
 
 
+## v0.0.6 (2023-12-17)
+
+### Fix
+
+* fix(setup): path ([`ba7f0a4`](https://github.com/lulav-citros/citros/commit/ba7f0a4c8286bc6cca92b1ed8ad1d47be14ab0f5))
+
+
 ## v0.0.5 (2023-12-17)
 
 ### Unknown
