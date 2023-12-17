@@ -128,7 +128,7 @@ class Citros(CitrosObj):
 
         # loads the parameter_setups
         for file in glob.glob(
-            "*.json", root_dir=f"{self.root_citros}/parameter_setups/"
+            f"{self.root_citros}/parameter_setups/*.json"
         ):
             self.log.debug(f"loading parameter_setup: {file}")
             self.parameter_setups.append(
