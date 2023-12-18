@@ -2,6 +2,13 @@
 
 
 
+## v0.0.21 (2023-12-18)
+
+### Fix
+
+* fix(impl): data list ([`4e6a754`](https://github.com/lulav-citros/citros/commit/4e6a754bdc3701f190aa94c8375dcaecb1074290))
+
+
 ## v0.0.20 (2023-12-18)
 
 ### Fix
