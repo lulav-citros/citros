@@ -42,6 +42,7 @@ class Batch:
         name: str = "citros",
         mesaage: str = "CITROS is AWESOME!!!",
         index: int = -1,  # default to take the last version of a runs
+        version=None,
         log=None,
         debug=False,
         verbose=False,
@@ -64,11 +65,12 @@ class Batch:
         simulation_name = simulation if type(simulation) is str else simulation.name
         self.batch_dir = Path(root) / simulation_name / name
         if type(simulation) is Simulation:  # create new batch
-            now = datetime.today().strftime("%Y%m%d%H%M%S")
-            self.batch_dir = Path(root) / simulation_name / name / now
+            if not version:
+                version = datetime.today().strftime("%Y%m%d%H%M%S")
+            self.batch_dir = Path(root) / simulation_name / name / version
         else:
             versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
-            batch_version = versions[self.index]            
+            batch_version = versions[self.index]
             self.batch_dir = Path(batch_version)
 
         self._init_log(log)
@@ -232,15 +234,20 @@ class Batch:
     def run(
         self,
         completions: int = 1,
+        sid: int = -1,  # the run id to complete. -1 -> run all
         ros_domain_id: int = None,
         trace_context: str = None,
     ):
         self.log.debug(f"{self.__class__.__name__}.run()")
 
+        # TODO: fix this. add support for multiple runs.
+        if sid == -1:
+            sid = 0
+
         self["completions"] = completions
         self["status"] = "RUNNING"
 
-        sim_dir = self.batch_dir / "0"
+        sim_dir = self.batch_dir / str(sid)
         # create log that will write to the simulation dir.
         ret = self.simulation.run(
             sim_dir, trace_context=trace_context, ros_domain_id=ros_domain_id

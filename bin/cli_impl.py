@@ -63,7 +63,7 @@ def init(args, argv):
 def run(args, argv):
     """
     :param args.simulation_name:
-    :param args.run_id:
+    :param args.index:
     :param args.completions:
 
     :param args.batch_name:
@@ -120,11 +120,12 @@ def run(args, argv):
         simulation,
         name=batch_name,
         mesaage=batch_message,
+        version=args.version,
         verbose=args.verbose,
         debug=args.debug,
     )
     batch.run(
-        10, ros_domain_id=config.ROS_DOMAIN_ID, trace_context=config.TRACE_CONTEXT
+        10, args.index, ros_domain_id=config.ROS_DOMAIN_ID, trace_context=config.TRACE_CONTEXT
     )
 
 
