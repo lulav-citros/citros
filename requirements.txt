@@ -32,3 +32,4 @@ citros-data-analysis==0.9.1
 fastapi
 fastapi-utils
 uvicorn
+docker

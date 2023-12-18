@@ -185,7 +185,7 @@ def simulation_run(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-############################# Simulation implementation ##############################
+####################### parameter setup implementation ##############################
 def parameter_setup_new(args, argv):
     # TODO[critical]: implement data_status
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
@@ -290,7 +290,7 @@ def data_list(args, argv):
                     _simulation,
                     _name,
                     version.split("/")[-1],
-                    "vova",
+                    "TODO!",  # TODO: get summery data from run (size, date, etc.)
                 )
 
                 _simulation = None
@@ -334,8 +334,29 @@ def data_service_status(args, argv):
 
 
 def data_db_create(args, argv):
-    # TODO[critical]: implement data_status
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    # docker run
+    # --name myPostgresDb
+    # -p 5455:5432
+    # -e POSTGRES_USER=postgresUser
+    # -e POSTGRES_PASSWORD=postgresPW
+    # -e POSTGRES_DB=postgresDB
+    # -d
+    # postgres
+    import docker
+    import subprocess
+
+    subprocess.run(["docker", "run", "ubuntu", "echo hello world"])
+
+    # try:
+    #     client = docker.from_env()
+    # except Exception as e:
+    #     print(
+    #         "[red]Docker is not running. Please start docker and try again. exiting..."
+    #     )
+    #     if args.verbose:
+    #         raise e
+    #     return
+    # client.containers.run("ubuntu", "echo hello world")
 
 
 def data_db_status(args, argv):

@@ -260,6 +260,7 @@ def parser_data_db(parent_subparser, epilog=None):
     subparser = parser.add_subparsers(dest="type")
 
     parser_data_db_status(subparser)
+    parser_data_db_create(subparser)
     parser_data_db_clean(subparser)
 
     return parser
@@ -297,6 +298,7 @@ def parser_data(main_sub, epilog=None):
 
     subsubparser = parser.add_subparsers(dest="type")
     parser_data_list(subsubparser, epilog)
-    parser_data_service(subsubparser, epilog)
+    parser_data_service(subsubparser, epilog)    
+    parser_data_db(subsubparser, epilog)
 
     return parser
