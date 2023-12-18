@@ -15,6 +15,8 @@ from citros.batch import Batch
 from rich.table import Table
 from rich.console import Console
 from rich import pretty
+from rich import box
+
 import json
 
 pretty.install()
@@ -125,7 +127,10 @@ def run(args, argv):
         debug=args.debug,
     )
     batch.run(
-        10, args.index, ros_domain_id=config.ROS_DOMAIN_ID, trace_context=config.TRACE_CONTEXT
+        10,
+        args.index,
+        ros_domain_id=config.ROS_DOMAIN_ID,
+        trace_context=config.TRACE_CONTEXT,
     )
 
 
@@ -211,6 +216,16 @@ def data(args, argv):
         if Path(sim).is_dir():
             simulations.append(str(sim).split("/")[-1])
 
+    if simulations == []:
+        print(f"There are currently no simulations in {root} folder.")
+        print("Go wild and run as many simulation as you can with CITROS. ")
+        print(
+            Panel.fit(
+                Padding('[green]citros run -n <name>" -m <message', 1),
+                title="help",
+            )
+        )
+        return
     chosen_simulation = inquirer.fuzzy(
         message="Select Simulation:", choices=simulations, default="", border=True
     ).execute()
@@ -257,24 +272,29 @@ def data(args, argv):
 def data_list(args, argv):
     root = Path(args.dir).expanduser().resolve() / ".citros/data"
 
-    table = Table(title="Simulation Runs")
+    table = Table(title=f"Simulation Runs in: [blue]{root}", box=box.SQUARE)
     table.add_column("Simulation", style="cyan", no_wrap=True)
-    table.add_column("Run name", style="magenta")
-    table.add_column("Versions", justify="right", style="green")
+    table.add_column("Run name", style="magenta", justify="center")
+    table.add_column("Versions", justify="left", style="green")
     table.add_column("Data", justify="right", style="green")
 
     simulations = sorted(glob.glob(f"{str(root)}/*"))
     for sim in simulations:
         names = sorted(glob.glob(f"{sim}/*"))
+        _simulation = sim.split("/")[-1]
         for name in names:
             versions = sorted(glob.glob(f"{name}/*"))
+            _name = name.split("/")[-1]
             for version in versions:
                 table.add_row(
-                    sim.split("/")[-1],
-                    name.split("/")[-1],
+                    _simulation,
+                    _name,
                     version.split("/")[-1],
                     "vova",
                 )
+
+                _simulation = None
+                _name = None
 
     console = Console()
     console.print(table)
