@@ -2,6 +2,17 @@
 
 
 
+## v0.0.20 (2023-12-18)
+
+### Fix
+
+* fix(version): support ver ([`d627957`](https://github.com/lulav-citros/citros/commit/d6279572b0f20f8e474478a75e1bba08959ebf8f))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of github.com:lulav-citros/citros ([`6cbfaae`](https://github.com/lulav-citros/citros/commit/6cbfaae243b83976831845a63642eaf754865d86))
+
+
 ## v0.0.19 (2023-12-17)
 
 ### Fix
