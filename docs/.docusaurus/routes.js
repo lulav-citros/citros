@@ -3,96 +3,115 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 
 export default [
   {
-    path: '/doc/__docusaurus/debug',
-    component: ComponentCreator('/doc/__docusaurus/debug', 'c62'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/config',
-    component: ComponentCreator('/doc/__docusaurus/debug/config', 'f7e'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/content',
-    component: ComponentCreator('/doc/__docusaurus/debug/content', '504'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/globalData',
-    component: ComponentCreator('/doc/__docusaurus/debug/globalData', 'f10'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/metadata',
-    component: ComponentCreator('/doc/__docusaurus/debug/metadata', '336'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/registry',
-    component: ComponentCreator('/doc/__docusaurus/debug/registry', '970'),
-    exact: true
-  },
-  {
-    path: '/doc/__docusaurus/debug/routes',
-    component: ComponentCreator('/doc/__docusaurus/debug/routes', '038'),
-    exact: true
-  },
-  {
-    path: '/doc/docs',
-    component: ComponentCreator('/doc/docs', 'd3e'),
+    path: '/docs/docs',
+    component: ComponentCreator('/docs/docs', 'dff'),
     routes: [
       {
-        path: '/doc/docs/',
-        component: ComponentCreator('/doc/docs/', '4f3'),
+        path: '/docs/docs/',
+        component: ComponentCreator('/docs/docs/', '7c4'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/citros_structure',
-        component: ComponentCreator('/doc/docs/citros_structure', 'a42'),
+        path: '/docs/docs/citros_structure',
+        component: ComponentCreator('/docs/docs/citros_structure', '060'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/cli_commands',
-        component: ComponentCreator('/doc/docs/cli_commands', 'eea'),
+        path: '/docs/docs/cli_commands',
+        component: ComponentCreator('/docs/docs/cli_commands', '65f'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/cli_install',
-        component: ComponentCreator('/doc/docs/cli_install', 'bae'),
+        path: '/docs/docs/cli_install',
+        component: ComponentCreator('/docs/docs/cli_install', '225'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/cli_quickstart',
-        component: ComponentCreator('/doc/docs/cli_quickstart', '61e'),
+        path: '/docs/docs/cli_quickstart',
+        component: ComponentCreator('/docs/docs/cli_quickstart', '424'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/config_params',
-        component: ComponentCreator('/doc/docs/config_params', 'b62'),
+        path: '/docs/docs/config_params',
+        component: ComponentCreator('/docs/docs/config_params', '371'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       },
       {
-        path: '/doc/docs/not_in_use/cli_install_advenced',
-        component: ComponentCreator('/doc/docs/not_in_use/cli_install_advenced', 'ed0'),
+        path: '/docs/docs/not_in_use/cli_install_advenced',
+        component: ComponentCreator('/docs/docs/not_in_use/cli_install_advenced', 'a4c'),
         exact: true
       },
       {
-        path: '/doc/docs/user_templates',
-        component: ComponentCreator('/doc/docs/user_templates', '193'),
+        path: '/docs/docs/user_templates',
+        component: ComponentCreator('/docs/docs/user_templates', '9a2'),
         exact: true,
         sidebar: "gettingStartedSidebar"
       }
     ]
   },
   {
-    path: '/doc/',
-    component: ComponentCreator('/doc/', 'fcd'),
+    path: '/docs/docs_tutorials',
+    component: ComponentCreator('/docs/docs_tutorials', '0d1'),
+    routes: [
+      {
+        path: '/docs/docs_tutorials/',
+        component: ComponentCreator('/docs/docs_tutorials/', 'a44'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/dockerfile_overview/',
+        component: ComponentCreator('/docs/docs_tutorials/dockerfile_overview/', '810'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/drone/',
+        component: ComponentCreator('/docs/docs_tutorials/drone/', '8e1'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/gal_orbits/',
+        component: ComponentCreator('/docs/docs_tutorials/gal_orbits/', 'dce'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/getting_started/',
+        component: ComponentCreator('/docs/docs_tutorials/getting_started/', '4f6'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/mass_spring_damper/',
+        component: ComponentCreator('/docs/docs_tutorials/mass_spring_damper/', '247'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/pendulum/',
+        component: ComponentCreator('/docs/docs_tutorials/pendulum/', '7e3'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      },
+      {
+        path: '/docs/docs_tutorials/soft_landing/',
+        component: ComponentCreator('/docs/docs_tutorials/soft_landing/', '5ec'),
+        exact: true,
+        sidebar: "tutorialSidebar"
+      }
+    ]
+  },
+  {
+    path: '/docs/',
+    component: ComponentCreator('/docs/', '606'),
     exact: true
   },
   {

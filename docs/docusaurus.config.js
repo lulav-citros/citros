@@ -17,7 +17,7 @@ const config = {
 //   url: "http://localhost:3000",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/doc/",
+  baseUrl: "/docs/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -96,18 +96,18 @@ const config = {
     //     // includeCurrentVersion: false,
     //   },
     // ],
-    // [
-    //   "@docusaurus/plugin-content-docs",
-    //   {
-    //     id: "docs_tutorials",
-    //     path: "docs_tutorials",
-    //     routeBasePath: "docs_tutorials",
-    //     sidebarPath: require.resolve("./sidebarsTutorials.js"),
-    //     remarkPlugins: [math],
-    //     rehypePlugins: [katex],
-    //     // includeCurrentVersion: false,
-    //   },
-    // ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "docs_tutorials",
+        path: "docs_tutorials",
+        routeBasePath: "docs_tutorials",
+        sidebarPath: require.resolve("./sidebarsTutorials.js"),
+        remarkPlugins: [math],
+        rehypePlugins: [katex],
+        // includeCurrentVersion: false,
+      },
+    ],
   ],
 
   stylesheets: [
@@ -160,12 +160,12 @@ const config = {
           //   position: "left",
           //   activeBaseRegex: `/docs_data_analysis/`,
           // },
-          // {
-          //   to: "/docs_tutorials", // ./docs-api/Intro.md
-          //   label: "Tutorials",
-          //   position: "left",
-          //   activeBaseRegex: `/docs_tutorials/`,
-          // },
+          {
+            to: "/docs_tutorials", // ./docs-api/Intro.md
+            label: "Tutorials",
+            position: "left",
+            activeBaseRegex: `/docs_tutorials/`,
+          },
           // { to: "/blog", label: "Blog", position: "left" },
           // {
           //   type: "docsVersionDropdown",

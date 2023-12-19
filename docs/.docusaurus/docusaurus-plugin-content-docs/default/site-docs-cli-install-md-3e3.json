@@ -6,7 +6,7 @@
   "source": "@site/docs/cli_install.md",
   "sourceDirName": ".",
   "slug": "/cli_install",
-  "permalink": "/doc/docs/cli_install",
+  "permalink": "/docs/docs/cli_install",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -14,10 +14,10 @@
   "sidebar": "gettingStartedSidebar",
   "previous": {
     "title": "Quick Start",
-    "permalink": "/doc/docs/cli_quickstart"
+    "permalink": "/docs/docs/cli_quickstart"
   },
   "next": {
     "title": "CLI Commands",
-    "permalink": "/doc/docs/cli_commands"
+    "permalink": "/docs/docs/cli_commands"
   }
 }

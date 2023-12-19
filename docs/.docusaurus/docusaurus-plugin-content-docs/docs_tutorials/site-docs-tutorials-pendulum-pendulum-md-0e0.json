@@ -1,0 +1,23 @@
+{
+  "unversionedId": "pendulum/Pendulum",
+  "id": "pendulum/Pendulum",
+  "title": "Pendulum",
+  "description": "Overview",
+  "source": "@site/docs_tutorials/pendulum/Pendulum.md",
+  "sourceDirName": "pendulum",
+  "slug": "/pendulum/",
+  "permalink": "/docs/docs_tutorials/pendulum/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 170,
+  "frontMatter": {
+    "sidebar_position": 170,
+    "sidebar_label": "Pendulum"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Galactic Orbits",
+    "permalink": "/docs/docs_tutorials/gal_orbits/"
+  }
+}

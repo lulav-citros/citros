@@ -6,7 +6,7 @@
   "source": "@site/docs/user_templates.md",
   "sourceDirName": ".",
   "slug": "/user_templates",
-  "permalink": "/doc/docs/user_templates",
+  "permalink": "/docs/docs/user_templates",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -14,6 +14,6 @@
   "sidebar": "gettingStartedSidebar",
   "previous": {
     "title": "Adding Functions to Parameter Setup",
-    "permalink": "/doc/docs/config_params"
+    "permalink": "/docs/docs/config_params"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "unversionedId": "spiceypy/spiceypy",
+  "id": "spiceypy/spiceypy",
+  "title": "SpiceyPy Using CITROS",
+  "description": "This project is developed using ROS nodes and leverages the SpiceyPy library, a Python implementation of NASA's NAIF Spice toolkit. Its primary purpose is to provide the orbital trajectory information of the Cassini spacecraft relative to Saturn's barycenter within specified time intervals.",
+  "source": "@site/docs_tutorials/spiceypy/spiceypy.md",
+  "sourceDirName": "spiceypy",
+  "slug": "/spiceypy/",
+  "permalink": "/doc/docs_tutorials/spiceypy/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 80,
+  "frontMatter": {
+    "sidebar_position": 80,
+    "sidebar_label": "SpiceyPy Using CITROS"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Lunar Starship",
+    "permalink": "/doc/docs_tutorials/lunar_starship/"
+  },
+  "next": {
+    "title": "Poliastro",
+    "permalink": "/doc/docs_tutorials/poliastro/"
+  }
+}

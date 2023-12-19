@@ -1,0 +1,27 @@
+{
+  "unversionedId": "dockerfile_overview/dockerfile_overview",
+  "id": "dockerfile_overview/dockerfile_overview",
+  "title": "CITROS in Dockerfile",
+  "description": "After configuring the simulation environment and conducting a local simulation using CITROS CLI, the next step is to enhance CITROS' capabilities by deploying the simulation environment to the cloud.",
+  "source": "@site/docs_tutorials/dockerfile_overview/dockerfile_overview.md",
+  "sourceDirName": "dockerfile_overview",
+  "slug": "/dockerfile_overview/",
+  "permalink": "/docs/docs_tutorials/dockerfile_overview/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2,
+    "sidebar_label": "CITROS in Dockerfile"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/docs/docs_tutorials/getting_started/"
+  },
+  "next": {
+    "title": "Introduction to CITROS",
+    "permalink": "/docs/docs_tutorials/"
+  }
+}

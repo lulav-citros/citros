@@ -8,7 +8,7 @@ export default {
   "tagline": "The starting point for your next robotic project",
   "favicon": "img/favicon.ico",
   "url": "https://citros.io",
-  "baseUrl": "/doc/",
+  "baseUrl": "/docs/",
   "organizationName": "citros",
   "projectName": "citros",
   "onBrokenLinks": "throw",
@@ -47,7 +47,23 @@ export default {
       }
     ]
   ],
-  "plugins": [],
+  "plugins": [
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        "id": "docs_tutorials",
+        "path": "docs_tutorials",
+        "routeBasePath": "docs_tutorials",
+        "sidebarPath": "/Users/mashtaka/dev/lulav-citros/citros/docs/sidebarsTutorials.js",
+        "remarkPlugins": [
+          null
+        ],
+        "rehypePlugins": [
+          null
+        ]
+      }
+    ]
+  ],
   "stylesheets": [
     {
       "href": "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
@@ -74,6 +90,12 @@ export default {
           "label": "CLI",
           "position": "left",
           "activeBaseRegex": "/docs/"
+        },
+        {
+          "to": "/docs_tutorials",
+          "label": "Tutorials",
+          "position": "left",
+          "activeBaseRegex": "/docs_tutorials/"
         }
       ],
       "hideOnScroll": false

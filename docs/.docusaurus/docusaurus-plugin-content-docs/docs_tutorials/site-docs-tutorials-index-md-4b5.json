@@ -1,0 +1,28 @@
+{
+  "unversionedId": "index",
+  "id": "index",
+  "title": "index",
+  "description": "<!--",
+  "source": "@site/docs_tutorials/index.md",
+  "sourceDirName": ".",
+  "slug": "/",
+  "permalink": "/docs/docs_tutorials/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "sidebar_position": 5,
+    "sidebar_label": "Introduction to CITROS",
+    "hide_title": true
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "CITROS in Dockerfile",
+    "permalink": "/docs/docs_tutorials/dockerfile_overview/"
+  },
+  "next": {
+    "title": "Soft Landing",
+    "permalink": "/docs/docs_tutorials/soft_landing/"
+  }
+}

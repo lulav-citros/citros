@@ -240,6 +240,505 @@
           }
         }
       ]
+    },
+    "docs_tutorials": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "label": "Next",
+          "banner": null,
+          "badge": false,
+          "noIndex": false,
+          "className": "docs-version-current",
+          "path": "/doc/docs_tutorials",
+          "tagsPath": "/doc/docs_tutorials/tags",
+          "isLast": true,
+          "routePriority": -1,
+          "sidebarFilePath": "/Users/mashtaka/dev/lulav-citros/citros/docs/sidebarsTutorials.js",
+          "contentPath": "/Users/mashtaka/dev/lulav-citros/citros/docs/docs_tutorials",
+          "contentPathLocalized": "/Users/mashtaka/dev/lulav-citros/citros/docs/i18n/en/docusaurus-plugin-content-docs-docs_tutorials/current",
+          "docs": [
+            {
+              "unversionedId": "aerosandbox/aerosandbox",
+              "id": "aerosandbox/aerosandbox",
+              "title": "Aerosandbox",
+              "description": "The project is a simulation tool developed using ROS (Robot Operating System) nodes and leverages the Aerosandbox Python library for aerodynamic calculations. Its primary objective is to simulate gliding flight scenarios for a Cessna 152 aircraft in the event of engine failure.",
+              "source": "@site/docs_tutorials/aerosandbox/aerosandbox.md",
+              "sourceDirName": "aerosandbox",
+              "slug": "/aerosandbox/",
+              "permalink": "/doc/docs_tutorials/aerosandbox/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 40,
+              "frontMatter": {
+                "sidebar_position": 40,
+                "sidebar_label": "Aerosandbox"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Galactic Orbits",
+                "permalink": "/doc/docs_tutorials/gal_orbits/"
+              },
+              "next": {
+                "title": "Robotic Arm",
+                "permalink": "/doc/docs_tutorials/robotic_arm/"
+              }
+            },
+            {
+              "unversionedId": "dockerfile_overview/dockerfile_overview",
+              "id": "dockerfile_overview/dockerfile_overview",
+              "title": "CITROS in Dockerfile",
+              "description": "After configuring the simulation environment and conducting a local simulation using CITROS CLI, the next step is to enhance CITROS' capabilities by deploying the simulation environment to the cloud.",
+              "source": "@site/docs_tutorials/dockerfile_overview/dockerfile_overview.md",
+              "sourceDirName": "dockerfile_overview",
+              "slug": "/dockerfile_overview/",
+              "permalink": "/doc/docs_tutorials/dockerfile_overview/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2,
+                "sidebar_label": "CITROS in Dockerfile"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Getting Started",
+                "permalink": "/doc/docs_tutorials/getting_started/"
+              },
+              "next": {
+                "title": "Introduction to CITROS",
+                "permalink": "/doc/docs_tutorials/"
+              }
+            },
+            {
+              "unversionedId": "drone/drone",
+              "id": "drone/drone",
+              "title": "Drone",
+              "description": "Overview",
+              "source": "@site/docs_tutorials/drone/drone.md",
+              "sourceDirName": "drone",
+              "slug": "/drone/",
+              "permalink": "/doc/docs_tutorials/drone/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 20,
+              "frontMatter": {
+                "sidebar_position": 20,
+                "sidebar_label": "Drone"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Soft Landing",
+                "permalink": "/doc/docs_tutorials/soft_landing/"
+              },
+              "next": {
+                "title": "Mass Spring Damper",
+                "permalink": "/doc/docs_tutorials/mass_spring_damper/"
+              }
+            },
+            {
+              "unversionedId": "gal_orbits/gal_orbits",
+              "id": "gal_orbits/gal_orbits",
+              "title": "Galactic Orbits",
+              "description": "Overview",
+              "source": "@site/docs_tutorials/gal_orbits/gal_orbits.md",
+              "sourceDirName": "gal_orbits",
+              "slug": "/gal_orbits/",
+              "permalink": "/doc/docs_tutorials/gal_orbits/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 30,
+              "frontMatter": {
+                "sidebar_position": 30,
+                "sidebar_label": "Galactic Orbits"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Mass Spring Damper",
+                "permalink": "/doc/docs_tutorials/mass_spring_damper/"
+              },
+              "next": {
+                "title": "Aerosandbox",
+                "permalink": "/doc/docs_tutorials/aerosandbox/"
+              }
+            },
+            {
+              "unversionedId": "getting_started/getting_started",
+              "id": "getting_started/getting_started",
+              "title": "Getting Started",
+              "description": "Prerequisites for Working With CITROS",
+              "source": "@site/docs_tutorials/getting_started/getting_started.md",
+              "sourceDirName": "getting_started",
+              "slug": "/getting_started/",
+              "permalink": "/doc/docs_tutorials/getting_started/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1,
+                "sidebar_label": "Getting Started"
+              },
+              "sidebar": "tutorialSidebar",
+              "next": {
+                "title": "CITROS in Dockerfile",
+                "permalink": "/doc/docs_tutorials/dockerfile_overview/"
+              }
+            },
+            {
+              "unversionedId": "index",
+              "id": "index",
+              "title": "index",
+              "description": "<!--",
+              "source": "@site/docs_tutorials/index.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/doc/docs_tutorials/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 5,
+              "frontMatter": {
+                "sidebar_position": 5,
+                "sidebar_label": "Introduction to CITROS",
+                "hide_title": true
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "CITROS in Dockerfile",
+                "permalink": "/doc/docs_tutorials/dockerfile_overview/"
+              },
+              "next": {
+                "title": "Soft Landing",
+                "permalink": "/doc/docs_tutorials/soft_landing/"
+              }
+            },
+            {
+              "unversionedId": "lunar_hopper/lunar_hopper",
+              "id": "lunar_hopper/lunar_hopper",
+              "title": "Lunar Hopper Optimal Control Example Using CITROS",
+              "description": "The Lunar Hopper project is a lunar exploration planning project aimed at solving the intricate problem of lunar hopper missions. It focuses on optimizing the spacecraft's trajectory across the whole flight. Leveraging state-of-the-art optimal problem-solving algorithms, specifically the MPOPT Python library, this project seeks to determine the most efficient path for maximizing the distance traveled during the mission. It empowers users to customize essential parameters such as spacecraft mass, fuel quantity, thrust, and specific impulse.",
+              "source": "@site/docs_tutorials/lunar_hopper/lunar_hopper.md",
+              "sourceDirName": "lunar_hopper",
+              "slug": "/lunar_hopper/",
+              "permalink": "/doc/docs_tutorials/lunar_hopper/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 60,
+              "frontMatter": {
+                "sidebar_position": 60,
+                "sidebar_label": "Lunar Hopper"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "TurtleBot",
+                "permalink": "/doc/docs_tutorials/turtlebot/"
+              },
+              "next": {
+                "title": "Lunar Starship",
+                "permalink": "/doc/docs_tutorials/lunar_starship/"
+              }
+            },
+            {
+              "unversionedId": "lunar_starship/lunar_starship",
+              "id": "lunar_starship/lunar_starship",
+              "title": "Lunar Starship Optimal Control Example Using CITROS",
+              "description": "This Lunar Starship mission project addresses the lunar hopper challenge by optimizing the ascent, ballistic flight and landing process on the Moon's surface, aiming to minimize fuel consumption, time, or other relevant parameters. It empowers users to define both theoretical and real dynamic functions, enhancing prediction accuracy and enabling real-time corrections during lunar mission.",
+              "source": "@site/docs_tutorials/lunar_starship/lunar_starship.md",
+              "sourceDirName": "lunar_starship",
+              "slug": "/lunar_starship/",
+              "permalink": "/doc/docs_tutorials/lunar_starship/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 70,
+              "frontMatter": {
+                "sidebar_position": 70,
+                "sidebar_label": "Lunar Starship"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Lunar Hopper",
+                "permalink": "/doc/docs_tutorials/lunar_hopper/"
+              },
+              "next": {
+                "title": "SpiceyPy Using CITROS",
+                "permalink": "/doc/docs_tutorials/spiceypy/"
+              }
+            },
+            {
+              "unversionedId": "mass_spring_damper/mass_spring_damper",
+              "id": "mass_spring_damper/mass_spring_damper",
+              "title": "Mass Spring Damper",
+              "description": "Overview",
+              "source": "@site/docs_tutorials/mass_spring_damper/mass_spring_damper.md",
+              "sourceDirName": "mass_spring_damper",
+              "slug": "/mass_spring_damper/",
+              "permalink": "/doc/docs_tutorials/mass_spring_damper/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 25,
+              "frontMatter": {
+                "sidebar_position": 25,
+                "sidebar_label": "Mass Spring Damper"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Drone",
+                "permalink": "/doc/docs_tutorials/drone/"
+              },
+              "next": {
+                "title": "Galactic Orbits",
+                "permalink": "/doc/docs_tutorials/gal_orbits/"
+              }
+            },
+            {
+              "unversionedId": "pendulum/Pendulum",
+              "id": "pendulum/Pendulum",
+              "title": "Pendulum",
+              "description": "Overview",
+              "source": "@site/docs_tutorials/pendulum/Pendulum.md",
+              "sourceDirName": "pendulum",
+              "slug": "/pendulum/",
+              "permalink": "/doc/docs_tutorials/pendulum/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 170,
+              "frontMatter": {
+                "sidebar_position": 170,
+                "sidebar_label": "Pendulum"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Poliastro",
+                "permalink": "/doc/docs_tutorials/poliastro/"
+              }
+            },
+            {
+              "unversionedId": "poliastro/poliastro",
+              "id": "poliastro/poliastro",
+              "title": "Poliastro",
+              "description": "This project contains three simple examples using Poliastro lib for Python 3:",
+              "source": "@site/docs_tutorials/poliastro/poliastro.md",
+              "sourceDirName": "poliastro",
+              "slug": "/poliastro/",
+              "permalink": "/doc/docs_tutorials/poliastro/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 150,
+              "frontMatter": {
+                "sidebar_position": 150,
+                "sidebar_label": "Poliastro"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SpiceyPy Using CITROS",
+                "permalink": "/doc/docs_tutorials/spiceypy/"
+              },
+              "next": {
+                "title": "Pendulum",
+                "permalink": "/doc/docs_tutorials/pendulum/"
+              }
+            },
+            {
+              "unversionedId": "robotic_arm/robotic_arm",
+              "id": "robotic_arm/robotic_arm",
+              "title": "Robotic Arm",
+              "description": "This project is designed to wrap the Robotic Arm Simulation project and integrate it with CITROS platform. The node provides ROS parameters that allow users to adjust target arm joints position. In addition, the Inverse Kinematic ROS node was added.",
+              "source": "@site/docs_tutorials/robotic_arm/robotic_arm.md",
+              "sourceDirName": "robotic_arm",
+              "slug": "/robotic_arm/",
+              "permalink": "/doc/docs_tutorials/robotic_arm/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 40,
+              "frontMatter": {
+                "sidebar_position": 40,
+                "sidebar_label": "Robotic Arm"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Aerosandbox",
+                "permalink": "/doc/docs_tutorials/aerosandbox/"
+              },
+              "next": {
+                "title": "TurtleBot",
+                "permalink": "/doc/docs_tutorials/turtlebot/"
+              }
+            },
+            {
+              "unversionedId": "soft_landing/soft_landing",
+              "id": "soft_landing/soft_landing",
+              "title": "Soft Landing Tutorial",
+              "description": "Overview",
+              "source": "@site/docs_tutorials/soft_landing/soft_landing.md",
+              "sourceDirName": "soft_landing",
+              "slug": "/soft_landing/",
+              "permalink": "/doc/docs_tutorials/soft_landing/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 10,
+              "frontMatter": {
+                "sidebar_position": 10,
+                "sidebar_label": "Soft Landing"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Introduction to CITROS",
+                "permalink": "/doc/docs_tutorials/"
+              },
+              "next": {
+                "title": "Drone",
+                "permalink": "/doc/docs_tutorials/drone/"
+              }
+            },
+            {
+              "unversionedId": "spiceypy/spiceypy",
+              "id": "spiceypy/spiceypy",
+              "title": "SpiceyPy Using CITROS",
+              "description": "This project is developed using ROS nodes and leverages the SpiceyPy library, a Python implementation of NASA's NAIF Spice toolkit. Its primary purpose is to provide the orbital trajectory information of the Cassini spacecraft relative to Saturn's barycenter within specified time intervals.",
+              "source": "@site/docs_tutorials/spiceypy/spiceypy.md",
+              "sourceDirName": "spiceypy",
+              "slug": "/spiceypy/",
+              "permalink": "/doc/docs_tutorials/spiceypy/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 80,
+              "frontMatter": {
+                "sidebar_position": 80,
+                "sidebar_label": "SpiceyPy Using CITROS"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Lunar Starship",
+                "permalink": "/doc/docs_tutorials/lunar_starship/"
+              },
+              "next": {
+                "title": "Poliastro",
+                "permalink": "/doc/docs_tutorials/poliastro/"
+              }
+            },
+            {
+              "unversionedId": "turtlebot/turtlebot",
+              "id": "turtlebot/turtlebot",
+              "title": "TurtleBot3 Example Using CITROS",
+              "description": "This project is designed to wrap the official TurtleBot3 simulation example and integrate it with a simple Autonomous Collision Avoidance node. The node provides ROS parameters that allow users to adjust various TurtleBot3 specifications, enabling the analysis of how these changes affect collision avoidance behavior.",
+              "source": "@site/docs_tutorials/turtlebot/turtlebot.md",
+              "sourceDirName": "turtlebot",
+              "slug": "/turtlebot/",
+              "permalink": "/doc/docs_tutorials/turtlebot/",
+              "draft": false,
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 50,
+              "frontMatter": {
+                "sidebar_position": 50,
+                "sidebar_label": "TurtleBot"
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Robotic Arm",
+                "permalink": "/doc/docs_tutorials/robotic_arm/"
+              },
+              "next": {
+                "title": "Lunar Hopper",
+                "permalink": "/doc/docs_tutorials/lunar_hopper/"
+              }
+            }
+          ],
+          "drafts": [],
+          "sidebars": {
+            "tutorialSidebar": [
+              {
+                "type": "doc",
+                "label": "Getting Started",
+                "id": "getting_started/getting_started"
+              },
+              {
+                "type": "doc",
+                "label": "CITROS in Dockerfile",
+                "id": "dockerfile_overview/dockerfile_overview"
+              },
+              {
+                "type": "doc",
+                "id": "index",
+                "label": "Introduction to CITROS"
+              },
+              {
+                "type": "doc",
+                "label": "Soft Landing",
+                "id": "soft_landing/soft_landing"
+              },
+              {
+                "type": "doc",
+                "label": "Drone",
+                "id": "drone/drone"
+              },
+              {
+                "type": "doc",
+                "label": "Mass Spring Damper",
+                "id": "mass_spring_damper/mass_spring_damper"
+              },
+              {
+                "type": "doc",
+                "label": "Galactic Orbits",
+                "id": "gal_orbits/gal_orbits"
+              },
+              {
+                "type": "doc",
+                "label": "Aerosandbox",
+                "id": "aerosandbox/aerosandbox"
+              },
+              {
+                "type": "doc",
+                "label": "Robotic Arm",
+                "id": "robotic_arm/robotic_arm"
+              },
+              {
+                "type": "doc",
+                "label": "TurtleBot",
+                "id": "turtlebot/turtlebot"
+              },
+              {
+                "type": "doc",
+                "label": "Lunar Hopper",
+                "id": "lunar_hopper/lunar_hopper"
+              },
+              {
+                "type": "doc",
+                "label": "Lunar Starship",
+                "id": "lunar_starship/lunar_starship"
+              },
+              {
+                "type": "doc",
+                "label": "SpiceyPy Using CITROS",
+                "id": "spiceypy/spiceypy"
+              },
+              {
+                "type": "doc",
+                "label": "Poliastro",
+                "id": "poliastro/poliastro"
+              },
+              {
+                "type": "doc",
+                "label": "Pendulum",
+                "id": "pendulum/Pendulum"
+              }
+            ]
+          }
+        }
+      ]
     }
   },
   "docusaurus-plugin-content-blog": {

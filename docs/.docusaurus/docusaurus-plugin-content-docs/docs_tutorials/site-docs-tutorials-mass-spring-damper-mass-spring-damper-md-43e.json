@@ -1,0 +1,27 @@
+{
+  "unversionedId": "mass_spring_damper/mass_spring_damper",
+  "id": "mass_spring_damper/mass_spring_damper",
+  "title": "Mass Spring Damper",
+  "description": "Overview",
+  "source": "@site/docs_tutorials/mass_spring_damper/mass_spring_damper.md",
+  "sourceDirName": "mass_spring_damper",
+  "slug": "/mass_spring_damper/",
+  "permalink": "/docs/docs_tutorials/mass_spring_damper/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 25,
+  "frontMatter": {
+    "sidebar_position": 25,
+    "sidebar_label": "Mass Spring Damper"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Drone",
+    "permalink": "/docs/docs_tutorials/drone/"
+  },
+  "next": {
+    "title": "Galactic Orbits",
+    "permalink": "/docs/docs_tutorials/gal_orbits/"
+  }
+}

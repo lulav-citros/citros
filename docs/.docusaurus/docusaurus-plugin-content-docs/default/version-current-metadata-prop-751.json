@@ -16,42 +16,42 @@
           {
             "type": "link",
             "label": "Quick Start",
-            "href": "/doc/docs/cli_quickstart",
+            "href": "/docs/docs/cli_quickstart",
             "docId": "cli_quickstart"
           },
           {
             "type": "link",
             "label": "Installation",
-            "href": "/doc/docs/cli_install",
+            "href": "/docs/docs/cli_install",
             "docId": "cli_install"
           }
         ],
         "collapsed": true,
         "collapsible": true,
-        "href": "/doc/docs/"
+        "href": "/docs/docs/"
       },
       {
         "type": "link",
         "label": "CLI Commands",
-        "href": "/doc/docs/cli_commands",
+        "href": "/docs/docs/cli_commands",
         "docId": "cli_commands"
       },
       {
         "type": "link",
         "label": "CITROS Repository Directory and File Structure",
-        "href": "/doc/docs/citros_structure",
+        "href": "/docs/docs/citros_structure",
         "docId": "citros_structure"
       },
       {
         "type": "link",
         "label": "Adding Functions to Parameter Setup",
-        "href": "/doc/docs/config_params",
+        "href": "/docs/docs/config_params",
         "docId": "config_params"
       },
       {
         "type": "link",
         "label": "User Templates",
-        "href": "/doc/docs/user_templates",
+        "href": "/docs/docs/user_templates",
         "docId": "user_templates"
       }
     ]

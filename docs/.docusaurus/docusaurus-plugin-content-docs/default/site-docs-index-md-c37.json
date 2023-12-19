@@ -6,7 +6,7 @@
   "source": "@site/docs/index.md",
   "sourceDirName": ".",
   "slug": "/",
-  "permalink": "/doc/docs/",
+  "permalink": "/docs/docs/",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -14,6 +14,6 @@
   "sidebar": "gettingStartedSidebar",
   "next": {
     "title": "Quick Start",
-    "permalink": "/doc/docs/cli_quickstart"
+    "permalink": "/docs/docs/cli_quickstart"
   }
 }

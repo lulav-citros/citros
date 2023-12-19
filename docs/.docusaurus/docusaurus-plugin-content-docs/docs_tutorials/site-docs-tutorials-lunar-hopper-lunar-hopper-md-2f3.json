@@ -1,0 +1,27 @@
+{
+  "unversionedId": "lunar_hopper/lunar_hopper",
+  "id": "lunar_hopper/lunar_hopper",
+  "title": "Lunar Hopper Optimal Control Example Using CITROS",
+  "description": "The Lunar Hopper project is a lunar exploration planning project aimed at solving the intricate problem of lunar hopper missions. It focuses on optimizing the spacecraft's trajectory across the whole flight. Leveraging state-of-the-art optimal problem-solving algorithms, specifically the MPOPT Python library, this project seeks to determine the most efficient path for maximizing the distance traveled during the mission. It empowers users to customize essential parameters such as spacecraft mass, fuel quantity, thrust, and specific impulse.",
+  "source": "@site/docs_tutorials/lunar_hopper/lunar_hopper.md",
+  "sourceDirName": "lunar_hopper",
+  "slug": "/lunar_hopper/",
+  "permalink": "/doc/docs_tutorials/lunar_hopper/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 60,
+  "frontMatter": {
+    "sidebar_position": 60,
+    "sidebar_label": "Lunar Hopper"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "TurtleBot",
+    "permalink": "/doc/docs_tutorials/turtlebot/"
+  },
+  "next": {
+    "title": "Lunar Starship",
+    "permalink": "/doc/docs_tutorials/lunar_starship/"
+  }
+}

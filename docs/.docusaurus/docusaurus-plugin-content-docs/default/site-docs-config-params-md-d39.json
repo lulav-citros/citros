@@ -6,7 +6,7 @@
   "source": "@site/docs/config_params.md",
   "sourceDirName": ".",
   "slug": "/config_params",
-  "permalink": "/doc/docs/config_params",
+  "permalink": "/docs/docs/config_params",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -14,10 +14,10 @@
   "sidebar": "gettingStartedSidebar",
   "previous": {
     "title": "CITROS Repository File Structure",
-    "permalink": "/doc/docs/citros_structure"
+    "permalink": "/docs/docs/citros_structure"
   },
   "next": {
     "title": "User Templates",
-    "permalink": "/doc/docs/user_templates"
+    "permalink": "/docs/docs/user_templates"
   }
 }

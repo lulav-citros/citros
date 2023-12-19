@@ -1,0 +1,27 @@
+{
+  "unversionedId": "turtlebot/turtlebot",
+  "id": "turtlebot/turtlebot",
+  "title": "TurtleBot3 Example Using CITROS",
+  "description": "This project is designed to wrap the official TurtleBot3 simulation example and integrate it with a simple Autonomous Collision Avoidance node. The node provides ROS parameters that allow users to adjust various TurtleBot3 specifications, enabling the analysis of how these changes affect collision avoidance behavior.",
+  "source": "@site/docs_tutorials/turtlebot/turtlebot.md",
+  "sourceDirName": "turtlebot",
+  "slug": "/turtlebot/",
+  "permalink": "/doc/docs_tutorials/turtlebot/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 50,
+  "frontMatter": {
+    "sidebar_position": 50,
+    "sidebar_label": "TurtleBot"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Robotic Arm",
+    "permalink": "/doc/docs_tutorials/robotic_arm/"
+  },
+  "next": {
+    "title": "Lunar Hopper",
+    "permalink": "/doc/docs_tutorials/lunar_hopper/"
+  }
+}

@@ -6,7 +6,7 @@
   "source": "@site/docs/citros_structure.md",
   "sourceDirName": ".",
   "slug": "/citros_structure",
-  "permalink": "/doc/docs/citros_structure",
+  "permalink": "/docs/docs/citros_structure",
   "draft": false,
   "tags": [],
   "version": "current",
@@ -14,10 +14,10 @@
   "sidebar": "gettingStartedSidebar",
   "previous": {
     "title": "CLI Commands",
-    "permalink": "/doc/docs/cli_commands"
+    "permalink": "/docs/docs/cli_commands"
   },
   "next": {
     "title": "Adding Functions to Parameter Setup",
-    "permalink": "/doc/docs/config_params"
+    "permalink": "/docs/docs/config_params"
   }
 }

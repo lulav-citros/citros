@@ -1,0 +1,27 @@
+{
+  "unversionedId": "poliastro/poliastro",
+  "id": "poliastro/poliastro",
+  "title": "Poliastro",
+  "description": "This project contains three simple examples using Poliastro lib for Python 3:",
+  "source": "@site/docs_tutorials/poliastro/poliastro.md",
+  "sourceDirName": "poliastro",
+  "slug": "/poliastro/",
+  "permalink": "/doc/docs_tutorials/poliastro/",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 150,
+  "frontMatter": {
+    "sidebar_position": 150,
+    "sidebar_label": "Poliastro"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "SpiceyPy Using CITROS",
+    "permalink": "/doc/docs_tutorials/spiceypy/"
+  },
+  "next": {
+    "title": "Pendulum",
+    "permalink": "/doc/docs_tutorials/pendulum/"
+  }
+}
