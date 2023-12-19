@@ -381,13 +381,29 @@ class Simulation(CitrosObj):
         systemStatsRecorder.stop()
 
         print(
-            f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation with return code [{ret}].",
+            f"[{'blue' if ret == 0 else 'red'}]Finished simulation with return code [{ret}].",
         )
 
-        self._copy_ros_log(simulation_rec_dir)
-        self._handle_msg_files(simulation_rec_dir)
-        self._save_system_vars(simulation_rec_dir)
-        self._prepare_citros_bag(simulation_rec_dir)
+        try:
+            print(f"Copying ros logs...")
+            self._copy_ros_log(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Copying and registering messages logs...")
+            self._handle_msg_files(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Saving system vars...")
+            self._save_system_vars(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Preparing citros bags...")
+            self._prepare_citros_bag(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
 
         if ret != 0:
             events.error(
