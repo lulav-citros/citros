@@ -230,14 +230,15 @@ class Simulation(CitrosObj):
             - If an image topic is encountered, the image data is saved separately and a string message is added to the new bag.
 
         """
-        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._create_citros_bag(src={src}, dst={dst})")
-        
+        self.log.debug(
+            f"{'   '*self.level}{self.__class__.__name__}._create_citros_bag(src={src}, dst={dst})"
+        )
+
         from typing import TYPE_CHECKING, cast
         from rosbags.serde import deserialize_cdr, serialize_cdr
         from rosbags.rosbag2 import Reader, Writer
         from rosbags.interfaces import ConnectionExtRosbag2, Connection
 
-        
         # check id name of file contain .citros
         if ".citros" in src.removesuffix("/").split("/")[-1]:
             self.log.warning(f"CITROS bag already exist, skipping ...")
@@ -288,7 +289,7 @@ class Simulation(CitrosObj):
             if "citros exists already" in str(e):
                 self.log.warning("CITROS bag already exist ...")
                 return
-    
+
     def _get_bags(self, path: str) -> dict:
         """
         Retrieve the paths of bag files in the specified directory and its subdirectories.
@@ -441,6 +442,7 @@ class Simulation(CitrosObj):
         # used for new simulation
         self.package_name = package_name
         self.launch_file = launch_file
+        self.parameter_setup = None
         super().__init__(name, root, new, log, citros, verbose, debug, level)
 
     # overriding
@@ -462,7 +464,7 @@ class Simulation(CitrosObj):
         # validate parameter_setup file
         param_setup = self["parameter_setup"]
 
-        parameter_setup = ParameterSetup(
+        self.parameter_setup = ParameterSetup(
             param_setup,
             root=self.root,
             new=self.new,
