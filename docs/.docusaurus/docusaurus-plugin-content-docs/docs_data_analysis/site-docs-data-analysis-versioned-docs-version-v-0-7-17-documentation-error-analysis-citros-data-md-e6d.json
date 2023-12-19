@@ -1,0 +1,28 @@
+{
+  "unversionedId": "documentation/error_analysis/citros_data",
+  "id": "version-v0.7.17/documentation/error_analysis/citros_data",
+  "title": "Class CitrosData",
+  "description": "Documentation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/documentation/error_analysis/citros_data.md",
+  "sourceDirName": "documentation/error_analysis",
+  "slug": "/documentation/error_analysis/citros_data",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "frontMatter": {
+    "sidebar_label": "Class CitrosData",
+    "toc_max_heading_level": 3,
+    "hide_title": true,
+    "description": "Documentation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Regression",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/error_analysis/regression"
+  },
+  "next": {
+    "title": "Class CitrosDataArray",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data_array"
+  }
+}

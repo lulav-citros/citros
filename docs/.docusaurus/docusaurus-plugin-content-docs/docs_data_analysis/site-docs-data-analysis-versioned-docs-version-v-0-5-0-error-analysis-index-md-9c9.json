@@ -1,0 +1,28 @@
+{
+  "unversionedId": "error_analysis/index",
+  "id": "version-v0.5.0/error_analysis/index",
+  "title": "index",
+  "description": "Error analysis",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/error_analysis/index.md",
+  "sourceDirName": "error_analysis",
+  "slug": "/error_analysis/",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/error_analysis/",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "Overview",
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "class CitrosDict",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_dict"
+  },
+  "next": {
+    "title": "Getting started: query data",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/error_analysis/getting_started_query_data"
+  }
+}

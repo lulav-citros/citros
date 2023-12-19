@@ -1,0 +1,29 @@
+{
+  "unversionedId": "validation/norm_test",
+  "id": "version-v0.5.0/validation/norm_test",
+  "title": "norm_test",
+  "description": "Norm test",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/validation/norm_test.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/norm_test",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/validation/norm_test",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 5,
+    "sidebar_label": "Norm test"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Mean value test",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/validation/mean_value_test"
+  },
+  "next": {
+    "title": "Testing each simulation",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/validation/testing_each_simulation"
+  }
+}

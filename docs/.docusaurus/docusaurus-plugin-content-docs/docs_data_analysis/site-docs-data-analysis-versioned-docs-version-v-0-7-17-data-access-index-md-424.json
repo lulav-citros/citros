@@ -1,0 +1,28 @@
+{
+  "unversionedId": "data_access/index",
+  "id": "version-v0.7.17/data_access/index",
+  "title": "Overview",
+  "description": "Module data_access is designed to communicate with the database and obtain information about the selected data.",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/data_access/index.md",
+  "sourceDirName": "data_access",
+  "slug": "/data_access/",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/data_access/",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "Overview",
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Package Overview",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/"
+  },
+  "next": {
+    "title": "Getting Started",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/data_access/getting_started"
+  }
+}

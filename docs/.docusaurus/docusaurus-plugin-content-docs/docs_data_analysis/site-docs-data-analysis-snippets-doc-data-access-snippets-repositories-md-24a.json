@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/data_access/snippets_repositories",
+  "id": "snippets_doc/data_access/snippets_repositories",
+  "title": "Repositories",
+  "description": "All Repositories",
+  "source": "@site/docs_data_analysis/snippets_doc/data_access/snippets_repositories.md",
+  "sourceDirName": "snippets_doc/data_access",
+  "slug": "/snippets_doc/data_access/snippets_repositories",
+  "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_repositories",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Repositories"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "CITROS Data Analysis",
+    "permalink": "/docs/docs_data_analysis/next/"
+  },
+  "next": {
+    "title": "Batches",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batches"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/data_access/snippets_users",
+  "id": "snippets_doc/data_access/snippets_users",
+  "title": "Users",
+  "description": "Table of Users",
+  "source": "@site/docs_data_analysis/snippets_doc/data_access/snippets_users.md",
+  "sourceDirName": "snippets_doc/data_access",
+  "slug": "/snippets_doc/data_access/snippets_users",
+  "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_users",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Users"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Batches",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batches"
+  },
+  "next": {
+    "title": "Batch Content",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batch_content"
+  }
+}

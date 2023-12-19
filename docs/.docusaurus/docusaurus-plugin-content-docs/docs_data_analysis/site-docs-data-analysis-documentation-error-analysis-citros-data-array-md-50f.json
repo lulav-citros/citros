@@ -1,0 +1,28 @@
+{
+  "unversionedId": "documentation/error_analysis/citros_data_array",
+  "id": "documentation/error_analysis/citros_data_array",
+  "title": "Class CitrosDataArray",
+  "description": "Documentation",
+  "source": "@site/docs_data_analysis/documentation/error_analysis/citros_data_array.md",
+  "sourceDirName": "documentation/error_analysis",
+  "slug": "/documentation/error_analysis/citros_data_array",
+  "permalink": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data_array",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "sidebar_label": "Class CitrosDataArray",
+    "toc_max_heading_level": 3,
+    "hide_title": true,
+    "description": "Documentation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Class CitrosData",
+    "permalink": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data"
+  },
+  "next": {
+    "title": "Class CitrosStat",
+    "permalink": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_stat"
+  }
+}

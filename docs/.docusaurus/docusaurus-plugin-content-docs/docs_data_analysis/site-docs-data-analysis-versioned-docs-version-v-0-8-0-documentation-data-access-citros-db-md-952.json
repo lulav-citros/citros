@@ -1,0 +1,28 @@
+{
+  "unversionedId": "documentation/data_access/citros_db",
+  "id": "version-v0.8.0/documentation/data_access/citros_db",
+  "title": "Class CitrosDB",
+  "description": "Documentation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.8.0/documentation/data_access/citros_db.md",
+  "sourceDirName": "documentation/data_access",
+  "slug": "/documentation/data_access/citros_db",
+  "permalink": "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_db",
+  "draft": false,
+  "tags": [],
+  "version": "v0.8.0",
+  "frontMatter": {
+    "sidebar_label": "Class CitrosDB",
+    "toc_max_heading_level": 3,
+    "hide_title": true,
+    "description": "Documentation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Plot Data",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/data_access/plot_data"
+  },
+  "next": {
+    "title": "Class CitrosDict",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_dict"
+  }
+}

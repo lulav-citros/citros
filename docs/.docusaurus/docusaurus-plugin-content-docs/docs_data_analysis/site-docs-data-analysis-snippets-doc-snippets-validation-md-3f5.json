@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/snippets_validation",
+  "id": "snippets_doc/snippets_validation",
+  "title": "Validation",
+  "description": "Overview",
+  "source": "@site/docs_data_analysis/snippets_doc/snippets_validation.md",
+  "sourceDirName": "snippets_doc",
+  "slug": "/snippets_doc/snippets_validation",
+  "permalink": "/docs/docs_data_analysis/next/snippets_doc/snippets_validation",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Validation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Error Analysis",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/snippets_error_analysis"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/next/data_access/"
+  }
+}

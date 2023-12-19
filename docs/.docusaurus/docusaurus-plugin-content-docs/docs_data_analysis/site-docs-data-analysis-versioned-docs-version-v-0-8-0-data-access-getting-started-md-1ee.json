@@ -1,0 +1,30 @@
+{
+  "unversionedId": "data_access/getting_started",
+  "id": "version-v0.8.0/data_access/getting_started",
+  "title": "Getting Started",
+  "description": "Getting started",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.8.0/data_access/getting_started.md",
+  "sourceDirName": "data_access",
+  "slug": "/data_access/getting_started",
+  "permalink": "/docs/docs_data_analysis/v0.8.0/data_access/getting_started",
+  "draft": false,
+  "tags": [],
+  "version": "v0.8.0",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "sidebar_label": "Getting Started",
+    "hide_title": true,
+    "description": "Getting started",
+    "sidebar_position": 1
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/data_access/"
+  },
+  "next": {
+    "title": "Repository Overview",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/data_access/repository_overview"
+  }
+}

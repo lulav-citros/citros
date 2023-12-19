@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/mean_value_test",
+  "id": "version-v0.7.17/validation/mean_value_test",
+  "title": "Mean Value Test",
+  "description": "Check mean value",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/validation/mean_value_test.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/mean_value_test",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/validation/mean_value_test",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 3,
+    "sidebar_label": "Mean Value Test",
+    "description": "Check mean value"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Standard Deviation Boundary Test",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_boundary_test"
+  },
+  "next": {
+    "title": "Standard Deviation Test",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_test"
+  }
+}

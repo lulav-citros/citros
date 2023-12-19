@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/snippets_error_analysis",
+  "id": "snippets_doc/snippets_error_analysis",
+  "title": "Error Analysis",
+  "description": "Get Statistics For Simulations",
+  "source": "@site/docs_data_analysis/snippets_doc/snippets_error_analysis.md",
+  "sourceDirName": "snippets_doc",
+  "slug": "/snippets_doc/snippets_error_analysis",
+  "permalink": "/docs/docs_data_analysis/next/snippets_doc/snippets_error_analysis",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Error Analysis"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Plotting",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_plotting"
+  },
+  "next": {
+    "title": "Validation",
+    "permalink": "/docs/docs_data_analysis/next/snippets_doc/snippets_validation"
+  }
+}

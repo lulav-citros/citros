@@ -51,6 +51,21 @@ export default {
     [
       "@docusaurus/plugin-content-docs",
       {
+        "id": "docs_data_analysis",
+        "path": "docs_data_analysis",
+        "routeBasePath": "docs_data_analysis",
+        "sidebarPath": "/Users/mashtaka/dev/lulav-citros/citros/docs/sidebarsDataAnalysis.js",
+        "remarkPlugins": [
+          null
+        ],
+        "rehypePlugins": [
+          null
+        ]
+      }
+    ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
         "id": "docs_tutorials",
         "path": "docs_tutorials",
         "routeBasePath": "docs_tutorials",
@@ -92,10 +107,24 @@ export default {
           "activeBaseRegex": "/docs/"
         },
         {
+          "to": "/docs_data_analysis",
+          "label": "Data analysis",
+          "position": "left",
+          "activeBaseRegex": "/docs_data_analysis/"
+        },
+        {
           "to": "/docs_tutorials",
           "label": "Tutorials",
           "position": "left",
           "activeBaseRegex": "/docs_tutorials/"
+        },
+        {
+          "type": "docsVersionDropdown",
+          "position": "right",
+          "docsPluginId": "docs_data_analysis",
+          "dropdownActiveClassDisabled": false,
+          "dropdownItemsBefore": [],
+          "dropdownItemsAfter": []
         }
       ],
       "hideOnScroll": false

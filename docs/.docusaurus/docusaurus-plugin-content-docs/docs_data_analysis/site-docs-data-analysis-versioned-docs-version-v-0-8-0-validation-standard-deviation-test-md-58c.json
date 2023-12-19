@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/standard_deviation_test",
+  "id": "version-v0.8.0/validation/standard_deviation_test",
+  "title": "Standard Deviation Test",
+  "description": "Check standard deviation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.8.0/validation/standard_deviation_test.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/standard_deviation_test",
+  "permalink": "/docs/docs_data_analysis/v0.8.0/validation/standard_deviation_test",
+  "draft": false,
+  "tags": [],
+  "version": "v0.8.0",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 4,
+    "sidebar_label": "Standard Deviation Test",
+    "description": "Check standard deviation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Mean Value Test",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/validation/mean_value_test"
+  },
+  "next": {
+    "title": "Norm Test",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/validation/norm_test"
+  }
+}

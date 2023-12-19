@@ -1,0 +1,28 @@
+{
+  "unversionedId": "validation/index",
+  "id": "version-v0.7.17/validation/index",
+  "title": "Overview",
+  "description": "Module validation provides methods to tests the results of the simulations. Taking into consideration various simulations, you can establish correspondence between their results, compute statistics, and verify if, for example, the mean values or standard deviations fall within the specified limits. All these tasks can be efficiently accomplished in minimal steps using the validation module. To learn more, check the examples.",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/validation/index.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/validation/",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "Overview",
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Class CitrosStat",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_stat"
+  },
+  "next": {
+    "title": "Getting Started",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/validation/getting_started"
+  }
+}

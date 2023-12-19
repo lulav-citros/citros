@@ -1,0 +1,28 @@
+{
+  "unversionedId": "validation/index",
+  "id": "version-v0.5.0/validation/index",
+  "title": "index",
+  "description": "Validation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/validation/index.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/validation/",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "Overview",
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "class CitrosStat",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_stat"
+  },
+  "next": {
+    "title": "Getting started",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/validation/getting_started"
+  }
+}

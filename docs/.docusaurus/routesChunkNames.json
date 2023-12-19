@@ -1,87 +1,833 @@
 {
-  "/docs/docs-dff": {
-    "__comp": "1be78505",
+  "/docs/__docusaurus/debug-4cc": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
     "__context": {
-      "plugin": "5f96851d"
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/__docusaurus/debug/config-788": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/__docusaurus/debug/content-949": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
     },
-    "versionMetadata": "935f2afb"
+    "allContent": "allContent---docs-docusaurus-debug-content-246-f36"
+  },
+  "/docs/__docusaurus/debug/globalData-511": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/__docusaurus/debug/metadata-92d": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/__docusaurus/debug/registry-9fe": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/__docusaurus/debug/routes-934": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---docs-docusaurus-debug-0-c-5-b33"
+    }
+  },
+  "/docs/docs_data_analysis/next-bc8": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-data-analysis-next-6-ea-b6e"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-data-analysis-nextf-62-588"
+  },
+  "/docs/docs_data_analysis/next/-5c9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-602-588"
+  },
+  "/docs/docs_data_analysis/next/data_access/-062": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-7-df-d89"
+  },
+  "/docs/docs_data_analysis/next/data_access/batch_content-acd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-batch-content-4-a-3-b1d"
+  },
+  "/docs/docs_data_analysis/next/data_access/batch_overview-384": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-batch-overviewe-9-e-79e"
+  },
+  "/docs/docs_data_analysis/next/data_access/getting_started-268": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-getting-started-5-c-0-2af"
+  },
+  "/docs/docs_data_analysis/next/data_access/plot_data-c03": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-plot-datac-3-a-6c1"
+  },
+  "/docs/docs_data_analysis/next/data_access/query_data-a5b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-query-datab-66-fd5"
+  },
+  "/docs/docs_data_analysis/next/data_access/repository_overview-a04": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-repository-overview-53-d-8b3"
+  },
+  "/docs/docs_data_analysis/next/data_access/users_overview-623": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-data-access-users-overview-853-690"
+  },
+  "/docs/docs_data_analysis/next/documentation/data_access/citros_db-e82": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-data-access-citros-dbc-7-d-4b9"
+  },
+  "/docs/docs_data_analysis/next/documentation/data_access/citros_dict-ba9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-data-access-citros-dicta-5-e-60e"
+  },
+  "/docs/docs_data_analysis/next/documentation/data_access/references-20e": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-data-access-referencesd-0-a-55d"
+  },
+  "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data-994": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-error-analysis-citros-data-301-de8"
+  },
+  "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data_array-a26": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-error-analysis-citros-data-array-50-f-85e"
+  },
+  "/docs/docs_data_analysis/next/documentation/error_analysis/citros_stat-918": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-error-analysis-citros-stat-0-d-5-db4"
+  },
+  "/docs/docs_data_analysis/next/documentation/validation/-a40": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-documentation-validation-65-b-f6a"
+  },
+  "/docs/docs_data_analysis/next/error_analysis/-5b5": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-error-analysis-eb-4-b28"
+  },
+  "/docs/docs_data_analysis/next/error_analysis/correlation-e20": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-error-analysis-correlation-4-fb-046"
+  },
+  "/docs/docs_data_analysis/next/error_analysis/getting_started_query_data-f47": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-error-analysis-getting-started-query-datac-27-419"
+  },
+  "/docs/docs_data_analysis/next/error_analysis/regression-a85": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-error-analysis-regressiondfd-ce9"
+  },
+  "/docs/docs_data_analysis/next/error_analysis/statistics-a41": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-error-analysis-statisticsbf-8-d32"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batch_content-0c6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-batch-contente-8-e-475"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batches-26d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-batches-5-db-db0"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_plotting-797": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-plottingd-9-d-bbe"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_query_data-82b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-query-datae-25-050"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_repositories-086": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-repositories-24-a-53a"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_users-555": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-data-access-snippets-usersd-54-dc0"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/snippets_error_analysis-9cd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-snippets-error-analysisaa-4-a96"
+  },
+  "/docs/docs_data_analysis/next/snippets_doc/snippets_validation-4f9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-snippets-doc-snippets-validation-3-f-5-d08"
+  },
+  "/docs/docs_data_analysis/next/validation/-272": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-0-d-3-311"
+  },
+  "/docs/docs_data_analysis/next/validation/getting_started-37d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-getting-startedcdd-792"
+  },
+  "/docs/docs_data_analysis/next/validation/mean_value_test-4c9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-mean-value-test-0-b-4-f23"
+  },
+  "/docs/docs_data_analysis/next/validation/norm_test-202": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-norm-teste-2-f-fbf"
+  },
+  "/docs/docs_data_analysis/next/validation/set_multiple_tests-593": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-set-multiple-testsfde-36b"
+  },
+  "/docs/docs_data_analysis/next/validation/standard_deviation_boundary_test-f08": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-standard-deviation-boundary-test-9-eb-463"
+  },
+  "/docs/docs_data_analysis/next/validation/standard_deviation_test-df9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-standard-deviation-testcc-5-39b"
+  },
+  "/docs/docs_data_analysis/next/validation/testing_each_simulation-1cb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-next-validation-testing-each-simulation-8-c-0-c6f"
+  },
+  "/docs/docs_data_analysis/v0.5.0-627": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-data-analysis-next-6-ea-b6e"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-data-analysis-v-0-5-092-e-c59"
+  },
+  "/docs/docs_data_analysis/v0.5.0/-b81": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-b-7-f-b5b"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/-3a3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-47-b-398"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/batch_content-2a9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-batch-content-28-e-dc3"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/batch_overview-c6d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-batch-overviewbbc-b70"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/getting_started-075": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-getting-startedbae-2eb"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/plot_data-366": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-plot-data-17-c-993"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/query_data-f4e": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-query-datac-78-d0d"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/repository_overview-5ad": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-repository-overviewf-29-981"
+  },
+  "/docs/docs_data_analysis/v0.5.0/data_access/users_overview-14d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-data-access-users-overview-18-a-877"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_db-00f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-data-access-citros-db-31-c-680"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_dict-cbf": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-data-access-citros-dict-970-766"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data-550": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-error-analysis-citros-data-383-998"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data_array-0ec": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-error-analysis-citros-data-arrayb-79-bc4"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_stat-a0d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-error-analysis-citros-stat-1-dd-89f"
+  },
+  "/docs/docs_data_analysis/v0.5.0/documentation/validation/-324": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-documentation-validation-b-79-89d"
+  },
+  "/docs/docs_data_analysis/v0.5.0/error_analysis/-b53": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-error-analysis-9-c-9-82b"
+  },
+  "/docs/docs_data_analysis/v0.5.0/error_analysis/correlation-ca0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-error-analysis-correlation-5-c-6-c63"
+  },
+  "/docs/docs_data_analysis/v0.5.0/error_analysis/getting_started_query_data-4d1": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-error-analysis-getting-started-query-data-72-c-ecf"
+  },
+  "/docs/docs_data_analysis/v0.5.0/error_analysis/regression-000": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-error-analysis-regression-1-c-7-0d5"
+  },
+  "/docs/docs_data_analysis/v0.5.0/error_analysis/statistics-91c": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-error-analysis-statistics-198-ed9"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/-b85": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-ce-5-ebe"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/getting_started-cd0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-getting-started-770-688"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/mean_value_test-449": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-mean-value-test-162-81e"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/norm_test-870": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-norm-test-5-f-1-e86"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/set_multiple_tests-278": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-set-multiple-tests-6-bd-b99"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/standard_deviation_boundary_test-7bc": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-standard-deviation-boundary-testea-4-86c"
+  },
+  "/docs/docs_data_analysis/v0.5.0/validation/testing_each_simulation-a56": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-5-0-validation-testing-each-simulationbbe-42c"
+  },
+  "/docs/docs_data_analysis/v0.7.17-4e7": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-data-analysis-next-6-ea-b6e"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-data-analysis-v-0-7-17-c-83-e56"
+  },
+  "/docs/docs_data_analysis/v0.7.17/-b3f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-5-dc-b28"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/-af8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-424-d08"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/batch_content-140": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-batch-contentd-2-f-5c9"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/batch_overview-214": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-batch-overviewdbe-554"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/getting_started-9db": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-getting-started-629-abd"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/plot_data-0ae": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-plot-datad-87-199"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/query_data-99d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-query-dataa-0-f-746"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/repository_overview-26c": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-repository-overview-2-e-6-b90"
+  },
+  "/docs/docs_data_analysis/v0.7.17/data_access/users_overview-266": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-data-access-users-overviewd-02-922"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/data_access/citros_db-f78": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-data-access-citros-dbc-09-05e"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/data_access/citros_dict-9b3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-data-access-citros-dictb-68-3cb"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/data_access/references-599": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-data-access-references-59-b-6f3"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data-550": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-error-analysis-citros-datae-6-d-b64"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data_array-1ed": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-error-analysis-citros-data-array-66-f-6a1"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_stat-092": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-error-analysis-citros-stat-3-da-619"
+  },
+  "/docs/docs_data_analysis/v0.7.17/documentation/validation/-dfd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-documentation-validation-4-cb-b33"
+  },
+  "/docs/docs_data_analysis/v0.7.17/error_analysis/-e26": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-error-analysis-9-af-11f"
+  },
+  "/docs/docs_data_analysis/v0.7.17/error_analysis/correlation-dba": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-error-analysis-correlation-5-fc-475"
+  },
+  "/docs/docs_data_analysis/v0.7.17/error_analysis/getting_started_query_data-f69": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-error-analysis-getting-started-query-data-699-730"
+  },
+  "/docs/docs_data_analysis/v0.7.17/error_analysis/regression-c32": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-error-analysis-regressione-6-e-a4a"
+  },
+  "/docs/docs_data_analysis/v0.7.17/error_analysis/statistics-f7a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-error-analysis-statistics-670-9f5"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/-ff3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-2-c-6-8ca"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/getting_started-7d6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-getting-startedb-73-d99"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/mean_value_test-edb": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-mean-value-test-529-de6"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/norm_test-757": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-norm-testa-0-b-727"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/set_multiple_tests-4cf": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-set-multiple-testsbf-9-7b6"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_boundary_test-b44": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-standard-deviation-boundary-test-93-a-0d7"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_test-af8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-standard-deviation-test-5-c-6-87f"
+  },
+  "/docs/docs_data_analysis/v0.7.17/validation/testing_each_simulation-929": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-7-17-validation-testing-each-simulation-763-33a"
+  },
+  "/docs/docs_data_analysis/v0.8.0-15d": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-data-analysis-next-6-ea-b6e"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-data-analysis-v-0-8-0-e-54-6ad"
+  },
+  "/docs/docs_data_analysis/v0.8.0/-52c": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-df-4-5c8"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/-2e7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-1-fa-6cd"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/batch_content-98d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-batch-contentc-31-dc5"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/batch_overview-ae9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-batch-overview-8-b-3-fb9"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/getting_started-596": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-getting-started-1-ee-e07"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/plot_data-9f0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-plot-data-3-df-430"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/query_data-e20": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-query-data-96-f-4d1"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/repository_overview-ebc": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-repository-overviewb-55-053"
+  },
+  "/docs/docs_data_analysis/v0.8.0/data_access/users_overview-359": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-data-access-users-overviewc-33-e1e"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_db-f7a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-data-access-citros-db-952-483"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_dict-dda": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-data-access-citros-dict-62-c-8cd"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/data_access/references-df6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-data-access-references-0-ac-ba4"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_data-da2": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-error-analysis-citros-data-913-a4a"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_data_array-0ef": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-error-analysis-citros-data-array-30-b-f22"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_stat-fc9": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-error-analysis-citros-statfd-3-2df"
+  },
+  "/docs/docs_data_analysis/v0.8.0/documentation/validation/-fe2": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-documentation-validation-98-d-cc0"
+  },
+  "/docs/docs_data_analysis/v0.8.0/error_analysis/-b95": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-error-analysis-3-ec-f4e"
+  },
+  "/docs/docs_data_analysis/v0.8.0/error_analysis/correlation-053": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-error-analysis-correlation-363-552"
+  },
+  "/docs/docs_data_analysis/v0.8.0/error_analysis/getting_started_query_data-842": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-error-analysis-getting-started-query-data-092-7e6"
+  },
+  "/docs/docs_data_analysis/v0.8.0/error_analysis/regression-08a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-error-analysis-regression-5-a-8-3b4"
+  },
+  "/docs/docs_data_analysis/v0.8.0/error_analysis/statistics-753": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-error-analysis-statisticsa-34-acd"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_batch_content-c91": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-batch-content-175-214"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_batches-b31": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-batches-9-c-5-37e"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_plotting-aba": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-plotting-266-9ed"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_query_data-437": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-query-dataf-14-3aa"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_repositories-562": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-repositoriesfa-3-873"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_users-5af": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-data-access-snippets-usersda-7-b93"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/snippets_error_analysis-939": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-snippets-error-analysis-28-e-65e"
+  },
+  "/docs/docs_data_analysis/v0.8.0/snippets_doc/snippets_validation-822": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-snippets-doc-snippets-validation-3-a-7-495"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/-32d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-b-5-d-2ea"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/getting_started-180": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-getting-started-8-c-2-253"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/mean_value_test-612": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-mean-value-testaab-4cd"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/norm_test-f15": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-norm-testd-44-3cc"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/set_multiple_tests-938": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-set-multiple-testscb-2-a35"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/standard_deviation_boundary_test-533": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-standard-deviation-boundary-testc-79-5ca"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/standard_deviation_test-f83": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-standard-deviation-test-58-c-143"
+  },
+  "/docs/docs_data_analysis/v0.8.0/validation/testing_each_simulation-a47": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-v-0-8-0-validation-testing-each-simulatione-54-e7e"
+  },
+  "/docs/docs-dff": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-5-f-9-d5b"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-935-7d8"
   },
   "/docs/docs/-7c4": {
-    "__comp": "17896441",
-    "content": "c377a04b"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-c-37-244"
   },
   "/docs/docs/citros_structure-060": {
-    "__comp": "17896441",
-    "content": "07a6141d"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-citros-structure-07-a-4b4"
   },
   "/docs/docs/cli_commands-65f": {
-    "__comp": "17896441",
-    "content": "1b68a5c7"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-cli-commands-1-b-6-f6e"
   },
   "/docs/docs/cli_install-225": {
-    "__comp": "17896441",
-    "content": "3e3b27a6"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-cli-install-3-e-3-093"
   },
   "/docs/docs/cli_quickstart-424": {
-    "__comp": "17896441",
-    "content": "9421ce2d"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-cli-quickstart-942-123"
   },
   "/docs/docs/config_params-371": {
-    "__comp": "17896441",
-    "content": "d3968571"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-config-paramsd-39-a47"
   },
   "/docs/docs/not_in_use/cli_install_advenced-a4c": {
-    "__comp": "17896441",
-    "content": "a04ffdbf"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-not-in-use-cli-install-advenceda-04-e5e"
   },
   "/docs/docs/user_templates-9a2": {
-    "__comp": "17896441",
-    "content": "ab05d269"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-user-templatesab-0-3b3"
+  },
+  "/docs/docs_data_analysis-083": {
+    "__comp": "__comp---theme-doc-page-1-be-9be",
+    "__context": {
+      "plugin": "plugin---docs-docs-data-analysis-next-6-ea-b6e"
+    },
+    "versionMetadata": "versionMetadata---docs-docs-data-analysisbb-3-a9f"
+  },
+  "/docs/docs_data_analysis/-4df": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-b-70-7d0"
+  },
+  "/docs/docs_data_analysis/data_access/-c65": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-b-19-c4c"
+  },
+  "/docs/docs_data_analysis/data_access/batch_content-fd6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-batch-contenteec-3fa"
+  },
+  "/docs/docs_data_analysis/data_access/batch_overview-88d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-batch-overviewe-24-f3e"
+  },
+  "/docs/docs_data_analysis/data_access/getting_started-55f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-getting-started-726-1d8"
+  },
+  "/docs/docs_data_analysis/data_access/plot_data-723": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-plot-data-50-a-926"
+  },
+  "/docs/docs_data_analysis/data_access/query_data-fba": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-query-dataa-29-cc3"
+  },
+  "/docs/docs_data_analysis/data_access/repository_overview-ec7": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-repository-overview-24-e-47f"
+  },
+  "/docs/docs_data_analysis/data_access/users_overview-151": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-data-access-users-overview-5-c-9-054"
+  },
+  "/docs/docs_data_analysis/documentation/data_access/citros_db-4a0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-data-access-citros-db-3-b-3-644"
+  },
+  "/docs/docs_data_analysis/documentation/data_access/citros_dict-cf2": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-data-access-citros-dict-7-cd-1b7"
+  },
+  "/docs/docs_data_analysis/documentation/data_access/references-326": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-data-access-references-6-e-5-4ac"
+  },
+  "/docs/docs_data_analysis/documentation/error_analysis/citros_data-3f1": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-error-analysis-citros-data-774-fd8"
+  },
+  "/docs/docs_data_analysis/documentation/error_analysis/citros_data_array-456": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-error-analysis-citros-data-array-8-af-07e"
+  },
+  "/docs/docs_data_analysis/documentation/error_analysis/citros_stat-8ff": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-error-analysis-citros-statc-81-566"
+  },
+  "/docs/docs_data_analysis/documentation/validation/-fb8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-documentation-validation-5-c-1-0c8"
+  },
+  "/docs/docs_data_analysis/error_analysis/-775": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-error-analysis-c-47-8ac"
+  },
+  "/docs/docs_data_analysis/error_analysis/correlation-5c6": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-error-analysis-correlationd-9-b-437"
+  },
+  "/docs/docs_data_analysis/error_analysis/getting_started_query_data-2cd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-error-analysis-getting-started-query-data-54-b-653"
+  },
+  "/docs/docs_data_analysis/error_analysis/regression-a06": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-error-analysis-regressionfb-6-1f4"
+  },
+  "/docs/docs_data_analysis/error_analysis/statistics-332": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-error-analysis-statistics-975-e0d"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batch_content-30b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-batch-content-6-d-7-d95"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batches-ea5": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-batchesd-0-d-04c"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_plotting-682": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-plotting-0-a-6-6b2"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_query_data-271": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-query-data-85-b-4d8"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_repositories-e75": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-repositories-8-d-6-6fd"
+  },
+  "/docs/docs_data_analysis/snippets_doc/data_access/snippets_users-956": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-data-access-snippets-users-2-bd-b72"
+  },
+  "/docs/docs_data_analysis/snippets_doc/snippets_error_analysis-603": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-snippets-error-analysis-0-e-3-864"
+  },
+  "/docs/docs_data_analysis/snippets_doc/snippets_validation-7f0": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-snippets-doc-snippets-validation-961-a79"
+  },
+  "/docs/docs_data_analysis/validation/-3aa": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-03-c-f0f"
+  },
+  "/docs/docs_data_analysis/validation/getting_started-7ea": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-getting-started-6-ca-b0a"
+  },
+  "/docs/docs_data_analysis/validation/mean_value_test-e3f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-mean-value-test-2-c-1-8a8"
+  },
+  "/docs/docs_data_analysis/validation/norm_test-cbc": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-norm-test-865-4c6"
+  },
+  "/docs/docs_data_analysis/validation/set_multiple_tests-069": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-set-multiple-tests-45-c-7fd"
+  },
+  "/docs/docs_data_analysis/validation/standard_deviation_boundary_test-f90": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-standard-deviation-boundary-test-941-ee2"
+  },
+  "/docs/docs_data_analysis/validation/standard_deviation_test-49e": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-standard-deviation-testc-1-a-6cf"
+  },
+  "/docs/docs_data_analysis/validation/testing_each_simulation-c9a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-data-analysis-validation-testing-each-simulation-7-c-6-f0d"
   },
   "/docs/docs_tutorials-0d1": {
-    "__comp": "1be78505",
+    "__comp": "__comp---theme-doc-page-1-be-9be",
     "__context": {
-      "plugin": "8cbe9726"
+      "plugin": "plugin---docs-docs-tutorials-8-cb-2d9"
     },
-    "versionMetadata": "48b1700f"
+    "versionMetadata": "versionMetadata---docs-docs-tutorials-48-b-a1e"
   },
   "/docs/docs_tutorials/-a44": {
-    "__comp": "17896441",
-    "content": "4b50630d"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-4-b-5-819"
   },
   "/docs/docs_tutorials/dockerfile_overview/-810": {
-    "__comp": "17896441",
-    "content": "ee0eb84f"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-dockerfile-overview-ee-0-c8a"
   },
   "/docs/docs_tutorials/drone/-8e1": {
-    "__comp": "17896441",
-    "content": "0182100d"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-drone-018-fdb"
   },
   "/docs/docs_tutorials/gal_orbits/-dce": {
-    "__comp": "17896441",
-    "content": "fba5c56f"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-gal-orbits-fba-af1"
   },
   "/docs/docs_tutorials/getting_started/-4f6": {
-    "__comp": "17896441",
-    "content": "22869fcd"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-getting-started-228-98f"
   },
   "/docs/docs_tutorials/mass_spring_damper/-247": {
-    "__comp": "17896441",
-    "content": "43eb2aab"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-mass-spring-damper-43-e-cda"
   },
   "/docs/docs_tutorials/pendulum/-7e3": {
-    "__comp": "17896441",
-    "content": "0e00195d"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-pendulum-0-e-0-5ce"
   },
   "/docs/docs_tutorials/soft_landing/-5ec": {
-    "__comp": "17896441",
-    "content": "d2ae8116"
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---docs-docs-tutorials-soft-landing-d-2-a-820"
   },
   "/docs/-606": {
-    "__comp": "1df93b7f",
+    "__comp": "__comp---site-src-pages-index-tsx-1-df-d3e",
     "__context": {
-      "plugin": "7a1ff993"
+      "plugin": "plugin---docs-7-a-1-754"
     },
-    "config": "5e9f5e1a"
+    "config": "config---docs-5-e-9-4ea"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "unversionedId": "error_analysis/regression",
+  "id": "version-v0.5.0/error_analysis/regression",
+  "title": "regression",
+  "description": "Regression",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/error_analysis/regression.md",
+  "sourceDirName": "error_analysis",
+  "slug": "/error_analysis/regression",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/error_analysis/regression",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 4,
+    "sidebar_label": "Regression"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Correlation",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/error_analysis/correlation"
+  },
+  "next": {
+    "title": "class CitrosData",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data"
+  }
+}

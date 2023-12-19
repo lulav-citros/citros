@@ -13,19 +13,6 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
 
-    // {
-    //   title: 'CITROS Web',
-    //   url: "docs",
-    //   Svg: require('@site/static/img/citros_home_web.svg').default,
-    //   description: (
-    //     <div>
-    //       <p>
-    //       CITROS Web offers a full platform to create and run simulations, 
-    //       investigate and analyse results, collaborate with your team with a simple UI</p>
-    //       <p>Read more...</p>        
-    //     </div>
-    //   ),
-    // },
     {
       title: 'CITROS CLI',
       url: "docs",
@@ -37,17 +24,17 @@ const FeatureList: FeatureItem[] = [
         </div>
       ),
     },
-    // {
-    //   title: 'CITROS Data Analysis',
-    //   url: "docs_data_analysis",
-    //   Svg: require('@site/static/img/citros_home_analysis.svg').default,
-    //   description: (
-    //     <div>
-    //       <p>CITROS Data Analysis allows you to query, analyse and visualize the data of your simulations. With its extensive features, you can easily extract valuable insights from your simulation runs.</p>
-    //       <p>Read more...</p>
-    //     </div>
-    //   ),
-    // },
+    {
+      title: 'CITROS Data Analysis',
+      url: "docs_data_analysis",
+      Svg: require('@site/static/img/citros_home_analysis.svg').default,
+      description: (
+        <div>
+          <p>CITROS Data Analysis allows you to query, analyse and visualize the data of your simulations. With its extensive features, you can easily extract valuable insights from your simulation runs.</p>
+          <p>Read more...</p>
+        </div>
+      ),
+    },
 ];
 
 function Feature({ title, Svg, description, url }: FeatureItem) {

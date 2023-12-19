@@ -1,0 +1,24 @@
+{
+  "unversionedId": "index",
+  "id": "version-v0.5.0/index",
+  "title": "index",
+  "description": "Data Analysis package",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/index.md",
+  "sourceDirName": ".",
+  "slug": "/",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1,
+    "sidebar_label": "Package overview",
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "next": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/data_access/"
+  }
+}

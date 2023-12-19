@@ -1,0 +1,29 @@
+{
+  "unversionedId": "data_access/repository_overview",
+  "id": "version-v0.5.0/data_access/repository_overview",
+  "title": "repository_overview",
+  "description": "Repository overview",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/data_access/repository_overview.md",
+  "sourceDirName": "data_access",
+  "slug": "/data_access/repository_overview",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/data_access/repository_overview",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 2,
+    "sidebar_label": "Repository overview"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Getting started",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/data_access/getting_started"
+  },
+  "next": {
+    "title": "Batch overview",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/data_access/batch_overview"
+  }
+}

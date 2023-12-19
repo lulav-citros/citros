@@ -1,0 +1,28 @@
+{
+  "unversionedId": "documentation/data_access/references",
+  "id": "version-v0.7.17/documentation/data_access/references",
+  "title": "Class Ref",
+  "description": "Documentation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/documentation/data_access/references.md",
+  "sourceDirName": "documentation/data_access",
+  "slug": "/documentation/data_access/references",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/documentation/data_access/references",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "frontMatter": {
+    "sidebar_label": "Class Ref",
+    "toc_max_heading_level": 3,
+    "hide_title": true,
+    "description": "Documentation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Class CitrosDict",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/documentation/data_access/citros_dict"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/error_analysis/"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "unversionedId": "error_analysis/correlation",
+  "id": "version-v0.7.17/error_analysis/correlation",
+  "title": "Correlation",
+  "description": "Correlation",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/error_analysis/correlation.md",
+  "sourceDirName": "error_analysis",
+  "slug": "/error_analysis/correlation",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/error_analysis/correlation",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 3,
+    "sidebar_label": "Correlation",
+    "description": "Correlation"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Bin, Interpolate and Calculate Statistics",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/error_analysis/statistics"
+  },
+  "next": {
+    "title": "Regression",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/error_analysis/regression"
+  }
+}

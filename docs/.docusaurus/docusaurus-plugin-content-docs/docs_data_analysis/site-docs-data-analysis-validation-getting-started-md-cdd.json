@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/getting_started",
+  "id": "validation/getting_started",
+  "title": "Getting Started",
+  "description": "Quick start",
+  "source": "@site/docs_data_analysis/validation/getting_started.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/getting_started",
+  "permalink": "/docs/docs_data_analysis/next/validation/getting_started",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "sidebar_label": "Getting Started",
+    "hide_title": true,
+    "sidebar_position": 1,
+    "description": "Quick start"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/next/validation/"
+  },
+  "next": {
+    "title": "Standard Deviation Boundary Test",
+    "permalink": "/docs/docs_data_analysis/next/validation/standard_deviation_boundary_test"
+  }
+}

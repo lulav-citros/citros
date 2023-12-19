@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/data_access/snippets_batch_content",
+  "id": "version-v0.9.1/snippets_doc/data_access/snippets_batch_content",
+  "title": "Batch Content",
+  "description": "General Information",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.9.1/snippets_doc/data_access/snippets_batch_content.md",
+  "sourceDirName": "snippets_doc/data_access",
+  "slug": "/snippets_doc/data_access/snippets_batch_content",
+  "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batch_content",
+  "draft": false,
+  "tags": [],
+  "version": "v0.9.1",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Batch Content"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Users",
+    "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_users"
+  },
+  "next": {
+    "title": "Query Data",
+    "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_query_data"
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "pluginId": "docs_data_analysis",
+  "version": "v0.5.0",
+  "label": "v0.5.0",
+  "banner": "unmaintained",
+  "badge": true,
+  "noIndex": false,
+  "className": "docs-version-v0.5.0",
+  "isLast": false,
+  "docsSidebars": {
+    "dataAnalysisSidebar": [
+      {
+        "type": "category",
+        "label": "Citros Data Analysis",
+        "items": [
+          {
+            "type": "category",
+            "label": "Data access",
+            "items": [
+              {
+                "type": "category",
+                "label": "Examples",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "Getting started",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/getting_started",
+                    "docId": "data_access/getting_started"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Repository overview",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/repository_overview",
+                    "docId": "data_access/repository_overview"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Batch overview",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/batch_overview",
+                    "docId": "data_access/batch_overview"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Users overview",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/users_overview",
+                    "docId": "data_access/users_overview"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Batch content",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/batch_content",
+                    "docId": "data_access/batch_content"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Query data",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/query_data",
+                    "docId": "data_access/query_data"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Plot data",
+                    "href": "/docs/docs_data_analysis/v0.5.0/data_access/plot_data",
+                    "docId": "data_access/plot_data"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              },
+              {
+                "type": "category",
+                "label": "Documentation",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "class CitrosDB",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_db",
+                    "docId": "documentation/data_access/citros_db"
+                  },
+                  {
+                    "type": "link",
+                    "label": "class CitrosDict",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_dict",
+                    "docId": "documentation/data_access/citros_dict"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              }
+            ],
+            "collapsed": true,
+            "collapsible": true,
+            "href": "/docs/docs_data_analysis/v0.5.0/data_access/"
+          },
+          {
+            "type": "category",
+            "label": "Error analysis",
+            "items": [
+              {
+                "type": "category",
+                "label": "Examples",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "Getting started: query data",
+                    "href": "/docs/docs_data_analysis/v0.5.0/error_analysis/getting_started_query_data",
+                    "docId": "error_analysis/getting_started_query_data"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Bin, interpolate and calculate statistics",
+                    "href": "/docs/docs_data_analysis/v0.5.0/error_analysis/statistics",
+                    "docId": "error_analysis/statistics"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Correlation",
+                    "href": "/docs/docs_data_analysis/v0.5.0/error_analysis/correlation",
+                    "docId": "error_analysis/correlation"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Regression",
+                    "href": "/docs/docs_data_analysis/v0.5.0/error_analysis/regression",
+                    "docId": "error_analysis/regression"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              },
+              {
+                "type": "category",
+                "label": "Documentation",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "class CitrosData",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data",
+                    "docId": "documentation/error_analysis/citros_data"
+                  },
+                  {
+                    "type": "link",
+                    "label": "class CitrosDataArray",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data_array",
+                    "docId": "documentation/error_analysis/citros_data_array"
+                  },
+                  {
+                    "type": "link",
+                    "label": "class CitrosStat",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_stat",
+                    "docId": "documentation/error_analysis/citros_stat"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              }
+            ],
+            "collapsed": true,
+            "collapsible": true,
+            "href": "/docs/docs_data_analysis/v0.5.0/error_analysis/"
+          },
+          {
+            "type": "category",
+            "label": "Validation",
+            "items": [
+              {
+                "type": "category",
+                "label": "Examples",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "Getting started",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/getting_started",
+                    "docId": "validation/getting_started"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Standard deviation boundary test",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/standard_deviation_boundary_test",
+                    "docId": "validation/standard_deviation_boundary_test"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Mean value test",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/mean_value_test",
+                    "docId": "validation/mean_value_test"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Norm test",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/norm_test",
+                    "docId": "validation/norm_test"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Testing each simulation",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/testing_each_simulation",
+                    "docId": "validation/testing_each_simulation"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Set multiple tests",
+                    "href": "/docs/docs_data_analysis/v0.5.0/validation/set_multiple_tests",
+                    "docId": "validation/set_multiple_tests"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              },
+              {
+                "type": "category",
+                "label": "Documentation",
+                "items": [
+                  {
+                    "type": "link",
+                    "label": "class Validation",
+                    "href": "/docs/docs_data_analysis/v0.5.0/documentation/validation/",
+                    "docId": "documentation/validation/validation"
+                  }
+                ],
+                "collapsed": true,
+                "collapsible": true
+              }
+            ],
+            "collapsed": true,
+            "collapsible": true,
+            "href": "/docs/docs_data_analysis/v0.5.0/validation/"
+          }
+        ],
+        "collapsed": true,
+        "collapsible": true,
+        "href": "/docs/docs_data_analysis/v0.5.0/"
+      }
+    ]
+  },
+  "docs": {
+    "data_access/batch_content": {
+      "id": "data_access/batch_content",
+      "title": "batch_content",
+      "description": "Batch content",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/batch_overview": {
+      "id": "data_access/batch_overview",
+      "title": "batch_overview",
+      "description": "Batch overview",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/getting_started": {
+      "id": "data_access/getting_started",
+      "title": "getting_started",
+      "description": "Data Access",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/index": {
+      "id": "data_access/index",
+      "title": "index",
+      "description": "Data access",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/plot_data": {
+      "id": "data_access/plot_data",
+      "title": "plot_data",
+      "description": "Plot data",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/query_data": {
+      "id": "data_access/query_data",
+      "title": "query_data",
+      "description": "Query data",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/repository_overview": {
+      "id": "data_access/repository_overview",
+      "title": "repository_overview",
+      "description": "Repository overview",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "data_access/users_overview": {
+      "id": "data_access/users_overview",
+      "title": "users_overview",
+      "description": "Users overview",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/data_access/citros_db": {
+      "id": "documentation/data_access/citros_db",
+      "title": "citros_db",
+      "description": "Class CitrosDB {citrosdataanalysis.dataaccess.citrosdb.CitrosDB}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/data_access/citros_dict": {
+      "id": "documentation/data_access/citros_dict",
+      "title": "citros_dict",
+      "description": "Class CitrosDict {citrosdataanalysis.dataaccess.citrosdict.CitrosDict}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/error_analysis/citros_data": {
+      "id": "documentation/error_analysis/citros_data",
+      "title": "citros_data",
+      "description": "Class CitrosData {citrosdataanalysis.erroranalysis.citrosdata.CitrosData}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/error_analysis/citros_data_array": {
+      "id": "documentation/error_analysis/citros_data_array",
+      "title": "citros_data_array",
+      "description": "Class CitrosDataArray {citrosdataanalysis.erroranalysis.citrosdata_array.CitrosDataArray}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/error_analysis/citros_stat": {
+      "id": "documentation/error_analysis/citros_stat",
+      "title": "citros_stat",
+      "description": "Class CitrosStat {citrosdataanalysis.erroranalysis.citrosstat.CitrosStat}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "documentation/validation/validation": {
+      "id": "documentation/validation/validation",
+      "title": "validation",
+      "description": "Class Validation {citrosdataanalysis.validation.validation.Validation}",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "error_analysis/correlation": {
+      "id": "error_analysis/correlation",
+      "title": "correlation",
+      "description": "Correlation",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "error_analysis/getting_started_query_data": {
+      "id": "error_analysis/getting_started_query_data",
+      "title": "Error analysis",
+      "description": "For performing error analysis module erroranalysis is used. To download module:",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "error_analysis/index": {
+      "id": "error_analysis/index",
+      "title": "index",
+      "description": "Error analysis",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "error_analysis/regression": {
+      "id": "error_analysis/regression",
+      "title": "regression",
+      "description": "Regression",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "error_analysis/statistics": {
+      "id": "error_analysis/statistics",
+      "title": "statistics",
+      "description": "Bin, interpolate and calculate statistics",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "index": {
+      "id": "index",
+      "title": "index",
+      "description": "Data Analysis package",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/getting_started": {
+      "id": "validation/getting_started",
+      "title": "Validation",
+      "description": "The validation module provides a set of tests check the simulation results. These tests include:",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/index": {
+      "id": "validation/index",
+      "title": "index",
+      "description": "Validation",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/mean_value_test": {
+      "id": "validation/mean_value_test",
+      "title": "mean_value_test",
+      "description": "Mean value test",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/norm_test": {
+      "id": "validation/norm_test",
+      "title": "norm_test",
+      "description": "Norm test",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/set_multiple_tests": {
+      "id": "validation/set_multiple_tests",
+      "title": "set_multiple_tests",
+      "description": "Set multiple tests",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/standard_deviation_boundary_test": {
+      "id": "validation/standard_deviation_boundary_test",
+      "title": "standard_deviation_boundary_test",
+      "description": "Standard deviation boundary test",
+      "sidebar": "dataAnalysisSidebar"
+    },
+    "validation/testing_each_simulation": {
+      "id": "validation/testing_each_simulation",
+      "title": "testing_each_simulation",
+      "description": "Testing each simulation",
+      "sidebar": "dataAnalysisSidebar"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "unversionedId": "error_analysis/getting_started_query_data",
+  "id": "error_analysis/getting_started_query_data",
+  "title": "Getting Started: Query Data",
+  "description": "Quick start",
+  "source": "@site/docs_data_analysis/error_analysis/getting_started_query_data.md",
+  "sourceDirName": "error_analysis",
+  "slug": "/error_analysis/getting_started_query_data",
+  "permalink": "/docs/docs_data_analysis/next/error_analysis/getting_started_query_data",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "sidebar_label": "Getting Started: Query Data",
+    "hide_title": true,
+    "sidebar_position": 1,
+    "description": "Quick start"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/next/error_analysis/"
+  },
+  "next": {
+    "title": "Bin, Interpolate and Calculate Statistics",
+    "permalink": "/docs/docs_data_analysis/next/error_analysis/statistics"
+  }
+}

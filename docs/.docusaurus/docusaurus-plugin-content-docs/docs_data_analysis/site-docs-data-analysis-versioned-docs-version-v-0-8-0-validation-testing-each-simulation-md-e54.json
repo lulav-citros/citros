@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/testing_each_simulation",
+  "id": "version-v0.8.0/validation/testing_each_simulation",
+  "title": "Testing Each Simulation",
+  "description": "Check individual simulations",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.8.0/validation/testing_each_simulation.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/testing_each_simulation",
+  "permalink": "/docs/docs_data_analysis/v0.8.0/validation/testing_each_simulation",
+  "draft": false,
+  "tags": [],
+  "version": "v0.8.0",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 5,
+    "sidebar_label": "Testing Each Simulation",
+    "description": "Check individual simulations"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Norm Test",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/validation/norm_test"
+  },
+  "next": {
+    "title": "Set Multiple Tests",
+    "permalink": "/docs/docs_data_analysis/v0.8.0/validation/set_multiple_tests"
+  }
+}

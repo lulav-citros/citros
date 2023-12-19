@@ -1,0 +1,27 @@
+{
+  "unversionedId": "snippets_doc/data_access/snippets_batches",
+  "id": "version-v0.9.1/snippets_doc/data_access/snippets_batches",
+  "title": "Batches",
+  "description": "All Batches",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.9.1/snippets_doc/data_access/snippets_batches.md",
+  "sourceDirName": "snippets_doc/data_access",
+  "slug": "/snippets_doc/data_access/snippets_batches",
+  "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batches",
+  "draft": false,
+  "tags": [],
+  "version": "v0.9.1",
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_label": "Batches"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Repositories",
+    "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_repositories"
+  },
+  "next": {
+    "title": "Users",
+    "permalink": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_users"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "unversionedId": "documentation/data_access/citros_dict",
+  "id": "version-v0.5.0/documentation/data_access/citros_dict",
+  "title": "citros_dict",
+  "description": "Class CitrosDict {citrosdataanalysis.dataaccess.citrosdict.CitrosDict}",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.5.0/documentation/data_access/citros_dict.md",
+  "sourceDirName": "documentation/data_access",
+  "slug": "/documentation/data_access/citros_dict",
+  "permalink": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_dict",
+  "draft": false,
+  "tags": [],
+  "version": "v0.5.0",
+  "frontMatter": {
+    "sidebar_label": "class CitrosDict",
+    "toc_max_heading_level": 3,
+    "hide_title": true
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "class CitrosDB",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_db"
+  },
+  "next": {
+    "title": "Overview",
+    "permalink": "/docs/docs_data_analysis/v0.5.0/error_analysis/"
+  }
+}

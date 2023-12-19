@@ -69,33 +69,18 @@ const config = {
   ],
 
   plugins: [
-    // [
-    //   "@docusaurus/plugin-content-docs",
-    //   {
-    //     id: "docs_cli",
-    //     path: "docs_cli",
-    //     routeBasePath: "docs_cli",
-    //     sidebarPath: require.resolve("./sidebarsCLI.js"),
-    //     remarkPlugins: [math],
-    //     rehypePlugins: [katex],
-    //     // includeCurrentVersion: false,
-    //   },
-    // ],
-
-
-
-    // [
-    //   "@docusaurus/plugin-content-docs",
-    //   {
-    //     id: "docs_data_analysis",
-    //     path: "docs_data_analysis",
-    //     routeBasePath: "docs_data_analysis",
-    //     sidebarPath: require.resolve("./sidebarsDataAnalysis.js"),
-    //     remarkPlugins: [math],
-    //     rehypePlugins: [katex],
-    //     // includeCurrentVersion: false,
-    //   },
-    // ],
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "docs_data_analysis",
+        path: "docs_data_analysis",
+        routeBasePath: "docs_data_analysis",
+        sidebarPath: require.resolve("./sidebarsDataAnalysis.js"),
+        remarkPlugins: [math],
+        rehypePlugins: [katex],
+        // includeCurrentVersion: false,
+      },
+    ],
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -154,12 +139,12 @@ const config = {
           //   position: "left",
           //   activeBaseRegex: `/docs_cli/`,
           // },
-          // {
-          //   to: "/docs_data_analysis", // ./docs-api/Intro.md
-          //   label: "Data analysis",
-          //   position: "left",
-          //   activeBaseRegex: `/docs_data_analysis/`,
-          // },
+          {
+            to: "/docs_data_analysis", // ./docs-api/Intro.md
+            label: "Data analysis",
+            position: "left",
+            activeBaseRegex: `/docs_data_analysis/`,
+          },
           {
             to: "/docs_tutorials", // ./docs-api/Intro.md
             label: "Tutorials",
@@ -174,13 +159,13 @@ const config = {
           //   // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
           //   // dropdownActiveClassDisabled: true,
           // },
-          // {
-          //   type: "docsVersionDropdown",
-          //   position: "right",
-          //   docsPluginId: "docs_data_analysis",
-          //   // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
-          //   dropdownActiveClassDisabled: false,
-          // },
+          {
+            type: "docsVersionDropdown",
+            position: "right",
+            docsPluginId: "docs_data_analysis",
+            // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
+            dropdownActiveClassDisabled: false,
+          },
         ],
       },
       footer: {

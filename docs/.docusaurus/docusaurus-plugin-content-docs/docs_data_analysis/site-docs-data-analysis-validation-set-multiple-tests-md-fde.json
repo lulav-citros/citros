@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/set_multiple_tests",
+  "id": "validation/set_multiple_tests",
+  "title": "Set Multiple Tests",
+  "description": "Set multiple tests",
+  "source": "@site/docs_data_analysis/validation/set_multiple_tests.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/set_multiple_tests",
+  "permalink": "/docs/docs_data_analysis/next/validation/set_multiple_tests",
+  "draft": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 7,
+    "sidebar_label": "Set Multiple Tests",
+    "description": "Set multiple tests"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Testing Each Simulation",
+    "permalink": "/docs/docs_data_analysis/next/validation/testing_each_simulation"
+  },
+  "next": {
+    "title": "Class Validation",
+    "permalink": "/docs/docs_data_analysis/next/documentation/validation/"
+  }
+}

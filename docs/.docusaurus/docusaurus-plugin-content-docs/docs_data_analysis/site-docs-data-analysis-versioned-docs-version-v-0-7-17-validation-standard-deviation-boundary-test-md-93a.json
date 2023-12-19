@@ -1,0 +1,30 @@
+{
+  "unversionedId": "validation/standard_deviation_boundary_test",
+  "id": "version-v0.7.17/validation/standard_deviation_boundary_test",
+  "title": "Standard Deviation Boundary Test",
+  "description": "Check standard deviation boundary",
+  "source": "@site/docs_data_analysis_versioned_docs/version-v0.7.17/validation/standard_deviation_boundary_test.md",
+  "sourceDirName": "validation",
+  "slug": "/validation/standard_deviation_boundary_test",
+  "permalink": "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_boundary_test",
+  "draft": false,
+  "tags": [],
+  "version": "v0.7.17",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "toc_max_heading_level": 4,
+    "hide_title": true,
+    "sidebar_position": 2,
+    "sidebar_label": "Standard Deviation Boundary Test",
+    "description": "Check standard deviation boundary"
+  },
+  "sidebar": "dataAnalysisSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/validation/getting_started"
+  },
+  "next": {
+    "title": "Mean Value Test",
+    "permalink": "/docs/docs_data_analysis/v0.7.17/validation/mean_value_test"
+  }
+}

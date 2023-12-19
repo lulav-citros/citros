@@ -1,5 +1,999 @@
 {
   "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/docs",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "citros_structure",
+              "path": "/docs/docs/citros_structure",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_commands",
+              "path": "/docs/docs/cli_commands",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_install",
+              "path": "/docs/docs/cli_install",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_quickstart",
+              "path": "/docs/docs/cli_quickstart",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "config_params",
+              "path": "/docs/docs/config_params",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs/",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "not_in_use/cli_install_advenced",
+              "path": "/docs/docs/not_in_use/cli_install_advenced"
+            },
+            {
+              "id": "user_templates",
+              "path": "/docs/docs/user_templates",
+              "sidebar": "gettingStartedSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "gettingStartedSidebar": {
+              "link": {
+                "path": "/docs/docs/",
+                "label": "CITROS CLI"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    },
+    "docs_data_analysis": {
+      "path": "/docs/docs_data_analysis",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": false,
+          "path": "/docs/docs_data_analysis/next",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "data_access/batch_content",
+              "path": "/docs/docs_data_analysis/next/data_access/batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/batch_overview",
+              "path": "/docs/docs_data_analysis/next/data_access/batch_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/getting_started",
+              "path": "/docs/docs_data_analysis/next/data_access/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/index",
+              "path": "/docs/docs_data_analysis/next/data_access/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/plot_data",
+              "path": "/docs/docs_data_analysis/next/data_access/plot_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/query_data",
+              "path": "/docs/docs_data_analysis/next/data_access/query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/repository_overview",
+              "path": "/docs/docs_data_analysis/next/data_access/repository_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/users_overview",
+              "path": "/docs/docs_data_analysis/next/data_access/users_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_db",
+              "path": "/docs/docs_data_analysis/next/documentation/data_access/citros_db",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_dict",
+              "path": "/docs/docs_data_analysis/next/documentation/data_access/citros_dict",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/references",
+              "path": "/docs/docs_data_analysis/next/documentation/data_access/references",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data",
+              "path": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data_array",
+              "path": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_data_array",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_stat",
+              "path": "/docs/docs_data_analysis/next/documentation/error_analysis/citros_stat",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/validation/validation",
+              "path": "/docs/docs_data_analysis/next/documentation/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/correlation",
+              "path": "/docs/docs_data_analysis/next/error_analysis/correlation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/getting_started_query_data",
+              "path": "/docs/docs_data_analysis/next/error_analysis/getting_started_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/index",
+              "path": "/docs/docs_data_analysis/next/error_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/regression",
+              "path": "/docs/docs_data_analysis/next/error_analysis/regression",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/statistics",
+              "path": "/docs/docs_data_analysis/next/error_analysis/statistics",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_data_analysis/next/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batch_content",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batches",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_batches",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_plotting",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_plotting",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_query_data",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_repositories",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_repositories",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_users",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/data_access/snippets_users",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_error_analysis",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/snippets_error_analysis",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_validation",
+              "path": "/docs/docs_data_analysis/next/snippets_doc/snippets_validation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/getting_started",
+              "path": "/docs/docs_data_analysis/next/validation/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/index",
+              "path": "/docs/docs_data_analysis/next/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/mean_value_test",
+              "path": "/docs/docs_data_analysis/next/validation/mean_value_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/norm_test",
+              "path": "/docs/docs_data_analysis/next/validation/norm_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/set_multiple_tests",
+              "path": "/docs/docs_data_analysis/next/validation/set_multiple_tests",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_boundary_test",
+              "path": "/docs/docs_data_analysis/next/validation/standard_deviation_boundary_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_test",
+              "path": "/docs/docs_data_analysis/next/validation/standard_deviation_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/testing_each_simulation",
+              "path": "/docs/docs_data_analysis/next/validation/testing_each_simulation",
+              "sidebar": "dataAnalysisSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "dataAnalysisSidebar": {
+              "link": {
+                "path": "/docs/docs_data_analysis/next/",
+                "label": "index"
+              }
+            }
+          }
+        },
+        {
+          "name": "v0.9.1",
+          "label": "v0.9.1",
+          "isLast": true,
+          "path": "/docs/docs_data_analysis",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "data_access/batch_content",
+              "path": "/docs/docs_data_analysis/data_access/batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/batch_overview",
+              "path": "/docs/docs_data_analysis/data_access/batch_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/getting_started",
+              "path": "/docs/docs_data_analysis/data_access/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/index",
+              "path": "/docs/docs_data_analysis/data_access/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/plot_data",
+              "path": "/docs/docs_data_analysis/data_access/plot_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/query_data",
+              "path": "/docs/docs_data_analysis/data_access/query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/repository_overview",
+              "path": "/docs/docs_data_analysis/data_access/repository_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/users_overview",
+              "path": "/docs/docs_data_analysis/data_access/users_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_db",
+              "path": "/docs/docs_data_analysis/documentation/data_access/citros_db",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_dict",
+              "path": "/docs/docs_data_analysis/documentation/data_access/citros_dict",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/references",
+              "path": "/docs/docs_data_analysis/documentation/data_access/references",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data",
+              "path": "/docs/docs_data_analysis/documentation/error_analysis/citros_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data_array",
+              "path": "/docs/docs_data_analysis/documentation/error_analysis/citros_data_array",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_stat",
+              "path": "/docs/docs_data_analysis/documentation/error_analysis/citros_stat",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/validation/validation",
+              "path": "/docs/docs_data_analysis/documentation/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/correlation",
+              "path": "/docs/docs_data_analysis/error_analysis/correlation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/getting_started_query_data",
+              "path": "/docs/docs_data_analysis/error_analysis/getting_started_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/index",
+              "path": "/docs/docs_data_analysis/error_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/regression",
+              "path": "/docs/docs_data_analysis/error_analysis/regression",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/statistics",
+              "path": "/docs/docs_data_analysis/error_analysis/statistics",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_data_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batch_content",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batches",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_batches",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_plotting",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_plotting",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_query_data",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_repositories",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_repositories",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_users",
+              "path": "/docs/docs_data_analysis/snippets_doc/data_access/snippets_users",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_error_analysis",
+              "path": "/docs/docs_data_analysis/snippets_doc/snippets_error_analysis",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_validation",
+              "path": "/docs/docs_data_analysis/snippets_doc/snippets_validation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/getting_started",
+              "path": "/docs/docs_data_analysis/validation/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/index",
+              "path": "/docs/docs_data_analysis/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/mean_value_test",
+              "path": "/docs/docs_data_analysis/validation/mean_value_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/norm_test",
+              "path": "/docs/docs_data_analysis/validation/norm_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/set_multiple_tests",
+              "path": "/docs/docs_data_analysis/validation/set_multiple_tests",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_boundary_test",
+              "path": "/docs/docs_data_analysis/validation/standard_deviation_boundary_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_test",
+              "path": "/docs/docs_data_analysis/validation/standard_deviation_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/testing_each_simulation",
+              "path": "/docs/docs_data_analysis/validation/testing_each_simulation",
+              "sidebar": "dataAnalysisSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "dataAnalysisSidebar": {
+              "link": {
+                "path": "/docs/docs_data_analysis/",
+                "label": "index"
+              }
+            }
+          }
+        },
+        {
+          "name": "v0.8.0",
+          "label": "v0.8.0",
+          "isLast": false,
+          "path": "/docs/docs_data_analysis/v0.8.0",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "data_access/batch_content",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/batch_overview",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/batch_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/getting_started",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/index",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/plot_data",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/plot_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/query_data",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/repository_overview",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/repository_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/users_overview",
+              "path": "/docs/docs_data_analysis/v0.8.0/data_access/users_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_db",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_db",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_dict",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/data_access/citros_dict",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/references",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/data_access/references",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data_array",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_data_array",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_stat",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/error_analysis/citros_stat",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/validation/validation",
+              "path": "/docs/docs_data_analysis/v0.8.0/documentation/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/correlation",
+              "path": "/docs/docs_data_analysis/v0.8.0/error_analysis/correlation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/getting_started_query_data",
+              "path": "/docs/docs_data_analysis/v0.8.0/error_analysis/getting_started_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/index",
+              "path": "/docs/docs_data_analysis/v0.8.0/error_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/regression",
+              "path": "/docs/docs_data_analysis/v0.8.0/error_analysis/regression",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/statistics",
+              "path": "/docs/docs_data_analysis/v0.8.0/error_analysis/statistics",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_data_analysis/v0.8.0/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batch_content",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_batches",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_batches",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_plotting",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_plotting",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_query_data",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_repositories",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_repositories",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/data_access/snippets_users",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/data_access/snippets_users",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_error_analysis",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/snippets_error_analysis",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "snippets_doc/snippets_validation",
+              "path": "/docs/docs_data_analysis/v0.8.0/snippets_doc/snippets_validation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/getting_started",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/index",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/mean_value_test",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/mean_value_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/norm_test",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/norm_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/set_multiple_tests",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/set_multiple_tests",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_boundary_test",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/standard_deviation_boundary_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_test",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/standard_deviation_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/testing_each_simulation",
+              "path": "/docs/docs_data_analysis/v0.8.0/validation/testing_each_simulation",
+              "sidebar": "dataAnalysisSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "dataAnalysisSidebar": {
+              "link": {
+                "path": "/docs/docs_data_analysis/v0.8.0/",
+                "label": "index"
+              }
+            }
+          }
+        },
+        {
+          "name": "v0.7.17",
+          "label": "v0.7.17",
+          "isLast": false,
+          "path": "/docs/docs_data_analysis/v0.7.17",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "data_access/batch_content",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/batch_overview",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/batch_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/getting_started",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/index",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/plot_data",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/plot_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/query_data",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/repository_overview",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/repository_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/users_overview",
+              "path": "/docs/docs_data_analysis/v0.7.17/data_access/users_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_db",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/data_access/citros_db",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_dict",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/data_access/citros_dict",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/references",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/data_access/references",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data_array",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_data_array",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_stat",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/error_analysis/citros_stat",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/validation/validation",
+              "path": "/docs/docs_data_analysis/v0.7.17/documentation/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/correlation",
+              "path": "/docs/docs_data_analysis/v0.7.17/error_analysis/correlation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/getting_started_query_data",
+              "path": "/docs/docs_data_analysis/v0.7.17/error_analysis/getting_started_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/index",
+              "path": "/docs/docs_data_analysis/v0.7.17/error_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/regression",
+              "path": "/docs/docs_data_analysis/v0.7.17/error_analysis/regression",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/statistics",
+              "path": "/docs/docs_data_analysis/v0.7.17/error_analysis/statistics",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_data_analysis/v0.7.17/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/getting_started",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/index",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/mean_value_test",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/mean_value_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/norm_test",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/norm_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/set_multiple_tests",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/set_multiple_tests",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_boundary_test",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_boundary_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_test",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/standard_deviation_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/testing_each_simulation",
+              "path": "/docs/docs_data_analysis/v0.7.17/validation/testing_each_simulation",
+              "sidebar": "dataAnalysisSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "dataAnalysisSidebar": {
+              "link": {
+                "path": "/docs/docs_data_analysis/v0.7.17/",
+                "label": "CITROS Data Analysis"
+              }
+            }
+          }
+        },
+        {
+          "name": "v0.5.0",
+          "label": "v0.5.0",
+          "isLast": false,
+          "path": "/docs/docs_data_analysis/v0.5.0",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "data_access/batch_content",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/batch_content",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/batch_overview",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/batch_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/getting_started",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/index",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/plot_data",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/plot_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/query_data",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/repository_overview",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/repository_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "data_access/users_overview",
+              "path": "/docs/docs_data_analysis/v0.5.0/data_access/users_overview",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_db",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_db",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/data_access/citros_dict",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/data_access/citros_dict",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_data_array",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_data_array",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/error_analysis/citros_stat",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/error_analysis/citros_stat",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "documentation/validation/validation",
+              "path": "/docs/docs_data_analysis/v0.5.0/documentation/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/correlation",
+              "path": "/docs/docs_data_analysis/v0.5.0/error_analysis/correlation",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/getting_started_query_data",
+              "path": "/docs/docs_data_analysis/v0.5.0/error_analysis/getting_started_query_data",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/index",
+              "path": "/docs/docs_data_analysis/v0.5.0/error_analysis/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/regression",
+              "path": "/docs/docs_data_analysis/v0.5.0/error_analysis/regression",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "error_analysis/statistics",
+              "path": "/docs/docs_data_analysis/v0.5.0/error_analysis/statistics",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_data_analysis/v0.5.0/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/getting_started",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/getting_started",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/index",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/mean_value_test",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/mean_value_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/norm_test",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/norm_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/set_multiple_tests",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/set_multiple_tests",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/standard_deviation_boundary_test",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/standard_deviation_boundary_test",
+              "sidebar": "dataAnalysisSidebar"
+            },
+            {
+              "id": "validation/testing_each_simulation",
+              "path": "/docs/docs_data_analysis/v0.5.0/validation/testing_each_simulation",
+              "sidebar": "dataAnalysisSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "dataAnalysisSidebar": {
+              "link": {
+                "path": "/docs/docs_data_analysis/v0.5.0/",
+                "label": "Citros Data Analysis"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    },
     "docs_tutorials": {
       "path": "/docs/docs_tutorials",
       "versions": [
@@ -57,69 +1051,6 @@
               "link": {
                 "path": "/docs/docs_tutorials/getting_started/",
                 "label": "Getting Started"
-              }
-            }
-          }
-        }
-      ],
-      "breadcrumbs": true
-    },
-    "default": {
-      "path": "/docs/docs",
-      "versions": [
-        {
-          "name": "current",
-          "label": "Next",
-          "isLast": true,
-          "path": "/docs/docs",
-          "mainDocId": "index",
-          "docs": [
-            {
-              "id": "citros_structure",
-              "path": "/docs/docs/citros_structure",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_commands",
-              "path": "/docs/docs/cli_commands",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_install",
-              "path": "/docs/docs/cli_install",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_quickstart",
-              "path": "/docs/docs/cli_quickstart",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "config_params",
-              "path": "/docs/docs/config_params",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "index",
-              "path": "/docs/docs/",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "not_in_use/cli_install_advenced",
-              "path": "/docs/docs/not_in_use/cli_install_advenced"
-            },
-            {
-              "id": "user_templates",
-              "path": "/docs/docs/user_templates",
-              "sidebar": "gettingStartedSidebar"
-            }
-          ],
-          "draftIds": [],
-          "sidebars": {
-            "gettingStartedSidebar": {
-              "link": {
-                "path": "/docs/docs/",
-                "label": "CITROS CLI"
               }
             }
           }
