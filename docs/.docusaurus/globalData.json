@@ -1,5 +1,68 @@
 {
   "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/docs",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "citros_structure",
+              "path": "/docs/docs/citros_structure",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_commands",
+              "path": "/docs/docs/cli_commands",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_install",
+              "path": "/docs/docs/cli_install",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "cli_quickstart",
+              "path": "/docs/docs/cli_quickstart",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "config_params",
+              "path": "/docs/docs/config_params",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs/",
+              "sidebar": "gettingStartedSidebar"
+            },
+            {
+              "id": "not_in_use/cli_install_advenced",
+              "path": "/docs/docs/not_in_use/cli_install_advenced"
+            },
+            {
+              "id": "user_templates",
+              "path": "/docs/docs/user_templates",
+              "sidebar": "gettingStartedSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "gettingStartedSidebar": {
+              "link": {
+                "path": "/docs/docs/",
+                "label": "CITROS CLI"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    },
     "docs_tutorials": {
       "path": "/docs/docs_tutorials",
       "versions": [
@@ -57,69 +120,6 @@
               "link": {
                 "path": "/docs/docs_tutorials/getting_started/",
                 "label": "Getting Started"
-              }
-            }
-          }
-        }
-      ],
-      "breadcrumbs": true
-    },
-    "default": {
-      "path": "/docs/docs",
-      "versions": [
-        {
-          "name": "current",
-          "label": "Next",
-          "isLast": true,
-          "path": "/docs/docs",
-          "mainDocId": "index",
-          "docs": [
-            {
-              "id": "citros_structure",
-              "path": "/docs/docs/citros_structure",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_commands",
-              "path": "/docs/docs/cli_commands",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_install",
-              "path": "/docs/docs/cli_install",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "cli_quickstart",
-              "path": "/docs/docs/cli_quickstart",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "config_params",
-              "path": "/docs/docs/config_params",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "index",
-              "path": "/docs/docs/",
-              "sidebar": "gettingStartedSidebar"
-            },
-            {
-              "id": "not_in_use/cli_install_advenced",
-              "path": "/docs/docs/not_in_use/cli_install_advenced"
-            },
-            {
-              "id": "user_templates",
-              "path": "/docs/docs/user_templates",
-              "sidebar": "gettingStartedSidebar"
-            }
-          ],
-          "draftIds": [],
-          "sidebars": {
-            "gettingStartedSidebar": {
-              "link": {
-                "path": "/docs/docs/",
-                "label": "CITROS CLI"
               }
             }
           }

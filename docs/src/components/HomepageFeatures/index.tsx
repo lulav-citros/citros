@@ -19,7 +19,7 @@ const FeatureList: FeatureItem[] = [
       Svg: require('@site/static/img/citros_home_cli.svg').default,
       description: (
         <div>
-          <p>CITROS CLI offers ROS 2 developers a seamless interface to launch multiple ROS simulations for a specific project with just a single command.</p>
+          <p>CITROS CLI offers ROS 2 developers <br />a seamless interface to launch <br />multiple ROS simulations for a specific project <br />with just a single command.</p>
           <p>Read more...</p>
         </div>
       ),
@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
       Svg: require('@site/static/img/citros_home_analysis.svg').default,
       description: (
         <div>
-          <p>CITROS Data Analysis allows you to query, analyse and visualize the data of your simulations. With its extensive features, you can easily extract valuable insights from your simulation runs.</p>
+          <p>CITROS Data Analysis allows you to query,  <br />analyse and visualize the data of your simulations. <br />With its extensive features, you can easily extract valuable <br />insights from your simulation runs.</p>
           <p>Read more...</p>
         </div>
       ),
@@ -41,7 +41,7 @@ function Feature({ title, Svg, description, url }: FeatureItem) {
   const history = useHistory();
   return (
     <div
-      className={clsx("col col--4")}
+      className={clsx("col col--6")}
       onClick={() => {
         history.push(url);
       }}
