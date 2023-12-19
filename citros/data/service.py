@@ -3,7 +3,6 @@ from fastapi_utils.timing import add_timing_middleware, record_timing
 import logging
 from citros.batch import Batch, NoBatchFoundException
 from citros import get_logger, shutdown_log
-from .config import config
 import uvicorn
 import os
 from pathlib import Path
