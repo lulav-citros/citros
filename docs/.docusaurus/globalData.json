@@ -1,5 +1,69 @@
 {
   "docusaurus-plugin-content-docs": {
+    "docs_tutorials": {
+      "path": "/docs/docs_tutorials",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs/docs_tutorials",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "dockerfile_overview/dockerfile_overview",
+              "path": "/docs/docs_tutorials/dockerfile_overview/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "drone/drone",
+              "path": "/docs/docs_tutorials/drone/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "gal_orbits/gal_orbits",
+              "path": "/docs/docs_tutorials/gal_orbits/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting_started/getting_started",
+              "path": "/docs/docs_tutorials/getting_started/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/docs/docs_tutorials/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "mass_spring_damper/mass_spring_damper",
+              "path": "/docs/docs_tutorials/mass_spring_damper/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "pendulum/Pendulum",
+              "path": "/docs/docs_tutorials/pendulum/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "soft_landing/soft_landing",
+              "path": "/docs/docs_tutorials/soft_landing/",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/docs/docs_tutorials/getting_started/",
+                "label": "Getting Started"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    },
     "default": {
       "path": "/docs/docs",
       "versions": [
@@ -987,70 +1051,6 @@
               "link": {
                 "path": "/docs/docs_data_analysis/v0.5.0/",
                 "label": "Citros Data Analysis"
-              }
-            }
-          }
-        }
-      ],
-      "breadcrumbs": true
-    },
-    "docs_tutorials": {
-      "path": "/docs/docs_tutorials",
-      "versions": [
-        {
-          "name": "current",
-          "label": "Next",
-          "isLast": true,
-          "path": "/docs/docs_tutorials",
-          "mainDocId": "index",
-          "docs": [
-            {
-              "id": "dockerfile_overview/dockerfile_overview",
-              "path": "/docs/docs_tutorials/dockerfile_overview/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "drone/drone",
-              "path": "/docs/docs_tutorials/drone/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "gal_orbits/gal_orbits",
-              "path": "/docs/docs_tutorials/gal_orbits/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "getting_started/getting_started",
-              "path": "/docs/docs_tutorials/getting_started/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "index",
-              "path": "/docs/docs_tutorials/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "mass_spring_damper/mass_spring_damper",
-              "path": "/docs/docs_tutorials/mass_spring_damper/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "pendulum/Pendulum",
-              "path": "/docs/docs_tutorials/pendulum/",
-              "sidebar": "tutorialSidebar"
-            },
-            {
-              "id": "soft_landing/soft_landing",
-              "path": "/docs/docs_tutorials/soft_landing/",
-              "sidebar": "tutorialSidebar"
-            }
-          ],
-          "draftIds": [],
-          "sidebars": {
-            "tutorialSidebar": {
-              "link": {
-                "path": "/docs/docs_tutorials/getting_started/",
-                "label": "Getting Started"
               }
             }
           }
