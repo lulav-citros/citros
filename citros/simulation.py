@@ -43,8 +43,8 @@ class Simulation(CitrosObj):
             verbose=self.verbose,
         )
 
-    def copy_ros_log(self, destination: str):
-        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_ros_log()")
+    def _copy_ros_log(self, destination: str):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._copy_ros_log()")
         from .utils import get_last_created_file, copy_files, rename_file
 
         ros_logs_dir_path = get_last_created_file(
@@ -59,7 +59,38 @@ class Simulation(CitrosObj):
         new_file_path = Path(destination, log_file_path.name)
         rename_file(new_file_path, "ros.log")
 
-    def copy_msg_files(self, destination: str):
+    @staticmethod
+    def _guess_msgtype(path: Path) -> str:
+        """
+        Guess the message type based on the path.
+
+        Args:
+            path (Path): The file path to the message type.
+
+        Returns:
+            str: The guessed message type.
+        """
+        name = path.relative_to(path.parents[2]).with_suffix("")
+        if "msg" not in name.parts:
+            name = name.parent / "msg" / name.name
+        return str(name)
+
+    def _register_custom_message(self, msgpath: str):
+        """
+        Register custom message types from a given folder path.
+
+        Args:
+            message_folder_path (str): The folder path where custom messages are stored.
+        """
+        from rosbags.typesys import get_types_from_msg, register_types
+
+        msgdef = msgpath.read_text(encoding="utf-8")
+        add_types = get_types_from_msg(msgdef, self._guess_msgtype(msgpath))
+        self.log.debug(f"{'   '*self.level}regisering {msgpath} ...")
+
+        register_types(add_types)
+
+    def _copy_msg_files(self, destination: str):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.copy_msg_files()")
         from .utils import copy_files
         from .parsers import ParserRos2
@@ -71,12 +102,18 @@ class Simulation(CitrosObj):
             target_dir = Path(destination, package_name, "msg")
             copy_files([msg_path], str(target_dir), self.log, True)
 
-    def save_system_vars(self, destination: str):
+            # register custom messages
+            self._register_custom_messages(str(msg_path))
+
+    def _handle_msg_files(self, simulation_rec_dir):
+        self._copy_msg_files(simulation_rec_dir)
+
+    def _save_system_vars(self, destination: str):
         import subprocess
         from os import linesep
 
         self.log.debug(
-            f"{'   '*self.level}{self.__class__.__name__}.save_system_vars()"
+            f"{'   '*self.level}{self.__class__.__name__}._save_system_vars()"
         )
         # Get all environment variables
         env_vars = dict(os.environ)
@@ -95,6 +132,203 @@ class Simulation(CitrosObj):
 
         with open(Path(destination, "environment.json"), "w") as f:
             json.dump(data, f, indent=4)
+
+    @staticmethod
+    def _add_string_connection(writer, connection, msgtype):
+        """
+        Adds a new connection with a modified topic name by appending '/path' to the original topic.
+
+        This method is specifically intended for handling string connections. After modifying the topic name,
+        it uses the provided writer to add the new connection, keeping other connection parameters unchanged.
+
+        Args:
+            writer (Writer): An object responsible for writing data.
+            connection (Connection): The original connection object.
+            msgtype (str): The message type for the new connection.
+
+        Returns:
+            list: A list containing the writer and the newly created connection object.
+
+        """
+        from typing import TYPE_CHECKING, cast
+        from rosbags.interfaces import ConnectionExtRosbag2, Connection
+
+        ext = cast(ConnectionExtRosbag2, connection.ext)
+        new_connection = writer.add_connection(
+            topic=connection.topic + "/path",
+            msgtype=msgtype,
+            serialization_format=ext.serialization_format,
+            offered_qos_profiles=ext.offered_qos_profiles,
+        )
+        return writer, new_connection
+
+    @staticmethod
+    def _create_string_topic(writer, file_name, connection):
+        """
+        Creates a new topic with a string message type, intended for writing a file path.
+
+        This method attempts to create a new connection using the provided writer and an existing connection.
+        The topic of the new connection is the original topic name with '/path' appended to it.
+        It then creates a new String message populated with the given file name.
+
+        Args:
+            writer (Writer): The writer object responsible for writing data.
+            file_name (str): The file name to be used in the new String message.
+            connection (Connection): The original connection object.
+
+        Returns:
+            tuple: A tuple containing the writer, the new connection object, the new data (String message),
+                and the message type for the new connection.
+
+        Raises:
+            Exception: Catches any exceptions thrown during the process. Handles specifically the case when
+                    a connection with the new topic name already exists.
+        """
+        from rosbags.serde import deserialize_cdr, serialize_cdr
+        from rosbags.rosbag2 import Reader, Writer
+        from rosbags.interfaces import ConnectionExtRosbag2, Connection
+
+        msgtype = String.__msgtype__
+        try:
+            # try to add string topic to the bag
+            writer, new_connection = Simulation._add_string_connection(
+                writer, connection, msgtype
+            )
+        except Exception as e:
+            if "Connection can only be added once" in str(e):
+                # the connection is already created, take it from the connection list
+                new_connection = [
+                    x
+                    for x in writer.connections
+                    if x.topic == connection.topic + "/path"
+                ][0]
+        new_data = String(file_name)
+        return writer, new_connection, new_data, msgtype
+
+    def create_citros_bag(self, src: str, dst: str):
+        """
+        Create a new ROS bag file by reading from an existing bag and transforming its contents.
+
+        This method reads messages from an existing ROS bag located at `src`, and writes to a new ROS bag at `dst`.
+        It performs custom handling for messages of the type "sensor_msgs/msg/Image" by saving them as image files
+        and then writing a new corresponding string message in the new bag.
+
+        Args:
+            src (str): The path to the source ROS bag file to be read.
+            dst (str): The path to the destination ROS bag file to be created.
+
+        Raises:
+            Various exceptions could be raised during reading and writing of the bag files,
+            which will be logged using the logger.
+
+        Side Effects:
+            - A new ROS bag is created at the location specified by `dst`.
+            - Additional image data files and metadata might be created based on the source bag's content.
+            - Logging information is produced to inform about the operations and potential errors.
+
+        Note:
+            - If an image topic is encountered, the image data is saved separately and a string message is added to the new bag.
+
+        """
+        from typing import TYPE_CHECKING, cast
+        from rosbags.serde import deserialize_cdr, serialize_cdr
+        from rosbags.rosbag2 import Reader, Writer
+        from rosbags.interfaces import ConnectionExtRosbag2, Connection
+
+        if ".citros" in src:
+            self.log.warning(f"CITROS bag already exist, skipping ...")
+            return
+
+        self.log.info(f"Creating a new CITROS bag: src = {src}\ndst = {dst}")
+
+        try:
+            with Reader(src) as reader, Writer(dst) as writer:
+                # create connection map to the writer
+                conn_map = {}
+                for conn in reader.connections:
+                    try:
+                        ext = cast(ConnectionExtRosbag2, conn.ext)
+                        conn_map[conn.id] = writer.add_connection(
+                            topic=conn.topic,
+                            msgtype=conn.msgtype,
+                            serialization_format=ext.serialization_format,
+                            offered_qos_profiles=ext.offered_qos_profiles,
+                        )
+                    except Exception as e:
+                        self.log.error(e)
+                        continue
+
+                # reader.connections is a list, we need start from 0 and not from 1 (this is why is x-1)
+                rconns = [reader.connections[x - 1] for x in conn_map]
+
+                for connection, timestamp, data in reader.messages(connections=rconns):
+                    if "sensor_msgs/msg/Image" in connection.msgtype:
+                        # if this is a image topic export data and continue without saving in the new bag.
+                        file_name = self._handle_image_message(dst, data, connection)
+                        (
+                            writer,
+                            new_connection,
+                            new_data,
+                            msgtype,
+                        ) = self._create_string_topic(writer, file_name, connection)
+                        writer.write(
+                            new_connection, timestamp, serialize_cdr(new_data, msgtype)
+                        )
+                        self.log.info(
+                            f"Found image, saving image data under {file_name}"
+                        )
+                        continue
+                    writer.write(conn_map[connection.id], timestamp, data)
+                return
+        except Exception as e:
+            if "citros exists already" in str(e):
+                self.log.warning("CITROS bag already exist ...")
+                return
+
+    @staticmethod
+    def _get_bags(path: str) -> dict:
+        """
+        Retrieve the paths of bag files in the specified directory and its subdirectories.
+
+        This method recursively traverses the directory structure from the specified path, looking for files with
+        ".mcap" or ".db3" extensions. It logs the discovery of any such files.
+
+        Args:
+            path (str): The root directory where the search for bag files will commence.
+
+        Returns:
+            list: A dict of paths where ".mcap" or ".db3" files are found.
+
+        Raises:
+            Exception: If no ".mcap" or ".db3" files are found in the specified path and its subdirectories.
+
+        Note:
+            Logging is done to debug the discovery of ".mcap" and ".db3" files.
+        """
+        bags = {}
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith(".mcap"):
+                    PrepareBag._logger.debug(f"Found MCAP bag: {file}")
+                elif file.endswith(".db3"):
+                    PrepareBag._logger.debug(f"Found SQLITE3 bag: {file}")
+                else:
+                    continue
+                bags[root] = file
+
+        if len(bags) < 1:
+            raise Exception(
+                f"Didn't find SQLITE3 or MCAP bag in the [{path}] folder ..."
+            )
+
+        return bags
+
+    def _prepare_citros_bag(self, destination: str):
+        # assuming bags already there (the simulations is done recording)
+        bags = self._get_bags(f"{destination}/bag/")
+        for bag_path, file_name_with_ext in bags.items():
+            file_name = os.path.splitext(file_name_with_ext)[0]
+            self.create_citros_bag(bag_path, bag_path + f"{file_name}.citros/")
 
     def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
         """Run simulation."""
@@ -137,6 +371,7 @@ class Simulation(CitrosObj):
         systemStatsRecorder = SystemStatsRecorder(f"{simulation_rec_dir}/stats.csv")
         systemStatsRecorder.start()
 
+        # run simulation
         ret = launch_service.run()
 
         systemStatsRecorder.stop()
@@ -145,12 +380,10 @@ class Simulation(CitrosObj):
             f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation with return code [{ret}].",
         )
 
-        self.copy_ros_log(simulation_rec_dir)
-        self.copy_msg_files(simulation_rec_dir)
-        self.save_system_vars(simulation_rec_dir)
-
-        # TODO!
-        # self.save_run_data()
+        self._copy_ros_log(simulation_rec_dir)
+        self._handle_msg_files(simulation_rec_dir)
+        self._save_system_vars(simulation_rec_dir)
+        self._prepare_citros_bag(simulation_rec_dir)
 
         if ret != 0:
             events.error(

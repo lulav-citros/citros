@@ -1,0 +1,47 @@
+-- ENV
+-- {{ ORGANIZATION_NAME }}
+-- {{ BATCH_RUN_ID }}
+
+CREATE SCHEMA IF NOT EXISTS data_bucket;
+
+-- Create table
+CREATE TABLE if not exists data_bucket."{{ BATCH_RUN_ID }}" (
+    id bigserial PRIMARY KEY,
+
+    -- organization id (mainly for shared db)        
+    -- user_id uuid default current_setting('jwt.claims.user_id')::uuid NOT NULL,
+
+    -- simulaiton id
+    "sid" bigint NOT NULL, -- simulation run id
+    
+    -- ros message
+    "rid" bigint NOT NULL, -- ros message id
+    "time" bigint NOT NULL, -- ros message time
+    "topic" varchar NOT NULL, -- ros message topic
+    "type" varchar NOT NULL, -- ros message type
+    "data" jsonb NOT NULL, -- ros message data
+
+    "created_at" timestamptz DEFAULT now() NOT NULL
+);
+-- Indexes
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("user_id");
+
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("sid");
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("rid");
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("time");
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("topic");
+-- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("type");
+
+-- Descriptions
+comment on table data_bucket."{{ BATCH_RUN_ID }}" is '@omit create,update,delete
+{{ BATCH_RUN_ID }} table';
+
+comment on column data_bucket."{{ BATCH_RUN_ID }}".rid is 'ros message id';
+comment on column data_bucket."{{ BATCH_RUN_ID }}".time is 'ros message time';
+comment on column data_bucket."{{ BATCH_RUN_ID }}".topic is 'ros message topic';
+comment on column data_bucket."{{ BATCH_RUN_ID }}".type is 'ros message type';
+comment on column data_bucket."{{ BATCH_RUN_ID }}".data is 'ros message data';
+
+-- Permissions
+-- -- Users
+GRANT ALL privileges ON TABLE data_bucket."{{ BATCH_RUN_ID }}" TO role_org_{{ ORGANIZATION_NAME }};

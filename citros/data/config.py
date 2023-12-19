@@ -14,3 +14,10 @@ class config:
     """
     the directory where `citros run` records all data to
     """
+
+    # ORGANIZATION_NAME = _conf("ORGANIZATION_NAME", "home_organization")
+    # POSTGRES_USERNAME = _conf("POSTGRES_USERNAME", "citros_anonymous")
+    # POSTGRES_PASSWORD = _conf("POSTGRES_PASSWORD", "")
+    # POSTGRES_HOST = _conf("POSTGRES_HOST", "")
+    # POSTGRES_PORT = _conf("POSTGRES_PORT", "")
+    # POSTGRES_DATABASE = _conf("POSTGRES_DATABASE", "")

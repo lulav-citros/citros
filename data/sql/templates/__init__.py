@@ -7,6 +7,6 @@
 #  ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 # ==============================================
 
-from .logger import get_logger, shutdown_log
+# from .citros import Citros
 
-__all__ = [get_logger, shutdown_log]
+__all__ = []

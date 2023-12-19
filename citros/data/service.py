@@ -11,6 +11,10 @@ from pathlib import Path
 app = FastAPI()
 
 
+class NoDataFoundException(Exception):
+    def __init__(self, message="No Data found."):
+        super().__init__(message)
+
 # get batch info
 @app.get("/{simulation}/{batch_name}")
 async def get_batch(simulation, batch_name):
@@ -44,10 +48,14 @@ async def request_access_batch(
     return {"message": "Batch run {simulation}/{batch_name} is loading. please wait"}
 
 
-def data_access(
+def data_access_service(
     root, time=False, host="localhost", port=8080, debug=False, verbose=False
 ):
     app.root = root
+    if not root:
+        raise ValueError("root path is required")
+    if not Path(root).exists():
+        raise NoDataFoundException(f"root path {root} does not exists")
     app.debug = debug
     app.verbose = verbose
     app.log = get_logger(

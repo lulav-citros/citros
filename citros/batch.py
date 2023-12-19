@@ -255,3 +255,10 @@ class Batch:
 
         self.log.debug(f"{self.__class__.__name__}.run(): ret {ret}")
         return ret
+
+    def load(self):
+        self.log.debug(f"{self.__class__.__name__}.load()")
+
+        self["data_status"] = "LOADING"
+
+        # TODO: load data to DB
