@@ -162,17 +162,3 @@ cython_debug/
 
 tmp/
 docs/package-lock.json
-docs/.docusaurus/client-manifest.json
-docs/.docusaurus/registry.js
-docs/.docusaurus/routes.js
-docs/.docusaurus/routesChunkNames.json
-docs/.docusaurus/site-metadata.json
-docs/.docusaurus/client-manifest.json
-docs/.docusaurus/registry.js
-docs/.docusaurus/routes.js
-docs/.docusaurus/site-metadata.json
-docs/.docusaurus/client-manifest.json
-docs/.docusaurus/registry.js
-docs/.docusaurus/routes.js
-docs/.docusaurus/routesChunkNames.json
-docs/.docusaurus/site-metadata.json
