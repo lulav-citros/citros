@@ -18,6 +18,7 @@ class Uploader:
     """
     The Uploader class is responsible for uploading data to CITROS db.
 
+
     assuming structure:
         .citros/data/{simulation name}/{batch name}/{simulation run id}/bag/{bag file}
 
