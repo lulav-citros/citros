@@ -18,12 +18,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd docs
+          cd docusaurus
           yarn --frozen-lockfile
 
       - name: Build
         run: |
-          cd docs
+          cd docusaurus
           yarn install                                  
           yarn build
 
