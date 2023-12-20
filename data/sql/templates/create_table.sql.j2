@@ -1,0 +1,48 @@
+-- ENV
+-- {{ ORGANIZATION_NAME }}
+-- {{ SCHEMA_NAME }}
+-- {{ TABLE_NAME }}
+
+CREATE SCHEMA IF NOT EXISTS {{ SCHEMA_NAME }};
+
+-- Create table
+CREATE TABLE if not exists {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" (
+    id bigserial PRIMARY KEY,
+
+    -- organization id (mainly for shared db)        
+    -- user_id uuid default current_setting('jwt.claims.user_id')::uuid NOT NULL,
+
+    -- simulaiton id
+    "sid" bigint NOT NULL, -- simulation run id
+    
+    -- ros message
+    "rid" bigint NOT NULL, -- ros message id
+    "time" bigint NOT NULL, -- ros message time
+    "topic" varchar NOT NULL, -- ros message topic
+    "type" varchar NOT NULL, -- ros message type
+    "data" jsonb NOT NULL, -- ros message data
+
+    "created_at" timestamptz DEFAULT now() NOT NULL
+);
+-- Indexes
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("user_id");
+
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("sid");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("rid");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("time");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("topic");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("type");
+
+-- Descriptions
+comment on table {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" is '@omit create,update,delete
+{{ TABLE_NAME }} table';
+
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".rid is 'ros message id';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".time is 'ros message time';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".topic is 'ros message topic';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".type is 'ros message type';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".data is 'ros message data';
+
+-- Permissions
+-- -- Users
+GRANT ALL privileges ON TABLE {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" TO role_org_{{ ORGANIZATION_NAME }};

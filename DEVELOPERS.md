@@ -25,7 +25,7 @@ The official doc [git-commit-guidlines] or [commit-message-format]
 ```
 
 example: 
-
+ 
 ```bash 
 git commit -m "docs(readme.md): change
 
@@ -50,6 +50,7 @@ allowed types = [
 minor types = ["feat"]
 patch types = ["fix", "perf"]
 ```
+
 
 # Versioning locally
 we are working with [semantic-release] for versioning our package. 
@@ -87,3 +88,11 @@ $ python3 -m pip install -e .
 # DevOps
 
 # Testing
+
+
+
+
+# ROS:
+```bash
+source /opt/ros/humble/setup.bash
+```

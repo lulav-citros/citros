@@ -37,6 +37,13 @@ def parser_data_list(parent_subparser, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
     parser.set_defaults(func=data_list)
 
     return parser
@@ -186,7 +193,73 @@ def parser_data_db_status(parent_subparser, epilog=None):
 
     return parser
 
+# citros data db stop
+def parser_data_db_stop(parent_subparser, epilog=None):
+    description_path = "data/db/stop.md"
+    help = "data db stop section"
 
+    parser = parent_subparser.add_parser(
+        "stop",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_db_stop)
+
+    # subparser = parser.add_subparsers(dest="type")
+
+    return parser
+
+# citros data db logs
+def parser_data_db_logs(parent_subparser, epilog=None):
+    description_path = "data/db/logs.md"
+    help = "data db logs section"
+
+    parser = parent_subparser.add_parser(
+        "logs",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_db_logs)
+
+    # subparser = parser.add_subparsers(dest="type")
+
+    return parser
 # citros data db clean
 def parser_data_db_clean(parent_subparser, epilog=None):
     description_path = "data/db/clean.md"
@@ -252,7 +325,11 @@ def parser_data_db(parent_subparser, epilog=None):
 
     subparser = parser.add_subparsers(dest="type")
 
+    parser_data_db_create(subparser)
     parser_data_db_status(subparser)
+    parser_data_db_stop(subparser)
+    parser_data_db_logs(subparser)
+    
     parser_data_db_clean(subparser)
 
     return parser
@@ -279,10 +356,18 @@ def parser_data(main_sub, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
     parser.set_defaults(func=data)
 
     subsubparser = parser.add_subparsers(dest="type")
     parser_data_list(subsubparser, epilog)
-    parser_data_service(subsubparser, epilog)
+    parser_data_service(subsubparser, epilog)    
+    parser_data_db(subsubparser, epilog)
 
     return parser

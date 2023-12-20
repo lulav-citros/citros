@@ -128,8 +128,9 @@ class Citros(CitrosObj):
 
         # loads the parameter_setups
         for file in glob.glob(
-            "*.json", root_dir=f"{self.root_citros}/parameter_setups/"
+            f"{self.root_citros}/parameter_setups/*.json"
         ):
+            file = file.split("/")[-1]
             self.log.debug(f"loading parameter_setup: {file}")
             self.parameter_setups.append(
                 ParameterSetup(
@@ -145,7 +146,8 @@ class Citros(CitrosObj):
             )
 
         # loads the simulations
-        for file in glob.glob("*.json", root_dir=f"{self.root_citros}/simulations/"):
+        for file in glob.glob(f"{self.root_citros}/simulations/*.json"):
+            file = file.split("/")[-1]
             # self.simulations.append(Simulation(self.root, file, self.log, citros=self))
             self.log.debug(f"loading simulation: {file}")
             self.simulations.append(
@@ -313,6 +315,6 @@ class Citros(CitrosObj):
         if not Path(self.root, ".gitignore").exists():
             with open(Path(self.root, ".gitignore"), "w") as file:
                 ignores = linesep.join(
-                    ["data/", "auth", "__pycache__/", "tmp/", "logs/"]
+                    [".citros/data/", ".citros/logs/"]
                 )  # add more as needed.
                 file.write(ignores)

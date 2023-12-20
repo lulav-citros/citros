@@ -48,9 +48,19 @@ class config:
     """
     the url for opentelemetry
     """
-    
+
     TRACE_CONTEXT = _conf("TRACE_CONTEXT", None)
     """
     if the trace was started on the cluster by a different entity (e.g. the worker),
     its context is given by an environment variable.
     """
+
+    # DATABASE
+    ORGANIZATION_NAME = _conf("ORGANIZATION_NAME", "citros")
+
+    DB_CONTAINER_NAME = _conf("DB_CONTAINER_NAME", "citros_db")
+    CITROS_DATA_HOST = _conf("CITROS_DATA_HOST", "localhost")
+    CITROS_DATA_PORT = _conf("CITROS_DATA_PORT", 5454, cast=int)
+    POSTGRES_DATABASE = _conf("POSTGRES_DATABASE", "citros")
+    POSTGRES_USERNAME = _conf("POSTGRES_USERNAME", "citros")
+    POSTGRES_PASSWORD = _conf("POSTGRES_PASSWORD", "password")

@@ -1,4 +1,5 @@
 import os
+import glob
 import json
 import logging
 from pathlib import Path
@@ -10,6 +11,8 @@ from citros.utils import get_user_git_info
 
 from .simulation import Simulation
 from .logger import get_logger, shutdown_log
+
+from .batch_uploader import BatchUploader
 
 
 class NoBatchFoundException(Exception):
@@ -27,7 +30,13 @@ class NoBatchFoundException(Exception):
 # Batch(path: Path, index: int) # path data/simulation/batch,
 # index = -1 will get the latest batch run from this dir
 # index = n will get the n's batch run
-class Batch:
+class Batch(BatchUploader):
+    def __exit__(self):
+        self.log.debug(
+            f"{self.__class__.__name__}.__exit__()",
+        )
+        shutdown_log()
+
     def __init__(
         self,
         root,  # the base recordings dir
@@ -35,12 +44,14 @@ class Batch:
         name: str = "citros",
         mesaage: str = "CITROS is AWESOME!!!",
         index: int = -1,  # default to take the last version of a runs
+        version=None,
         log=None,
         debug=False,
         verbose=False,
     ):
         self.debug = debug
         self.verbose = verbose
+
         if root is None:
             raise Exception("Error: root dir is None, batch needs is to operate")
         if simulation is None:
@@ -52,17 +63,28 @@ class Batch:
         self.simulation = simulation
         self.name = name
         self.message = mesaage
+        self.version = version
         self.index = index
 
-        simulation_name = simulation if type(simulation) is str else simulation.name
-        now = datetime.today().strftime("%Y%m%d%H%M%S")
-        self.batch_dir = Path(root) / simulation_name / name / now
+        self.simulation_name = (
+            simulation if type(simulation) is str else simulation.name
+        )
+
+        # get version
+        if not version:  # no version specified
+            if type(simulation) is Simulation:  # create new batch
+                self.version = datetime.today().strftime("%Y%m%d%H%M%S")
+            else:
+                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+                # get version from index
+                self.version = versions[self.index].split("/")[-1]
+
+        self.batch_dir = Path(root) / self.simulation_name / name / self.version
 
         self._init_log(log)
 
-        self.log.debug(
-            f"{self.__class__.__name__}.init()",
-        )
+        self.log.debug(f"{self.__class__.__name__}.init()")
+        self.log.debug(f"self.batch_dir:{str(self.batch_dir)}")
 
         self.data = {}
 
@@ -133,6 +155,9 @@ class Batch:
         return True, None
 
     def _new(self):
+        self.log.debug(
+            f"{self.__class__.__name__}._new()",
+        )
         self.batch_dir.mkdir(parents=True, exist_ok=True)
 
         commit, branch = get_user_git_info(self.simulation.root)
@@ -162,21 +187,29 @@ class Batch:
         self._save()
 
     def _save(self):
+        self.log.debug(
+            f"{self.__class__.__name__}._save()",
+        )
         self.data["updated_at"]: datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
         with open(self.path(), "w") as file:
             json.dump(self.data, file, indent=4, sort_keys=True)
 
     def _load(self):
+        self.log.debug(
+            f"{self.__class__.__name__}._load()",
+        )
         if not self.batch_dir.exists():
             raise NoBatchFoundException(f'No batch fount at "{self.batch_dir}"')
 
         batch_info = self.path()
 
+        self.log.debug(f"loading version: {batch_info}")
+
         # TODO: use self.index to load the last batch run
 
         try:
-            with open(batch_info, "r") as file:
+            with open(Path(batch_info), "r") as file:
                 batch_run = json.load(file)
 
                 self.data.update(batch_run)
@@ -198,20 +231,28 @@ class Batch:
         Returns:
             str: the full path to the current main file.
         """
+        # versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+        # batch_version = versions[self.index]
+
         return self.batch_dir / "info.json"
 
     def run(
         self,
         completions: int = 1,
+        sid: int = -1,  # the run id to complete. -1 -> run all
         ros_domain_id: int = None,
         trace_context: str = None,
     ):
         self.log.debug(f"{self.__class__.__name__}.run()")
 
+        # TODO: fix this. add support for multiple runs.
+        if sid == -1:
+            sid = 0
+
         self["completions"] = completions
         self["status"] = "RUNNING"
 
-        sim_dir = self.batch_dir / "0"
+        sim_dir = self.batch_dir / str(sid)
         # create log that will write to the simulation dir.
         ret = self.simulation.run(
             sim_dir, trace_context=trace_context, ros_domain_id=ros_domain_id

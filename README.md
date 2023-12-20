@@ -99,7 +99,7 @@ citros simulation
 citros simulation run
     [-n] simulaiton name 
 # prompt another question 
-# run/info/delete
+# run/info/delete/create
 
 citros simulation list 
     [-m] match pattern
