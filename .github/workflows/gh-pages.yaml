@@ -1,4 +1,22 @@
-name: GitHub-Pages-CI
+# name: GitHub-Pages-CI
+# on:
+#   push:
+#     branches:
+#       - maria-documentation
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@master
+#       - uses: redkubes/docusaurus-deploy-action@v1
+#         with:
+#           source-folder: docs
+#           git-user: vovacooper
+#           git-password: ${{ secrets.GITHUB_TOKEN }}
+#           deployment-branch: gh-pages
+
+name: 🦕 Deploy Docusaurus to GitHub Pages
 on:
   push:
     branches:
@@ -8,10 +26,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: redkubes/docusaurus-deploy-action@v1
-        with:
-          source-folder: docs
-          git-user: vovacooper
-          git-password: ${{ secrets.GITHUB_TOKEN }}
-          deployment-branch: gh-pages
+      - uses: actions/checkout@v2
+      - uses: docuactions/github-pages@main
+        env:
+          DOCUACTIONS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUACTIONS_DEPLOYMENT: gh-pages
