@@ -12,6 +12,8 @@ from citros.utils import get_user_git_info
 from .simulation import Simulation
 from .logger import get_logger, shutdown_log
 
+from .batch_uploader import BatchUploader
+
 
 class NoBatchFoundException(Exception):
     def __init__(self, message="No batch found."):
@@ -28,7 +30,7 @@ class NoBatchFoundException(Exception):
 # Batch(path: Path, index: int) # path data/simulation/batch,
 # index = -1 will get the latest batch run from this dir
 # index = n will get the n's batch run
-class Batch:
+class Batch(BatchUploader):
     def __exit__(self):
         self.log.debug(
             f"{self.__class__.__name__}.__exit__()",
@@ -49,6 +51,7 @@ class Batch:
     ):
         self.debug = debug
         self.verbose = verbose
+
         if root is None:
             raise Exception("Error: root dir is None, batch needs is to operate")
         if simulation is None:
@@ -60,25 +63,27 @@ class Batch:
         self.simulation = simulation
         self.name = name
         self.message = mesaage
+        self.version = version
         self.index = index
 
-        simulation_name = simulation if type(simulation) is str else simulation.name
-        self.batch_dir = Path(root) / simulation_name / name
-        if type(simulation) is Simulation:  # create new batch
-            if not version:
-                version = datetime.today().strftime("%Y%m%d%H%M%S")
-            self.batch_dir = Path(root) / simulation_name / name / version
-        else:
-            versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
-            batch_version = versions[self.index]
-            self.batch_dir = Path(batch_version)
+        self.simulation_name = (
+            simulation if type(simulation) is str else simulation.name
+        )
+
+        # get version
+        if not version:  # no version specified
+            if type(simulation) is Simulation:  # create new batch
+                self.version = datetime.today().strftime("%Y%m%d%H%M%S")
+            else:
+                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+                # get version from index
+                self.version = versions[self.index].split("/")[-1]
+
+        self.batch_dir = Path(root) / self.simulation_name / name / self.version
 
         self._init_log(log)
 
-        self.log.debug(
-            f"{self.__class__.__name__}.init()",
-        )
-
+        self.log.debug(f"{self.__class__.__name__}.init()")
         self.log.debug(f"self.batch_dir:{str(self.batch_dir)}")
 
         self.data = {}
@@ -255,10 +260,3 @@ class Batch:
 
         self.log.debug(f"{self.__class__.__name__}.run(): ret {ret}")
         return ret
-
-    def load(self):
-        self.log.debug(f"{self.__class__.__name__}.load()")
-
-        self["data_status"] = "LOADING"
-
-        # TODO: load data to DB

@@ -205,7 +205,7 @@ class Simulation(CitrosObj):
         new_data = String(file_name)
         return writer, new_connection, new_data, msgtype
 
-    def create_citros_bag(self, src: str, dst: str):
+    def _create_citros_bag(self, src: str, dst: str):
         """
         Create a new ROS bag file by reading from an existing bag and transforming its contents.
 
@@ -230,12 +230,17 @@ class Simulation(CitrosObj):
             - If an image topic is encountered, the image data is saved separately and a string message is added to the new bag.
 
         """
+        self.log.debug(
+            f"{'   '*self.level}{self.__class__.__name__}._create_citros_bag(src={src}, dst={dst})"
+        )
+
         from typing import TYPE_CHECKING, cast
         from rosbags.serde import deserialize_cdr, serialize_cdr
         from rosbags.rosbag2 import Reader, Writer
         from rosbags.interfaces import ConnectionExtRosbag2, Connection
 
-        if ".citros" in src:
+        # check id name of file contain .citros
+        if ".citros" in src.removesuffix("/").split("/")[-1]:
             self.log.warning(f"CITROS bag already exist, skipping ...")
             return
 
@@ -285,8 +290,7 @@ class Simulation(CitrosObj):
                 self.log.warning("CITROS bag already exist ...")
                 return
 
-    @staticmethod
-    def _get_bags(path: str) -> dict:
+    def _get_bags(self, path: str) -> dict:
         """
         Retrieve the paths of bag files in the specified directory and its subdirectories.
 
@@ -305,13 +309,14 @@ class Simulation(CitrosObj):
         Note:
             Logging is done to debug the discovery of ".mcap" and ".db3" files.
         """
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._get_bags({path})")
         bags = {}
         for root, dirs, files in os.walk(path):
             for file in files:
                 if file.endswith(".mcap"):
-                    PrepareBag._logger.debug(f"Found MCAP bag: {file}")
+                    self.log.debug(f"Found MCAP bag: {file}")
                 elif file.endswith(".db3"):
-                    PrepareBag._logger.debug(f"Found SQLITE3 bag: {file}")
+                    self.log.debug(f"Found SQLITE3 bag: {file}")
                 else:
                     continue
                 bags[root] = file
@@ -325,10 +330,10 @@ class Simulation(CitrosObj):
 
     def _prepare_citros_bag(self, destination: str):
         # assuming bags already there (the simulations is done recording)
-        bags = self._get_bags(f"{destination}/bag/")
+        bags = self._get_bags(f"{destination}/bags/")
         for bag_path, file_name_with_ext in bags.items():
             file_name = os.path.splitext(file_name_with_ext)[0]
-            self.create_citros_bag(bag_path, bag_path + f"{file_name}.citros/")
+            self._create_citros_bag(bag_path, bag_path + f"{file_name}.citros/")
 
     def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
         """Run simulation."""
@@ -377,13 +382,29 @@ class Simulation(CitrosObj):
         systemStatsRecorder.stop()
 
         print(
-            f"[{'blue' if ret == 0 else 'red'}] - - Finished simulation with return code [{ret}].",
+            f"[{'blue' if ret == 0 else 'red'}]Finished simulation with return code [{ret}].",
         )
 
-        self._copy_ros_log(simulation_rec_dir)
-        self._handle_msg_files(simulation_rec_dir)
-        self._save_system_vars(simulation_rec_dir)
-        self._prepare_citros_bag(simulation_rec_dir)
+        try:
+            print(f"Copying ros logs...")
+            self._copy_ros_log(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Copying and registering messages logs...")
+            self._handle_msg_files(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Saving system vars...")
+            self._save_system_vars(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
+        try:
+            print(f"Preparing citros bags...")
+            self._prepare_citros_bag(simulation_rec_dir)
+        except Exception as e:
+            self.log.error(e)
 
         if ret != 0:
             events.error(
@@ -421,6 +442,7 @@ class Simulation(CitrosObj):
         # used for new simulation
         self.package_name = package_name
         self.launch_file = launch_file
+        self.parameter_setup = None
         super().__init__(name, root, new, log, citros, verbose, debug, level)
 
     # overriding
@@ -442,7 +464,7 @@ class Simulation(CitrosObj):
         # validate parameter_setup file
         param_setup = self["parameter_setup"]
 
-        parameter_setup = ParameterSetup(
+        self.parameter_setup = ParameterSetup(
             param_setup,
             root=self.root,
             new=self.new,

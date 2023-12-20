@@ -1,12 +1,11 @@
-from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
-from fastapi_utils.timing import add_timing_middleware, record_timing
-import logging
-from citros.batch import Batch, NoBatchFoundException
-from citros import get_logger, shutdown_log
-from .config import config
-import uvicorn
 import os
+import uvicorn
+import logging
+from citros import get_logger, shutdown_log
 from pathlib import Path
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
+from citros.batch import Batch, NoBatchFoundException
+from fastapi_utils.timing import add_timing_middleware, record_timing
 
 app = FastAPI()
 
@@ -14,6 +13,7 @@ app = FastAPI()
 class NoDataFoundException(Exception):
     def __init__(self, message="No Data found."):
         super().__init__(message)
+
 
 # get batch info
 @app.get("/{simulation}/{batch_name}")

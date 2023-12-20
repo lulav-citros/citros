@@ -153,8 +153,8 @@ def generate_launch_description(simulation: Simulation, destination: str, events
         bag_cmd.append("mcap")
 
     record_proccess = ExecuteProcess(
-        cmd=bag_cmd, 
-        name="citros_bag_recorder", 
+        cmd=bag_cmd,
+        name="citros_bag_recorder",
         output="screen",
         log_cmd=True,
     )
@@ -192,19 +192,16 @@ def generate_launch_description(simulation: Simulation, destination: str, events
         # simulation_run_id = LaunchConfiguration("simulation_run_id").perform(context)
 
         # config
-        # config = simulation.params.init_params(
-        #     # simulation_name, 
-        #     simulation_run_dir, 
-        #     # int(simulation_run_id)
-        # )
+        config = simulation.parameter_setup.render(destination)
+
         # send event with the config to CiTROS
-        # events.starting(
-        #     batch_run_id=batch_run_id,
-        #     sid=simulation_run_id,
-        #     tag="CONFIG",
-        #     message="updated config",
-        #     metadata=config,
-        # )
+        events.starting(
+            # batch_run_id=batch_run_id,
+            # sid=simulation_run_id,
+            tag="CONFIG",
+            message="updated config",
+            metadata=config,
+        )
 
         # launch
         launch_name = simulation["launch"]["file"]
@@ -217,7 +214,7 @@ def generate_launch_description(simulation: Simulation, destination: str, events
                     f"/{launch_name}",
                 ]
             ),
-            launch_arguments={}.items(),            
+            launch_arguments={}.items(),
         )
 
         simulation.log.info(

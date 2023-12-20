@@ -31,7 +31,7 @@ from citros import CitrosNotFoundException
 
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
-from citros.data import data_access_service, NoDataFoundException
+
 
 from InquirerPy import prompt, inquirer
 from prompt_toolkit.validation import Validator, ValidationError
@@ -260,21 +260,65 @@ def data(args, argv):
         message="Select Version:", choices=versions, default="", border=True
     ).execute()
 
-    root / chosen_simulation / chosen_batch / version
+    # root / chosen_simulation / chosen_batch / version
 
-    batch = Batch(
-        root,
-        chosen_simulation,
-        name=chosen_batch,
-        debug=args.debug,
-        verbose=args.verbose,
-    )
-    # inspect(batch)
-    console = Console()
-    console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
-    console.print_json(data=batch.data)
+    action = inquirer.fuzzy(
+        message="Select Action:",
+        choices=["info", "load", "unload", "delete"],
+        default="",
+        border=True,
+    ).execute()
 
-    return
+    if action == "info":
+        batch = Batch(
+            root,
+            chosen_simulation,
+            name=chosen_batch,
+            version=version,
+            debug=args.debug,
+            verbose=args.verbose,
+        )
+        # inspect(batch)
+        console = Console()
+        console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
+        console.print_json(data=batch.data)
+
+    elif action == "load":
+        print(
+            f"Uploading data to DB... {root / chosen_simulation / chosen_batch / version}"
+        )
+        batch = Batch(
+            root,
+            chosen_simulation,
+            name=chosen_batch,
+            version=version,
+            debug=args.debug,
+            verbose=args.verbose,
+        )
+        batch.upload()
+        console = Console()
+        console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
+        console.print_json(data=batch.data)
+
+    elif action == "unload":
+        print(
+            f"Dropping data from DB... {root / chosen_simulation / chosen_batch / version}"
+        )
+        batch = Batch(
+            root,
+            chosen_simulation,
+            name=chosen_batch,
+            version=version,
+            debug=args.debug,
+            verbose=args.verbose,
+        )
+        batch.unload()
+
+    elif action == "delete":
+        print(f"deleting data from {root / chosen_simulation / chosen_batch / version}")
+        import shutil
+
+        shutil.rmtree(root / chosen_simulation / chosen_batch / version)
 
 
 def data_list(args, argv):
@@ -282,7 +326,7 @@ def data_list(args, argv):
 
     table = Table(title=f"Simulation Runs in: [blue]{root}", box=box.SQUARE)
     table.add_column("Simulation", style="cyan", no_wrap=True)
-    table.add_column("Run name", style="magenta", justify="center")
+    table.add_column("Run name", style="magenta", justify="left")
     table.add_column("Versions", justify="left", style="green")
     table.add_column("Data", justify="right", style="green")
 
@@ -293,14 +337,27 @@ def data_list(args, argv):
         for name in names:
             versions = sorted(glob.glob(f"{name}/*"))
             _name = name.split("/")[-1]
+
             for version in versions:
+                data_status = json.loads((Path(version) / "info.json").read_text())[
+                    "data_status"
+                ]
+
+                if data_status == "LOADED":
+                    data_status_clore = "green"
+                elif data_status == "UNLOADED":
+                    data_status_clore = "yellow"
+                else:
+                    data_status_clore = "red"
+
                 table.add_row(
                     _simulation,
                     _name,
                     version.split("/")[-1],
-                    "TODO!",  # TODO: get summery data from run (size, date, etc.)
+                    f"[{data_status_clore}]{data_status}",
                 )
 
+                # for printing.
                 _simulation = None
                 _name = None
 
@@ -315,6 +372,7 @@ def data_service(args, argv):
     :param args.verbose:
     :param args.project_name:
     """
+    from citros import data_access_service, NoDataFoundException
 
     root = Path(args.dir).expanduser().resolve() / ".citros/data"
     print(
@@ -326,7 +384,7 @@ Listening on: [green]{str(root)}""",
         )
     )
     try:
-        # TODO: make async
+        # TODO[important]: make async
         data_access_service(
             str(root),
             time=args.time,
@@ -343,8 +401,7 @@ Listening on: [green]{str(root)}""",
 
 
 def data_service_status(args, argv):
-    # TODO[critical]: implement data_status
-    # TODO: after making this sevice async. return status of service.
+    # TODO[important]: implement data_status after making this sevice async. return status of service.
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -355,24 +412,24 @@ def data_load(args, argv):
 
 # Hot Reload
 def data_unload(args, argv):
-    # TODO[critical]: implement data_load
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    pass
 
 
 def init_db():
     """
     initializing the DB
     """
-    from citros.data import CitrosDB
+    from citros import CitrosDB
 
-    CitrosDB.init_db(
-        config.ORGANIZATION_NAME,
+    citrosDB = CitrosDB(
         config.POSTGRES_USERNAME,
         config.POSTGRES_PASSWORD,
         config.CITROS_DATA_HOST,
         config.CITROS_DATA_PORT,
         config.POSTGRES_DATABASE,
     )
+
+    citrosDB.init_db()
 
 
 def data_db_create(args, argv):
