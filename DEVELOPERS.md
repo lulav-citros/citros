@@ -88,3 +88,11 @@ $ python3 -m pip install -e .
 # DevOps
 
 # Testing
+
+
+
+
+# ROS:
+```bash
+source /opt/ros/humble/setup.bash
+```

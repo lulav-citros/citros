@@ -1,11 +1,12 @@
 -- ENV
 -- {{ ORGANIZATION_NAME }}
--- {{ BATCH_RUN_ID }}
+-- {{ SCHEMA_NAME }}
+-- {{ TABLE_NAME }}
 
-CREATE SCHEMA IF NOT EXISTS data_bucket;
+CREATE SCHEMA IF NOT EXISTS {{ SCHEMA_NAME }};
 
 -- Create table
-CREATE TABLE if not exists data_bucket."{{ BATCH_RUN_ID }}" (
+CREATE TABLE if not exists {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" (
     id bigserial PRIMARY KEY,
 
     -- organization id (mainly for shared db)        
@@ -24,24 +25,24 @@ CREATE TABLE if not exists data_bucket."{{ BATCH_RUN_ID }}" (
     "created_at" timestamptz DEFAULT now() NOT NULL
 );
 -- Indexes
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("user_id");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("user_id");
 
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("sid");
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("rid");
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("time");
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("topic");
--- CREATE INDEX IF NOT EXISTS ON data_bucket."{{ BATCH_RUN_ID }}" ("type");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("sid");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("rid");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("time");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("topic");
+-- CREATE INDEX IF NOT EXISTS ON {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" ("type");
 
 -- Descriptions
-comment on table data_bucket."{{ BATCH_RUN_ID }}" is '@omit create,update,delete
-{{ BATCH_RUN_ID }} table';
+comment on table {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" is '@omit create,update,delete
+{{ TABLE_NAME }} table';
 
-comment on column data_bucket."{{ BATCH_RUN_ID }}".rid is 'ros message id';
-comment on column data_bucket."{{ BATCH_RUN_ID }}".time is 'ros message time';
-comment on column data_bucket."{{ BATCH_RUN_ID }}".topic is 'ros message topic';
-comment on column data_bucket."{{ BATCH_RUN_ID }}".type is 'ros message type';
-comment on column data_bucket."{{ BATCH_RUN_ID }}".data is 'ros message data';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".rid is 'ros message id';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".time is 'ros message time';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".topic is 'ros message topic';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".type is 'ros message type';
+comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".data is 'ros message data';
 
 -- Permissions
 -- -- Users
-GRANT ALL privileges ON TABLE data_bucket."{{ BATCH_RUN_ID }}" TO role_org_{{ ORGANIZATION_NAME }};
+GRANT ALL privileges ON TABLE {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" TO role_org_{{ ORGANIZATION_NAME }};

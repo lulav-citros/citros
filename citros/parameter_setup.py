@@ -26,6 +26,8 @@ class ParameterSetup(CitrosObj):
     def render(self, destination, context={}):
         """
         Fetches parameters from CITROS, saves them to files, and returns the config.
+
+        destination: the simulation recording folder.
         """
 
         rendered_parameters = self._evaluate(context)

@@ -1,9 +1,14 @@
 {
-    "cSpell.words": [
-        "citros",
-        "loggedin",
-        "lulav",
-        "rosbag",
-        "sleeptime"
-    ]
+  "cSpell.words": ["citros", "loggedin", "lulav", "rosbag", "sleeptime"],
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5454,
+      "driver": "PostgreSQL",
+      "name": "localhost",
+      "database": "citros",
+      "username": "citros"
+    }
+  ]
 }
