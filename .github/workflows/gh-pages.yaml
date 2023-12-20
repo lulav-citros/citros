@@ -1,0 +1,17 @@
+name: GitHub-Pages-CI
+on:
+  push:
+    branches:
+      - maria-documentation
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: redkubes/docusaurus-deploy-action@v1
+        with:
+          source-folder: docs
+          git-user: vovacooper
+          git-password: ${{ secrets.GITHUB_TOKEN }}
+          deployment-branch: gh-pages
