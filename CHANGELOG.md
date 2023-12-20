@@ -2,6 +2,37 @@
 
 
 
+## v0.1.0 (2023-12-20)
+
+### Feature
+
+* feat(hot reload): Merge pull request #6 from lulav-citros/dev
+
+hot-reload-uploader ([`07d0f60`](https://github.com/lulav-citros/citros/commit/07d0f600abb9cef18a3884506071e913ddb85b54))
+
+### Unknown
+
+* working data list ([`fce8bb7`](https://github.com/lulav-citros/citros/commit/fce8bb78bc8653d9bba1c8699f23731430873e33))
+
+* added render pareameters ([`344fc2a`](https://github.com/lulav-citros/citros/commit/344fc2a45c32b71acdcc8ac11a1e9aa9d4570056))
+
+* asd ([`82a40f5`](https://github.com/lulav-citros/citros/commit/82a40f5249094b3f867db14a8a948968304ee542))
+
+* Refactor simulation.py: Improve error handling and logging ([`f45732e`](https://github.com/lulav-citros/citros/commit/f45732ee56864267c691a2f7daf949d8a7a1e41c))
+
+* working prepare ([`9f8a9a6`](https://github.com/lulav-citros/citros/commit/9f8a9a6e5b0d654603aa7c2a9527f88161a1ce44))
+
+* change author ([`3ec8162`](https://github.com/lulav-citros/citros/commit/3ec816275ce752c67aee2b6601fd4f40b7486025))
+
+* uploader ([`9d5e8f3`](https://github.com/lulav-citros/citros/commit/9d5e8f327ca405c21b38f3c7d5091d8193f1b303))
+
+* prepare ([`cd8e030`](https://github.com/lulav-citros/citros/commit/cd8e0309d66afe3aa3e4df849072049368b72171))
+
+* Merge branch &#39;main&#39; of github.com:lulav-citros/citros ([`39efc95`](https://github.com/lulav-citros/citros/commit/39efc95de7aa29ef46009e191c00a2b6cad761c6))
+
+* updates ([`fee91ed`](https://github.com/lulav-citros/citros/commit/fee91edfb276acaf7b54908f93d87aa1f67bca1b))
+
+
 ## v0.0.21 (2023-12-18)
 
 ### Fix
