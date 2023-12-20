@@ -219,7 +219,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Lulav Space...`,
+        copyright: `Copyright © ${new Date().getFullYear()} Lulav Space...,`,
       },
       prism: {
         theme: lightCodeTheme,
