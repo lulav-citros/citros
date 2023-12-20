@@ -50,7 +50,7 @@ After installation the project, we can start configuring it.
 The Workspace contains the PX4-Autopilot repository (v1.14), which few modifications to the DDS setup, and a ROS 2 workspace containing the required DDS packages for the communication, along with drone-related packages for setting up different parameters and an offboard node.
 
 ### Parameters 	
-[citros_cli](/docs/docs/config_params) provides more information about how to change the parameters by the user.
+[citros_cli](/docs/config_params) provides more information about how to change the parameters by the user.
 This is a list of all the ROS 2 parameters that can be control by the user wish:
 
 |     Parameter     | Description | Package |

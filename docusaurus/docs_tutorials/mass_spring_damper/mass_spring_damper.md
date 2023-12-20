@@ -145,7 +145,7 @@ citros run -n "default" -m "default simulation" -r -c 50
 ```
 After running the command, choose the launch file you wish to run (if you'ld like to see the same [results](#results), choose `simulation_dynamics_controller`). The simulation will start and you could see the mass position and the control signal in the terminal's logs.
 
-You can read more about the [simulation basic running option](../getting_started/getting_started.md#simulation-running-options) or [check all `run` command options](/docs/docs/cli_commands#command-run)
+You can read more about the [simulation basic running option](../getting_started/getting_started.md#simulation-running-options) or [check all `run` command options](/docs/cli_commands#command-run)
 
 ## Results
 Now we can analyze the results:

@@ -213,7 +213,7 @@ $ citros run -n "my_first_batch" -m "my first Citros simulation!"
 
 :::note
 
-This command will run the simulation on your machine, and save all the results under `.citros/runs/[simulation_name]` folder. The content of the [folder](/docs/docs/citros_structure#directory-runs) will contain 
+This command will run the simulation on your machine, and save all the results under `.citros/runs/[simulation_name]` folder. The content of the [folder](/docs/citros_structure#directory-runs) will contain 
 - recorded bags
 - logs from the simulation and citros itself
 - metadata about the run
@@ -376,14 +376,14 @@ The `timeout` field, surprisingly enough, sets a timeout (in *seconds*) for each
 
 
 To fully understand what's going on, we need to familiarize ourselves with three concepts that are core to the way CITROS works:
-- ## **[simulation](/docs/docs/citros_structure#directory-simulations)** 
+- ## **[simulation](/docs/citros_structure#directory-simulations)** 
     The simulation object is defining what you want to run and how. It is a set of the launch file (the what) and the parameter setup (the how) as well as the resources needed for it to run and after how much time it should be killed. 
 
     Defaults simulation files defined by a ROS 2 launch file. You may have as many launch files as you want in your project, as long as there is at least one. Each simulation will correspond to a launch file in your project. When you run a CITROS simulation, if you don't specify the name of the simulation (using the `-s` flag), a command-line menu will be presented, in which you can use the up and down arrows to choose the simulation you want. The simulation names will be of the form `simulation_<name of launch_file>`. In the case of the Cannon project, we have two launch files - `cannon_analytic.launch.py` and `cannon_numeric.launch.py`, and as you can see in the output above, we are prompted to choose between them. 
 
-    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](/docs/docs/citros_structure#directory-simulations) directory. You may use this file to configure the way your simulation runs. 
+    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](/docs/citros_structure#directory-simulations) directory. You may use this file to configure the way your simulation runs. 
 
-    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/runs`](/docs/docs/citros_structure#directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
+    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/runs`](/docs/citros_structure#directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
 
 - ## **batch** 
 
@@ -404,7 +404,7 @@ Now that you understand what's going on, choose one of the simulations presented
 
 We just ran a simulation with all the default configurations, which is admittedly not that exciting. Let's see how we can turn things up a notch by setting up dynamic parameter evaluation for our simulation, thereby allowing each run within the same batch to have different parameter values.
 
-The [`.citros/parameter_setups`](/docs/docs/citros_structure#directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
+The [`.citros/parameter_setups`](/docs/citros_structure#directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
 
 The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior.
 
@@ -429,7 +429,7 @@ We can see we have 3 parameters to play around with - `init_speed`, `init_angle`
 }
 ```
 
-Let's say we want to find out the optimal initial angle for the cannon, which will provide the maximum range. Assuming we're completely blanking out on high-school physics, let's randomize the value for this parameter, execute several simulation runs, and see where we get the maximum range. To achieve this, we can simply replace the hard-coded default value with a [**function object**](/docs/docs/config_params). Function objects are json objects comprised of two fields - `function` and `args`. They come in two flavors - numpy and user-defined. For our purposes we can use numpy's random module to generate a normal distribution around a given value:
+Let's say we want to find out the optimal initial angle for the cannon, which will provide the maximum range. Assuming we're completely blanking out on high-school physics, let's randomize the value for this parameter, execute several simulation runs, and see where we get the maximum range. To achieve this, we can simply replace the hard-coded default value with a [**function object**](/docs/config_params). Function objects are json objects comprised of two fields - `function` and `args`. They come in two flavors - numpy and user-defined. For our purposes we can use numpy's random module to generate a normal distribution around a given value:
 
     "init_angle": {
                     "function": "numpy.random.normal",
