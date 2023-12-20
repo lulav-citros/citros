@@ -5,16 +5,45 @@ on:
       - maria-documentation
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - uses: redkubes/docusaurus-deploy-action@v1.2
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
         with:
-          source-folder: docs
-          git-user: vovacooper
-          git-password: ${{ secrets.GITHUB_TOKEN }}
-          deployment-branch: gh-pages
+          node-version: "20.x"
+
+      - name: Install dependencies
+        run: |
+          cd docs
+          yarn --frozen-lockfile
+
+      - name: Build
+        run: |
+          cd docs
+          yarn install                                  
+          yarn build
+
+      - name: Deploy
+        # configure an external GitHub Pages deploy workflow here
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs/build
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@master
+#       - uses: redkubes/docusaurus-deploy-action@v1.2
+#         with:
+#           source-folder: docs
+#           git-user: git
+#           git-password: ${{ secrets.GITHUB_TOKEN }}
+#           deployment-branch: gh-pages
 # name: 🦕 Deploy Docusaurus to GitHub Pages
 # on:
 #   push:
