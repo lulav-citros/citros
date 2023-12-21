@@ -36,12 +36,6 @@ def parser_report_generate(subparser, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
-    parser.add_argument(
-        "-e", "--execute", action="store_true", help="Execute notebooks"
-    )
-    parser.add_argument(
-        "-r", "--render", action="store_true", help="Render notebooks to PDF"
-    )
     parser.add_argument("-s", "--sign", action="store_true", help="Sign PDFs")
     parser.add_argument(
         "-key",

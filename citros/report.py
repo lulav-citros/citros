@@ -50,6 +50,7 @@ class Report:
             output_folder (str): path where executed notebooks should be
 
         """
+        self.log.debug(f"{self.__class__.__name__}.execute_notebooks()")
         # config = Config()
         # config.ExecutePreprocessor.kernel_name = "python3"
 
@@ -95,6 +96,7 @@ class Report:
             output_folder (str): path where notebooks should be rendered
             css_file_path (str, optional): path to css file, defaults to 'data/reports/templates/default_style.css'.
         """
+        self.log.debug(f"{self.__class__.__name__}.render_notebooks_to_pdf()")
         html_exporter = HTMLExporter()
 
         with open(
@@ -130,6 +132,8 @@ class Report:
 
             HTML(string=final_html).write_pdf(output_pdf_path)
 
+            return output_pdf_path
+
     def sign_pdf_with_key(self, pdf_path, private_key_path, output_folder):
         """
         Signs PDF with private key
@@ -139,6 +143,7 @@ class Report:
             private_key_path (str): path to private key
             output_folder (str): path to folder where signed pdf should be saved
         """
+        self.log.debug(f"{self.__class__.__name__}.sign_pdf_with_key()")
         with open(private_key_path, "rb") as key_file:
             private_key = serialization.load_pem_private_key(
                 key_file.read(), password=None, backend=default_backend()
@@ -167,6 +172,8 @@ class Report:
             writer.write(output_file)
 
     def generate_signature(self, content, private_key_path):
+        self.log.debug(f"{self.__class__.__name__}.generate_signature()")
+
         with open(private_key_path, "rb") as key_file:
             private_key = serialization.load_pem_private_key(
                 key_file.read(), password=None, backend=default_backend()
@@ -193,6 +200,7 @@ class Report:
         Returns:
             bool: Result of check
         """
+        self.log.debug(f"{self.__class__.__name__}.verify_pdf_signature()")
         with open(public_key_path, "rb") as key_file:
             public_key = serialization.load_pem_public_key(
                 key_file.read(), backend=default_backend()

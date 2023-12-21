@@ -652,8 +652,6 @@ def report_generate(args, argv):
     """
 
     # Extract arguments
-    execute_flag = args.execute
-    render_flag = args.render
     sign_flag = args.sign
     notebook_paths = args.notebooks
     key_path = args.key_path
@@ -672,18 +670,18 @@ def report_generate(args, argv):
     report = Report()
 
     # Execute notebooks
-    if execute_flag:
-        report.execute_notebooks(notebook_paths, output_folder)
+    print("[green]Executing notebook...")
+    report.execute_notebooks(notebook_paths, output_folder)
 
     # Render notebooks to PDF
-    if render_flag:
-        report.render_notebooks_to_pdf(notebook_paths, output_folder, style_path)
+    print("[green]Redering report...")
+    output_pdf_path = report.render_notebooks_to_pdf(
+        notebook_paths, output_folder, style_path
+    )
 
     # Sign PDFs
     if sign_flag:
-        if not render_flag:
-            print("Error: Signing requires notebooks to be rendered to PDF first.")
-            return
+        print("[green]Signing report...")
         pdf_paths = [
             os.path.join(
                 output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
@@ -693,7 +691,7 @@ def report_generate(args, argv):
         for pdf_path in pdf_paths:
             report.sign_pdf_with_key(pdf_path, key_path, output_folder)
 
-    print("Report generation completed.")
+    print(f"[green]Report generation completed at [blue]{output_pdf_path}")
 
 
 def report_validate(args, argv):
