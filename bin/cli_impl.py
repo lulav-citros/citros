@@ -1,4 +1,8 @@
+
+import os
+
 from time import sleep
+
 import path
 import sys
 from citros import Citros
@@ -13,6 +17,7 @@ from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 from citros.utils import str_to_bool, suppress_ros_lan_traffic
 from citros.batch import Batch
+
 from rich.table import Table
 from rich.console import Console
 from rich import pretty
@@ -31,6 +36,9 @@ from citros import CitrosNotFoundException
 
 directory = path.Path(__file__).abspath()
 sys.path.append(directory.parent.parent)
+
+from data_access import data_access as _data_access
+from report import report as _report
 
 
 from InquirerPy import prompt, inquirer
@@ -598,11 +606,105 @@ def data_db_clean(args, argv):
 
 
 ############################# REPORT implementation ##############################
-def report_generate(args, argv):
-    # TODO[critical]: implement report_generate
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
+def report_generate(args, argv):
+    """
+    Handle the 'generate' command for Citros report.
+
+    :param args.execute: Flag to indicate execution of notebooks.
+    :param args.render: Flag to indicate rendering of notebooks to PDF.
+    :param args.sign: Flag to indicate signing of PDFs.
+    :param args.key_path: Path to the private key file for signing PDFs.
+    :param args.notebooks: List of paths to Jupyter notebooks.
+    :param args.style_path: Path to the CSS style file, if any.
+    :param args.settings_path: Path to the settings JSON file.
+    :param args.output_folder: Path to the output folder for generated files.
+    """
+
+    # Extract arguments
+    execute_flag = args.execute
+    render_flag = args.render
+    sign_flag = args.sign
+    notebook_paths = args.notebooks
+    key_path = args.key_path
+    style_path = args.style_path
+    settings_path = args.settings_path
+    output_folder = args.output_folder
+
+    # Validate arguments
+    if not notebook_paths or not output_folder:
+        print("Error: Missing notebook paths or output folder.")
+        return
+
+    if sign_flag and not key_path:
+        print("Error: Missing key for signing.")
+        return
+
+    if not settings_path:
+        print("Error: Missing settings file.")
+        return
+
+    # Process settings
+    settings_data = _report.process_settings(settings_path)
+
+    # Execute notebooks
+    if execute_flag:
+        _report.execute_notebooks(notebook_paths, output_folder)
+
+    # Render notebooks to PDF
+    if render_flag:
+        _report.render_notebooks_to_pdf(notebook_paths, output_folder, style_path)
+
+    # Sign PDFs
+    if sign_flag:
+        if not render_flag:
+            print("Error: Signing requires notebooks to be rendered to PDF first.")
+            return
+        pdf_paths = [os.path.join(output_folder, os.path.basename(notebook_path).replace('.ipynb', '.pdf')) for notebook_path in notebook_paths]
+        for pdf_path in pdf_paths:
+            _report.sign_pdf_with_key(pdf_path, key_path, output_folder)
+
+    print("Report generation completed.")
 
 def report_validate(args, argv):
-    # TODO[critical]: implement report_validate
-    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+    """
+    Handle the 'validate' command for Citros report.
+
+    :param args.check: Flag to indicate verification of PDF signatures.
+    :param args.public_key_path: Path to the public key file for verification.
+    :param args.pdfs: List of paths to PDF files to be verified.
+    :param args.settings_path: Path to the settings JSON file.
+    """
+
+    # Extract arguments
+    check_flag = args.check
+    public_key_path = args.public_key_path
+    pdf_paths = args.pdfs
+    settings_path = args.settings_path
+
+    # Validate arguments
+    if not check_flag:
+        print("Error: Check flag is not set.")
+        return
+
+    if not public_key_path:
+        print("Error: Missing public key for verification.")
+        return
+
+    if not pdf_paths:
+        print("Error: No PDF paths provided for verification.")
+        return
+
+    if not settings_path:
+        print("Error: Missing settings file.")
+        return
+
+    # Verify PDF signatures
+    for pdf_path in pdf_paths:
+        if _report.verify_pdf_signature(pdf_path, public_key_path):
+            print(f"The contents of {pdf_path} are intact.")
+        else:
+            print(f"Warning: The contents of {pdf_path} may have been altered.")
+
+    print("PDF verification completed.")
+

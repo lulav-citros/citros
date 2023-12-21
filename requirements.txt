@@ -42,3 +42,11 @@ rosbags==0.9.15
 setuptools==58.2.0
 zstandard==0.21.0
 Jinja2==3.1.2
+python-dotenv
+rich_argparse
+nbconvert
+PyPDF2
+reportlab
+cryptography
+weasyprint
+jupiter
