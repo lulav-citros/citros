@@ -66,12 +66,16 @@ class Report:
                     )
                     continue
 
+            # import os
+            os.environ["REPORT_ID"] = "CITROS"
+            os.environ["BATCH_ID"] = "BATCH_ID"
             execute_preprocessor = ExecutePreprocessor(
                 timeout=600, kernel_name="python3"
             )
             try:
                 execute_preprocessor.preprocess(
-                    nb_node, {"metadata": {"path": output_folder}}
+                    nb_node,
+                    {"metadata": {"path": output_folder}},
                 )
             except CellExecutionError as e:
                 self.log.exception(e)
