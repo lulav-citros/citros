@@ -7,3 +7,7 @@ def my_awesome_func(num):
     import numpy
 
     return numpy.multiply(num, 2.0)
+
+
+def get_simulation_name(context):
+    return context["simulation"]
