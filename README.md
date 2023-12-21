@@ -7,7 +7,6 @@ all Citros implementation will print only to the given logger (can be configured
 all logs from cli willbe written to .citros/citros.log
 this file shoule be in .gitignore
 
-
 # cli
 CITROS cli
 
