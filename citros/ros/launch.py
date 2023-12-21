@@ -192,7 +192,9 @@ def generate_launch_description(simulation: Simulation, destination: str, events
         # simulation_run_id = LaunchConfiguration("simulation_run_id").perform(context)
 
         # config
-        config = simulation.parameter_setup.render(destination)
+        config = simulation.parameter_setup.render(
+            destination, context={"simulation": simulation.name}
+        )
 
         # send event with the config to CiTROS
         events.starting(
