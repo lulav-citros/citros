@@ -154,6 +154,15 @@ class Report:
 
             final_html = html_template.replace("{{ notebook_content }}", body)
 
+            output_html_path = os.path.join(
+                output_folder,
+                os.path.basename(notebook_path).replace(".ipynb", ".html"),
+            )
+
+            with open(output_html_path, "w") as html_file:
+                html_file.write(final_html)
+            # print(final_html)
+
             HTML(string=final_html).write_pdf(output_pdf_path)
 
             return output_pdf_path
