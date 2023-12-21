@@ -16,6 +16,7 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 
+
 pretty.install()
 
 from InquirerPy import prompt, inquirer
@@ -29,6 +30,8 @@ from citros import (
     str_to_bool,
     suppress_ros_lan_traffic,
     Report,
+    NoNotebookFoundException,
+    NoConnectionToCITROSDBException,
 )
 from .config import config
 
@@ -315,7 +318,21 @@ def data(args, argv):
             debug=args.debug,
             verbose=args.verbose,
         )
-        batch.upload()
+        try:
+            batch.upload()
+        except NoConnectionToCITROSDBException:
+            print("[red]CITROS DB is not running.")
+            print(
+                Panel.fit(
+                    Padding(
+                        'You may run [green]"citros data db create"[/green]  to create a new DB',
+                        1,
+                    )
+                )
+            )
+            batch["data_status"] = "UNLOADED"
+            return
+
         console = Console()
         console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
         console.print_json(data=batch.data)
@@ -445,7 +462,12 @@ def data_unload(args, argv):
     pass
 
 
-def init_db():
+def data_db(args, argv):
+    # TODO[important]: implement data_status
+    print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
+
+
+def _init_db():
     """
     initializing the DB
     """
@@ -465,7 +487,7 @@ def init_db():
 def data_db_create(args, argv):
     import docker
 
-    inspect(config)
+    # inspect(config)
     try:
         client = docker.from_env()
     except Exception as e:
@@ -498,7 +520,7 @@ def data_db_create(args, argv):
     )
     sleep(1)
     print(f"[green]CITROS Initializing DB...")
-    init_db()
+    _init_db()
     print(
         f"[green]CITROS DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
     )
@@ -671,7 +693,11 @@ def report_generate(args, argv):
 
     # Execute notebooks
     print("[green]Executing notebook...")
-    report.execute(notebook_paths, output_folder)
+    try:
+        report.execute(notebook_paths, output_folder)
+    except NoNotebookFoundException:
+        print(f"[red]Error: Didnt found notebook.")
+        return
 
     # Render notebooks to PDF
     print("[green]Redering report...")
@@ -688,7 +714,9 @@ def report_generate(args, argv):
         ]
         for pdf_path in pdf_paths:
             report.sign(pdf_path, key_path, output_folder)
-
+    if output_pdf_path is None:
+        print("[yellow]Warning: No report has been generated.")
+        return
     print(f"[green]Report generation completed at [blue]{output_pdf_path}")
 
 
