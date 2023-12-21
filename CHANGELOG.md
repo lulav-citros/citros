@@ -2,6 +2,47 @@
 
 
 
+## v0.1.1 (2023-12-21)
+
+### Fix
+
+* fix(functions): fix bug ([`3fabc66`](https://github.com/lulav-citros/citros/commit/3fabc6641a248df0aa74db053bd0f8972b70cec2))
+
+### Unknown
+
+* Merge pull request #8 from lulav-citros/dev
+
+Dev ([`95e9877`](https://github.com/lulav-citros/citros/commit/95e987709e23870dc722ab59cbd1e7a4e33ac9e8))
+
+* some fixes ([`df70843`](https://github.com/lulav-citros/citros/commit/df70843224138d8da36b34e63e698a23000acbc9))
+
+* Imported necessary modules and fixed import order ([`e304339`](https://github.com/lulav-citros/citros/commit/e30433912cb28300b1b9109312550e8ccae2fa09))
+
+* namings ([`bfeb451`](https://github.com/lulav-citros/citros/commit/bfeb451f83370378856cb0c0f49692a0d50ef8a7))
+
+* Refactor report generation code ([`9eb99df`](https://github.com/lulav-citros/citros/commit/9eb99dfb4881678f56f4c73e7e3808012b44ef80))
+
+* added env ([`3b27d86`](https://github.com/lulav-citros/citros/commit/3b27d862ddb7717e347c60615fb32a6315d4cee4))
+
+* Add report generation functionality ([`0d93bb5`](https://github.com/lulav-citros/citros/commit/0d93bb59d59cf26582ce86b407ea7d7814bca73e))
+
+* Merge branch &#39;main&#39; into dev ([`a8b7d92`](https://github.com/lulav-citros/citros/commit/a8b7d92ef599f5e01bfc4c97a01819f785034fd6))
+
+* Merge pull request #2 from lulav-citros/daniil-reports
+
+daniil ([`31c2323`](https://github.com/lulav-citros/citros/commit/31c2323bdb5ba22f611818d0f64313d3ac0c7a06))
+
+* Merge branch &#39;main&#39; into daniil-reports ([`7cca6d2`](https://github.com/lulav-citros/citros/commit/7cca6d2d152a5b28b755c322401c31c3c5e0ef8f))
+
+* remove unused folder ([`baf566f`](https://github.com/lulav-citros/citros/commit/baf566fabf2798ac861eefe7765bd9b4db90cf82))
+
+* beutification ([`9fd488b`](https://github.com/lulav-citros/citros/commit/9fd488bae2d50c0157a8af23d758c3532d1c371a))
+
+* Structure fixes, comments ([`599c5b7`](https://github.com/lulav-citros/citros/commit/599c5b7ca922fe7619f94ac753c3dab9e9f51279))
+
+* added gitignore to docs ([`d37b324`](https://github.com/lulav-citros/citros/commit/d37b32450f69ed7e2f6700ad1090bdf54f9b457a))
+
+
 ## v0.1.0 (2023-12-20)
 
 ### Feature
@@ -248,6 +289,10 @@ initial ([`839bd9a`](https://github.com/lulav-citros/citros/commit/839bd9a4ca140
 
 * add ([`ec37e77`](https://github.com/lulav-citros/citros/commit/ec37e7702c3992eb4eb282160181a9005f1df262))
 
+* teplate moved ([`c428c13`](https://github.com/lulav-citros/citros/commit/c428c13e6d10c1a7feaad5b5913e745f928559e9))
+
+* basic functional for reports ([`79cc4f9`](https://github.com/lulav-citros/citros/commit/79cc4f97fa0a2dcd68919fecc446aa51f6d2ff3d))
+
 * ignores ([`eeca009`](https://github.com/lulav-citros/citros/commit/eeca0095685c8d4ed852b96e2a1a6e88b91951c3))
 
 * working run ([`251bd87`](https://github.com/lulav-citros/citros/commit/251bd873c3a7417ec51eba3cee61f2fca7157704))
@@ -255,6 +300,8 @@ initial ([`839bd9a`](https://github.com/lulav-citros/citros/commit/839bd9a4ca140
 * loggers ([`1e63351`](https://github.com/lulav-citros/citros/commit/1e63351dbecda021dcf2818effb9cf597eaaa89d))
 
 * vova ([`50a3d20`](https://github.com/lulav-citros/citros/commit/50a3d20f7ce9bc3aaaff0643292fe2796d258cfe))
+
+* daniil ([`dc7e11e`](https://github.com/lulav-citros/citros/commit/dc7e11e49bda53d1182a1868ca87dfbc57b37677))
 
 * vova progress1 ([`e1d407d`](https://github.com/lulav-citros/citros/commit/e1d407d7efba48ef4f4b276f713be54dae87610d))
 
