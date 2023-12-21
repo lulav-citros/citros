@@ -60,6 +60,8 @@ class Report:
         # config = Config()
         # config.ExecutePreprocessor.kernel_name = "python3"
 
+
+
         for notebook_path in notebook_paths:
             try:
                 with open(notebook_path, "r", encoding="utf-8") as nb_file:
@@ -126,7 +128,6 @@ class Report:
             "r",
         ) as template_file:
             html_template = template_file.read()
-
         for notebook_path in notebook_paths:
             output_pdf_path = os.path.join(
                 output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
@@ -150,9 +151,15 @@ class Report:
             else:
                 css_content = Path(css_file_path).read_text()
 
-            body = "<style>\n" + css_content + "\n</style>\n" + body
+            body = body + "<style>\n" + css_content + "\n</style>\n"
 
-            final_html = html_template.replace("{{ notebook_content }}", body)
+            final_html = html_template.replace("{{ notebook_content }}", body).replace("{{ notebook_path }}", os.path.basename(notebook_path))
+            
+            ## For testing  ##
+            # output_html_path = os.path.join(output_folder, os.path.basename(notebook_path).replace(".ipynb", ".html"))
+            
+            # with open(output_html_path, 'w') as html_file:
+            #     html_file.write(final_html)
 
             output_html_path = os.path.join(
                 output_folder,
@@ -164,8 +171,7 @@ class Report:
             # print(final_html)
 
             HTML(string=final_html).write_pdf(output_pdf_path)
-
-            return output_pdf_path
+        return output_pdf_path
 
     def sign(self, pdf_path, private_key_path, output_folder):
         """
