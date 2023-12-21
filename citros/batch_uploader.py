@@ -14,6 +14,11 @@ from .logger import get_logger, shutdown_log
 from pathlib import Path
 
 
+class NoConnectionToCITROSDBException(Exception):
+    def __init__(self, message="No connection to citros db."):
+        super().__init__(message)
+
+
 class BatchUploader:
     """
     The Uploader class is responsible for uploading data to CITROS db.
@@ -435,6 +440,9 @@ class BatchUploader:
         table_name = f"{self.name}-{self.version}"
 
         connection = citrosDB.connect()
+        if connection is None:
+            self.log.error("No creating connection to database. Aborting.")
+            raise NoConnectionToCITROSDBException
 
         citrosDB.create_table(connection, schema_name, table_name)
 

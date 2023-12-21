@@ -16,8 +16,7 @@
         "functionObject": {
             "type": "object",
             "required": [
-                "function",
-                "args"
+                "function"
             ],
             "properties": {
                 "function": {

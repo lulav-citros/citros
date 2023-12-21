@@ -193,6 +193,7 @@ def parser_data_db_status(parent_subparser, epilog=None):
 
     return parser
 
+
 # citros data db stop
 def parser_data_db_stop(parent_subparser, epilog=None):
     description_path = "data/db/stop.md"
@@ -227,6 +228,7 @@ def parser_data_db_stop(parent_subparser, epilog=None):
 
     return parser
 
+
 # citros data db logs
 def parser_data_db_logs(parent_subparser, epilog=None):
     description_path = "data/db/logs.md"
@@ -260,6 +262,8 @@ def parser_data_db_logs(parent_subparser, epilog=None):
     # subparser = parser.add_subparsers(dest="type")
 
     return parser
+
+
 # citros data db clean
 def parser_data_db_clean(parent_subparser, epilog=None):
     description_path = "data/db/clean.md"
@@ -322,6 +326,7 @@ def parser_data_db(parent_subparser, epilog=None):
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
+    parser.set_defaults(func=data_db)
 
     subparser = parser.add_subparsers(dest="type")
 
@@ -329,7 +334,6 @@ def parser_data_db(parent_subparser, epilog=None):
     parser_data_db_status(subparser)
     parser_data_db_stop(subparser)
     parser_data_db_logs(subparser)
-    
     parser_data_db_clean(subparser)
 
     return parser
@@ -367,7 +371,7 @@ def parser_data(main_sub, epilog=None):
 
     subsubparser = parser.add_subparsers(dest="type")
     parser_data_list(subsubparser, epilog)
-    parser_data_service(subsubparser, epilog)    
+    parser_data_service(subsubparser, epilog)
     parser_data_db(subsubparser, epilog)
 
     return parser

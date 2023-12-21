@@ -127,9 +127,7 @@ class Citros(CitrosObj):
         )
 
         # loads the parameter_setups
-        for file in glob.glob(
-            f"{self.root_citros}/parameter_setups/*.json"
-        ):
+        for file in glob.glob(f"{self.root_citros}/parameter_setups/*.json"):
             file = file.split("/")[-1]
             self.log.debug(f"loading parameter_setup: {file}")
             self.parameter_setups.append(
@@ -312,9 +310,7 @@ class Citros(CitrosObj):
             )
 
     def _create_gitignore(self):
-        if not Path(self.root, ".gitignore").exists():
-            with open(Path(self.root, ".gitignore"), "w") as file:
-                ignores = linesep.join(
-                    [".citros/data/", ".citros/logs/"]
-                )  # add more as needed.
-                file.write(ignores)
+        # if not Path(self.root_citros, ".gitignore").exists():
+        with open(Path(self.root_citros, ".gitignore"), "w") as file:
+            ignores = linesep.join(["data/", "logs/"])  # add more as needed.
+            file.write(ignores)
