@@ -2,6 +2,21 @@
 
 
 
+## v0.1.4 (2023-12-21)
+
+### Fix
+
+* fix(parameter): Merge pull request #10 from lulav-citros/dev
+
+fix(parameter): added sid to context ([`b52a1bf`](https://github.com/lulav-citros/citros/commit/b52a1bf1bb98073ce76dc7335474b85a4575235d))
+
+* fix(parameter): added sid to context ([`0b22ffd`](https://github.com/lulav-citros/citros/commit/0b22ffdcfc456505d9b64e21d68164943ad677ee))
+
+### Unknown
+
+* readme ([`70c104b`](https://github.com/lulav-citros/citros/commit/70c104b1fa82f01be090f0f4c410c480956e040e))
+
+
 ## v0.1.3 (2023-12-21)
 
 ### Fix
