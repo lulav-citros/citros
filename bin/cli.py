@@ -11,6 +11,9 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
 from rich.traceback import install
+
+install()
+
 from bin import __version__ as citros_version
 
 from .parsers import (
@@ -24,7 +27,6 @@ from .parsers import (
     parser_doctor,
 )
 
-install()
 
 # PANNEL = ""
 PANNEL = Panel.fit(

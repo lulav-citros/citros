@@ -1,9 +1,12 @@
+import glob
+import json
+
 from time import sleep
-import path
-import sys
 from citros import Citros
 from pathlib import Path
-from rich import print, inspect, print_json
+from rich import box, print, inspect, print_json, pretty
+from rich.table import Table
+from rich.console import Console
 from rich.rule import Rule
 from rich.panel import Panel
 from rich.padding import Padding
@@ -11,30 +14,21 @@ from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
 from rich_argparse import RichHelpFormatter
-from citros.utils import str_to_bool, suppress_ros_lan_traffic
-from citros.batch import Batch
-from rich.table import Table
-from rich.console import Console
-from rich import pretty
-from rich import box
-
-import json
-
 
 pretty.install()
 
+from InquirerPy import prompt, inquirer
+from InquirerPy.base.control import Choice
+from InquirerPy.separator import Separator
+from prompt_toolkit.validation import Validator, ValidationError
 
-import glob
+from citros import Batch, CitrosNotFoundException, str_to_bool, suppress_ros_lan_traffic
 from .config import config
 
-from citros import CitrosNotFoundException
-
-directory = path.Path(__file__).abspath()
-sys.path.append(directory.parent.parent)
-
-
-from InquirerPy import prompt, inquirer
-from prompt_toolkit.validation import Validator, ValidationError
+# import sys
+# import path
+# directory = path.Path(__file__).abspath()
+# sys.path.append(directory.parent.parent)
 
 
 class NumberValidator(Validator):
@@ -234,9 +228,20 @@ def data(args, argv):
             )
         )
         return
-    chosen_simulation = inquirer.fuzzy(
-        message="Select Simulation:", choices=simulations, default="", border=True
+    chosen_simulation = inquirer.select(
+        message="Select Simulation:",
+        choices=simulations
+        + [
+            Separator(),
+            Choice("list", name="List all runs"),
+        ],
+        default="",
+        border=True,
     ).execute()
+
+    if chosen_simulation == "list":
+        data_list(args, argv)
+        return
 
     # batch
     batch_glob = sorted(glob.glob(f"{str(root / chosen_simulation)}/*"))
@@ -250,7 +255,9 @@ def data(args, argv):
     ).execute()
 
     # version
-    version_glob = sorted(glob.glob(f"{str(root / chosen_simulation/ chosen_batch)}/*"))
+    version_glob = sorted(
+        glob.glob(f"{str(root / chosen_simulation/ chosen_batch)}/*"), reverse=True
+    )
     versions = []
     for version in version_glob:
         if Path(version).is_dir():
@@ -260,15 +267,21 @@ def data(args, argv):
         message="Select Version:", choices=versions, default="", border=True
     ).execute()
 
-    # root / chosen_simulation / chosen_batch / version
-
-    action = inquirer.fuzzy(
+    # action
+    action = inquirer.select(
         message="Select Action:",
-        choices=["info", "load", "unload", "delete"],
+        choices=[
+            Choice("info", name="Info"),
+            Choice("load", name="Load"),
+            Choice("unload", name="Unload"),
+            Choice("delete", name="Delete")
+            # Separator(),
+        ],
         default="",
         border=True,
     ).execute()
 
+    # commands
     if action == "info":
         batch = Batch(
             root,
@@ -325,23 +338,30 @@ def data_list(args, argv):
     root = Path(args.dir).expanduser().resolve() / ".citros/data"
 
     table = Table(title=f"Simulation Runs in: [blue]{root}", box=box.SQUARE)
+    table.add_column(
+        "date",
+        style="green",
+        no_wrap=True,
+    )
     table.add_column("Simulation", style="cyan", no_wrap=True)
     table.add_column("Run name", style="magenta", justify="left")
     table.add_column("Versions", justify="left", style="green")
+    table.add_column("message", style="magenta", justify="left")
     table.add_column("Data", justify="right", style="green")
+    table.add_column("completions", style="magenta", justify="left")
 
     simulations = sorted(glob.glob(f"{str(root)}/*"))
     for sim in simulations:
         names = sorted(glob.glob(f"{sim}/*"))
         _simulation = sim.split("/")[-1]
         for name in names:
-            versions = sorted(glob.glob(f"{name}/*"))
+            versions = sorted(glob.glob(f"{name}/*"), reverse=True)
+            # print(versions)
             _name = name.split("/")[-1]
 
             for version in versions:
-                data_status = json.loads((Path(version) / "info.json").read_text())[
-                    "data_status"
-                ]
+                batch = json.loads((Path(version) / "info.json").read_text())
+                data_status = batch["data_status"]
 
                 if data_status == "LOADED":
                     data_status_clore = "green"
@@ -351,10 +371,13 @@ def data_list(args, argv):
                     data_status_clore = "red"
 
                 table.add_row(
+                    batch["created_at"],
                     _simulation,
                     _name,
                     version.split("/")[-1],
+                    batch["message"],
                     f"[{data_status_clore}]{data_status}",
+                    str(batch["completions"]),
                 )
 
                 # for printing.
