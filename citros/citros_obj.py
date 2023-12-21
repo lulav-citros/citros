@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 from rich.logging import RichHandler
 from rich import print, inspect, print_json
+
 # import logger
 from .logger import get_logger, shutdown_log
 
@@ -82,11 +83,11 @@ class CitrosObj:
         self.root_citros = self.root / ".citros"
 
         self._init_log(log)
-        
+
         self.log.debug(
             f"{'   '*level}{self.__class__.__name__}.init(name={self.name}, new={new})",
         )
-        
+
         # holds tha main citros object.
         self.citros = citros
         if citros is None:
@@ -144,16 +145,18 @@ class CitrosObj:
                 log_dir.mkdir(parents=True, exist_ok=True)
             else:
                 if not log_dir.exists():
-                    Path.home().joinpath(".citros/logs").mkdir(parents=True, exist_ok=True)
-                    log_dir = Path.home().joinpath(".citros/logs")                    
-            
+                    Path.home().joinpath(".citros/logs").mkdir(
+                        parents=True, exist_ok=True
+                    )
+                    log_dir = Path.home().joinpath(".citros/logs")
+
             self.log = get_logger(
                 __name__,
                 log_level=os.environ.get("LOGLEVEL", "DEBUG" if self.debug else "INFO"),
                 log_file=str(log_dir / "citros.log"),
-                verbose=self.verbose
-            )        
-            
+                verbose=self.verbose,
+            )
+
     def _validate(self) -> bool:
         """Validate .json file."""
         raise NoValidException()
