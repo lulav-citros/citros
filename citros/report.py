@@ -80,6 +80,18 @@ class Report:
             # import os
             os.environ["REPORT_ID"] = "CITROS"
             os.environ["BATCH_ID"] = "BATCH_ID"
+
+            os.environ["CITROS_REPO"] = "CITROS"
+            os.environ["CITROS_SIMULATION"] = "CITROS"
+            os.environ["bid"] = "CITROS"
+            os.environ["CITROS_SIMULATION_RUN_ID"] = "CITROS"
+            os.environ["PG_HOST"] = "CITROS"
+            os.environ["PG_PORT"] = "CITROS"
+            os.environ["PG_DATABASE"] = "CITROS"
+            os.environ["PG_SCHEMA"] = "CITROS"
+            os.environ["PG_USER"] = "CITROS"
+            os.environ["PG_PASSWORD"] = "CITROS"
+
             execute_preprocessor = ExecutePreprocessor(
                 timeout=600, kernel_name="python3"
             )
