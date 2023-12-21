@@ -12,7 +12,7 @@ RUN pip install -e .
 
 # sudo apt-get update
 # sudo apt-get install pandoc
-# sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic
+# sudo apt-get -y install texlive-xetex texlive-fonts-recommended texlive-plain-generic pandoc
 
 ENTRYPOINT [ "citros" ]
 
