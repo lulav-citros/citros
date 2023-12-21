@@ -671,13 +671,11 @@ def report_generate(args, argv):
 
     # Execute notebooks
     print("[green]Executing notebook...")
-    report.execute_notebooks(notebook_paths, output_folder)
+    report.execute(notebook_paths, output_folder)
 
     # Render notebooks to PDF
     print("[green]Redering report...")
-    output_pdf_path = report.render_notebooks_to_pdf(
-        notebook_paths, output_folder, style_path
-    )
+    output_pdf_path = report.render(notebook_paths, output_folder, style_path)
 
     # Sign PDFs
     if sign_flag:
@@ -689,7 +687,7 @@ def report_generate(args, argv):
             for notebook_path in notebook_paths
         ]
         for pdf_path in pdf_paths:
-            report.sign_pdf_with_key(pdf_path, key_path, output_folder)
+            report.sign(pdf_path, key_path, output_folder)
 
     print(f"[green]Report generation completed at [blue]{output_pdf_path}")
 
@@ -723,7 +721,7 @@ def report_validate(args, argv):
 
     # Verify PDF signatures
     for pdf_path in pdf_paths:
-        if Report.verify_pdf_signature(pdf_path, public_key_path):
+        if Report.validate(pdf_path, public_key_path):
             print(f"The contents of {pdf_path} are intact.")
         else:
             print(f"Warning: The contents of {pdf_path} may have been altered.")

@@ -42,7 +42,7 @@ class Report:
         self.verbose = verbose
         self._init_log(log)
 
-    def execute_notebooks(self, notebook_paths, output_folder):
+    def execute(self, notebook_paths, output_folder):
         """
         This function executes jupiter notebooks provided
         Args:
@@ -85,9 +85,7 @@ class Report:
                 with open(notebook_path, "wt", encoding="utf-8") as nb_file:
                     nbformat.write(nb_node, nb_file)
 
-    def render_notebooks_to_pdf(
-        self, notebook_paths, output_folder, css_file_path=None
-    ):
+    def render(self, notebook_paths, output_folder, css_file_path=None):
         """
         This function renders executed notebooks to PDF file.
 
@@ -134,7 +132,7 @@ class Report:
 
             return output_pdf_path
 
-    def sign_pdf_with_key(self, pdf_path, private_key_path, output_folder):
+    def sign(self, pdf_path, private_key_path, output_folder):
         """
         Signs PDF with private key
 
@@ -171,25 +169,7 @@ class Report:
         with open(output_pdf_path, "wb") as output_file:
             writer.write(output_file)
 
-    def generate_signature(self, content, private_key_path):
-        self.log.debug(f"{self.__class__.__name__}.generate_signature()")
-
-        with open(private_key_path, "rb") as key_file:
-            private_key = serialization.load_pem_private_key(
-                key_file.read(), password=None, backend=default_backend()
-            )
-
-        signature = private_key.sign(
-            content,
-            padding.PSS(
-                mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH
-            ),
-            hashes.SHA256(),
-        )
-
-        return signature
-
-    def verify_pdf_signature(self, pdf_path, public_key_path):
+    def validate(self, pdf_path, public_key_path):
         """
         Checks if signed PDF was altered or not using public key
 
@@ -200,7 +180,7 @@ class Report:
         Returns:
             bool: Result of check
         """
-        self.log.debug(f"{self.__class__.__name__}.verify_pdf_signature()")
+        self.log.debug(f"{self.__class__.__name__}.verify()")
         with open(public_key_path, "rb") as key_file:
             public_key = serialization.load_pem_public_key(
                 key_file.read(), backend=default_backend()
