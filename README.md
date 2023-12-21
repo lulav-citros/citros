@@ -1,6 +1,5 @@
 log
 
-
 citros comands... will:
 
 citros_imp -> prints all cli stuff to screen and file.
