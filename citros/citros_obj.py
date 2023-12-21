@@ -4,19 +4,24 @@ import logging
 from pathlib import Path
 from rich.logging import RichHandler
 from rich import print, inspect, print_json
+# import logger
+from .logger import get_logger, shutdown_log
 
 
 class CitrosException(Exception):
     def __init__(self, message="Simulation exception."):
         super().__init__(message)
 
+
 class CitrosNotFoundException(CitrosException):
     def __init__(self, message="No batch found."):
         super().__init__(message)
-        
+
+
 class FileNotFoundException(CitrosException):
     def __init__(self, message="No batch found."):
         super().__init__(message)
+
 
 class NoValidException(CitrosException):
     def __init__(self, message="No batch found."):
@@ -24,7 +29,7 @@ class NoValidException(CitrosException):
 
 
 class CitrosObj:
-    """Object representing .citros/*.json file."""
+    """Object representing .citros/*.json filew."""
 
     #####################
     ##### overrides #####
@@ -61,11 +66,6 @@ class CitrosObj:
             self.name = name[:-5]
         self.file = self.name + ".json"
 
-        if self.debug:
-            print(
-                f"{'   '*level}{self.__class__.__name__}.init(name={self.name}, new={new})",
-            )
-
         if root is None:
             raise CitrosException(f'root cant be "{root}"')
         if name is None:
@@ -81,23 +81,16 @@ class CitrosObj:
         # path to .citros folder
         self.root_citros = self.root / ".citros"
 
-        # print("self.root_citros", self.root_citros, name)
-
+        self._init_log(log)
+        
+        self.log.debug(
+            f"{'   '*level}{self.__class__.__name__}.init(name={self.name}, new={new})",
+        )
+        
         # holds tha main citros object.
         self.citros = citros
         if citros is None:
             self.citros = self
-
-        if log is None:
-            logging.basicConfig(
-                level=os.environ.get("LOGLEVEL", "INFO"),
-                format="%(message)s",
-                datefmt="[%X]",
-                handlers=[RichHandler(rich_tracebacks=True)],
-            )
-            self.log = logging.getLogger(__name__)
-        else:
-            self.log = log
 
         self.data = {}
         if self.new:
@@ -143,6 +136,24 @@ class CitrosObj:
     ###################
     ##### private #####
     ###################
+    def _init_log(self, log=None):
+        self.log = log
+        if self.log is None:
+            log_dir = self.root_citros / "logs"
+            if self.new:
+                log_dir.mkdir(parents=True, exist_ok=True)
+            else:
+                if not log_dir.exists():
+                    Path.home().joinpath(".citros/logs").mkdir(parents=True, exist_ok=True)
+                    log_dir = Path.home().joinpath(".citros/logs")                    
+            
+            self.log = get_logger(
+                __name__,
+                log_level=os.environ.get("LOGLEVEL", "DEBUG" if self.debug else "INFO"),
+                log_file=str(log_dir / "citros.log"),
+                verbose=self.verbose
+            )        
+            
     def _validate(self) -> bool:
         """Validate .json file."""
         raise NoValidException()

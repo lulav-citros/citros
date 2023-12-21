@@ -7,6 +7,6 @@
 #  ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 # ==============================================
 
-from .logger import get_logger, shutdown
+from .logger import get_logger, shutdown_log
 
-__all__ = ["get_logger" "shutdown"]
+__all__ = [get_logger, shutdown_log]

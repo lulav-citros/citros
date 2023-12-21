@@ -1,12 +1,19 @@
 import sys
 import logging
-
+from rich.logging import RichHandler
+from rich import print, inspect, print_json
 from logging.handlers import TimedRotatingFileHandler
 
 
 FORMATTER = logging.Formatter(
     "[%(asctime)s] [%(name)s.%(funcName)s:%(lineno)d] [%(levelname)s]: %(message)s"
 )
+
+
+def get_rich_hangler():
+    handler = RichHandler(rich_tracebacks=True)
+    handler.setFormatter(FORMATTER)
+    return RichHandler(rich_tracebacks=True)
 
 
 # log to console
@@ -23,51 +30,39 @@ def get_file_handler(log_file):
     return file_handler
 
 
-def get_log_level(level: str):
-    if level == "debug":
+def str_to_log_level(level: str):
+    if level == "debug" or level == "DEBUG":
         return logging.DEBUG
-    elif level == "info":
+    elif level == "info" or level == "INFO":
         return logging.INFO
-    elif level == "warn":
+    elif level == "warn" or level == "WARN":
         return logging.WARNING
-    elif level == "error":
+    elif level == "error" or level == "ERROR":
         return logging.ERROR
     else:
         # default to debug on invalid input
-        return logging.DEBUG
-
-
-Loggers = {}
+        return logging.INFO
 
 
 def get_logger(
     logger_name,
-    batch_run_id=None,
-    simulation_run_id=None,
-    log_level="debug",
+    log_level="info",
     log_file=".citros/logs/citros.log",
-    on_cluster=False,
+    verbose=False,
 ):
-    logger_name = f"{logger_name}-{batch_run_id}-{simulation_run_id}"
-
-    if Loggers.get(logger_name, None):
-        return Loggers[logger_name]
-
     logger = logging.getLogger(logger_name)
-    logger.setLevel(get_log_level(log_level))
+    logger.setLevel(str_to_log_level(log_level))
 
     file_handler = get_file_handler(log_file)
     logger.addHandler(file_handler)
 
     # write to console when debugging
-    if log_level == "debug" or on_cluster:
-        console_handler = get_console_handler()
-        logger.addHandler(console_handler)
+    if verbose:
+        # logger.addHandler(get_console_handler())
+        logger.addHandler(get_rich_hangler())
 
-    Loggers[logger_name] = logger
-
-    return Loggers[logger_name]
+    return logger
 
 
-def shutdown():
+def shutdown_log():
     logging.shutdown()

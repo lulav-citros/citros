@@ -46,7 +46,14 @@ def parser_run(main_sub, epilog=None):
     parser.add_argument(
         "-s", "--simulation_name", nargs="?", default=None, help="Simulation name"
     )
-    parser.add_argument("-i", "--run_id", nargs="?", default="", help="run id")
+
+    parser.add_argument(
+        "--version",
+        nargs="?",
+        default=None,
+        help="the batch run version. .citros/data/{sim_name}/{batch_name}/{ **batch_version** }/{sid}",
+    )
+
     parser.add_argument(
         "-c",
         "--completions",
@@ -54,6 +61,14 @@ def parser_run(main_sub, epilog=None):
         default=1,
         help="number of times to run the simulation",
     )
+    parser.add_argument(
+        "-i",
+        "--index",
+        nargs="?",
+        default=-1,
+        help="the pard of the batch. if -1 will run all the batch",
+    )
+
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )

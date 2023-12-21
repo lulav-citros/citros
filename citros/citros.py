@@ -13,7 +13,13 @@ from citros.utils import validate_dir, validate_file
 from .settings import Settings
 from .simulation import Simulation
 from .parameter_setup import ParameterSetup
-from .citros_obj import CitrosObj, CitrosException, FileNotFoundException, CitrosNotFoundException,NoValidException
+from .citros_obj import (
+    CitrosObj,
+    CitrosException,
+    FileNotFoundException,
+    CitrosNotFoundException,
+    NoValidException,
+)
 
 from rich.traceback import install
 from rich.logging import RichHandler
@@ -97,14 +103,18 @@ class Citros(CitrosObj):
 
     # overriding
     def _load(self):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
+
         # loads the main file (project.json)
         try:
+            self.log.debug(f"loading .citros/project.json")
             super()._load()
         except FileNotFoundError as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
             raise FileNotFoundException(f"simulation file {self.file} does not exist.")
 
         # loads the settings.json file
+        self.log.debug(f"loading .citros/settings.json")
         self.settings = Settings(
             "settings",
             root=self.root,
@@ -118,8 +128,10 @@ class Citros(CitrosObj):
 
         # loads the parameter_setups
         for file in glob.glob(
-            "*.json", root_dir=f"{self.root_citros}/parameter_setups/"
+            f"{self.root_citros}/parameter_setups/*.json"
         ):
+            file = file.split("/")[-1]
+            self.log.debug(f"loading parameter_setup: {file}")
             self.parameter_setups.append(
                 ParameterSetup(
                     file,
@@ -134,8 +146,10 @@ class Citros(CitrosObj):
             )
 
         # loads the simulations
-        for file in glob.glob("*.json", root_dir=f"{self.root_citros}/simulations/"):
+        for file in glob.glob(f"{self.root_citros}/simulations/*.json"):
+            file = file.split("/")[-1]
             # self.simulations.append(Simulation(self.root, file, self.log, citros=self))
+            self.log.debug(f"loading simulation: {file}")
             self.simulations.append(
                 Simulation(
                     file,
@@ -154,11 +168,13 @@ class Citros(CitrosObj):
 
     # overriding
     def _new(self):
+        self.log.debug(f"{'   '*self.level}{self.__class__.__name__}._new()")
+
         # create the .citros folder
         Path(self.root_citros).mkdir(parents=True, exist_ok=True)
 
         # settings
-        # .citros/settings.json
+        self.log.debug(f"creating .citros/settings.json")
         self.settings = Settings(
             "settings",
             root=self.root,
@@ -180,7 +196,7 @@ class Citros(CitrosObj):
         self._save()
 
         # parameter setups
-        # .citros/parameter_setups/default_param_setup.json
+        self.log.debug(f"creating .citros/parameter_setups/default_param_setup.json")
         self.parameter_setups = ParameterSetup(
             "default_param_setup",
             root=self.root,
@@ -198,7 +214,7 @@ class Citros(CitrosObj):
             shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
 
         # create simulation per launch file as default
-        # .citros/simulations/*
+        self.log.debug(f"creating .citros/simulations/*")
         (self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
         self._create_simulations()
         with importlib_resources.files(f"data.doc").joinpath(
@@ -206,10 +222,10 @@ class Citros(CitrosObj):
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
 
-        # .citros/.gitignore
+        self.log.debug(f"creating .citros/.gitignore")
         self._create_gitignore()
 
-        # .citros/notebooks
+        self.log.debug(f"creating .citros/notebooks")
         (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "notebooks/README.md"
@@ -217,14 +233,14 @@ class Citros(CitrosObj):
             shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
         # TODO: copy some sample notebooks.
 
-        # .citros/data
+        self.log.debug(f"creating .citros/data")
         (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "data/README.md"
         ) as md_file_path:
             shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
 
-        # .citros/reports
+        self.log.debug(f"creating .citros/reports")
         (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
         with importlib_resources.files(f"data.doc").joinpath(
             "reports/README.md"
@@ -299,6 +315,6 @@ class Citros(CitrosObj):
         if not Path(self.root, ".gitignore").exists():
             with open(Path(self.root, ".gitignore"), "w") as file:
                 ignores = linesep.join(
-                    ["data/", "auth", "__pycache__/"]
+                    [".citros/data/", ".citros/logs/"]
                 )  # add more as needed.
                 file.write(ignores)
