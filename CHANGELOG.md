@@ -2,6 +2,13 @@
 
 
 
+## v0.1.2 (2023-12-21)
+
+### Fix
+
+* fix(version): version ([`bd91a0f`](https://github.com/lulav-citros/citros/commit/bd91a0ff31038860515e8b00b74778e2283a6c2e))
+
+
 ## v0.1.1 (2023-12-21)
 
 ### Fix
