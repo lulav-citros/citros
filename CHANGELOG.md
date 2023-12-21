@@ -2,6 +2,19 @@
 
 
 
+## v0.1.3 (2023-12-21)
+
+### Fix
+
+* fix(functions): Merge pull request #9 from lulav-citros/dev
+
+fix(functions) function fix ([`a096966`](https://github.com/lulav-citros/citros/commit/a096966b3c1e85d23146a5e8e542689ef82d8568))
+
+### Unknown
+
+* function fix ([`f81ff30`](https://github.com/lulav-citros/citros/commit/f81ff30d9907780ddc77a0b145cb99cc83fbce51))
+
+
 ## v0.1.2 (2023-12-21)
 
 ### Fix
