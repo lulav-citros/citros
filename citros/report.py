@@ -1,19 +1,20 @@
 import os
 import json
 import sys
-from pathlib import Path
 import nbformat
+import importlib_resources
+
 from PyPDF2 import PdfReader, PdfWriter
+from pathlib import Path
 from nbconvert import HTMLExporter, PDFExporter
 from nbconvert.preprocessors import ExecutePreprocessor
 from nbconvert.preprocessors import CellExecutionError
 from traitlets.config import Config
+from weasyprint import HTML
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
-from weasyprint import HTML
-import importlib_resources
 
 
 from .logger import get_logger, shutdown_log
