@@ -106,7 +106,7 @@ Sometimes you may want to access some information that is part of the Citros con
     def func_with_context(num, context):
         return num + float(context['run_id'])
 
-`context` is a dictionary with key/value pairs describing the current Citros context. Currently the only key is `run_id`, but more may be added in the future. Then, you would call it from your `parameter_setup.json` file:
+`context` is a dictionary with key/value pairs describing the current Citros context. Currently the only key is `sid` and `simulation` that holds that name of the simulation, but more may be added in the future. Then, you would call it from your `parameter_setup.json` file:
 
     "init_speed": {
         "function": "my_func.py:func_with_context",
@@ -114,6 +114,15 @@ Sometimes you may want to access some information that is part of the Citros con
     }
 
 Notice that the argument for `context` is added automatically for you - the `args` list only contains the argument for the first parameter (`num`).
+
+
+```json 
+# example context
+context = {
+    "sid": 0,
+    "simulation": "cannon_analytic"
+}
+```
 
 </details>
 

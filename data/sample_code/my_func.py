@@ -11,3 +11,7 @@ def my_awesome_func(num):
 
 def get_simulation_name(context):
     return context["simulation"]
+
+
+def get_sid(context):
+    return context["sid"]
