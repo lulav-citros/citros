@@ -30,7 +30,7 @@ class ParameterSetup(CitrosObj):
 
         destination: the simulation recording folder.
         """
-
+        self.log.debug(f"{self.__class__.__name__}._validate()")
         rendered_parameters = self._evaluate(context)
 
         self.log.debug("Saving parameters to files. ")
@@ -111,6 +111,7 @@ class ParameterSetup(CitrosObj):
 
         print(result)  # Output: {"c": ..., "b": 8, "a": 5}
         """
+        self.log.debug(f"{self.__class__.__name__}._evaluate(context={context})")
 
         def load_function(function_path, function_name):
             self.log.debug(
@@ -118,6 +119,7 @@ class ParameterSetup(CitrosObj):
             )
 
             if not function_path.startswith("numpy"):
+                self.log.debug("Loading user defined function.")
                 spec = importlib.util.spec_from_file_location(
                     "user_module", function_path
                 )
@@ -125,6 +127,7 @@ class ParameterSetup(CitrosObj):
                 spec.loader.exec_module(module)
                 function = getattr(module, function_name)
             else:
+                self.log.debug("Loading numpy function.")
                 function = eval(function_path)
             return function
 
@@ -216,16 +219,25 @@ class ParameterSetup(CitrosObj):
                     )
 
                 function = load_function(function_path, function_name)
-
                 # Check if function has a parameter named `context` and add it if so
-                if (
-                    function_name is not None
-                    and "context" in inspect.signature(function).parameters
-                ):
-                    value["args"].append(context)
+                if value.get("args") is None:
+                    value["args"] = []
+
+                try:
+                    if (
+                        function_name is not None
+                        and "context" in inspect.signature(function).parameters
+                    ):
+                        value["args"].append(context)
+                except Exception as e:
+                    self.log.exception(e)
 
                 args = [evaluate_value(arg) for arg in value["args"]]
+
                 result = function(*args)
+                self.log.debug(
+                    f"function = {function}, args = {args}, result = {result}"
+                )
 
                 # convert numpy scalars to native scalars, if needed.
                 if isinstance(result, (numpy.generic)):
