@@ -60,6 +60,8 @@ class Report:
         # config = Config()
         # config.ExecutePreprocessor.kernel_name = "python3"
 
+
+
         for notebook_path in notebook_paths:
             try:
                 with open(notebook_path, "r", encoding="utf-8") as nb_file:
@@ -80,6 +82,18 @@ class Report:
             # import os
             os.environ["REPORT_ID"] = "CITROS"
             os.environ["BATCH_ID"] = "BATCH_ID"
+
+            # os.environ["CITROS_REPO"] = "CITROS"
+            # os.environ["CITROS_SIMULATION"] = "CITROS"
+            # os.environ["bid"] = "CITROS"
+            # os.environ["CITROS_SIMULATION_RUN_ID"] = "CITROS"
+            os.environ["PG_HOST"] = "localhost"
+            os.environ["PG_PORT"] = "5454"
+            os.environ["PG_DATABASE"] = "citros"
+            os.environ["PG_SCHEMA"] = "citros"
+            os.environ["PG_USER"] = "citros"
+            os.environ["PG_PASSWORD"] = "password"
+
             execute_preprocessor = ExecutePreprocessor(
                 timeout=600, kernel_name="python3"
             )
@@ -114,7 +128,6 @@ class Report:
             "r",
         ) as template_file:
             html_template = template_file.read()
-
         for notebook_path in notebook_paths:
             output_pdf_path = os.path.join(
                 output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
@@ -138,13 +151,18 @@ class Report:
             else:
                 css_content = Path(css_file_path).read_text()
 
-            body = "<style>\n" + css_content + "\n</style>\n" + body
+            body = body + "<style>\n" + css_content + "\n</style>\n"
 
-            final_html = html_template.replace("{{ notebook_content }}", body)
+            final_html = html_template.replace("{{ notebook_content }}", body).replace("{{ notebook_path }}", os.path.basename(notebook_path))
+            
+            ## For testing  ##
+            # output_html_path = os.path.join(output_folder, os.path.basename(notebook_path).replace(".ipynb", ".html"))
+            
+            # with open(output_html_path, 'w') as html_file:
+            #     html_file.write(final_html)
 
             HTML(string=final_html).write_pdf(output_pdf_path)
-
-            return output_pdf_path
+        return output_pdf_path
 
     def sign(self, pdf_path, private_key_path, output_folder):
         """
