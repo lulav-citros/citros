@@ -42,7 +42,13 @@ def parser_report_generate(subparser, epilog=None):
     parser.add_argument("-e", "--execute", action="store_true", help="Execute notebooks")
     parser.add_argument("-r", "--render", action="store_true", help="Render notebooks to PDF")
     parser.add_argument("-s", "--sign", action="store_true", help="Sign PDFs")
-    parser.add_argument("paths", nargs='*', help="All paths in the order of key, notebooks, style (optional), settings, output")
+    parser.add_argument("-key", "--key-path", help="Path to private key file for signing", required='-s' in sys.argv)
+    parser.add_argument("-notebooks", nargs='+', help="Paths to Jupyter notebooks")
+    parser.add_argument("-style", "--style-path", help="Path to CSS style file", default=None)
+    parser.add_argument("-settings", "--settings-path", help="Path to settings JSON file")
+    parser.add_argument("-output", "--output-folder", help="Path to output folder")
+    # parser.add_argument("paths", nargs='*', help="All paths in the order of key, notebooks, style (optional), settings, output")
+    
 
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
@@ -76,7 +82,10 @@ def parser_report_validate(subparser, epilog=None):
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
     parser.add_argument("-c", "--check", action="store_true", help="Verify PDF signatures")
-    parser.add_argument("paths", nargs='*', help="Path to the public key file for verification, followed by paths to PDF files to be verified")
+    # parser.add_argument("paths", nargs='*', help="Path to the public key file for verification, followed by paths to PDF files to be verified")
+    parser.add_argument("-key", "--public-key-path", help="Path to public key file for verification", required=True)
+    parser.add_argument("-pdfs", nargs='+', help="Paths to PDF files to be verified", required=True)
+    parser.add_argument("-settings", "--settings-path", help="Path to settings JSON file", required=True)
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
