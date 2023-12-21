@@ -667,7 +667,7 @@ def report_generate(args, argv):
         print("Error: Missing key for signing.")
         return
 
-    report = Report()
+    report = Report(debug=args.debug, verbose=args.verbose)
 
     # Execute notebooks
     print("[green]Executing notebook...")
