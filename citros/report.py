@@ -20,6 +20,11 @@ from cryptography.hazmat.primitives import serialization
 from .logger import get_logger, shutdown_log
 
 
+class NoNotebookFoundException(Exception):
+    def __init__(self, message="No Notebook found."):
+        super().__init__(message)
+
+
 class Report:
     ###################
     ##### private #####
@@ -56,17 +61,21 @@ class Report:
         # config.ExecutePreprocessor.kernel_name = "python3"
 
         for notebook_path in notebook_paths:
-            with open(notebook_path, "r", encoding="utf-8") as nb_file:
-                try:
-                    nb_node = nbformat.read(nb_file, as_version=4)
-                except nbformat.reader.NotJSONError:
-                    self.log.debug(f"The file {notebook_path} is not valid JSON.")
-                    continue
-                except nbformat.validator.ValidationError as e:
-                    self.log.debug(
-                        f"The file {notebook_path} is not a valid notebook; validation error: {e}"
-                    )
-                    continue
+            try:
+                with open(notebook_path, "r", encoding="utf-8") as nb_file:
+                    try:
+                        nb_node = nbformat.read(nb_file, as_version=4)
+                    except nbformat.reader.NotJSONError:
+                        self.log.debug(f"The file {notebook_path} is not valid JSON.")
+                        continue
+                    except nbformat.validator.ValidationError as e:
+                        self.log.debug(
+                            f"The file {notebook_path} is not a valid notebook; validation error: {e}"
+                        )
+                        continue
+            except FileNotFoundError:
+                self.log.error(f"The file {notebook_path} does not exist.")
+                raise NoNotebookFoundException
 
             # import os
             os.environ["REPORT_ID"] = "CITROS"
@@ -110,8 +119,12 @@ class Report:
             output_pdf_path = os.path.join(
                 output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
             )
-            with open(notebook_path) as nb_file:
-                nb_node = nbformat.read(nb_file, as_version=4)
+            try:
+                with open(notebook_path) as nb_file:
+                    nb_node = nbformat.read(nb_file, as_version=4)
+            except FileNotFoundError:
+                self.log.error(f"The file {notebook_path} does not exist.")
+                raise NoNotebookFoundException
 
             (body, _) = html_exporter.from_notebook_node(nb_node)
 

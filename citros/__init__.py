@@ -17,11 +17,12 @@ from .citros_obj import (
 )
 from .utils import str_to_bool, suppress_ros_lan_traffic
 from .batch import Batch
+from .batch_uploader import NoConnectionToCITROSDBException
 from .logger import get_logger, shutdown_log
 from .service import data_access_service, NoDataFoundException
 
 # reporting
-from .report import Report
+from .report import Report, NoNotebookFoundException
 
 __all__ = [
     Citros,
@@ -38,4 +39,5 @@ __all__ = [
     str_to_bool,
     suppress_ros_lan_traffic,
     Report,
+    NoNotebookFoundException,
 ]
