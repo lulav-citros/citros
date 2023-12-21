@@ -2,6 +2,32 @@
 
 
 
+## v0.1.7 (2023-12-21)
+
+### Fix
+
+* fix(req): Merge pull request #13 from lulav-citros/dev
+
+Dev ([`a88639d`](https://github.com/lulav-citros/citros/commit/a88639d602faeac18e791f721537ab6511e14460))
+
+### Unknown
+
+* Update numpy version in requirements.txt ([`904ae7b`](https://github.com/lulav-citros/citros/commit/904ae7bfaeca0638ea1470782abc98b6ab155fd8))
+
+* Fix issues with CITROS DB connection and handling of missing notebooks ([`c70aff2`](https://github.com/lulav-citros/citros/commit/c70aff2629624654e7ea15c5bfad1fd8363698df))
+
+
+## v0.1.6 (2023-12-21)
+
+### Fix
+
+* fix(gitignore): Merge pull request #12 from lulav-citros/dev
+
+fix(gitignore): gitignore ([`0fc2999`](https://github.com/lulav-citros/citros/commit/0fc2999999704dabc772e1f5c5038b85cff5dbf3))
+
+* fix(gitignore): gitignore ([`058c94d`](https://github.com/lulav-citros/citros/commit/058c94d2a4d773df1461d3dad87741ce8b9c9084))
+
+
 ## v0.1.5 (2023-12-21)
 
 ### Fix
