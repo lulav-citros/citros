@@ -1,15 +1,16 @@
 import json
+import yaml
+import numpy
 import shutil
+import inspect
+import importlib.util
+import importlib_resources
 
 from pathlib import Path
 
-import importlib_resources
-import importlib.util
-
-import yaml
-from citros.parsers import ParserRos2
 from .citros_obj import CitrosObj
 from .utils import get_data_file_path, validate_dir
+from citros.parsers import ParserRos2
 
 
 class ParameterSetup(CitrosObj):
@@ -208,7 +209,10 @@ class ParameterSetup(CitrosObj):
                     # at this point function_path is only the file name.
                     function_path, function_name = function_detail
                     function_path = str(
-                        self.citros.PARAMS_FUNCTIONS_DIR / function_path
+                        self.citros.root_citros
+                        / "parameter_setups"
+                        / "functions"
+                        / function_path
                     )
 
                 function = load_function(function_path, function_name)

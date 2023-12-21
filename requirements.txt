@@ -49,4 +49,4 @@ PyPDF2
 reportlab
 cryptography
 weasyprint
-jupiter
+nbformat
