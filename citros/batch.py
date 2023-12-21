@@ -255,7 +255,7 @@ class Batch(BatchUploader):
         sim_dir = self.batch_dir / str(sid)
         # create log that will write to the simulation dir.
         ret = self.simulation.run(
-            sim_dir, trace_context=trace_context, ros_domain_id=ros_domain_id
+            sim_dir, sid=sid, trace_context=trace_context, ros_domain_id=ros_domain_id
         )
 
         self.log.debug(f"{self.__class__.__name__}.run(): ret {ret}")
