@@ -2,6 +2,17 @@
 
 
 
+## v0.1.6 (2023-12-21)
+
+### Fix
+
+* fix(gitignore): Merge pull request #12 from lulav-citros/dev
+
+fix(gitignore): gitignore ([`0fc2999`](https://github.com/lulav-citros/citros/commit/0fc2999999704dabc772e1f5c5038b85cff5dbf3))
+
+* fix(gitignore): gitignore ([`058c94d`](https://github.com/lulav-citros/citros/commit/058c94d2a4d773df1461d3dad87741ce8b9c9084))
+
+
 ## v0.1.5 (2023-12-21)
 
 ### Fix
