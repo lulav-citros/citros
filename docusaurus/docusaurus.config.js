@@ -123,7 +123,7 @@ const config = {
         logo: {
           alt: "CITROS Logo",
           src: "img/citros.png",
-          href: "https://citros.io",
+          href: "https://docs.citros.io",
         },
         items: [
           {
