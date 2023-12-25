@@ -105,6 +105,8 @@ class Citros(CitrosObj):
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
 
+        self.copy_data_files()
+
         # loads the main file (project.json)
         try:
             self.log.debug(f"loading .citros/project.json")
@@ -170,6 +172,8 @@ class Citros(CitrosObj):
 
         # create the .citros folder
         Path(self.root_citros).mkdir(parents=True, exist_ok=True)
+        # copy data files.
+        self.copy_data_files()
 
         # settings
         self.log.debug(f"creating .citros/settings.json")
@@ -184,7 +188,7 @@ class Citros(CitrosObj):
             level=self.level + 1,
         )
 
-        self._parser_ros2 = ParserRos2(self.log)
+        self._parser_ros2 = ParserRos2(self.log, self.get_citros_ignore_list())
         # get data from ros2
         project_data = self._parser_ros2.parse(str(self.root))
         with open(self.path(), "w") as file:
@@ -205,45 +209,10 @@ class Citros(CitrosObj):
             debug=self.debug,
             level=self.level + 1,
         )
-        (self.root_citros / "parameter_setups").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "parameter_setups/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
 
         # create simulation per launch file as default
         self.log.debug(f"creating .citros/simulations/*")
-        (self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
         self._create_simulations()
-        with importlib_resources.files(f"data.doc").joinpath(
-            "simulations/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
-
-        self.log.debug(f"creating .citros/.gitignore")
-        self._create_gitignore()
-
-        self.log.debug(f"creating .citros/notebooks")
-        (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "notebooks/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
-        # TODO: copy some sample notebooks.
-
-        self.log.debug(f"creating .citros/data")
-        (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "data/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
-
-        self.log.debug(f"creating .citros/reports")
-        (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "reports/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")
 
     #################
     ##### utils #####
@@ -309,8 +278,68 @@ class Citros(CitrosObj):
                 )
             )
 
-    def _create_gitignore(self):
-        # if not Path(self.root_citros, ".gitignore").exists():
-        with open(Path(self.root_citros, ".gitignore"), "w") as file:
-            ignores = linesep.join(["data/", "logs/"])  # add more as needed.
-            file.write(ignores)
+    def get_citros_ignore_list(self):
+        if Path(self.root_citros, ".citrosignore").exists():
+            with open(Path(self.root_citros, ".citrosignore"), "r") as file:
+                lines = [line.strip() for line in file if "#" not in line]
+                self.log.debug(f".citrosignore contenrs: {lines}")
+                return lines
+        else:
+            self.log.debug(f"Could not find .citrosignore in {self.root_citros}")
+            return []
+
+    def copy_data_files(self):
+        # simulations
+        Path(self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "simulations/README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
+
+        # parameter_setups
+        Path(self.root_citros / "parameter_setups").mkdir(parents=True, exist_ok=True)
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "parameter_setups/README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
+
+        # .gitignore
+        self.log.debug(f"creating .citros/.gitignore")
+        with importlib_resources.files(f"data.misc").joinpath(
+            ".gitignore"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros)
+
+        # .citrosignore
+        # if not Path(self.root_citros, ".citrosignore").exists():  # avoid overwriting
+        with importlib_resources.files(f"data.misc").joinpath(
+            ".citrosignore"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros)
+
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"README.md")
+
+        self.log.debug(f"creating .citros/notebooks")
+        (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "notebooks/README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
+        # TODO: copy some sample notebooks.
+
+        self.log.debug(f"creating .citros/data")
+        (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "data/README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
+
+        self.log.debug(f"creating .citros/reports")
+        (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
+        with importlib_resources.files(f"data.doc.folder").joinpath(
+            "reports/README.md"
+        ) as md_file_path:
+            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")

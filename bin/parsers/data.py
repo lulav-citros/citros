@@ -26,7 +26,9 @@ def parser_data_list(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -59,7 +61,9 @@ def parser_data_service_status(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -94,7 +98,9 @@ def parser_data_service(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -134,7 +140,9 @@ def parser_data_db_create(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -169,7 +177,9 @@ def parser_data_db_status(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -204,7 +214,9 @@ def parser_data_db_stop(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -239,7 +251,9 @@ def parser_data_db_logs(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -274,7 +288,9 @@ def parser_data_db_clean(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -309,7 +325,9 @@ def parser_data_db(parent_subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -349,7 +367,9 @@ def parser_data(main_sub, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),

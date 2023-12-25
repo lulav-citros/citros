@@ -87,7 +87,7 @@ class ParameterSetup(CitrosObj):
             ) as md_file_path:
                 shutil.copy2(md_file_path, destination / f"my_func.py")
 
-            with importlib_resources.files(f"data.doc").joinpath(
+            with importlib_resources.files(f"data.doc.folder").joinpath(
                 "parameter_setups/functions/README.md"
             ) as md_file_path:
                 shutil.copy2(md_file_path, destination / f"README.md")

@@ -3,6 +3,8 @@ import json
 import sys
 import uuid
 import shutil
+import importlib_resources
+
 from pathlib import Path
 from citros.stats import SystemStatsRecorder
 from rich import print, inspect, print_json
@@ -509,7 +511,7 @@ class Simulation(CitrosObj):
             self._load()
             # return
 
-        Path(self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
+        Path(self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)        
 
         # got from __init__
         if self.launch_file is None or self.package_name is None:

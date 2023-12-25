@@ -131,7 +131,7 @@ class Report:
         # dl = DictLoader({"citros": html_template})
 
         # html_exporter = HTMLExporter(extra_loaders=[dl], template_file="citros")
-
+        returns = []
         for notebook_path in notebook_paths:
             output_pdf_path = os.path.join(
                 output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
@@ -156,7 +156,8 @@ class Report:
 
             HTML(string=body).write_pdf(output_pdf_path)
 
-            return output_pdf_path
+            returns.append(output_pdf_path)
+        return returns
 
     def sign(self, pdf_path, private_key_path, output_folder):
         """

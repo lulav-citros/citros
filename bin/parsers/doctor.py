@@ -22,7 +22,8 @@ def parser_doctor(main_sub, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath("doctor.md"), "r"
+                    importlib_resources.files(f"data.doc.cli").joinpath("doctor.md"),
+                    "r",
                 ).read()
             ),
             subtitle=f"[{citros_version}]",
