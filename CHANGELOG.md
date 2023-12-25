@@ -2,6 +2,43 @@
 
 
 
+## v0.1.8 (2023-12-25)
+
+### Fix
+
+* fix(gitignore): Merge pull request #15 from lulav-citros/dev
+
+Dev ([`fa49b66`](https://github.com/lulav-citros/citros/commit/fa49b661c88b7a0dd1d14759c8cc939d7ab96bc9))
+
+* fix(citrosignore): new file ([`c40ee01`](https://github.com/lulav-citros/citros/commit/c40ee01c5b09b2b8792e0650acaaca728b0ff82b))
+
+### Unknown
+
+* Add new files and update existing files ([`8882bf0`](https://github.com/lulav-citros/citros/commit/8882bf0138be5e91233a2a9795f505425822f88b))
+
+* Refactor report rendering code ([`04bb230`](https://github.com/lulav-citros/citros/commit/04bb230e83326d3317334af494552f1baf7c5c63))
+
+* Merge branch &#39;main&#39; into dev ([`9d43ee4`](https://github.com/lulav-citros/citros/commit/9d43ee4030a8af8a4dfeb6499fa4019d8f80dd3f))
+
+* Add code to generate HTML report and write it to file ([`9e326e0`](https://github.com/lulav-citros/citros/commit/9e326e08e002a384e0a46279c431f98e825670d3))
+
+* Merge pull request #14 from lulav-citros/templates_1
+
+Templates update, render fixes ([`55b63a8`](https://github.com/lulav-citros/citros/commit/55b63a856eb6c00fd22ea78512793087aa1c3013))
+
+* template improvement, fixes ([`a45702e`](https://github.com/lulav-citros/citros/commit/a45702e5df709ae2f2cacb8f51b848a300bff148))
+
+* Merge branch &#39;dev&#39; into templates_1 ([`18fdc8a`](https://github.com/lulav-citros/citros/commit/18fdc8af7549d1f04dfadd1255a3f6087d209b9e))
+
+* in progress ([`003ee55`](https://github.com/lulav-citros/citros/commit/003ee5579f513efb6a5890552580afd2aef9b795))
+
+* Merge branch &#39;main&#39; into dev ([`f09b43d`](https://github.com/lulav-citros/citros/commit/f09b43d373c6379f20e17bd7f84556ff42c7796b))
+
+* Update PostgreSQL environment variables in report.py ([`342474c`](https://github.com/lulav-citros/citros/commit/342474ce187d223fb53e5dc64d3c564cebf0f29f))
+
+* temp ([`79fc089`](https://github.com/lulav-citros/citros/commit/79fc089f86b8ecfc51320c1a0633d194dcadc955))
+
+
 ## v0.1.7 (2023-12-21)
 
 ### Fix
