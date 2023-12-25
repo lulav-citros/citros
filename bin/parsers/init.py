@@ -22,7 +22,7 @@ def parser_init(main_sub, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath("init.md"), "r"
+                    importlib_resources.files(f"data.doc.cli").joinpath("init.md"), "r"
                 ).read()
             ),
             subtitle=f"[{citros_version}]",

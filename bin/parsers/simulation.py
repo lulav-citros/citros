@@ -25,7 +25,9 @@ def parser_simulation_run(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -56,7 +58,9 @@ def parser_simulation_list(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -86,7 +90,9 @@ def parser_simulation(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
