@@ -1,4 +1,4 @@
-from ._gql_base import _GqlBase
+
 from .citros_dict import CitrosDict
 from datetime import datetime, timezone, timedelta
 import os
@@ -7,7 +7,7 @@ import re
 import json
 from urllib.parse import quote
 
-class _GqlCursor(_GqlBase):
+class _GqlCursor():
     '''
     Communication with graph ql database
     '''
