@@ -33,7 +33,7 @@ setup(
     author=citros_meta.__author__,
     author_email=citros_meta.__author_email__,
     packages=find_packages(),
-    package_data={"": ["*.json", "*.sh", "*.py", "*.md", ".citrosignore"]},
+    package_data={"": ["*.json", "*.sh", "*.py", "*.md", ".gitignore", ".citrosignore"]},
     entry_points={
         "console_scripts": [
             "citros = bin.cli:main",
