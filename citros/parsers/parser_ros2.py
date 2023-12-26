@@ -72,7 +72,13 @@ class ParserRos2(ParserBase):
     def parse_makefile(self, package_path):
         path_to_cmake = Path(package_path, "CMakeLists.txt")
 
-        nodes = self.find_install_targets(path_to_cmake)
+        try:
+            nodes = self.find_install_targets(path_to_cmake)
+        except Exception as e:
+            self.log.exception(
+                f"Exception raised while trying to parse {path_to_cmake}"
+            )
+            nodes = []
 
         return {"cmake": str(path_to_cmake), "nodes": nodes}
 
