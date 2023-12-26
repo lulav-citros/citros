@@ -2,6 +2,13 @@
 
 
 
+## v0.1.9 (2023-12-26)
+
+### Fix
+
+* fix(gitignore): added to data ([`c522902`](https://github.com/lulav-citros/citros/commit/c522902b420614fecbd87eab9decc9e262c2ca14))
+
+
 ## v0.1.8 (2023-12-25)
 
 ### Fix
