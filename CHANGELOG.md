@@ -2,6 +2,13 @@
 
 
 
+## v0.1.10 (2023-12-26)
+
+### Fix
+
+* fix(parser_ros2): fix unsupported nodes ([`55e5177`](https://github.com/lulav-citros/citros/commit/55e5177091b1ca9d114a7c85b68dd1917955ae84))
+
+
 ## v0.1.9 (2023-12-26)
 
 ### Fix
