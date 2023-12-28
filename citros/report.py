@@ -197,6 +197,8 @@ class Report:
             self.validate()
         self.end()
 
+        return self.folder
+
     # report status.
     def start(self):
         self.log.debug(f"{self.__class__.__name__}.start()")

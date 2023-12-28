@@ -182,8 +182,6 @@ class Batch(BatchUploader):
             "completions": "",
             "status": "",
             "metadata": "",
-            "data_last_access": "",
-            "data_status": "UNLOADED",  # LOADED, UNLOADED, LOADING, ERROR
             "created_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
             "updated_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
         }

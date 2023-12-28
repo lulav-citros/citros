@@ -92,6 +92,42 @@ def parser_report_generate(subparser, epilog=None):
 
 
 # citros report list
+def parser_report_list(subparser, epilog=None):
+    description_path = "report/list.md"
+    help = "citros report list section"
+    parser = subparser.add_parser(
+        "list",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-dir", default=".", help="The working dir of the project")
+
+    # debug
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=report_list)
+
+    return parser
+
+
+# citros report validate
 def parser_report_validate(subparser, epilog=None):
     description_path = "report/validate.md"
     help = "citros report validate section"
@@ -166,6 +202,7 @@ def parser_report(subparser, epilog=None):
     subparser = parser.add_subparsers(dest="type")
     # report run/list
     parser_report_generate(subparser, epilog=epilog)
+    parser_report_list(subparser, epilog=epilog)
     parser_report_validate(subparser, epilog=epilog)
 
     return parser

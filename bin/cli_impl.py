@@ -188,28 +188,28 @@ def doctor(args, argv):
 
 ############################# Simulation implementation ##############################
 def simulation_list(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def simulation_run(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 ####################### parameter setup implementation ##############################
 def parameter_setup_new(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def parameter_setup_list(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def parameter_setup(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -259,6 +259,17 @@ def data(args, argv):
 
     batches = citros.get_batches(simulation=chosen_simulation)
     batches = [batch["name"] for batch in batches]
+    if batches == []:
+        print("[yellow]There are no batches for this simulation yet.")
+        print(
+            Panel.fit(
+                Padding(
+                    'You may run [green]"citros run"[/green] to create a new DB',
+                    1,
+                )
+            )
+        )
+        return
 
     chosen_batch = inquirer.fuzzy(
         message="Select Batch:", choices=batches, default="", border=True
@@ -289,6 +300,9 @@ def data(args, argv):
 
     # commands
     if action == "info":
+        print(
+            f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
+        )
         batch = citros.get_batch(
             simulation=chosen_simulation, name=chosen_batch, version=version
         )
@@ -298,12 +312,15 @@ def data(args, argv):
         console.print_json(data=batch.data)
 
     elif action == "load":
-        print(f"Uploading data to DB... { chosen_simulation / chosen_batch / version}")
+        print(
+            f"Uploading data to DB... { chosen_simulation} / {chosen_batch} / {version}"
+        )
         batch = citros.get_batch(
-            simulation=chosen_simulation, batch=chosen_batch, version=version
+            simulation=chosen_simulation, name=chosen_batch, version=version
         )
 
         try:
+            batch.unload()
             batch.upload()
         except NoConnectionToCITROSDBException:
             print("[red]CITROS DB is not running.")
@@ -315,7 +332,6 @@ def data(args, argv):
                     )
                 )
             )
-            batch["data_status"] = "UNLOADED"
             return
 
         console = Console()
@@ -323,24 +339,26 @@ def data(args, argv):
         console.print_json(data=batch.data)
 
     elif action == "unload":
-        print(f"Dropping data from DB... { chosen_simulation / chosen_batch / version}")
+        print(
+            f"Dropping data from DB... { chosen_simulation } / {chosen_batch} / {version}"
+        )
         batch = citros.get_batch(
-            simulation=chosen_simulation, batch=chosen_batch, version=version
+            simulation=chosen_simulation, name=chosen_batch, version=version
         )
 
         batch.unload()
 
     elif action == "delete":
-        print(f"deleting data from { chosen_simulation / chosen_batch / version}")
+        print(f"deleting data from { chosen_simulation } / {chosen_batch} / {version}")
         citros.delete_batch(
-            simulation=chosen_simulation, batch=chosen_batch, version=version
+            simulation=chosen_simulation, name=chosen_batch, version=version
         )
 
 
 def data_list(args, argv):
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
-        batches = citros.get_batches_flat()
+        flat_batches = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
             f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
@@ -362,21 +380,21 @@ def data_list(args, argv):
     table.add_column("Data", justify="right", style="green")
     table.add_column("completions", style="magenta", justify="left")
 
-    for batch in batches:
-        if batch["data_status"] == "LOADED":
-            data_status_clore = "green"
-        elif batch["data_status"] == "UNLOADED":
-            data_status_clore = "yellow"
+    for flat_batch in flat_batches:
+        if flat_batch["status"] == "LOADED":
+            status_clore = "green"
+        elif flat_batch["status"] == "UNLOADED":
+            status_clore = "yellow"
         else:
-            data_status_clore = "red"
+            status_clore = "red"
 
         table.add_row(
-            batch["simulation"],
-            batch["name"],
-            batch["version"],
-            batch["message"],
-            f"[{data_status_clore}]{batch['data_status']}",
-            batch["completions"],
+            flat_batch["simulation"],
+            flat_batch["name"],
+            flat_batch["version"],
+            flat_batch["message"],
+            f"[{status_clore}]{flat_batch['status']}",
+            flat_batch["completions"],
         )
 
     console = Console()
@@ -419,7 +437,7 @@ Listening on: [green]{str(root)}""",
 
 
 def data_service_status(args, argv):
-    # TODO[important]: implement data_status after making this sevice async. return status of service.
+    # TODO[important]: implement  after making this sevice async. return status of service.
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -434,7 +452,7 @@ def data_unload(args, argv):
 
 
 def data_db(args, argv):
-    # TODO[important]: implement data_status
+    # TODO[important]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -621,12 +639,12 @@ def data_db_clean(args, argv):
 
 
 ############################# REPORT implementation ##############################
-def reports(args, argv):
+def report(args, argv):
     print("reports...!!!")
     print("will print summery of all reports here.")
 
 
-def report(args, argv):
+def report_list(args, argv):
     print("reports...!!!")
     print("will print summery of all reports here.")
 
@@ -671,9 +689,9 @@ def report_generate(args, argv):
 
     # Execute notebooks
     print("[green]Executing notebook...")
-    report.run()
+    folder = report.run()
 
-    print(f"[green]Report generation completed at [blue]")
+    print(f'[green]Report generation completed at [blue]"{folder}"')
 
 
 def report_validate(args, argv):

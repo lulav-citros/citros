@@ -313,9 +313,6 @@ class Citros(CitrosObj):
         shutil.rmtree(self.root_citros / "data" / simulation / name / version)
 
     def get_batch(self, simulation: str, name: str, version=-1):
-        if type(version) is str:
-            version = int(version)
-
         batch = Batch(
             self.root_citros / "data",
             simulation,
@@ -328,6 +325,12 @@ class Citros(CitrosObj):
 
         return batch
 
+    def unload_batch(self, simulation, batch):
+        versions = glob.glob(f"{simulation}/{batch}/*")
+        for ver in versions:
+            batch = self.get_batch(simulation, batch, ver)
+            batch.unload()
+
     def get_batches(self, simulation=None, batch=None, filter: str = None):
         batches = []
         if simulation:
@@ -335,22 +338,26 @@ class Citros(CitrosObj):
                 glob.glob(f"{str(self.root_citros / 'data' / simulation)}")
             )
         else:
-            simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*"))
+            simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
 
         for sim in simulations:
             if batch:
-                batch_names = sorted(glob.glob(f"{sim}/{batch}"))
+                batch_names = sorted(glob.glob(f"{sim}/{batch}/"))
             else:
-                batch_names = sorted(glob.glob(f"{sim}/*"))
+                batch_names = sorted(glob.glob(f"{sim}/*/"))
+
+            print(f"batch_names={batch_names}")
 
             for batch_name in batch_names:
-                versions = sorted(glob.glob(f"{batch_name}/*"), reverse=True)
+                versions = sorted(glob.glob(f"{batch_name}/*/"), reverse=True)
 
                 batches.append(
                     {
-                        "simulation": sim.split("/")[-1],
-                        "name": batch_name.split("/")[-1],
-                        "versions": [v.split("/")[-1] for v in versions],
+                        "simulation": sim.removesuffix("/").split("/")[-1],
+                        "name": batch_name.removesuffix("/").split("/")[-1],
+                        "versions": [
+                            v.removesuffix("/").split("/")[-1] for v in versions
+                        ],
                     }
                 )
 
@@ -358,27 +365,40 @@ class Citros(CitrosObj):
 
     def get_batches_flat(self):
         batches = []
-        simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*"))
+        simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
         for sim in simulations:
-            names = sorted(glob.glob(f"{sim}/*"))
-            _simulation = sim.split("/")[-1]
+            if not Path(sim).is_dir():
+                continue
+            names = sorted(glob.glob(f"{sim}/*/"))
+            _simulation = sim.removesuffix("/").split("/")[-1]
             for name in names:
-                versions = sorted(glob.glob(f"{name}/*"), reverse=True)
+                if not Path(name).is_dir():
+                    continue
+                versions = sorted(glob.glob(f"{name}/*/"), reverse=True)
                 # print(versions)
-                _name = name.split("/")[-1]
+                _name = name.removesuffix("/").split("/")[-1]
+                try:
+                    batch_hr_statu = json.loads((Path(name) / "hr.json").read_text())
+                except:
+                    batch_hr_statu = {"status": "UNLOADED"}
 
                 for version in versions:
                     batch = json.loads((Path(version) / "info.json").read_text())
-                    data_status = batch["data_status"]
+                    status = "UNLOADED"
+                    if (
+                        batch_hr_statu.get("version", None)
+                        == version.removesuffix("/").split("/")[-1]
+                    ):
+                        status = batch_hr_statu.get("status")
 
                     batches.append(
                         {
                             "created_at": batch["created_at"],
                             "simulation": _simulation,
                             "name": _name,
-                            "version": version.split("/")[-1],
+                            "version": version.removesuffix("/").split("/")[-1],
                             "message": batch["message"],
-                            f"data_status": data_status,
+                            f"status": status,
                             "completions": str(batch["completions"]),
                             "path": version,
                         }
