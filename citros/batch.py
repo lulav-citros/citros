@@ -77,9 +77,9 @@ class Batch(BatchUploader):
             if type(simulation) is Simulation:  # create new batch
                 self.version = datetime.today().strftime("%Y%m%d%H%M%S")
             else:
-                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*/"))
                 # get version from index
-                self.version = versions[self.index].split("/")[-1]
+                self.version = versions[self.index].removesuffix("/").split("/")[-1]
 
         # print(f"{self.simulation_name} / {name} / {self.version}")
         self.batch_dir = Path(root) / self.simulation_name / name / self.version

@@ -88,6 +88,9 @@ class Report:
 
         self.citros = citros
         self.batch = batch
+        if self.batch is None:
+            self.log.error("batch is None")
+            return
 
         self.version = version
         self.index = index

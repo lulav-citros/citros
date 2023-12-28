@@ -683,9 +683,9 @@ def report_generate(args, argv):
         print(
             f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
         )
-        return
+        return    
     batch = citros.get_batch(args.simulation, args.batch, args.version)
-
+    # inspect(batch)
     report = Report(
         name=args.name,
         mesaage=args.message,
