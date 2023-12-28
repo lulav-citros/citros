@@ -42,7 +42,7 @@ class Batch(BatchUploader):
         root,  # the base recordings dir
         simulation,  # if type(simulation) str then it is the name of the simulation if type(simulation) Simulation then it is the simulation object
         name: str = "citros",
-        mesaage: str = "CITROS is AWESOME!!!",
+        message: str = "CITROS is AWESOME!!!",
         index: int = -1,  # default to take the last version of a runs
         version=None,
         log=None,
@@ -62,7 +62,7 @@ class Batch(BatchUploader):
         self.root = root
         self.simulation = simulation
         self.name = name
-        self.message = mesaage
+        self.message = message
         self.version = version
         self.index = index
 

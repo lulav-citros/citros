@@ -409,3 +409,30 @@ class Citros(CitrosObj):
                     _name = None
 
         return batches
+
+    def get_reports_flat(self):
+        ret = []
+        reports = sorted(glob.glob(f"{str(self.root_citros / 'reports')}/*/"))
+        for report in reports:
+            if not Path(report).is_dir():
+                continue
+            versions = sorted(glob.glob(f"{report}/*/"), reverse=True)
+
+            for version in versions:
+                report_version = json.loads((Path(version) / "info.json").read_text())
+
+                # print(report_version)
+                ret.append(
+                    {
+                        "started_at": report_version["started_at"],
+                        "finished_at": report_version["finished_at"],
+                        "name": report_version["name"],
+                        "version": version.removesuffix("/").split("/")[-1],
+                        "message": report_version["message"],
+                        "path": version,
+                        "progress": report_version["progress"],
+                        "status": report_version["status"],
+                    }
+                )
+
+        return ret

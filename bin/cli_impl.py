@@ -127,7 +127,7 @@ def run(args, argv):
         root_rec_dir,
         simulation,
         name=batch_name,
-        mesaage=batch_message,
+        message=batch_message,
         version=args.version,
         verbose=args.verbose,
         debug=args.debug,
@@ -656,8 +656,41 @@ def report(args, argv):
 
 
 def report_list(args, argv):
-    print("reports...!!!")
-    print("will print summery of all reports here.")
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+        flat_repo = citros.get_reports_flat()
+    except CitrosNotFoundException:
+        print(
+            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+        )
+        return
+
+    table = Table(
+        title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
+    )
+    table.add_column("date", style="cyan", no_wrap=False)
+    # table.add_column("started_at", style="cyan", no_wrap=True)
+    # table.add_column("finished_at", style="cyan", no_wrap=True)
+    table.add_column("name", style="magenta", justify="left")
+    table.add_column("Versions", justify="left", style="green")
+    table.add_column("message", style="magenta", justify="left")
+    table.add_column("progress", justify="right", style="green")
+    table.add_column("status", style="magenta", justify="left")
+    _name = None
+    for flat in flat_repo:
+        table.add_row(
+            flat["started_at"],
+            # flat["finished_at"],
+            None if flat["name"] == _name else flat["name"],
+            flat["version"],
+            flat["message"],
+            str(flat["progress"]),
+            flat["status"],
+        )
+        _name = flat["name"]
+
+    console = Console()
+    console.print(table)
 
 
 def report_generate(args, argv):
@@ -683,12 +716,12 @@ def report_generate(args, argv):
         print(
             f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
         )
-        return    
+        return
     batch = citros.get_batch(args.simulation, args.batch, args.version)
     # inspect(batch)
     report = Report(
         name=args.name,
-        mesaage=args.message,
+        message=args.message,
         citros=citros,
         batch=batch,
         notebooks=args.nb,
