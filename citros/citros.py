@@ -26,8 +26,11 @@ from rich.logging import RichHandler
 from rich import print, inspect, print_json
 from rich.panel import Panel
 from rich.padding import Padding
+import shutil
 
 install()
+
+from .batch import Batch
 
 
 class Citros(CitrosObj):
@@ -105,7 +108,7 @@ class Citros(CitrosObj):
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
 
-        self.copy_data_files()
+        self.copy_default_citros_files()
 
         # loads the main file (project.json)
         try:
@@ -173,7 +176,7 @@ class Citros(CitrosObj):
         # create the .citros folder
         Path(self.root_citros).mkdir(parents=True, exist_ok=True)
         # copy data files.
-        self.copy_data_files()
+        self.copy_default_citros_files()
 
         # settings
         self.log.debug(f"creating .citros/settings.json")
@@ -288,58 +291,121 @@ class Citros(CitrosObj):
             self.log.debug(f"Could not find .citrosignore in {self.root_citros}")
             return []
 
-    def copy_data_files(self):
-        # simulations
-        Path(self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "simulations/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
+    def copy_default_citros_files(self):
+        self.log.debug(
+            f"{'   '*self.level}{self.__class__.__name__}.copy_default_citros_files()"
+        )
 
-        # parameter_setups
-        Path(self.root_citros / "parameter_setups").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "parameter_setups/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
+        source_folder = importlib_resources.files("data.defaults.citros")
 
-        # .gitignore
-        self.log.debug(f"creating .citros/.gitignore")
-        with importlib_resources.files(f"data.misc").joinpath(
-            ".gitignore"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros)
+        self.log.debug(f"copying {source_folder} to {self.root_citros}")
 
-        # .citrosignore
-        # if not Path(self.root_citros, ".citrosignore").exists():  # avoid overwriting
-        with importlib_resources.files(f"data.misc").joinpath(
-            ".citrosignore"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros)
+        shutil.copytree(source_folder, self.root_citros, dirs_exist_ok=True)
 
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"README.md")
+        self.log.debug(f"Done.")
 
-        self.log.debug(f"creating .citros/notebooks")
-        (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "notebooks/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
-        # TODO: copy some sample notebooks.
+    ###################
+    ##### public ######
+    ###################
+    def delete_batch(self, simulation: str, name: str, version: str):
+        import shutil
 
-        self.log.debug(f"creating .citros/data")
-        (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "data/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
+        shutil.rmtree(self.root_citros / "data" / simulation / name / version)
 
-        self.log.debug(f"creating .citros/reports")
-        (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc.folder").joinpath(
-            "reports/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")
+    def get_batch(self, simulation: str, name: str, version=-1):
+        batch = Batch(
+            self.root_citros / "data",
+            simulation,
+            name=name,
+            version=version if type(version) is str else None,
+            index=version if type(version) is int else None,
+            debug=self.debug,
+            verbose=self.verbose,
+        )
+
+        return batch
+
+    def unload_batch(self, simulation, batch):
+        versions = glob.glob(f"{simulation}/{batch}/*")
+        for ver in versions:
+            batch = self.get_batch(simulation, batch, ver)
+            batch.unload()
+
+    def get_batches(self, simulation=None, batch=None, filter: str = None):
+        batches = []
+        if simulation:
+            simulations = sorted(
+                glob.glob(f"{str(self.root_citros / 'data' / simulation)}")
+            )
+        else:
+            simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
+
+        for sim in simulations:
+            if batch:
+                batch_names = sorted(glob.glob(f"{sim}/{batch}/"))
+            else:
+                batch_names = sorted(glob.glob(f"{sim}/*/"))
+
+            print(f"batch_names={batch_names}")
+
+            for batch_name in batch_names:
+                versions = sorted(glob.glob(f"{batch_name}/*/"), reverse=True)
+
+                batches.append(
+                    {
+                        "simulation": sim.removesuffix("/").split("/")[-1],
+                        "name": batch_name.removesuffix("/").split("/")[-1],
+                        "versions": [
+                            v.removesuffix("/").split("/")[-1] for v in versions
+                        ],
+                    }
+                )
+
+        return batches
+
+    def get_batches_flat(self):
+        batches = []
+        simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
+        for sim in simulations:
+            if not Path(sim).is_dir():
+                continue
+            names = sorted(glob.glob(f"{sim}/*/"))
+            _simulation = sim.removesuffix("/").split("/")[-1]
+            for name in names:
+                if not Path(name).is_dir():
+                    continue
+                versions = sorted(glob.glob(f"{name}/*/"), reverse=True)
+                # print(versions)
+                _name = name.removesuffix("/").split("/")[-1]
+                try:
+                    batch_hr_statu = json.loads((Path(name) / "hr.json").read_text())
+                except:
+                    batch_hr_statu = {"status": "UNLOADED"}
+
+                for version in versions:
+                    batch = json.loads((Path(version) / "info.json").read_text())
+                    status = "UNLOADED"
+                    if (
+                        batch_hr_statu.get("version", None)
+                        == version.removesuffix("/").split("/")[-1]
+                    ):
+                        status = batch_hr_statu.get("status")
+
+                    batches.append(
+                        {
+                            "created_at": batch["created_at"],
+                            "simulation": _simulation,
+                            "name": _name,
+                            "version": version.removesuffix("/").split("/")[-1],
+                            "message": batch["message"],
+                            f"status": status,
+                            "completions": str(batch["completions"]),
+                            "path": version,
+                        }
+                    )
+
+                    # for printing.
+                    _simulation = None
+                    _name = None
+
+        return batches

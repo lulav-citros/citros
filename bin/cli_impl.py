@@ -188,28 +188,28 @@ def doctor(args, argv):
 
 ############################# Simulation implementation ##############################
 def simulation_list(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def simulation_run(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 ####################### parameter setup implementation ##############################
 def parameter_setup_new(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def parameter_setup_list(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 def parameter_setup(args, argv):
-    # TODO[critical]: implement data_status
+    # TODO[critical]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -219,17 +219,19 @@ def data(args, argv):
     # -n name
     # -i version index
     # print batch info.
-    root = Path(args.dir).expanduser().resolve() / ".citros/data"
 
-    # simulation
-    simulations_glob = sorted(glob.glob(f"{str(root)}/*"))
-    simulations = []
-    for sim in simulations_glob:
-        if Path(sim).is_dir():
-            simulations.append(str(sim).split("/")[-1])
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+    except CitrosNotFoundException:
+        print(
+            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+        )
+        return
+
+    simulations = [sim.name for sim in citros.simulations]
 
     if simulations == []:
-        print(f"There are currently no simulations in {root} folder.")
+        print(f"There are currently no simulations in {citros.root_citros} folder.")
         print("Go wild and run as many simulation as you can with CITROS. ")
         print(
             Panel.fit(
@@ -254,25 +256,30 @@ def data(args, argv):
         return
 
     # batch
-    batch_glob = sorted(glob.glob(f"{str(root / chosen_simulation)}/*"))
-    batches = []
-    for batch in batch_glob:
-        if Path(batch).is_dir():
-            batches.append(str(batch).split("/")[-1])
+
+    batches = citros.get_batches(simulation=chosen_simulation)
+    batches = [batch["name"] for batch in batches]
+    if batches == []:
+        print("[yellow]There are no batches for this simulation yet.")
+        print(
+            Panel.fit(
+                Padding(
+                    'You may run [green]"citros run"[/green] to create a new DB',
+                    1,
+                )
+            )
+        )
+        return
 
     chosen_batch = inquirer.fuzzy(
         message="Select Batch:", choices=batches, default="", border=True
     ).execute()
 
-    # version
-    version_glob = sorted(
-        glob.glob(f"{str(root / chosen_simulation/ chosen_batch)}/*"), reverse=True
-    )
-    versions = []
-    for version in version_glob:
-        if Path(version).is_dir():
-            versions.append(str(version).split("/")[-1])
+    batches = citros.get_batches(simulation=chosen_simulation, batch=chosen_batch)
+    assert len(batches) <= 1
 
+    # version
+    versions = batches[0]["versions"]
     version = inquirer.fuzzy(
         message="Select Version:", choices=versions, default="", border=True
     ).execute()
@@ -293,32 +300,27 @@ def data(args, argv):
 
     # commands
     if action == "info":
-        batch = Batch(
-            root,
-            chosen_simulation,
-            name=chosen_batch,
-            version=version,
-            debug=args.debug,
-            verbose=args.verbose,
+        print(
+            f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
         )
-        # inspect(batch)
+        batch = citros.get_batch(
+            simulation=chosen_simulation, name=chosen_batch, version=version
+        )
+
         console = Console()
         console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
         console.print_json(data=batch.data)
 
     elif action == "load":
         print(
-            f"Uploading data to DB... {root / chosen_simulation / chosen_batch / version}"
+            f"Uploading data to DB... { chosen_simulation} / {chosen_batch} / {version}"
         )
-        batch = Batch(
-            root,
-            chosen_simulation,
-            name=chosen_batch,
-            version=version,
-            debug=args.debug,
-            verbose=args.verbose,
+        batch = citros.get_batch(
+            simulation=chosen_simulation, name=chosen_batch, version=version
         )
+
         try:
+            batch.unload()
             batch.upload()
         except NoConnectionToCITROSDBException:
             print("[red]CITROS DB is not running.")
@@ -330,7 +332,6 @@ def data(args, argv):
                     )
                 )
             )
-            batch["data_status"] = "UNLOADED"
             return
 
         console = Console()
@@ -339,29 +340,34 @@ def data(args, argv):
 
     elif action == "unload":
         print(
-            f"Dropping data from DB... {root / chosen_simulation / chosen_batch / version}"
+            f"Dropping data from DB... { chosen_simulation } / {chosen_batch} / {version}"
         )
-        batch = Batch(
-            root,
-            chosen_simulation,
-            name=chosen_batch,
-            version=version,
-            debug=args.debug,
-            verbose=args.verbose,
+        batch = citros.get_batch(
+            simulation=chosen_simulation, name=chosen_batch, version=version
         )
+
         batch.unload()
 
     elif action == "delete":
-        print(f"deleting data from {root / chosen_simulation / chosen_batch / version}")
-        import shutil
-
-        shutil.rmtree(root / chosen_simulation / chosen_batch / version)
+        print(f"deleting data from { chosen_simulation } / {chosen_batch} / {version}")
+        citros.delete_batch(
+            simulation=chosen_simulation, name=chosen_batch, version=version
+        )
 
 
 def data_list(args, argv):
-    root = Path(args.dir).expanduser().resolve() / ".citros/data"
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+        flat_batches = citros.get_batches_flat()
+    except CitrosNotFoundException:
+        print(
+            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+        )
+        return
 
-    table = Table(title=f"Simulation Runs in: [blue]{root}", box=box.SQUARE)
+    table = Table(
+        title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
+    )
     table.add_column(
         "date",
         style="green",
@@ -374,39 +380,22 @@ def data_list(args, argv):
     table.add_column("Data", justify="right", style="green")
     table.add_column("completions", style="magenta", justify="left")
 
-    simulations = sorted(glob.glob(f"{str(root)}/*"))
-    for sim in simulations:
-        names = sorted(glob.glob(f"{sim}/*"))
-        _simulation = sim.split("/")[-1]
-        for name in names:
-            versions = sorted(glob.glob(f"{name}/*"), reverse=True)
-            # print(versions)
-            _name = name.split("/")[-1]
+    for flat_batch in flat_batches:
+        if flat_batch["status"] == "LOADED":
+            status_clore = "green"
+        elif flat_batch["status"] == "UNLOADED":
+            status_clore = "yellow"
+        else:
+            status_clore = "red"
 
-            for version in versions:
-                batch = json.loads((Path(version) / "info.json").read_text())
-                data_status = batch["data_status"]
-
-                if data_status == "LOADED":
-                    data_status_clore = "green"
-                elif data_status == "UNLOADED":
-                    data_status_clore = "yellow"
-                else:
-                    data_status_clore = "red"
-
-                table.add_row(
-                    batch["created_at"],
-                    _simulation,
-                    _name,
-                    version.split("/")[-1],
-                    batch["message"],
-                    f"[{data_status_clore}]{data_status}",
-                    str(batch["completions"]),
-                )
-
-                # for printing.
-                _simulation = None
-                _name = None
+        table.add_row(
+            flat_batch["simulation"],
+            flat_batch["name"],
+            flat_batch["version"],
+            flat_batch["message"],
+            f"[{status_clore}]{flat_batch['status']}",
+            flat_batch["completions"],
+        )
 
     console = Console()
     console.print(table)
@@ -448,7 +437,7 @@ Listening on: [green]{str(root)}""",
 
 
 def data_service_status(args, argv):
-    # TODO[important]: implement data_status after making this sevice async. return status of service.
+    # TODO[important]: implement  after making this sevice async. return status of service.
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -463,7 +452,7 @@ def data_unload(args, argv):
 
 
 def data_db(args, argv):
-    # TODO[important]: implement data_status
+    # TODO[important]: implement
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
@@ -661,13 +650,14 @@ def data_db_clean(args, argv):
 
 
 ############################# REPORT implementation ##############################
-def reports(args, argv):
+def report(args, argv):
     print("reports...!!!")
     print("will print summery of all reports here.")
 
 
-def report(args, argv):
-    print("report...!!!")
+def report_list(args, argv):
+    print("reports...!!!")
+    print("will print summery of all reports here.")
 
 
 def report_generate(args, argv):
@@ -681,54 +671,38 @@ def report_generate(args, argv):
     :param args.notebooks: List of paths to Jupyter notebooks.
     :param args.style_path: Path to the CSS style file, if any.
 
+    :param args.dir
+    :param args.name
+    :param args.message
     :param args.output_folder: Path to the output folder for generated files.
     """
-
-    # Extract arguments
-    sign_flag = args.sign
-    notebook_paths = args.notebooks
-    key_path = args.key_path
-    style_path = args.style_path
-    output_folder = args.output_folder
-
-    # Validate arguments
-    if not notebook_paths or not output_folder:
-        print("Error: Missing notebook paths or output folder.")
-        return
-
-    if sign_flag and not key_path:
-        print("Error: Missing key for signing.")
-        return
-
-    report = Report(debug=args.debug, verbose=args.verbose)
+    # inspect(args)
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+    except CitrosNotFoundException:
+        print(
+            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+        )
+        return    
+    batch = citros.get_batch(args.simulation, args.batch, args.version)
+    # inspect(batch)
+    report = Report(
+        name=args.name,
+        mesaage=args.message,
+        citros=citros,
+        batch=batch,
+        notebooks=args.nb,
+        sign=args.sign,
+        log=citros.log,
+        debug=args.debug,
+        verbose=args.verbose,
+    )
 
     # Execute notebooks
     print("[green]Executing notebook...")
-    try:
-        report.execute(notebook_paths, output_folder)
-    except NoNotebookFoundException:
-        print(f"[red]Error: Didnt found notebook.")
-        return
+    folder = report.run()
 
-    # Render notebooks to PDF
-    print("[green]Redering report...")
-    output_pdf_path = report.render(notebook_paths, output_folder, style_path)
-
-    # Sign PDFs
-    if sign_flag:
-        print("[green]Signing report...")
-        pdf_paths = [
-            os.path.join(
-                output_folder, os.path.basename(notebook_path).replace(".ipynb", ".pdf")
-            )
-            for notebook_path in notebook_paths
-        ]
-        for pdf_path in pdf_paths:
-            report.sign(pdf_path, key_path, output_folder)
-    if output_pdf_path is None:
-        print("[yellow]Warning: No report has been generated.")
-        return
-    print(f"[green]Report generation completed at [blue]{output_pdf_path}")
+    print(f'[green]Report generation completed at [blue]"{folder}"')
 
 
 def report_validate(args, argv):

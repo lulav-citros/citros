@@ -1,14 +1,16 @@
 import os
-import json
 import sys
+import glob
+import json
 import nbformat
 import importlib_resources
-
 from PyPDF2 import PdfReader, PdfWriter
 from pathlib import Path
+from datetime import datetime
 from nbconvert import HTMLExporter, PDFExporter
 from nbconvert.preprocessors import ExecutePreprocessor
 from nbconvert.preprocessors import CellExecutionError
+from rich import inspect
 from traitlets.config import Config
 from weasyprint import HTML
 from cryptography.hazmat.primitives import hashes
@@ -16,6 +18,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 
+from .citros import Citros
 
 from .logger import get_logger, shutdown_log
 
@@ -25,12 +28,34 @@ class NoNotebookFoundException(Exception):
         super().__init__(message)
 
 
+# citros report -n best_report_ever -notebook notebooks/notebook_name.ipynb -b vova_batch_1/version
+
+# TODO: check that vova_batch_1/version is loaded, if not, load it
+# reports/report_name/
+# reports/report_name/notebooks/
+# reports/report_name/batch/name (soft link)
+# reports/report_name/info.json (status of report)
+# reports/report_name/output/ (render output of notebooks + pdfs )
+
+
 class Report:
+    """
+
+    Raises:
+        NoNotebookFoundException: _description_
+        NoNotebookFoundException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+
     ###################
     ##### private #####
     ###################
-    def _init_log(self, log=None):
+    def _init_log(self, log=None, verbose=False, debug=False):
         self.log = log
+        self.verbose = verbose
+        self.debug = debug
         if self.log is None:
             Path.home().joinpath(".citros/logs").mkdir(parents=True, exist_ok=True)
             log_dir = Path.home().joinpath(".citros/logs")
@@ -42,12 +67,160 @@ class Report:
                 verbose=self.verbose,
             )
 
-    def __init__(self, log=None, debug=False, verbose=False):
-        self.log = log
-        self.debug = debug
-        self.verbose = verbose
-        self._init_log(log)
+    def __init__(
+        self,
+        name: str = None,
+        mesaage: str = None,
+        citros: Citros = None,
+        batch=None,
+        notebooks=[],
+        sign=False,
+        key=None,
+        index: int = -1,  # default to take the last version of a runs
+        version=None,
+        log=None,
+        debug=False,
+        verbose=False,
+    ):
+        self._init_log(log, verbose, debug)
+        self.log.debug(f"{self.__class__.__name__}.__init__()")
+        self.sign_report = sign
 
+        self.citros = citros
+        self.batch = batch
+        if self.batch is None:
+            self.log.error("batch is None")
+            return
+
+        self.version = version
+        self.index = index
+
+        self.reports_dir = citros.root_citros / "reports" / name
+        # get version
+        if not version:  # no version specified
+            if batch:  # create new report
+                self.version = datetime.today().strftime("%Y%m%d%H%M%S")
+            else:
+                versions = sorted(glob.glob(f"{str(self.reports_dir)}/*"))
+                # get version from index
+                self.version = versions[self.index].split("/")[-1]
+
+        self.folder = citros.root_citros / "reports" / name / self.version
+
+        self.state = {
+            "notebooks": notebooks,
+            "data": [
+                {
+                    "simulation": batch["simulation"],
+                    "batch": batch["name"],
+                    "version": batch.version,
+                }
+            ],
+            "status": "START",
+            "name": name,
+            "mesaage": mesaage,
+            "progress": 0,
+            "started_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
+            "finished_at": None,
+        }
+
+        Path(self.folder).mkdir(parents=True, exist_ok=True)
+        (Path(self.folder) / "output").mkdir(parents=True, exist_ok=True)
+        # (Path(self.folder) / "notebooks").mkdir(parents=True, exist_ok=True)
+
+        self._save()
+
+    def __str__(self):
+        # print_json(data=self.data)
+        return json.dumps(self.state, indent=4)
+
+    def __getitem__(self, key):
+        """get element from object
+
+        Args:
+            key (str): the element key
+
+        Returns:
+            str: the element value
+        """
+        return self.state[key]
+
+    def get(self, key, default=None):
+        """get element from object
+
+        Args:
+            key (str): the element key
+
+        Returns:
+            str: the element value
+        """
+        return self.data.state(key, default)
+
+    def __setitem__(self, key, newvalue):
+        self.state[key] = newvalue
+        self._save()
+
+    def _save(self):
+        self.log.debug(
+            f"{self.__class__.__name__}._save()",
+        )
+        self.state["updated_at"]: datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(self.path(), "w") as file:
+            json.dump(self.state, file, indent=4, sort_keys=True)
+
+    ###################
+    ##### public ######
+    ###################
+    def path(self):
+        """return the full path to the current main file.
+
+        default to ".citros/project.json"
+
+        Returns:
+            str: the full path to the current main file.
+        """
+        return self.folder / "info.json"
+
+    def run(self):
+        self.log.debug(f"{self.__class__.__name__}.run()")
+        self.start()
+        self.proccess(0)
+        self.log.debug("Start executing notebooks")
+        self.execute(self.state["notebooks"], self.folder / "output")
+
+        notebooks = glob.glob(f"{self.folder / 'output'}/*")
+
+        self.log.debug("Start rendering notebooks")
+        self.render(notebooks, self.folder)
+        if self.sign_report:
+            self.log.debug("Start signing notebooks")
+            self.sign()
+            self.log.debug("Start validating notebooks")
+            self.validate()
+        self.end()
+
+        return self.folder
+
+    # report status.
+    def start(self):
+        self.log.debug(f"{self.__class__.__name__}.start()")
+        self.state["status"] = "START"
+        # TODO: copy notebooks to report folder
+        # TODO: create soft link to batch folder
+
+    def proccess(self, progress):
+        self.state["progress"] = progress
+
+    def end(self):
+        self.log.debug(f"{self.__class__.__name__}.end()")
+        self.proccess(100)
+        self.state["status"] = "END"
+        self.state["finished_at"] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+    ###################
+    ##### public ######
+    ###################
     def execute(self, notebook_paths, output_folder):
         """
         This function executes jupiter notebooks provided
@@ -61,6 +234,7 @@ class Report:
         # config.ExecutePreprocessor.kernel_name = "python3"
 
         for notebook_path in notebook_paths:
+            notebook_name = notebook_path.split("/")[-1]
             try:
                 with open(notebook_path, "r", encoding="utf-8") as nb_file:
                     try:
@@ -104,7 +278,9 @@ class Report:
                 self.log.exception(e)
                 # raise
             finally:
-                with open(notebook_path, "wt", encoding="utf-8") as nb_file:
+                with open(
+                    output_folder / notebook_name, "wt", encoding="utf-8"
+                ) as nb_file:
                     nbformat.write(nb_node, nb_file)
 
     def render(self, notebook_paths, output_folder, css_file_path=None):
@@ -116,7 +292,10 @@ class Report:
             output_folder (str): path where notebooks should be rendered
             css_file_path (str, optional): path to css file, defaults to 'data/reports/templates/default_style.css'.
         """
-        self.log.debug(f"{self.__class__.__name__}.render_notebooks_to_pdf()")
+        self.log.debug(
+            f"{self.__class__.__name__}.render_notebooks_to_pdf({notebook_paths})"
+        )
+
         html_exporter = HTMLExporter(theme="light")
         # from jinja2 import DictLoader
 
@@ -168,6 +347,7 @@ class Report:
             private_key_path (str): path to private key
             output_folder (str): path to folder where signed pdf should be saved
         """
+        raise NotImplementedError
         self.log.debug(f"{self.__class__.__name__}.sign_pdf_with_key()")
         with open(private_key_path, "rb") as key_file:
             private_key = serialization.load_pem_private_key(
@@ -207,6 +387,7 @@ class Report:
         Returns:
             bool: Result of check
         """
+        raise NotImplementedError
         self.log.debug(f"{self.__class__.__name__}.verify()")
         with open(public_key_path, "rb") as key_file:
             public_key = serialization.load_pem_public_key(

@@ -70,15 +70,18 @@ class Batch(BatchUploader):
             simulation if type(simulation) is str else simulation.name
         )
 
+        self.batch_dir = Path(root) / self.simulation_name / name
+
         # get version
         if not version:  # no version specified
             if type(simulation) is Simulation:  # create new batch
                 self.version = datetime.today().strftime("%Y%m%d%H%M%S")
             else:
-                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*"))
+                versions = sorted(glob.glob(f"{str(self.batch_dir)}/*/"))
                 # get version from index
-                self.version = versions[self.index].split("/")[-1]
+                self.version = versions[self.index].removesuffix("/").split("/")[-1]
 
+        # print(f"{self.simulation_name} / {name} / {self.version}")
         self.batch_dir = Path(root) / self.simulation_name / name / self.version
 
         self._init_log(log)
@@ -152,6 +155,7 @@ class Batch(BatchUploader):
     # - all files is intact.
     # - if files is signed check all signings (sha)
     def _validate(self):
+        # TODO: add validations
         return True, None
 
     def _new(self):
@@ -178,8 +182,6 @@ class Batch(BatchUploader):
             "completions": "",
             "status": "",
             "metadata": "",
-            "data_last_access": "",
-            "data_status": "UNLOADED",  # LOADED, UNLOADED, LOADING, ERROR
             "created_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
             "updated_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
         }

@@ -78,6 +78,7 @@ class ParserRos2(ParserBase):
             self.log.exception(
                 f"Exception raised while trying to parse {path_to_cmake}"
             )
+            print(f"[red]Could not parse {path_to_cmake}[/red]")
             nodes = []
 
         return {"cmake": str(path_to_cmake), "nodes": nodes}
