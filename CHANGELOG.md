@@ -2,6 +2,23 @@
 
 
 
+## v0.2.1 (2023-12-28)
+
+### Fix
+
+* fix(reports): working ([`e5448fc`](https://github.com/lulav-citros/citros/commit/e5448fc5ca743a309fd41c0081c0c4eb5c64d644))
+
+### Unknown
+
+* Merge pull request #17 from lulav-citros/vova-reports
+
+fix(reports): new reports ([`4d31103`](https://github.com/lulav-citros/citros/commit/4d311032e08e1e017ee73b91fa4b87e658b3d698))
+
+* Fix issues with batch and report generation ([`ec30137`](https://github.com/lulav-citros/citros/commit/ec30137e4c6815c6d741ce9ce515843eef604ec9))
+
+* Merge commit &#39;e4c136fc4153efc112452611cab74316ffd2fb39&#39; into vova-reports ([`bcd25b6`](https://github.com/lulav-citros/citros/commit/bcd25b6d1fb8603e58b0bd322b7cce4520b5f397))
+
+
 ## v0.2.0 (2023-12-28)
 
 ### Feature
@@ -13,6 +30,10 @@
 * Merge pull request #16 from lulav-citros/dev
 
 Add data analysis to citros cli ([`d35100b`](https://github.com/lulav-citros/citros/commit/d35100b7e682298e7db3ce02006b18eca0be273c))
+
+* Refactor report.py and batch_uploader.py ([`47dd001`](https://github.com/lulav-citros/citros/commit/47dd00126923b3329746a624fea523e13f69295a))
+
+* Remove unused files and update parser error handling ([`b7d564d`](https://github.com/lulav-citros/citros/commit/b7d564d80d0d974bfe6aad05102f62e23cbaae14))
 
 * citros data db init ([`f3a95d7`](https://github.com/lulav-citros/citros/commit/f3a95d72855cf88fbbc5c3fe065942c0e6783f6b))
 
