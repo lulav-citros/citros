@@ -2,11 +2,32 @@
 
 
 
+## v0.2.0 (2023-12-28)
+
+### Feature
+
+* feat(citros/citros_data_analysis): initial changes for integration to citros ([`f59bb54`](https://github.com/lulav-citros/citros/commit/f59bb5458bc3eaa6d2a988a9194d422d12e45be8))
+
+### Unknown
+
+* Merge pull request #16 from lulav-citros/dev
+
+Add data analysis to citros cli ([`d35100b`](https://github.com/lulav-citros/citros/commit/d35100b7e682298e7db3ce02006b18eca0be273c))
+
+* citros data db init ([`f3a95d7`](https://github.com/lulav-citros/citros/commit/f3a95d72855cf88fbbc5c3fe065942c0e6783f6b))
+
+* Refactor code for CitrosDict and _Stat classes ([`1622b4c`](https://github.com/lulav-citros/citros/commit/1622b4c0274feab98967ba5a8e19eb80ba93a34b))
+
+
 ## v0.1.10 (2023-12-26)
 
 ### Fix
 
 * fix(parser_ros2): fix unsupported nodes ([`55e5177`](https://github.com/lulav-citros/citros/commit/55e5177091b1ca9d114a7c85b68dd1917955ae84))
+
+### Unknown
+
+* temp ([`e6ee1be`](https://github.com/lulav-citros/citros/commit/e6ee1bec38fceccc097d5a221aba45fa573df4d1))
 
 
 ## v0.1.9 (2023-12-26)
@@ -14,6 +35,10 @@
 ### Fix
 
 * fix(gitignore): added to data ([`c522902`](https://github.com/lulav-citros/citros/commit/c522902b420614fecbd87eab9decc9e262c2ca14))
+
+### Unknown
+
+* added initial data analysis ([`3387005`](https://github.com/lulav-citros/citros/commit/3387005b82b1aba6b2e6579acc4871ef8532a0de))
 
 
 ## v0.1.8 (2023-12-25)
