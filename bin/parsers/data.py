@@ -167,6 +167,43 @@ def parser_data_db_create(parent_subparser, epilog=None):
     return parser
 
 
+# citros data db init
+def parser_data_db_init(parent_subparser, epilog=None):
+    description_path = "data/db/init.md"
+    help = "data db init section"
+
+    parser = parent_subparser.add_parser(
+        "init",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_db_init)
+
+    # subparser = parser.add_subparsers(dest="type")
+
+    return parser
+
+
 # citros data db status
 def parser_data_db_status(parent_subparser, epilog=None):
     description_path = "data/db/status.md"
@@ -349,6 +386,7 @@ def parser_data_db(parent_subparser, epilog=None):
     subparser = parser.add_subparsers(dest="type")
 
     parser_data_db_create(subparser)
+    parser_data_db_init(subparser)
     parser_data_db_status(subparser)
     parser_data_db_stop(subparser)
     parser_data_db_logs(subparser)

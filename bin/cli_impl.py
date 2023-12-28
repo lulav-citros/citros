@@ -467,7 +467,7 @@ def data_db(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-def _init_db():
+def _init_db(verbose, debug):
     """
     initializing the DB
     """
@@ -479,6 +479,8 @@ def _init_db():
         config.CITROS_DATA_HOST,
         config.CITROS_DATA_PORT,
         config.POSTGRES_DATABASE,
+        verbose=verbose,
+        debug=debug,
     )
 
     citrosDB.init_db()
@@ -518,9 +520,18 @@ def data_db_create(args, argv):
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
     )
-    sleep(1)
+    # TODO: check container status...
+    sleep(3)
     print(f"[green]CITROS Initializing DB...")
-    _init_db()
+    _init_db(args.verbose, args.debug)
+    print(
+        f"[green]CITROS DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
+    )
+
+
+def data_db_init(args, argv):
+    print(f"[green]CITROS Initializing DB...")
+    _init_db(args.verbose, args.debug)
     print(
         f"[green]CITROS DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
     )
