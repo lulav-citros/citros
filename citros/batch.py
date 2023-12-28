@@ -70,6 +70,8 @@ class Batch(BatchUploader):
             simulation if type(simulation) is str else simulation.name
         )
 
+        self.batch_dir = Path(root) / self.simulation_name / name
+
         # get version
         if not version:  # no version specified
             if type(simulation) is Simulation:  # create new batch
@@ -79,6 +81,7 @@ class Batch(BatchUploader):
                 # get version from index
                 self.version = versions[self.index].split("/")[-1]
 
+        # print(f"{self.simulation_name} / {name} / {self.version}")
         self.batch_dir = Path(root) / self.simulation_name / name / self.version
 
         self._init_log(log)
@@ -152,6 +155,7 @@ class Batch(BatchUploader):
     # - all files is intact.
     # - if files is signed check all signings (sha)
     def _validate(self):
+        # TODO: add validations
         return True, None
 
     def _new(self):

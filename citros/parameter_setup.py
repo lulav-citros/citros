@@ -75,23 +75,6 @@ class ParameterSetup(CitrosObj):
         self.data.update(default_parameter_setup)
         self._save()
 
-        # copy functions
-        destination = self.root_citros / "parameter_setups" / "functions"
-        destination.mkdir(parents=True, exist_ok=True)
-
-        if not (destination / "my_func.py").exists():  # avoid overwriting
-            importlib_resources.files(f"data.sample_code").joinpath("my_func.py")
-
-            with importlib_resources.files(f"data.sample_code").joinpath(
-                "my_func.py"
-            ) as md_file_path:
-                shutil.copy2(md_file_path, destination / f"my_func.py")
-
-            with importlib_resources.files(f"data.doc.folder").joinpath(
-                "parameter_setups/functions/README.md"
-            ) as md_file_path:
-                shutil.copy2(md_file_path, destination / f"README.md")
-
         # TODO: when addeing a parameter to a package/node, add/append it to the parameter setups that use it.
 
     def _evaluate(self, context=None):
