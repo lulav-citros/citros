@@ -2,7 +2,7 @@ from .citros_db import CitrosDB
 from .citros_dict import CitrosDict
 
 
-class _Stat:
+class Stat:
     """
     Class for collecting technical statistics about connections from the CitrosDB class.
 

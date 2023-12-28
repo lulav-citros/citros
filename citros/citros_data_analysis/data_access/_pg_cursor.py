@@ -6,6 +6,8 @@ import pandas as pd
 import inspect
 import psycopg2
 
+from citros.database import CitrosDB as CitrosDB_base
+
 from typing import Union, Optional, Any
 from psycopg2 import sql
 from prettytable import PrettyTable, ALL
@@ -13,13 +15,12 @@ from prettytable import PrettyTable, ALL
 from .citros_dict import CitrosDict
 
 
-class _PgCursor:
+class _PgCursor(CitrosDB_base):
     _connection_parameters = {
         "host": None,
         "user": None,
         "password": None,
         "database": None,
-        "options": None,
         "port": None,
     }
     pg_connection = None
@@ -39,19 +40,28 @@ class _PgCursor:
         user=None,
         password=None,
         database=None,
-        schema=None,
-        batch=None,
-        sid=None,
-        debug=False,
-        async_query=False,
-        async_timeout=180,
+        simulation = None,
+        batch = None,
+        debug = False
     ):
-        # if not sys.warnoptions and not debug:
-        #     import warnings
-        #     warnings.simplefilter("ignore")
+        init_args = {}
+        if host is not None:
+            init_args['db_host'] = host
+        if port is not None:
+            init_args['db_port'] = port
+        if user is not None:
+            init_args['db_user'] = user
+        if password is not None:
+            init_args['db_password'] = password
+        if database is not None:
+            init_args['db_name'] = database
+        super().__init__(**init_args)
 
-        self.async_query = async_query
-        self.async_timeout = async_timeout
+        if simulation is None:
+            simulation = os.getenv("CITROS_SIMULATION")
+        self._set_simulation(simulation)
+
+        self._set_batch(batch)
 
         self._registr_dec2float()
         self.if_close_connection = True
@@ -60,73 +70,39 @@ class _PgCursor:
         self._all_additional_columns = ["sid", "rid", "time", "topic", "type"]
         self._order_by_allowed = ["asc", "ASC", "Asc", "desc", "DESC", "Desc"]
 
-        if host is None or host == "":
-            self._host = os.getenv("PG_HOST", None)
-            if self._host is None:
-                if os.getenv("KERNEL_NAME") is not None:
-                    self._host = "shared-playground-postgresql.ns-citros-shared"
-                else:
-                    self._host = "citros.io"
+    def _set_simulation(self, simulation):
+        '''
+        Set simulation name.
+
+        Parameters
+        ----------
+        simulation : str
+            Name of the simulation.
+        '''
+        if simulation is None:
+            self._simulation = None
+        elif isinstance(simulation, str):
+            self._simulation = simulation
         else:
-            self._host = host
+            self._simulation = None
+            print("simulation is not set, 'simulation' must be a str")
 
-        if database is None:
-            self._database = os.getenv("PG_DATABASE")
-        else:
-            self._database = database
+    def _set_batch(self, batch):
+        '''
+        Set batch name.
 
-        if schema is None or schema == "":
-            self._schema = os.getenv("PG_SCHEMA", "data_bucket")
-        else:
-            self._schema = schema
-
-        if port is None or port == "":
-            self._port = os.getenv("PG_PORT", "5432")
-        else:
-            self._port = port
-
-        if sid is None:
-            self._set_sid(os.getenv("CITROS_SIMULATION_RUN_ID"))
-        else:
-            self._set_sid(sid)
-
-        self._topic = None
-
-        if user is None:
-            self._user = os.getenv("PG_USER")
-        else:
-            self._user = user
-
-        if password is None:
-            self._password = os.getenv("PG_PASSWORD")
-        else:
-            self._password = password
-
+        Parameters
+        ----------
+        batch : str
+            Name of the batch.
+        '''
         if batch is None:
-            self._batch_id = os.getenv("bid")
             self._batch_name = None
+        elif isinstance(batch, str):
+            self._batch_name = batch
         else:
-            self._batch_id = batch
-            self._batch_name = None
-
-    def _is_batch_set(self):
-        """
-        Check if the batch id is set.
-
-        Returns
-        -------
-        bool : True if the batch id is set and exists, otherwise False.
-        """
-        if self._batch_id is None:
-            if self._debug:
-                raise AttributeError(
-                    "batch id is not provided, please provide by batch() method"
-                )
-            else:
-                print("Error: please provide batch by citros.batch()")
-                return False
-        else:
-            return True
+            self._batch = None
+            print("batch is not set, 'batch' must be a str")
 
     def _set_sid(self, value):
         """
@@ -197,30 +173,16 @@ class _PgCursor:
     def _make_connection_postgres(self):
         """
         Make connection to Postgres database to execute PostgreSQL commands.
-
-        Parameters
-        ----------
-        host : str
-            Database host address.
-        user : str
-            User name.
-        password : str
-            Password.
-        database : str
-            Database name.
-        schema : str
-            Schema name.
-        port : str, optional
-            If not specified = "5432".
         """
-        _PgCursor.pg_connection = psycopg2.connect(
-            host=self._host,
-            user=self._user,
-            password=self._password,
-            database=self._database,
-            options="-c search_path=" + self._schema,
-            port=self._port,
-        )
+        # _PgCursor.pg_connection = psycopg2.connect(
+        #     host=self._host,
+        #     user=self._user,
+        #     password=self._password,
+        #     database=self._database,
+        #     options="-c search_path=" + self._schema,
+        #     port=self._port,
+        # )
+        _PgCursor.pg_connection = CitrosDB_base().connect()
         if self._debug:
             _PgCursor.n_pg_connections += 1
 
@@ -236,21 +198,21 @@ class _PgCursor:
         psycopg2.extensions.register_type(DEC2FLOAT)
 
     def _change_connection_parameters(self):
-        _PgCursor._connection_parameters["host"] = self._host
-        _PgCursor._connection_parameters["user"] = self._user
-        _PgCursor._connection_parameters["password"] = self._password
-        _PgCursor._connection_parameters["database"] = self._database
-        _PgCursor._connection_parameters["options"] = "-c search_path=" + self._schema
-        _PgCursor._connection_parameters["port"] = self._port
+        _PgCursor._connection_parameters["host"] = self.db_host
+        _PgCursor._connection_parameters["user"] = self.db_user
+        _PgCursor._connection_parameters["password"] = self.db_password
+        _PgCursor._connection_parameters["database"] = self.db_name
+        # _PgCursor._connection_parameters["options"] = "-c search_path=" + self._schema
+        _PgCursor._connection_parameters["port"] = self.db_port
 
     def _if_connection_parameters_changed(self):
         new_connection = {
-            "host": self._host,
-            "user": self._user,
-            "password": self._password,
-            "database": self._database,
-            "options": "-c search_path=" + self._schema,
-            "port": self._port,
+            "host": self.db_host,
+            "user": self.db_user,
+            "password": self.db_password,
+            "database": self.db_name,
+            # "options": "-c search_path=" + self._schema,
+            "port": self.db_port,
         }
         return new_connection != _PgCursor._connection_parameters
 
@@ -261,9 +223,11 @@ class _PgCursor:
         Parameters
         ----------
         query : str
-            query to execute
+            query to execute.
         param_execute : list
-            Additional parameters to pass
+            Additional parameters to pass.
+        check_batch : bool
+            If True, check that batch is provided.
 
         Returns
         -------
@@ -273,13 +237,8 @@ class _PgCursor:
         if param_execute == []:
             param_execute = None
         if check_batch:
-            if self._batch_id is None:
-                if self._debug:
-                    raise AttributeError(
-                        "batch is not provided, please provide by batch() method"
-                    )
-                else:
-                    print("Error: please provide batch by citros.batch()")
+            if self._batch_name is None:
+                print("Error: please provide batch by citros.batch()")
                 return {"res": None, "error": None}
         if _PgCursor.pg_connection is None:
             self._make_connection_postgres()
@@ -302,7 +261,6 @@ class _PgCursor:
                         _PgCursor.n_pg_queries += 1
                         self._calculate_pg_calls(inspect.stack()[1][3])
                     result = curs.fetchall()
-                    # Ref()._references.append(self._batch_id)
                     return {"res": result, "error": None}
 
             except psycopg2.InterfaceError as e:
@@ -1158,13 +1116,13 @@ class _PgCursor:
         )
         return df, error_name
 
-    def _is_batch_in_database(self, batch_id):
+    def _is_batch_in_database(self, tablename):
         """
-        Check if the batch `batch_id` is in the database.
+        Check if the batch `tablename` is in the database.
 
         Parameters
         ----------
-        batch_id : batch id to check.
+        tablename : batch name.
 
         Returns
         -------
@@ -1173,10 +1131,10 @@ class _PgCursor:
         """
         query = sql.SQL("SELECT tablename from pg_tables where schemaname = %(schema)s")
         table_result = self._execute_query(
-            query, {"schema": self._schema}, check_batch=False
+            query, {"schema": self._simulation}, check_batch=False
         )["res"]
         tables = [t[0] for t in table_result]
-        if batch_id not in tables:
+        if tablename not in tables:
             return False
         else:
             return True
@@ -1189,13 +1147,12 @@ class _PgCursor:
             "SELECT DISTINCT schemaname from pg_tables where schemaname = %(schema)s"
         )
         schema_list = self._execute_query(
-            query, {"schema": self._schema}, check_batch=False
+            query, {"schema": self._simulation}, check_batch=False
         )["res"]
         if len(schema_list) == 0:
-            if self._debug:
-                raise NameError('there is no schema "{0}"'.format(self._schema))
-            else:
-                print('there is no schema "{0}"'.format(self._schema))
+            return False
+        else:
+            return True
 
     def _resolve_query_json(self, query_input, null_wrap=True):
         """
@@ -1407,10 +1364,10 @@ class _PgCursor:
         error : str
             Error name if error occurred or None
         """
-        var = {"schema": self._schema}
+        var = {"schema": self._simulation}
         if mode == "current":
             tablename_condition = " AND tablename = %(tablename)s"
-            var["tablename"] = self._batch_id
+            var["tablename"] = self._batch_name
         elif mode == "all":
             tablename_condition = ""
         query = sql.SQL(
@@ -1446,10 +1403,9 @@ class _PgCursor:
         """
         if filter_by is None:
             filter_by = {}
-        table_name = self._batch_id
 
         param_execute = {}
-        param_sql = [sql.Identifier(table_name)]
+        param_sql = [sql.Identifier(self._simulation, self._batch_name)]
         param_execute = []
 
         query_filter, param_sql_filter, param_execute_filter = self._resolve_filter_by(
@@ -1508,7 +1464,6 @@ class _PgCursor:
         """
         if filter_by is None:
             filter_by = {}
-        table_name = self._batch_id
 
         param_execute = {}
         param_sql = []
@@ -1532,7 +1487,7 @@ class _PgCursor:
         )
 
         q_result = self._execute_query(
-            query.format(*param_sql, table_name=sql.Identifier(table_name)),
+            query.format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name)),
             param_execute,
             check_batch=False,
         )["res"]
@@ -1636,7 +1591,6 @@ class _PgCursor:
         """
         if group_by is None:
             group_by = []
-        table_name = self._batch_id
         query_str = "MIN(time) as minTime, MAX(time) as maxTime, (MAX(time) - MIN(time)) as \
                                     diffTime, COUNT(*) FROM {}"
 
@@ -1654,13 +1608,13 @@ class _PgCursor:
             param_group_by_sql = sql.SQL(",").join(list(map(sql.Identifier, group_by)))
             param_sql = [
                 param_group_by_sql,
-                sql.Identifier(table_name),
+                sql.Identifier(self._simulation, self._batch_name),
                 *param_sql_filtr,
                 param_group_by_sql,
             ]
         else:
             query_group_str = ""
-            param_sql = [sql.Identifier(table_name), *param_sql_filtr]
+            param_sql = [sql.Identifier(self._simulation, self._batch_name), *param_sql_filtr]
 
         query = sql.SQL("SELECT " + query_str + query_filter + query_group_str)
         # do not check if the batch exists and downloaded because it was done in _general_info
@@ -1678,54 +1632,6 @@ class _PgCursor:
             return df
         else:
             return None
-
-    # def _get_data_keys(self, topic = '', type_label = ''):
-    #     '''
-    #     Return keys of the json-format data column for exact `topic` and exact `type_label`.
-
-    #     Parameters
-    #     ----------
-    #     topic : str
-    #         Topic value
-    #     type_label : str
-    #         Type value
-
-    #     Returns
-    #     -------
-    #     keys : list
-    #         Names of the json-format data keys.
-    #     '''
-    #     table_name = self._batch_id
-    #     if topic == '' and type_label == '':
-    #         query = sql.SQL("SELECT data FROM {table_name} limit 1")
-    #         param_execute = {}
-    #         err_message = ''
-    #     elif topic != '' and type_label == '':
-    #         query = sql.SQL("SELECT DISTINCT ON (topic) data FROM {table_name} WHERE topic = %(topic)s")
-    #         param_execute = {'topic' : topic}
-    #         err_message = 'topic does not exist'
-    #     elif topic == '' and type_label != '':
-    #         query = sql.SQL("SELECT DISTINCT ON (type) data FROM {table_name} WHERE type = %(type)s")
-    #         param_execute = {'type' : type_label}
-    #         err_message = 'type does not exist'
-    #     else:
-    #         query = sql.SQL("SELECT DISTINCT ON (topic, type) data FROM {table_name} WHERE topic = %(topic)s AND type = %(type)s")
-    #         param_execute = {'topic' : topic, 'type' : type_label}
-    #         err_message = 'topic or type does not exist'
-
-    #     result = self._execute_query(query.format(table_name = sql.Identifier(table_name)), param_execute)
-
-    #     if result is None:
-    #         print(err_message)
-    #         return []
-    #     elif len(result) == 0:
-    #         print(err_message)
-    #         return []
-
-    #     q_result = result[0][0]
-    #     keys = []
-    #     self._get_keys_from_dict(q_result, keys, pre = ['data'])
-    #     return keys
 
     def _get_keys_from_dict(self, d, keys, pre):
         """
@@ -1785,7 +1691,6 @@ class _PgCursor:
         param_sql += col_label
         param_execute += json_labels
 
-        table_name = self._batch_id
         query_filter, param_sql_filtr, param_execute_filtr = self._resolve_filter_by(
             filter_by
         )
@@ -1793,7 +1698,7 @@ class _PgCursor:
         param_execute += param_execute_filtr
         query = sql.SQL(
             "SELECT DISTINCT " + query_column + " FROM {table}" + query_filter
-        ).format(*param_sql, table=sql.Identifier(table_name))
+        ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
         error_name = query_result["error"]
@@ -1810,7 +1715,6 @@ class _PgCursor:
         param_sql = []
         param_execute = []
 
-        table_name = self._batch_id
         query_filter, param_sql_filtr, param_execute_filtr = self._resolve_filter_by(
             filter_by
         )
@@ -1828,7 +1732,7 @@ class _PgCursor:
                             SELECT * FROM {table}"""
             + query_filter
             + """) AS t;"""
-        ).format(*param_sql, table=sql.Identifier(table_name))
+        ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
         error_name = query_result["error"]
@@ -1841,7 +1745,7 @@ class _PgCursor:
             try:
                 unique_sid = [int(x) for x in data[0][2].split(", ")]
             except:
-                unique_topic = []
+                unique_sid = []
             try:
                 n = int(data[0][3])
             except:
@@ -1850,7 +1754,7 @@ class _PgCursor:
         else:
             return "", [], [], 0, True, error_name
 
-    def get_min_max_value(
+    def _get_min_max_value(
         self,
         column_name: str,
         filter_by: dict = None,
@@ -1903,7 +1807,6 @@ class _PgCursor:
             else:
                 return (None), None
 
-        table_name = self._batch_id
         all_additional_columns = self._all_additional_columns
         param_sql = []
         param_execute = []
@@ -1939,7 +1842,7 @@ class _PgCursor:
                 + query_filter
                 + """) AS t
                             WHERE col_x = extremum_x;"""
-            ).format(*param_sql, table_name=sql.Identifier(table_name))
+            ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
 
         else:
             param_sql += param_sql_filter
@@ -1951,7 +1854,7 @@ class _PgCursor:
                 + query_row
                 + ") FROM {table_name}"
                 + query_filter
-            ).format(*param_sql, table_name=sql.Identifier(table_name))
+            ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         result = query_result["res"]
         error_name = query_result["error"]
@@ -2027,7 +1930,6 @@ class _PgCursor:
             return None, None
         else:
             query_column = ""
-        table_name = self._batch_id
 
         all_additional_columns = self._all_additional_columns
         param_sql = []
@@ -2064,7 +1966,7 @@ class _PgCursor:
         if len(group_by) == 0:
             query = sql.SQL(
                 "SELECT COUNT(" + query_column + ") FROM {table_name}" + query_filter
-            ).format(*param_sql, table_name=sql.Identifier(table_name))
+            ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         else:
             query = sql.SQL(
                 "SELECT "
@@ -2075,7 +1977,7 @@ class _PgCursor:
                 + query_filter
                 + " GROUP BY "
                 + query_group
-            ).format(*param_sql, table_name=sql.Identifier(table_name))
+            ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
 
         return query_result["res"], query_result["error"]
@@ -2130,7 +2032,6 @@ class _PgCursor:
             return None, None
         else:
             query_column = ""
-        table_name = self._batch_id
 
         all_additional_columns = self._all_additional_columns
         param_sql = []
@@ -2172,7 +2073,7 @@ class _PgCursor:
                     "SELECT COUNT(*) FROM (SELECT DISTINCT * FROM {table_name}"
                     + query_filter
                     + ") as temp"
-                ).format(*param_sql, table_name=sql.Identifier(table_name))
+                ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
             else:
                 query = sql.SQL(
                     "SELECT COUNT(col_q) FROM (SELECT DISTINCT "
@@ -2180,7 +2081,7 @@ class _PgCursor:
                     + " as col_q FROM {table_name}"
                     + query_filter
                     + ") as temp"
-                ).format(*param_sql, table_name=sql.Identifier(table_name))
+                ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         else:
             query_group_as_col = []
             query_group_col = []
@@ -2197,7 +2098,7 @@ class _PgCursor:
                     + query_filter
                     + ") as temp GROUP BY "
                     + query_group
-                ).format(*param_sql, table_name=sql.Identifier(table_name))
+                ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
             else:
                 query = sql.SQL(
                     "SELECT "
@@ -2210,7 +2111,7 @@ class _PgCursor:
                     + query_filter
                     + ") as temp GROUP BY "
                     + query_group_col
-                ).format(*param_sql, table_name=sql.Identifier(table_name))
+                ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         return query_result["res"], query_result["error"]
 
@@ -2249,7 +2150,7 @@ class _PgCursor:
             Method of sampling:
             'avg' - average - average `n_avg` rows;
             'move_avg' - moving average - average over `n_avg` rows and return every `n_skip`-th row;
-            'skip' - skiping `n_skip` rows;
+            'skip' - skipping `n_skip` rows;
             '' - no sampling.
             If not specified, no sampling is applied
         n_avg : int, default 1
@@ -2379,7 +2280,6 @@ class _PgCursor:
             filter_by = {}
         if order_by is None:
             order_by = {}
-        table_name = self._batch_id
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -2425,7 +2325,7 @@ class _PgCursor:
             + " FROM {table}"
             + query_filter
             + query_order
-        ).format(*param_sql, table=sql.Identifier(table_name))
+        ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
@@ -2491,7 +2391,6 @@ class _PgCursor:
             except Exception:
                 print("`n_skip` must be int")
                 return None, None
-        table_name = self._batch_id
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -2570,7 +2469,7 @@ class _PgCursor:
             + query_filter_data
             + query_skip
             + query_order
-        ).format(*param_sql, table=sql.Identifier(table_name))
+        ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
@@ -2636,7 +2535,6 @@ class _PgCursor:
             except Exception:
                 print("n_avg must be int")
                 return None, None
-        table_name = self._batch_id
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -2836,11 +2734,11 @@ class _PgCursor:
                 + ") as b "
                 + query_filter_data
                 + query_order
-            ).format(*param_sql, table=sql.Identifier(table_name))
+            ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         else:
             query = sql.SQL(
                 query_avg + main_query + query_group_avg + query_order
-            ).format(*param_sql, table=sql.Identifier(table_name))
+            ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
         error_name = query_result["error"]
@@ -2892,8 +2790,6 @@ class _PgCursor:
         error_name : str
             Error name if it occurred during querying to postgres database or None
         """
-        # if data_query is None:
-        #     data_query = []
         if additional_columns is None:
             additional_columns = []
         if filter_by is None:
@@ -2918,7 +2814,6 @@ class _PgCursor:
             except Exception:
                 print("n_avg must be int")
                 return None, None
-        table_name = self._batch_id
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -3121,7 +3016,7 @@ class _PgCursor:
             + query_filter_data
             + query_skip
             + query_order
-        ).format(*param_sql, table=sql.Identifier(table_name))
+        ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
@@ -3173,7 +3068,7 @@ class _PgCursor:
             Method of sampling:
             'avg' - average - average ``n_avg`` rows;
             'move_avg' - moving average - average ``n_avg`` rows and return every ``n_skip``-th row;
-            'skip' - skiping ``n_skip`` rows;
+            'skip' - skipping ``n_skip`` rows;
             '' - no sampling.
             If not specified, no sampling is applied
         n_avg : int

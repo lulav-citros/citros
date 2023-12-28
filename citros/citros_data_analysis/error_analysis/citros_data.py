@@ -1212,14 +1212,17 @@ class CitrosData:
         ----------
         db2 : CitrosData
             Additional CitrosData object.
+
         x_col : int >=0 or str, optional
             - If `int` - index of column to plot along x axis, >=0.
             - If `str` - label of the column to plot along y axis
             - If data is multidimensional, must be specified, otherwise data is supposed to be 1-dimensional.
+
         y_col : int >=0  or str, optional
             - If `int` - index of column to plot along y axis, >=0.
             - If `str` - label of the column to plot along y axis
             - If data is multidimensional, must be specified, otherwise data is supposed to be 1-dimensional.
+
         slice_id : int
             id of the slice.
         slice_val : float
