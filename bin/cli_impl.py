@@ -676,6 +676,9 @@ def report_list(args, argv):
     table.add_column("message", style="magenta", justify="left")
     table.add_column("progress", justify="right", style="green")
     table.add_column("status", style="magenta", justify="left")
+    table.add_column(
+        "path", style="magenta", justify="left", no_wrap=False, overflow="fold"
+    )
     _name = None
     for flat in flat_repo:
         table.add_row(
@@ -686,6 +689,8 @@ def report_list(args, argv):
             flat["message"],
             str(flat["progress"]),
             flat["status"],
+            str(flat["path"]),
+            # f"[link={flat['path']}]path[/link]",
         )
         _name = flat["name"]
 
