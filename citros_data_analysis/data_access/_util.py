@@ -1,7 +1,8 @@
 import os
 
+
 def get_version():
-    '''
+    """
     Return version of the citros_data_analysis package.
 
     Examples
@@ -9,8 +10,8 @@ def get_version():
     >>> from citros_data_analysis import data_access as da
     >>> print(da.get_version())
     v0.1.1
-    '''
-    rel_path  = "../__init__.py"
+    """
+    rel_path = "../__init__.py"
     here = os.path.abspath(os.path.dirname(__file__))
     with open(os.path.join(here, rel_path)) as fp:
         for line in fp.read().splitlines():
