@@ -140,7 +140,18 @@ def run(args, argv):
         trace_context=config.TRACE_CONTEXT,
     )
 
-    # TODO: check if database is running. if so, send data to database.
+    try:
+        batch.unload()
+        batch.upload()
+    except NoConnectionToCITROSDBException:
+        print("[red]CITROS DB is not running.")
+        print(
+            Panel.fit(
+                Padding("[green]citros data db create", 1),
+                title="help",
+            )
+        )
+
     print(f"[green]CITROS run completed successfully. ")
     print(
         f"[green]You may run [blue]'citros data service'[/blue] to get access to your data using CITROS API."
