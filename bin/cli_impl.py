@@ -86,8 +86,9 @@ def run(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     if args.debug:
@@ -224,8 +225,9 @@ def data(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     simulations = [sim.name for sim in citros.simulations]
@@ -361,8 +363,9 @@ def data_list(args, argv):
         flat_batches = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     table = Table(
@@ -379,6 +382,7 @@ def data_list(args, argv):
     table.add_column("message", style="magenta", justify="left")
     table.add_column("Data", justify="right", style="green")
     table.add_column("completions", style="magenta", justify="left")
+    table.add_column("path", style="cyan", justify="left")
 
     for flat_batch in flat_batches:
         if flat_batch["status"] == "LOADED":
@@ -395,6 +399,8 @@ def data_list(args, argv):
             flat_batch["message"],
             f"[{status_clore}]{flat_batch['status']}",
             flat_batch["completions"],
+            # flat_batch["path"],
+            str(flat_batch["path"]).removeprefix(os.getcwd()).removeprefix("/"),
         )
 
     console = Console()
@@ -661,8 +667,9 @@ def report_list(args, argv):
         flat_repo = citros.get_reports_flat()
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     table = Table(
@@ -689,7 +696,7 @@ def report_list(args, argv):
             flat["message"],
             str(flat["progress"]),
             flat["status"],
-            str(flat["path"]),
+            str(flat["path"]).removeprefix(os.getcwd()).removeprefix("/"),
             # f"[link={flat['path']}]path[/link]",
         )
         _name = flat["name"]
@@ -719,8 +726,9 @@ def report_generate(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
     batch = citros.get_batch(args.simulation, args.batch, args.version)
     # inspect(batch)

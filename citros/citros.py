@@ -108,15 +108,17 @@ class Citros(CitrosObj):
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
 
-        self.copy_default_citros_files()
-
         # loads the main file (project.json)
         try:
             self.log.debug(f"loading .citros/project.json")
             super()._load()
-        except FileNotFoundError as ex:
+        except FileNotFoundException as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
-            raise FileNotFoundException(f"simulation file {self.file} does not exist.")
+            raise CitrosNotFoundException(
+                f"simulation file {self.file} does not exist."
+            )
+
+        self.copy_default_citros_files()
 
         # loads the settings.json file
         self.log.debug(f"loading .citros/settings.json")
@@ -302,7 +304,7 @@ class Citros(CitrosObj):
 
         shutil.copytree(source_folder, self.root_citros, dirs_exist_ok=True)
 
-        self.log.debug(f"Done.")
+        self.log.debug(f"Done copying default citros files.")
 
     ###################
     ##### public ######
