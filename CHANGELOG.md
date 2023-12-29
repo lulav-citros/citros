@@ -2,6 +2,13 @@
 
 
 
+## v0.2.2 (2023-12-29)
+
+### Fix
+
+* fix(package): Add *.j2 files to package_data ([`52364ca`](https://github.com/lulav-citros/citros/commit/52364ca7e1ddcc038a61f8b64882babe4bf387ae))
+
+
 ## v0.2.1 (2023-12-28)
 
 ### Fix
