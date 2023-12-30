@@ -70,7 +70,7 @@ class Report:
     def __init__(
         self,
         name: str = None,
-        mesaage: str = None,
+        message: str = None,
         citros: Citros = None,
         batch=None,
         notebooks=[],
@@ -118,7 +118,7 @@ class Report:
             ],
             "status": "START",
             "name": name,
-            "mesaage": mesaage,
+            "message": message,
             "progress": 0,
             "started_at": datetime.today().strftime("%Y-%m-%d %H:%M:%S"),
             "finished_at": None,
@@ -215,8 +215,8 @@ class Report:
     def end(self):
         self.log.debug(f"{self.__class__.__name__}.end()")
         self.proccess(100)
-        self.state["status"] = "END"
-        self.state["finished_at"] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        self["status"] = "END"
+        self["finished_at"] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
     ###################
     ##### public ######

@@ -86,8 +86,9 @@ def run(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     if args.debug:
@@ -127,19 +128,48 @@ def run(args, argv):
         root_rec_dir,
         simulation,
         name=batch_name,
-        mesaage=batch_message,
+        message=batch_message,
         version=args.version,
         verbose=args.verbose,
         debug=args.debug,
     )
-    batch.run(
-        args.completions,
-        args.index,
-        ros_domain_id=config.ROS_DOMAIN_ID,
-        trace_context=config.TRACE_CONTEXT,
-    )
+    try:
+        batch.run(
+            args.completions,
+            args.index,
+            ros_domain_id=config.ROS_DOMAIN_ID,
+            trace_context=config.TRACE_CONTEXT,
+        )
+    except ModuleNotFoundError:
+        print("[red]Error:[/red] ROS2 is not installed or not in your PATH.")
+        print(
+            Panel.fit(
+                Padding(
+                    """Please install ROS2 on the system and source it:
+[green]source /opt/ros/{ros2 distribution}/setup.bash[/green]
 
-    # TODO: check if database is running. if so, send data to database.
+Please build your ROS2 workspace and source it by:
+[green]colcon build
+source install/local_setup.bash""",
+                    1,
+                ),
+                title="help",
+            )
+        )
+        return
+
+    try:
+        batch.unload()
+        batch.upload()
+    except NoConnectionToCITROSDBException:
+        print("[red]CITROS DB is not running.")
+        print(
+            Panel.fit(
+                Padding("[green]citros data db create", 1),
+                title="help",
+            )
+        )
+
     print(f"[green]CITROS run completed successfully. ")
     print(
         f"[green]You may run [blue]'citros data service'[/blue] to get access to your data using CITROS API."
@@ -224,8 +254,9 @@ def data(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     simulations = [sim.name for sim in citros.simulations]
@@ -361,24 +392,26 @@ def data_list(args, argv):
         flat_batches = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
     table = Table(
         title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
     )
-    table.add_column(
-        "date",
-        style="green",
-        no_wrap=True,
-    )
+    # table.add_column(
+    #     "date",
+    #     style="green",
+    #     no_wrap=True,
+    # )
     table.add_column("Simulation", style="cyan", no_wrap=True)
     table.add_column("Run name", style="magenta", justify="left")
     table.add_column("Versions", justify="left", style="green")
     table.add_column("message", style="magenta", justify="left")
-    table.add_column("Data", justify="right", style="green")
-    table.add_column("completions", style="magenta", justify="left")
+    table.add_column("status", justify="right", style="green")
+    table.add_column("completions", style="magenta", justify="center")
+    table.add_column("path", style="cyan", justify="left")
 
     for flat_batch in flat_batches:
         if flat_batch["status"] == "LOADED":
@@ -395,6 +428,8 @@ def data_list(args, argv):
             flat_batch["message"],
             f"[{status_clore}]{flat_batch['status']}",
             flat_batch["completions"],
+            # flat_batch["path"],
+            str(flat_batch["path"]).removeprefix(os.getcwd()).removeprefix("/"),
         )
 
     console = Console()
@@ -656,8 +691,47 @@ def report(args, argv):
 
 
 def report_list(args, argv):
-    print("reports...!!!")
-    print("will print summery of all reports here.")
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+        flat_repo = citros.get_reports_flat()
+    except CitrosNotFoundException:
+        print(
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
+        )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+        return
+
+    table = Table(
+        title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
+    )
+    table.add_column("date", style="cyan", no_wrap=False)
+    # table.add_column("started_at", style="cyan", no_wrap=True)
+    # table.add_column("finished_at", style="cyan", no_wrap=True)
+    table.add_column("name", style="magenta", justify="left")
+    table.add_column("Versions", justify="left", style="green")
+    table.add_column("message", style="magenta", justify="left")
+    table.add_column("progress", justify="right", style="green")
+    table.add_column("status", style="magenta", justify="left")
+    table.add_column(
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+    )
+    _name = None
+    for flat in flat_repo:
+        table.add_row(
+            flat["started_at"],
+            # flat["finished_at"],
+            None if flat["name"] == _name else flat["name"],
+            flat["version"],
+            flat["message"],
+            str(flat["progress"]),
+            flat["status"],
+            str(flat["path"]).removeprefix(os.getcwd()).removeprefix("/"),
+            # f"[link={flat['path']}]path[/link]",
+        )
+        _name = flat["name"]
+
+    console = Console()
+    console.print(table)
 
 
 def report_generate(args, argv):
@@ -681,14 +755,15 @@ def report_generate(args, argv):
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
         print(
-            f'[red] "{Path(args.dir).expanduser().resolve()}" has not been initialized. cant run "citros run" on non initialized directory.'
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
-        return    
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+        return
     batch = citros.get_batch(args.simulation, args.batch, args.version)
     # inspect(batch)
     report = Report(
         name=args.name,
-        mesaage=args.message,
+        message=args.message,
         citros=citros,
         batch=batch,
         notebooks=args.nb,

@@ -521,6 +521,9 @@ class BatchUploader:
         table_name = f"{self.name}"
 
         connection = citrosDB.connect()
+        if connection is None:
+            self.log.error("No creating connection to database. Aborting.")
+            raise NoConnectionToCITROSDBException
 
         citrosDB.drop_table(connection, schema_name, table_name)
 

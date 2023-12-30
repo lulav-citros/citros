@@ -108,15 +108,17 @@ class Citros(CitrosObj):
     def _load(self):
         self.log.debug(f"{'   '*self.level}{self.__class__.__name__}.load()")
 
-        self.copy_default_citros_files()
-
         # loads the main file (project.json)
         try:
             self.log.debug(f"loading .citros/project.json")
             super()._load()
-        except FileNotFoundError as ex:
+        except FileNotFoundException as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
-            raise FileNotFoundException(f"simulation file {self.file} does not exist.")
+            raise CitrosNotFoundException(
+                f"simulation file {self.file} does not exist."
+            )
+
+        self.copy_default_citros_files()
 
         # loads the settings.json file
         self.log.debug(f"loading .citros/settings.json")
@@ -302,7 +304,7 @@ class Citros(CitrosObj):
 
         shutil.copytree(source_folder, self.root_citros, dirs_exist_ok=True)
 
-        self.log.debug(f"Done.")
+        self.log.debug(f"Done copying default citros files.")
 
     ###################
     ##### public ######
@@ -409,3 +411,36 @@ class Citros(CitrosObj):
                     _name = None
 
         return batches
+
+    def get_reports_flat(self):
+        ret = []
+        reports = sorted(glob.glob(f"{str(self.root_citros / 'reports')}/*/"))
+        for report in reports:
+            if not Path(report).is_dir():
+                continue
+            versions = sorted(glob.glob(f"{report}/*/"), reverse=True)
+
+            for version in versions:
+                report_version = json.loads((Path(version) / "info.json").read_text())
+
+                ret.append(
+                    {
+                        "started_at": report_version["started_at"],
+                        "finished_at": report_version["finished_at"],
+                        "name": report_version["name"],
+                        "version": version.removesuffix("/").split("/")[-1],
+                        "message": report_version["message"],
+                        "path": str(
+                            Path(version)
+                            / report_version["notebooks"][0]
+                            .removesuffix("/")
+                            .split("/")[-1]
+                            .removesuffix(".ipynb")
+                        )
+                        + ".pdf",
+                        "progress": report_version["progress"],
+                        "status": report_version["status"],
+                    }
+                )
+
+        return ret
