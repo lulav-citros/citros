@@ -2,6 +2,25 @@
 
 
 
+## v0.2.3 (2023-12-30)
+
+### Fix
+
+* fix(batch): load batch after run  (#18)
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully ([`a538cab`](https://github.com/lulav-citros/citros/commit/a538cab4edcdcf37bc899bffa39905dc9d305f6b))
+
+
 ## v0.2.2 (2023-12-29)
 
 ### Fix
