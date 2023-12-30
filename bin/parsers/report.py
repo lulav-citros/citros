@@ -70,7 +70,7 @@ def parser_report_generate(subparser, epilog=None):
     parser.add_argument(
         "-style", "--style-path", help="Path to CSS style file", default=None
     )
-    parser.add_argument("-output", "--output-folder", help="Path to output folder")
+    parser.add_argument("-output", "--output", help="Path to output folder")
 
     # sign
     parser.add_argument("--sign", action="store_true", help="Sign PDFs")

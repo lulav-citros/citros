@@ -158,17 +158,20 @@ source install/local_setup.bash""",
         )
         return
 
-    try:
-        batch.unload()
-        batch.upload()
-    except NoConnectionToCITROSDBException:
-        print("[red]CITROS DB is not running.")
-        print(
-            Panel.fit(
-                Padding("[green]citros data db create", 1),
-                title="help",
+    # when running multiple runs, load to DB after all runs is done.
+    # if index != -1 then we run only a part of the batch, so we don't want to load to DB yet.
+    if args.index == -1:
+        try:
+            batch.unload()
+            batch.upload()
+        except NoConnectionToCITROSDBException:
+            print("[red]CITROS DB is not running.")
+            print(
+                Panel.fit(
+                    Padding("[green]citros data db create", 1),
+                    title="help",
+                )
             )
-        )
 
     print(f"[green]CITROS run completed successfully. ")
     print(
@@ -748,7 +751,7 @@ def report_generate(args, argv):
     :param args.dir
     :param args.name
     :param args.message
-    :param args.output_folder: Path to the output folder for generated files.
+    :param args.output: Path to the output folder for generated files.
     """
     # inspect(args)
     try:
@@ -765,6 +768,7 @@ def report_generate(args, argv):
         name=args.name,
         message=args.message,
         citros=citros,
+        output=args.output,
         batch=batch,
         notebooks=args.nb,
         sign=args.sign,
