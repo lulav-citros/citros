@@ -133,12 +133,30 @@ def run(args, argv):
         verbose=args.verbose,
         debug=args.debug,
     )
-    batch.run(
-        args.completions,
-        args.index,
-        ros_domain_id=config.ROS_DOMAIN_ID,
-        trace_context=config.TRACE_CONTEXT,
-    )
+    try:
+        batch.run(
+            args.completions,
+            args.index,
+            ros_domain_id=config.ROS_DOMAIN_ID,
+            trace_context=config.TRACE_CONTEXT,
+        )
+    except ModuleNotFoundError:
+        print("[red]Error:[/red] ROS2 is not installed or not in your PATH.")
+        print(
+            Panel.fit(
+                Padding(
+                    """Please install ROS2 on the system and source it:
+[green]source /opt/ros/{ros2 distribution}/setup.bash[/green]
+
+Please build your ROS2 workspace and source it by:
+[green]colcon build
+source install/local_setup.bash""",
+                    1,
+                ),
+                title="help",
+            )
+        )
+        return
 
     try:
         batch.unload()
@@ -382,17 +400,17 @@ def data_list(args, argv):
     table = Table(
         title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
     )
-    table.add_column(
-        "date",
-        style="green",
-        no_wrap=True,
-    )
+    # table.add_column(
+    #     "date",
+    #     style="green",
+    #     no_wrap=True,
+    # )
     table.add_column("Simulation", style="cyan", no_wrap=True)
     table.add_column("Run name", style="magenta", justify="left")
     table.add_column("Versions", justify="left", style="green")
     table.add_column("message", style="magenta", justify="left")
-    table.add_column("Data", justify="right", style="green")
-    table.add_column("completions", style="magenta", justify="left")
+    table.add_column("status", justify="right", style="green")
+    table.add_column("completions", style="magenta", justify="center")
     table.add_column("path", style="cyan", justify="left")
 
     for flat_batch in flat_batches:
@@ -684,7 +702,7 @@ def report_list(args, argv):
         return
 
     table = Table(
-        title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
+        title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
     )
     table.add_column("date", style="cyan", no_wrap=False)
     # table.add_column("started_at", style="cyan", no_wrap=True)
@@ -695,7 +713,7 @@ def report_list(args, argv):
     table.add_column("progress", justify="right", style="green")
     table.add_column("status", style="magenta", justify="left")
     table.add_column(
-        "path", style="magenta", justify="left", no_wrap=False, overflow="fold"
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
     )
     _name = None
     for flat in flat_repo:
