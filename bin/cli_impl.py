@@ -131,7 +131,6 @@ def run(args, argv):
         simulation,
         name=batch_name,
         message=batch_message,
-        message=batch_message,
         version=args.version,
         verbose=args.verbose,
         debug=args.debug,
