@@ -1,7 +1,9 @@
 import os
 import glob
 import json
+import importlib_resources
 
+from bin import __version__ as citros_version
 from time import sleep
 from citros import Citros
 from pathlib import Path
@@ -20,6 +22,7 @@ from rich_argparse import RichHelpFormatter
 pretty.install()
 
 from InquirerPy import prompt, inquirer
+from rich.prompt import Prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from prompt_toolkit.validation import Validator, ValidationError
@@ -55,6 +58,41 @@ class NumberValidator(Validator):
             )
 
 
+def citros(args, argv):
+    print(
+        Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath("citros.md"),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+        )
+    )
+    # action
+    action = inquirer.select(
+        message="Select Action:",
+        choices=[
+            Choice("data", name="Data: for data managment "),
+            Choice("report", name="Report: generation and management"),
+            Choice("run", name="Run: new simulation"),
+            # Separator(),
+        ],
+        default="",
+        border=True,
+    ).execute()
+
+    if action == "data":
+        data(args, argv)
+    elif action == "report":
+        report(args, argv)
+    elif action == "run":
+        run(args, argv)
+    else:
+        print("[red]Error: unknown action")
+
+
 ############################# CLI implementation ##############################
 def init(args, argv):
     """
@@ -82,6 +120,7 @@ def run(args, argv):
     :param args.debug:
     :param args.verbose:
     """
+
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
@@ -94,8 +133,28 @@ def run(args, argv):
     if args.debug:
         print("[green]done initializing CITROS")
 
-    batch_name = args.batch_name
-    batch_message = args.batch_message
+    if not hasattr(args, "batch_name"):
+        batch_name = Prompt.ask("Please name this batch run", default="citros")
+    else:
+        batch_name = args.batch_name
+
+    # print(batch_name)
+
+    if not hasattr(args, "batch_message"):
+        batch_message = Prompt.ask(
+            "Enter a message for this batch run",
+            default="This is a default batch message from citros",
+        )
+    else:
+        batch_message = args.batch_message
+
+    if not hasattr(args, "completions"):
+        completions = Prompt.ask(
+            "How many times you want the simulation to run?",
+            default="1",
+        )
+    else:
+        completions = args.completions
 
     if not batch_name and str_to_bool(citros.settings["force_batch_name"]):
         print("[red]Please supply a batch name with flag -n <name>.")
@@ -115,11 +174,14 @@ def run(args, argv):
         )
         return False
 
+    if not hasattr(args, "simulation_name"):
+        simulation_name = None
+    else:
+        simulation_name = args.simulation_name
     simulation = choose_simulation(
         citros,
-        args.simulation_name,
+        simulation_name,
     )
-
     root_rec_dir = f"{args.dir}/.citros/data"
     if config.RECORDINGS_DIR:
         root_rec_dir = config.RECORDINGS_DIR
@@ -129,14 +191,14 @@ def run(args, argv):
         simulation,
         name=batch_name,
         message=batch_message,
-        version=args.version,
+        version=getattr(args, "version", None),
         verbose=args.verbose,
         debug=args.debug,
     )
     try:
         batch.run(
-            args.completions,
-            args.index,
+            completions,
+            getattr(args, "index", -1),
             ros_domain_id=config.ROS_DOMAIN_ID,
             trace_context=config.TRACE_CONTEXT,
         )
@@ -157,11 +219,11 @@ source install/local_setup.bash""",
             )
         )
         return
-
     # when running multiple runs, load to DB after all runs is done.
     # if index != -1 then we run only a part of the batch, so we don't want to load to DB yet.
-    if args.index == -1:
+    if getattr(args, "index", -1) == -1:
         try:
+            print("Upoading data po DB...")
             batch.unload()
             batch.upload()
         except NoConnectionToCITROSDBException:
@@ -180,7 +242,21 @@ source install/local_setup.bash""",
 
 
 # helper function
-def choose_simulation(citros: Citros, simulation_name):
+def choose_simulation(citros: Citros, simulation_name=None):
+    """
+    Choose a simulation from the available simulations in the Citros object.
+
+    Args:
+        citros (Citros): The Citros object containing the simulations.
+        simulation_name (str, optional): The name of the simulation to choose. Defaults to None.
+
+    Returns:
+        Simulation: The chosen simulation object.
+
+    Raises:
+        KeyError: If the specified simulation name is not found in the available simulations.
+    """
+
     simulations_dict = {}
     for s in citros.simulations:
         simulations_dict[s.name] = s
@@ -276,11 +352,11 @@ def data(args, argv):
         return
     chosen_simulation = inquirer.select(
         message="Select Simulation:",
-        choices=simulations
-        + [
+        choices=[
+            Choice("list", name="List: list all runs"),
             Separator(),
-            Choice("list", name="List all runs"),
-        ],
+        ]
+        + simulations,
         default="",
         border=True,
     ).execute()

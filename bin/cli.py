@@ -50,10 +50,23 @@ def main():
         formatter_class=RichHelpFormatter,
         # add_help=False
     )
+
+    parser.add_argument(
+        "-dir", "--dir", default=".", help="The working dir of the project"
+    )
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
     parser.add_argument("-V", "--version", action="version", version=citros_version)
+    parser.set_defaults(func=citros)
 
     subparsers = parser.add_subparsers(
-        title="commands", help="citros commands", dest="type", required=True
+        title="commands",
+        help="citros commands",
+        dest="type",  # required=True
     )
 
     parser_init(subparsers, EPILOG)
