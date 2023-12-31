@@ -59,24 +59,14 @@ class NumberValidator(Validator):
 
 
 def citros(args, argv):
-    print(
-        Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc.cli").joinpath("citros.md"),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-        )
-    )
     # action
     action = inquirer.select(
         message="Select Action:",
         choices=[
+            Choice("init", name="Init: initialize .citros in current directory"),
+            Choice("run", name="Run: new simulation"),
             Choice("data", name="Data: for data managment "),
             Choice("report", name="Report: generation and management"),
-            Choice("run", name="Run: new simulation"),
             # Separator(),
         ],
         default="",
@@ -89,6 +79,8 @@ def citros(args, argv):
         report(args, argv)
     elif action == "run":
         run(args, argv)
+    elif action == "init":
+        init(args, argv)
     else:
         print("[red]Error: unknown action")
 
