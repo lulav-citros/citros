@@ -174,10 +174,7 @@ def run(args, argv):
         )
         return False
 
-    if not hasattr(args, "simulation_name"):
-        simulation_name = None
-    else:
-        simulation_name = args.simulation_name
+    simulation_name = getattr(args, "simulation_name", None)
     simulation = choose_simulation(
         citros,
         simulation_name,
@@ -205,7 +202,7 @@ def run(args, argv):
     except ModuleNotFoundError:
         print("[red]Error:[/red] ROS2 is not installed or not in your PATH.")
         print(
-            Panel.fit(
+            Panel(
                 Padding(
                     """Please install ROS2 on the system and source it:
 [green]source /opt/ros/{ros2 distribution}/setup.bash[/green]
@@ -410,15 +407,17 @@ def data(args, argv):
 
     # commands
     if action == "info":
-        print(
-            f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
-        )
+        # print(
+        #     f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
+        # )
         batch = citros.get_batch(
             simulation=chosen_simulation, name=chosen_batch, version=version
         )
 
         console = Console()
-        console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
+        console.rule(
+            f".citros/data/{chosen_simulation}/{chosen_batch}/{version}/info.json"
+        )
         console.print_json(data=batch.data)
 
     elif action == "load":
@@ -497,7 +496,9 @@ def data_list(args, argv):
     table.add_column("message", style="magenta", justify="left")
     table.add_column("status", justify="right", style="green")
     table.add_column("completions", style="magenta", justify="center")
-    table.add_column("path", style="cyan", justify="left")
+    table.add_column(
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+    )
 
     for flat_batch in flat_batches:
         if flat_batch["status"] == "LOADED":
@@ -772,8 +773,38 @@ def data_db_clean(args, argv):
 
 ############################# REPORT implementation ##############################
 def report(args, argv):
-    print("reports...!!!")
-    print("will print summery of all reports here.")
+    print(
+        Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath("report.md"),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+        )
+    )
+    # action
+    action = inquirer.select(
+        message="Select Action:",
+        choices=[
+            Choice("list", name="List: reports list "),
+            Choice("generate", name="Generate: new report"),
+            Choice("validate", name="Validate: report integrity"),
+            # Separator(),
+        ],
+        default="",
+        border=True,
+    ).execute()
+
+    if action == "list":
+        report_list(args, argv)
+    elif action == "generate":
+        report_generate(args, argv)
+    elif action == "validate":
+        report_validate(args, argv)
+    else:
+        print("[red]Error: unknown action")
 
 
 def report_list(args, argv):
@@ -886,7 +917,17 @@ def report_generate(args, argv):
         )
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
-    batch = citros.get_batch(args.simulation, args.batch, args.version)
+    simulation_name = getattr(args, "simulation", None)
+    simulation = choose_simulation(
+        citros,
+        simulation_name,
+    )
+
+    batch = citros.get_batch(
+        simulation,
+        getattr(args, "batch", None),
+        getattr(args, "version", None),
+    )
     # inspect(batch)
     report = Report(
         name=args.name,

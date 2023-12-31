@@ -348,8 +348,6 @@ class Citros(CitrosObj):
             else:
                 batch_names = sorted(glob.glob(f"{sim}/*/"))
 
-            print(f"batch_names={batch_names}")
-
             for batch_name in batch_names:
                 versions = sorted(glob.glob(f"{batch_name}/*/"), reverse=True)
 
