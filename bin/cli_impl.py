@@ -58,9 +58,17 @@ class NumberValidator(Validator):
             )
 
 
+keybindings = {
+    "skip": [{"key": "escape"}],
+}
+
+
 def citros(args, argv):
     # action
     action = inquirer.select(
+        raise_keyboard_interrupt=False,
+        mandatory=False,
+        keybindings=keybindings,
         message="Select Action:",
         choices=[
             Choice("init", name="Init: initialize .citros in current directory"),
@@ -81,6 +89,8 @@ def citros(args, argv):
         run(args, argv)
     elif action == "init":
         init(args, argv)
+    elif action is None:
+        print("Bye")
     else:
         print("[red]Error: unknown action")
 
