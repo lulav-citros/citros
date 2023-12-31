@@ -87,9 +87,7 @@ def run(args, argv):
     except CitrosNotFoundException:
         print(
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
-            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
-        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
@@ -260,9 +258,7 @@ def data(args, argv):
     except CitrosNotFoundException:
         print(
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
-            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
-        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
 
@@ -394,16 +390,16 @@ def data(args, argv):
 
 
 def data_list(args, argv):
+    # inspect(args)
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
         flat_batches = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
-            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
-        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+
         return
 
     table = Table(
