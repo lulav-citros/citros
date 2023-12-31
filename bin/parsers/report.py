@@ -188,7 +188,7 @@ def parser_report(subparser, epilog=None):
                 ).read()
             ),
             subtitle=f"[{citros_version}]",
-            title="description",
+            title="citros report",
         ),
         epilog=epilog,
         help=help,
