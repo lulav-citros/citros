@@ -39,7 +39,7 @@ def parser_data_list(parent_subparser, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
-    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument("-dir","--dir", default=".", help="The working dir of the project")
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )

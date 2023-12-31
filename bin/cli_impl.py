@@ -1,7 +1,9 @@
 import os
 import glob
 import json
+import importlib_resources
 
+from bin import __version__ as citros_version
 from time import sleep
 from citros import Citros
 from pathlib import Path
@@ -20,6 +22,7 @@ from rich_argparse import RichHelpFormatter
 pretty.install()
 
 from InquirerPy import prompt, inquirer
+from rich.prompt import Prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 from prompt_toolkit.validation import Validator, ValidationError
@@ -55,6 +58,41 @@ class NumberValidator(Validator):
             )
 
 
+def citros(args, argv):
+    print(
+        Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath("citros.md"),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+        )
+    )
+    # action
+    action = inquirer.select(
+        message="Select Action:",
+        choices=[
+            Choice("data", name="Data: for data managment "),
+            Choice("report", name="Report: generation and management"),
+            Choice("run", name="Run: new simulation"),
+            # Separator(),
+        ],
+        default="",
+        border=True,
+    ).execute()
+
+    if action == "data":
+        data(args, argv)
+    elif action == "report":
+        report(args, argv)
+    elif action == "run":
+        run(args, argv)
+    else:
+        print("[red]Error: unknown action")
+
+
 ############################# CLI implementation ##############################
 def init(args, argv):
     """
@@ -82,6 +120,7 @@ def run(args, argv):
     :param args.debug:
     :param args.verbose:
     """
+
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
     except CitrosNotFoundException:
@@ -94,8 +133,28 @@ def run(args, argv):
     if args.debug:
         print("[green]done initializing CITROS")
 
-    batch_name = args.batch_name
-    batch_message = args.batch_message
+    if not hasattr(args, "batch_name"):
+        batch_name = Prompt.ask("Please name this batch run", default="citros")
+    else:
+        batch_name = args.batch_name
+
+    # print(batch_name)
+
+    if not hasattr(args, "batch_message"):
+        batch_message = Prompt.ask(
+            "Enter a message for this batch run",
+            default="This is a default batch message from citros",
+        )
+    else:
+        batch_message = args.batch_message
+
+    if not hasattr(args, "completions"):
+        completions = Prompt.ask(
+            "How many times you want the simulation to run?",
+            default="1",
+        )
+    else:
+        completions = args.completions
 
     if not batch_name and str_to_bool(citros.settings["force_batch_name"]):
         print("[red]Please supply a batch name with flag -n <name>.")
@@ -115,11 +174,11 @@ def run(args, argv):
         )
         return False
 
+    simulation_name = getattr(args, "simulation_name", None)
     simulation = choose_simulation(
         citros,
-        args.simulation_name,
+        simulation_name,
     )
-
     root_rec_dir = f"{args.dir}/.citros/data"
     if config.RECORDINGS_DIR:
         root_rec_dir = config.RECORDINGS_DIR
@@ -129,21 +188,21 @@ def run(args, argv):
         simulation,
         name=batch_name,
         message=batch_message,
-        version=args.version,
+        version=getattr(args, "version", None),
         verbose=args.verbose,
         debug=args.debug,
     )
     try:
         batch.run(
-            args.completions,
-            args.index,
+            completions,
+            getattr(args, "index", -1),
             ros_domain_id=config.ROS_DOMAIN_ID,
             trace_context=config.TRACE_CONTEXT,
         )
     except ModuleNotFoundError:
         print("[red]Error:[/red] ROS2 is not installed or not in your PATH.")
         print(
-            Panel.fit(
+            Panel(
                 Padding(
                     """Please install ROS2 on the system and source it:
 [green]source /opt/ros/{ros2 distribution}/setup.bash[/green]
@@ -157,18 +216,21 @@ source install/local_setup.bash""",
             )
         )
         return
-
-    try:
-        batch.unload()
-        batch.upload()
-    except NoConnectionToCITROSDBException:
-        print("[red]CITROS DB is not running.")
-        print(
-            Panel.fit(
-                Padding("[green]citros data db create", 1),
-                title="help",
+    # when running multiple runs, load to DB after all runs is done.
+    # if index != -1 then we run only a part of the batch, so we don't want to load to DB yet.
+    if getattr(args, "index", -1) == -1:
+        try:
+            print("Upoading data po DB...")
+            batch.unload()
+            batch.upload()
+        except NoConnectionToCITROSDBException:
+            print("[red]CITROS DB is not running.")
+            print(
+                Panel.fit(
+                    Padding("[green]citros data db create", 1),
+                    title="help",
+                )
             )
-        )
 
     print(f"[green]CITROS run completed successfully. ")
     print(
@@ -177,7 +239,21 @@ source install/local_setup.bash""",
 
 
 # helper function
-def choose_simulation(citros: Citros, simulation_name):
+def choose_simulation(citros: Citros, simulation_name=None):
+    """
+    Choose a simulation from the available simulations in the Citros object.
+
+    Args:
+        citros (Citros): The Citros object containing the simulations.
+        simulation_name (str, optional): The name of the simulation to choose. Defaults to None.
+
+    Returns:
+        Simulation: The chosen simulation object.
+
+    Raises:
+        KeyError: If the specified simulation name is not found in the available simulations.
+    """
+
     simulations_dict = {}
     for s in citros.simulations:
         simulations_dict[s.name] = s
@@ -273,11 +349,11 @@ def data(args, argv):
         return
     chosen_simulation = inquirer.select(
         message="Select Simulation:",
-        choices=simulations
-        + [
+        choices=[
+            Choice("list", name="List: list all runs"),
             Separator(),
-            Choice("list", name="List all runs"),
-        ],
+        ]
+        + simulations,
         default="",
         border=True,
     ).execute()
@@ -331,15 +407,17 @@ def data(args, argv):
 
     # commands
     if action == "info":
-        print(
-            f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
-        )
+        # print(
+        #     f"chosen_simulation={chosen_simulation}, chosen_batch={chosen_batch}, version={version}"
+        # )
         batch = citros.get_batch(
             simulation=chosen_simulation, name=chosen_batch, version=version
         )
 
         console = Console()
-        console.rule(f"{chosen_simulation} / {chosen_batch} / {version}")
+        console.rule(
+            f".citros/data/{chosen_simulation}/{chosen_batch}/{version}/info.json"
+        )
         console.print_json(data=batch.data)
 
     elif action == "load":
@@ -387,6 +465,7 @@ def data(args, argv):
 
 
 def data_list(args, argv):
+    # inspect(args)
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
         flat_batches = citros.get_batches_flat()
@@ -395,11 +474,17 @@ def data_list(args, argv):
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
         )
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+
         return
 
     table = Table(
         title=f"Simulation Runs in: [blue]{citros.root_citros / 'data'}", box=box.SQUARE
     )
+    # table.add_column(
+    #     "date",
+    #     style="green",
+    #     no_wrap=True,
+    # )
     # table.add_column(
     #     "date",
     #     style="green",
@@ -411,7 +496,9 @@ def data_list(args, argv):
     table.add_column("message", style="magenta", justify="left")
     table.add_column("status", justify="right", style="green")
     table.add_column("completions", style="magenta", justify="center")
-    table.add_column("path", style="cyan", justify="left")
+    table.add_column(
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+    )
 
     for flat_batch in flat_batches:
         if flat_batch["status"] == "LOADED":
@@ -686,11 +773,82 @@ def data_db_clean(args, argv):
 
 ############################# REPORT implementation ##############################
 def report(args, argv):
-    print("reports...!!!")
-    print("will print summery of all reports here.")
+    print(
+        Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath("report.md"),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+        )
+    )
+    # action
+    action = inquirer.select(
+        message="Select Action:",
+        choices=[
+            Choice("list", name="List: reports list "),
+            Choice("generate", name="Generate: new report"),
+            Choice("validate", name="Validate: report integrity"),
+            # Separator(),
+        ],
+        default="",
+        border=True,
+    ).execute()
+
+    if action == "list":
+        report_list(args, argv)
+    elif action == "generate":
+        report_generate(args, argv)
+    elif action == "validate":
+        report_validate(args, argv)
+    else:
+        print("[red]Error: unknown action")
 
 
 def report_list(args, argv):
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+        flat_repo = citros.get_reports_flat()
+    except CitrosNotFoundException:
+        print(
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
+        )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+        return
+
+    table = Table(
+        title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
+    )
+    table.add_column("date", style="cyan", no_wrap=False)
+    # table.add_column("started_at", style="cyan", no_wrap=True)
+    # table.add_column("finished_at", style="cyan", no_wrap=True)
+    table.add_column("name", style="magenta", justify="left")
+    table.add_column("Versions", justify="left", style="green")
+    table.add_column("message", style="magenta", justify="left")
+    table.add_column("progress", justify="right", style="green")
+    table.add_column("status", style="magenta", justify="left")
+    table.add_column(
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+    )
+    _name = None
+    for flat in flat_repo:
+        table.add_row(
+            flat["started_at"],
+            # flat["finished_at"],
+            None if flat["name"] == _name else flat["name"],
+            flat["version"],
+            flat["message"],
+            str(flat["progress"]),
+            flat["status"],
+            str(flat["path"]).removeprefix(os.getcwd()).removeprefix("/"),
+            # f"[link={flat['path']}]path[/link]",
+        )
+        _name = flat["name"]
+
+    console = Console()
+    console.print(table)
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
         flat_repo = citros.get_reports_flat()
@@ -748,7 +906,7 @@ def report_generate(args, argv):
     :param args.dir
     :param args.name
     :param args.message
-    :param args.output_folder: Path to the output folder for generated files.
+    :param args.output: Path to the output folder for generated files.
     """
     # inspect(args)
     try:
@@ -759,12 +917,23 @@ def report_generate(args, argv):
         )
         print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
         return
-    batch = citros.get_batch(args.simulation, args.batch, args.version)
+    simulation_name = getattr(args, "simulation", None)
+    simulation = choose_simulation(
+        citros,
+        simulation_name,
+    )
+
+    batch = citros.get_batch(
+        simulation,
+        getattr(args, "batch", None),
+        getattr(args, "version", None),
+    )
     # inspect(batch)
     report = Report(
         name=args.name,
         message=args.message,
         citros=citros,
+        output=args.output,
         batch=batch,
         notebooks=args.nb,
         sign=args.sign,

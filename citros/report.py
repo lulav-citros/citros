@@ -72,6 +72,7 @@ class Report:
         name: str = None,
         message: str = None,
         citros: Citros = None,
+        output=None,
         batch=None,
         notebooks=[],
         sign=False,
@@ -95,7 +96,11 @@ class Report:
         self.version = version
         self.index = index
 
+        self.output = output
         self.reports_dir = citros.root_citros / "reports" / name
+        if output is not None:
+            self.reports_dir = Path(output) / "reports" / name
+
         # get version
         if not version:  # no version specified
             if batch:  # create new report
@@ -105,7 +110,7 @@ class Report:
                 # get version from index
                 self.version = versions[self.index].split("/")[-1]
 
-        self.folder = citros.root_citros / "reports" / name / self.version
+        self.folder = self.reports_dir / self.version
 
         self.state = {
             "notebooks": notebooks,

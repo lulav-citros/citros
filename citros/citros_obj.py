@@ -77,12 +77,18 @@ class CitrosObj:
         # self.root = the path to the parent of .citros object.
         # self.root = Path.cwd() if root is None else Path(root).expanduser().resolve()
         # self.root = self._find_citros_in_ancestors(new=new)
-        self.root = Path.cwd() if root is None else Path(root).expanduser().resolve()
+        if root is None:
+            self.root = (
+                Path.cwd() if root is None else Path(root).expanduser().resolve()
+            )
+        else:
+            self.root = Path(root)
 
         # path to .citros folder
         self.root_citros = self.root / ".citros"
 
         self._init_log(log)
+        self.log.debug(f"Citros root={self.root}")
 
         self.log.debug(
             f"{'   '*level}{self.__class__.__name__}.init(name={self.name}, new={new})",

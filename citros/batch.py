@@ -267,8 +267,7 @@ class Batch(BatchUploader):
 
         if sid != -1:
             self.simulation_run(sid, ros_domain_id, trace_context)
-            return
-        print(completions)
+            return        
         for i in range(int(completions)):
             self.log.debug(f"run {i}")
             self.simulation_run(i, ros_domain_id, trace_context)
