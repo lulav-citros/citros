@@ -842,6 +842,47 @@ def report_list(args, argv):
 
     console = Console()
     console.print(table)
+    try:
+        citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
+        flat_repo = citros.get_reports_flat()
+    except CitrosNotFoundException:
+        print(
+            f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
+        )
+        print(Panel.fit(Padding("You may run [green]citros init ", 1), title="help"))
+        return
+
+    table = Table(
+        title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
+    )
+    table.add_column("date", style="cyan", no_wrap=False)
+    # table.add_column("started_at", style="cyan", no_wrap=True)
+    # table.add_column("finished_at", style="cyan", no_wrap=True)
+    table.add_column("name", style="magenta", justify="left")
+    table.add_column("Versions", justify="left", style="green")
+    table.add_column("message", style="magenta", justify="left")
+    table.add_column("progress", justify="right", style="green")
+    table.add_column("status", style="magenta", justify="left")
+    table.add_column(
+        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+    )
+    _name = None
+    for flat in flat_repo:
+        table.add_row(
+            flat["started_at"],
+            # flat["finished_at"],
+            None if flat["name"] == _name else flat["name"],
+            flat["version"],
+            flat["message"],
+            str(flat["progress"]),
+            flat["status"],
+            str(flat["path"]).removeprefix(os.getcwd()).removeprefix("/"),
+            # f"[link={flat['path']}]path[/link]",
+        )
+        _name = flat["name"]
+
+    console = Console()
+    console.print(table)
 
 
 def report_generate(args, argv):

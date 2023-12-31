@@ -61,6 +61,7 @@ def main():
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.add_argument("-V", "--version", action="version", version=citros_version)
+    parser.set_defaults(func=citros)
 
     def func(args, argv):
         print(PANNEL)
