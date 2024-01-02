@@ -2,6 +2,365 @@
 
 
 
+## v0.2.8 (2024-01-02)
+
+### Fix
+
+* fix(simulaiton): remove __ ([`cfab4af`](https://github.com/lulav-citros/citros/commit/cfab4af932996fd09a12dd520fc6f52a81008b88))
+
+
+## v0.2.7 (2024-01-02)
+
+### Fix
+
+* fix(reademe): commands
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability
+
+* Add title to citros report
+
+* Refactor CLI command handling
+
+* Refactor report_list function to improve readability and remove unnecessary code
+
+* Add keybindings for skip action in CLI implementation
+
+* Update CLI documentation and fix report generation path
+
+* Remove unused files and update report generate description ([`a434b02`](https://github.com/lulav-citros/citros/commit/a434b02c0339e678f43bbc125f3cf2269efaa1e7))
+
+
+## v0.2.6 (2024-01-02)
+
+### Fix
+
+* fix(cli_impl): remove inspect ([`dede5a3`](https://github.com/lulav-citros/citros/commit/dede5a3e3a1ddf50c0aa54d9330df3eb1831eca2))
+
+
+## v0.2.5 (2024-01-02)
+
+### Fix
+
+* fix(reports): fixed cli commands
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability
+
+* Add title to citros report
+
+* Refactor CLI command handling
+
+* Refactor report_list function to improve readability and remove unnecessary code
+
+* Add keybindings for skip action in CLI implementation
+
+* Update CLI documentation and fix report generation path ([`7b4b3c0`](https://github.com/lulav-citros/citros/commit/7b4b3c0d9fa57427dc00c8c9954062adf6ad8da4))
+
+
+## v0.2.4 (2023-12-31)
+
+### Fix
+
+* fix(report): Dev (#19)
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability ([`457f544`](https://github.com/lulav-citros/citros/commit/457f5445a9a511f9a9b4310ce4dba2b8584542a6))
+
+
+## v0.2.3 (2023-12-30)
+
+### Fix
+
+* fix(batch): load batch after run  (#18)
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully ([`a538cab`](https://github.com/lulav-citros/citros/commit/a538cab4edcdcf37bc899bffa39905dc9d305f6b))
+
+
+## v0.2.2 (2023-12-29)
+
+### Fix
+
+* fix(package): Add *.j2 files to package_data ([`52364ca`](https://github.com/lulav-citros/citros/commit/52364ca7e1ddcc038a61f8b64882babe4bf387ae))
+
+
+## v0.2.1 (2023-12-28)
+
+### Fix
+
+* fix(reports): working ([`e5448fc`](https://github.com/lulav-citros/citros/commit/e5448fc5ca743a309fd41c0081c0c4eb5c64d644))
+
+### Unknown
+
+* Merge pull request #17 from lulav-citros/vova-reports
+
+fix(reports): new reports ([`4d31103`](https://github.com/lulav-citros/citros/commit/4d311032e08e1e017ee73b91fa4b87e658b3d698))
+
+* Fix issues with batch and report generation ([`ec30137`](https://github.com/lulav-citros/citros/commit/ec30137e4c6815c6d741ce9ce515843eef604ec9))
+
+* Merge commit &#39;e4c136fc4153efc112452611cab74316ffd2fb39&#39; into vova-reports ([`bcd25b6`](https://github.com/lulav-citros/citros/commit/bcd25b6d1fb8603e58b0bd322b7cce4520b5f397))
+
+
+## v0.2.0 (2023-12-28)
+
+### Feature
+
+* feat(citros/citros_data_analysis): initial changes for integration to citros ([`f59bb54`](https://github.com/lulav-citros/citros/commit/f59bb5458bc3eaa6d2a988a9194d422d12e45be8))
+
+### Unknown
+
+* Merge pull request #16 from lulav-citros/dev
+
+Add data analysis to citros cli ([`d35100b`](https://github.com/lulav-citros/citros/commit/d35100b7e682298e7db3ce02006b18eca0be273c))
+
+* Refactor report.py and batch_uploader.py ([`47dd001`](https://github.com/lulav-citros/citros/commit/47dd00126923b3329746a624fea523e13f69295a))
+
+* Remove unused files and update parser error handling ([`b7d564d`](https://github.com/lulav-citros/citros/commit/b7d564d80d0d974bfe6aad05102f62e23cbaae14))
+
+* citros data db init ([`f3a95d7`](https://github.com/lulav-citros/citros/commit/f3a95d72855cf88fbbc5c3fe065942c0e6783f6b))
+
+* Refactor code for CitrosDict and _Stat classes ([`1622b4c`](https://github.com/lulav-citros/citros/commit/1622b4c0274feab98967ba5a8e19eb80ba93a34b))
+
+
+## v0.1.10 (2023-12-26)
+
+### Fix
+
+* fix(parser_ros2): fix unsupported nodes ([`55e5177`](https://github.com/lulav-citros/citros/commit/55e5177091b1ca9d114a7c85b68dd1917955ae84))
+
+### Unknown
+
+* temp ([`e6ee1be`](https://github.com/lulav-citros/citros/commit/e6ee1bec38fceccc097d5a221aba45fa573df4d1))
+
+
+## v0.1.9 (2023-12-26)
+
+### Fix
+
+* fix(gitignore): added to data ([`c522902`](https://github.com/lulav-citros/citros/commit/c522902b420614fecbd87eab9decc9e262c2ca14))
+
+### Unknown
+
+* added initial data analysis ([`3387005`](https://github.com/lulav-citros/citros/commit/3387005b82b1aba6b2e6579acc4871ef8532a0de))
+
+
+## v0.1.8 (2023-12-25)
+
+### Fix
+
+* fix(gitignore): Merge pull request #15 from lulav-citros/dev
+
+Dev ([`fa49b66`](https://github.com/lulav-citros/citros/commit/fa49b661c88b7a0dd1d14759c8cc939d7ab96bc9))
+
+* fix(citrosignore): new file ([`c40ee01`](https://github.com/lulav-citros/citros/commit/c40ee01c5b09b2b8792e0650acaaca728b0ff82b))
+
+### Unknown
+
+* Add new files and update existing files ([`8882bf0`](https://github.com/lulav-citros/citros/commit/8882bf0138be5e91233a2a9795f505425822f88b))
+
+* Refactor report rendering code ([`04bb230`](https://github.com/lulav-citros/citros/commit/04bb230e83326d3317334af494552f1baf7c5c63))
+
+* Merge branch &#39;main&#39; into dev ([`9d43ee4`](https://github.com/lulav-citros/citros/commit/9d43ee4030a8af8a4dfeb6499fa4019d8f80dd3f))
+
+* Add code to generate HTML report and write it to file ([`9e326e0`](https://github.com/lulav-citros/citros/commit/9e326e08e002a384e0a46279c431f98e825670d3))
+
+* Merge pull request #14 from lulav-citros/templates_1
+
+Templates update, render fixes ([`55b63a8`](https://github.com/lulav-citros/citros/commit/55b63a856eb6c00fd22ea78512793087aa1c3013))
+
+* template improvement, fixes ([`a45702e`](https://github.com/lulav-citros/citros/commit/a45702e5df709ae2f2cacb8f51b848a300bff148))
+
+* Merge branch &#39;dev&#39; into templates_1 ([`18fdc8a`](https://github.com/lulav-citros/citros/commit/18fdc8af7549d1f04dfadd1255a3f6087d209b9e))
+
+* in progress ([`003ee55`](https://github.com/lulav-citros/citros/commit/003ee5579f513efb6a5890552580afd2aef9b795))
+
+* Merge branch &#39;main&#39; into dev ([`f09b43d`](https://github.com/lulav-citros/citros/commit/f09b43d373c6379f20e17bd7f84556ff42c7796b))
+
+* Update PostgreSQL environment variables in report.py ([`342474c`](https://github.com/lulav-citros/citros/commit/342474ce187d223fb53e5dc64d3c564cebf0f29f))
+
+* temp ([`79fc089`](https://github.com/lulav-citros/citros/commit/79fc089f86b8ecfc51320c1a0633d194dcadc955))
+
+
+## v0.1.7 (2023-12-21)
+
+### Fix
+
+* fix(req): Merge pull request #13 from lulav-citros/dev
+
+Dev ([`a88639d`](https://github.com/lulav-citros/citros/commit/a88639d602faeac18e791f721537ab6511e14460))
+
+### Unknown
+
+* Update numpy version in requirements.txt ([`904ae7b`](https://github.com/lulav-citros/citros/commit/904ae7bfaeca0638ea1470782abc98b6ab155fd8))
+
+* Fix issues with CITROS DB connection and handling of missing notebooks ([`c70aff2`](https://github.com/lulav-citros/citros/commit/c70aff2629624654e7ea15c5bfad1fd8363698df))
+
+
+## v0.1.6 (2023-12-21)
+
+### Fix
+
+* fix(gitignore): Merge pull request #12 from lulav-citros/dev
+
+fix(gitignore): gitignore ([`0fc2999`](https://github.com/lulav-citros/citros/commit/0fc2999999704dabc772e1f5c5038b85cff5dbf3))
+
+* fix(gitignore): gitignore ([`058c94d`](https://github.com/lulav-citros/citros/commit/058c94d2a4d773df1461d3dad87741ce8b9c9084))
+
+
+## v0.1.5 (2023-12-21)
+
+### Fix
+
+* fix(igonore): Merge pull request #11 from lulav-citros/dev
+
+fix(igonore): ignore ([`0002c02`](https://github.com/lulav-citros/citros/commit/0002c02bef67e34f004c22c33794d5f4f427ce35))
+
+* fix(igonore): ignore ([`8e49072`](https://github.com/lulav-citros/citros/commit/8e49072c170421c9e6785a579ae1b04551d24722))
+
+
+## v0.1.4 (2023-12-21)
+
+### Fix
+
+* fix(parameter): Merge pull request #10 from lulav-citros/dev
+
+fix(parameter): added sid to context ([`b52a1bf`](https://github.com/lulav-citros/citros/commit/b52a1bf1bb98073ce76dc7335474b85a4575235d))
+
+* fix(parameter): added sid to context ([`0b22ffd`](https://github.com/lulav-citros/citros/commit/0b22ffdcfc456505d9b64e21d68164943ad677ee))
+
+### Unknown
+
+* readme ([`70c104b`](https://github.com/lulav-citros/citros/commit/70c104b1fa82f01be090f0f4c410c480956e040e))
+
+
+## v0.1.3 (2023-12-21)
+
+### Fix
+
+* fix(functions): Merge pull request #9 from lulav-citros/dev
+
+fix(functions) function fix ([`a096966`](https://github.com/lulav-citros/citros/commit/a096966b3c1e85d23146a5e8e542689ef82d8568))
+
+### Unknown
+
+* function fix ([`f81ff30`](https://github.com/lulav-citros/citros/commit/f81ff30d9907780ddc77a0b145cb99cc83fbce51))
+
+
+## v0.1.2 (2023-12-21)
+
+### Fix
+
+* fix(version): version ([`bd91a0f`](https://github.com/lulav-citros/citros/commit/bd91a0ff31038860515e8b00b74778e2283a6c2e))
+
+
+## v0.1.1 (2023-12-21)
+
+### Fix
+
+* fix(functions): fix bug ([`3fabc66`](https://github.com/lulav-citros/citros/commit/3fabc6641a248df0aa74db053bd0f8972b70cec2))
+
+### Unknown
+
+* Merge pull request #8 from lulav-citros/dev
+
+Dev ([`95e9877`](https://github.com/lulav-citros/citros/commit/95e987709e23870dc722ab59cbd1e7a4e33ac9e8))
+
+* some fixes ([`df70843`](https://github.com/lulav-citros/citros/commit/df70843224138d8da36b34e63e698a23000acbc9))
+
+* Imported necessary modules and fixed import order ([`e304339`](https://github.com/lulav-citros/citros/commit/e30433912cb28300b1b9109312550e8ccae2fa09))
+
+* namings ([`bfeb451`](https://github.com/lulav-citros/citros/commit/bfeb451f83370378856cb0c0f49692a0d50ef8a7))
+
+* Refactor report generation code ([`9eb99df`](https://github.com/lulav-citros/citros/commit/9eb99dfb4881678f56f4c73e7e3808012b44ef80))
+
+* added env ([`3b27d86`](https://github.com/lulav-citros/citros/commit/3b27d862ddb7717e347c60615fb32a6315d4cee4))
+
+* Add report generation functionality ([`0d93bb5`](https://github.com/lulav-citros/citros/commit/0d93bb59d59cf26582ce86b407ea7d7814bca73e))
+
+* Merge branch &#39;main&#39; into dev ([`a8b7d92`](https://github.com/lulav-citros/citros/commit/a8b7d92ef599f5e01bfc4c97a01819f785034fd6))
+
+* Merge pull request #2 from lulav-citros/daniil-reports
+
+daniil ([`31c2323`](https://github.com/lulav-citros/citros/commit/31c2323bdb5ba22f611818d0f64313d3ac0c7a06))
+
+* Merge branch &#39;main&#39; into daniil-reports ([`7cca6d2`](https://github.com/lulav-citros/citros/commit/7cca6d2d152a5b28b755c322401c31c3c5e0ef8f))
+
+* remove unused folder ([`baf566f`](https://github.com/lulav-citros/citros/commit/baf566fabf2798ac861eefe7765bd9b4db90cf82))
+
+* beutification ([`9fd488b`](https://github.com/lulav-citros/citros/commit/9fd488bae2d50c0157a8af23d758c3532d1c371a))
+
+* Structure fixes, comments ([`599c5b7`](https://github.com/lulav-citros/citros/commit/599c5b7ca922fe7619f94ac753c3dab9e9f51279))
+
+* added gitignore to docs ([`d37b324`](https://github.com/lulav-citros/citros/commit/d37b32450f69ed7e2f6700ad1090bdf54f9b457a))
+
+
 ## v0.1.0 (2023-12-20)
 
 ### Feature
@@ -248,6 +607,10 @@ initial ([`839bd9a`](https://github.com/lulav-citros/citros/commit/839bd9a4ca140
 
 * add ([`ec37e77`](https://github.com/lulav-citros/citros/commit/ec37e7702c3992eb4eb282160181a9005f1df262))
 
+* teplate moved ([`c428c13`](https://github.com/lulav-citros/citros/commit/c428c13e6d10c1a7feaad5b5913e745f928559e9))
+
+* basic functional for reports ([`79cc4f9`](https://github.com/lulav-citros/citros/commit/79cc4f97fa0a2dcd68919fecc446aa51f6d2ff3d))
+
 * ignores ([`eeca009`](https://github.com/lulav-citros/citros/commit/eeca0095685c8d4ed852b96e2a1a6e88b91951c3))
 
 * working run ([`251bd87`](https://github.com/lulav-citros/citros/commit/251bd873c3a7417ec51eba3cee61f2fca7157704))
@@ -255,6 +618,8 @@ initial ([`839bd9a`](https://github.com/lulav-citros/citros/commit/839bd9a4ca140
 * loggers ([`1e63351`](https://github.com/lulav-citros/citros/commit/1e63351dbecda021dcf2818effb9cf597eaaa89d))
 
 * vova ([`50a3d20`](https://github.com/lulav-citros/citros/commit/50a3d20f7ce9bc3aaaff0643292fe2796d258cfe))
+
+* daniil ([`dc7e11e`](https://github.com/lulav-citros/citros/commit/dc7e11e49bda53d1182a1868ca87dfbc57b37677))
 
 * vova progress1 ([`e1d407d`](https://github.com/lulav-citros/citros/commit/e1d407d7efba48ef4f4b276f713be54dae87610d))
 
