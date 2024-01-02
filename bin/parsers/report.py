@@ -66,7 +66,9 @@ def parser_report_generate(subparser, epilog=None):
     parser.add_argument("-ver", "--version", nargs="?", default=-1, help="version")
 
     # notebooks
-    parser.add_argument("-nb", nargs="+", help="Paths to Jupyter notebooks")
+    parser.add_argument(
+        "-nb", "--notebooks", nargs="+", help="Paths to Jupyter notebooks"
+    )
     parser.add_argument(
         "-style", "--style-path", help="Path to CSS style file", default=None
     )
@@ -196,6 +198,12 @@ def parser_report(subparser, epilog=None):
     )
     parser.add_argument("-n", "--name", default=None, help="name of report")
     parser.add_argument("-m", "--match", default=None, help="match report pattern")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
 
     parser.set_defaults(func=report)
 
