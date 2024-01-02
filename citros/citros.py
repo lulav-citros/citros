@@ -26,8 +26,11 @@ from rich.logging import RichHandler
 from rich import print, inspect, print_json
 from rich.panel import Panel
 from rich.padding import Padding
+import shutil
 
 install()
+
+from .batch import Batch
 
 
 class Citros(CitrosObj):
@@ -109,9 +112,13 @@ class Citros(CitrosObj):
         try:
             self.log.debug(f"loading .citros/project.json")
             super()._load()
-        except FileNotFoundError as ex:
+        except FileNotFoundException as ex:
             self.log.error(f"simulation file {self.file} does not exist.")
-            raise FileNotFoundException(f"simulation file {self.file} does not exist.")
+            raise CitrosNotFoundException(
+                f"simulation file {self.file} does not exist."
+            )
+
+        self.copy_default_citros_files()
 
         # loads the settings.json file
         self.log.debug(f"loading .citros/settings.json")
@@ -127,9 +134,7 @@ class Citros(CitrosObj):
         )
 
         # loads the parameter_setups
-        for file in glob.glob(
-            f"{self.root_citros}/parameter_setups/*.json"
-        ):
+        for file in glob.glob(f"{self.root_citros}/parameter_setups/*.json"):
             file = file.split("/")[-1]
             self.log.debug(f"loading parameter_setup: {file}")
             self.parameter_setups.append(
@@ -172,6 +177,8 @@ class Citros(CitrosObj):
 
         # create the .citros folder
         Path(self.root_citros).mkdir(parents=True, exist_ok=True)
+        # copy data files.
+        self.copy_default_citros_files()
 
         # settings
         self.log.debug(f"creating .citros/settings.json")
@@ -186,7 +193,7 @@ class Citros(CitrosObj):
             level=self.level + 1,
         )
 
-        self._parser_ros2 = ParserRos2(self.log)
+        self._parser_ros2 = ParserRos2(self.log, self.get_citros_ignore_list())
         # get data from ros2
         project_data = self._parser_ros2.parse(str(self.root))
         with open(self.path(), "w") as file:
@@ -207,45 +214,10 @@ class Citros(CitrosObj):
             debug=self.debug,
             level=self.level + 1,
         )
-        (self.root_citros / "parameter_setups").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "parameter_setups/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"parameter_setups/README.md")
 
         # create simulation per launch file as default
         self.log.debug(f"creating .citros/simulations/*")
-        (self.root_citros / "simulations").mkdir(parents=True, exist_ok=True)
         self._create_simulations()
-        with importlib_resources.files(f"data.doc").joinpath(
-            "simulations/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"simulations/README.md")
-
-        self.log.debug(f"creating .citros/.gitignore")
-        self._create_gitignore()
-
-        self.log.debug(f"creating .citros/notebooks")
-        (self.root_citros / "notebooks").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "notebooks/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"notebooks/README.md")
-        # TODO: copy some sample notebooks.
-
-        self.log.debug(f"creating .citros/data")
-        (self.root_citros / "data").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "data/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"data/README.md")
-
-        self.log.debug(f"creating .citros/reports")
-        (self.root_citros / "reports").mkdir(parents=True, exist_ok=True)
-        with importlib_resources.files(f"data.doc").joinpath(
-            "reports/README.md"
-        ) as md_file_path:
-            shutil.copy2(md_file_path, self.root_citros / f"reports/README.md")
 
     #################
     ##### utils #####
@@ -311,10 +283,171 @@ class Citros(CitrosObj):
                 )
             )
 
-    def _create_gitignore(self):
-        if not Path(self.root, ".gitignore").exists():
-            with open(Path(self.root, ".gitignore"), "w") as file:
-                ignores = linesep.join(
-                    [".citros/data/", ".citros/logs/"]
-                )  # add more as needed.
-                file.write(ignores)
+    def get_citros_ignore_list(self):
+        if Path(self.root_citros, ".citrosignore").exists():
+            with open(Path(self.root_citros, ".citrosignore"), "r") as file:
+                lines = [line.strip() for line in file if "#" not in line]
+                self.log.debug(f".citrosignore contenrs: {lines}")
+                return lines
+        else:
+            self.log.debug(f"Could not find .citrosignore in {self.root_citros}")
+            return []
+
+    def copy_default_citros_files(self):
+        self.log.debug(
+            f"{'   '*self.level}{self.__class__.__name__}.copy_default_citros_files()"
+        )
+
+        source_folder = importlib_resources.files("data.defaults.citros")
+
+        self.log.debug(f"copying {source_folder} to {self.root_citros}")
+
+        shutil.copytree(source_folder, self.root_citros, dirs_exist_ok=True)
+
+        self.log.debug(f"Done copying default citros files.")
+
+    ###################
+    ##### public ######
+    ###################
+    def delete_batch(self, simulation: str, name: str, version: str):
+        import shutil
+
+        shutil.rmtree(self.root_citros / "data" / simulation / name / version)
+
+    def get_batch(self, simulation: str, name: str, version=-1):
+        batch = Batch(
+            self.root_citros / "data",
+            simulation,
+            name=name,
+            version=version if type(version) is str else None,
+            index=version if type(version) is int else None,
+            debug=self.debug,
+            verbose=self.verbose,
+        )
+
+        return batch
+
+    def unload_batch(self, simulation, batch):
+        versions = glob.glob(f"{simulation}/{batch}/*")
+        for ver in versions:
+            batch = self.get_batch(simulation, batch, ver)
+            batch.unload()
+
+    def get_batches(self, simulation=None, batch=None, filter: str = None):
+        batches = []
+        if simulation:
+            simulations = sorted(
+                glob.glob(f"{str(self.root_citros / 'data' / simulation)}")
+            )
+        else:
+            simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
+
+        for sim in simulations:
+            if batch:
+                batch_names = sorted(glob.glob(f"{sim}/{batch}/"))
+            else:
+                batch_names = sorted(glob.glob(f"{sim}/*/"))
+
+            for batch_name in batch_names:
+                versions = sorted(glob.glob(f"{batch_name}/*/"), reverse=True)
+
+                batches.append(
+                    {
+                        "simulation": sim.removesuffix("/").split("/")[-1],
+                        "name": batch_name.removesuffix("/").split("/")[-1],
+                        "versions": [
+                            v.removesuffix("/").split("/")[-1] for v in versions
+                        ],
+                    }
+                )
+
+        return batches
+
+    def get_batches_flat(self):
+        batches = []
+        simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
+        for sim in simulations:
+            if not Path(sim).is_dir():
+                continue
+            names = sorted(glob.glob(f"{sim}/*/"))
+            _simulation = sim.removesuffix("/").split("/")[-1]
+            for name in names:
+                if not Path(name).is_dir():
+                    continue
+                versions = sorted(glob.glob(f"{name}/*/"), reverse=True)
+                # print(versions)
+                _name = name.removesuffix("/").split("/")[-1]
+                try:
+                    batch_hr_statu = json.loads((Path(name) / "hr.json").read_text())
+                except:
+                    batch_hr_statu = {"status": "UNLOADED"}
+
+                for version in versions:
+                    batch = json.loads((Path(version) / "info.json").read_text())
+                    status = "UNLOADED"
+                    if (
+                        batch_hr_statu.get("version", None)
+                        == version.removesuffix("/").split("/")[-1]
+                    ):
+                        status = batch_hr_statu.get("status")
+
+                    batches.append(
+                        {
+                            "created_at": batch["created_at"],
+                            "simulation": _simulation,
+                            "name": _name,
+                            "version": version.removesuffix("/").split("/")[-1],
+                            "message": batch["message"],
+                            f"status": status,
+                            "completions": str(batch["completions"]),
+                            "path": version,
+                        }
+                    )
+
+                    # for printing.
+                    _simulation = None
+                    _name = None
+
+        return batches
+
+    def get_reports_flat(self):
+        ret = []
+        reports = sorted(glob.glob(f"{str(self.root_citros / 'reports')}/*/"))
+        for report in reports:
+            if not Path(report).is_dir():
+                continue
+            versions = sorted(glob.glob(f"{report}/*/"), reverse=True)
+
+            for version in versions:
+                report_version = json.loads((Path(version) / "info.json").read_text())
+
+                notebooks = ""
+                if (
+                    report_version.get("notebooks") == None
+                    or report_version["notebooks"] == None
+                    or len(report_version["notebooks"]) == 0
+                ):
+                    continue
+                else:
+                    notebooks = str(
+                        Path(version)
+                        / report_version["notebooks"][0]
+                        .removesuffix("/")
+                        .split("/")[-1]
+                        .removesuffix(".ipynb")
+                    )
+
+                ret.append(
+                    {
+                        "started_at": report_version["started_at"],
+                        "finished_at": report_version["finished_at"],
+                        "name": report_version["name"],
+                        "version": version.removesuffix("/").split("/")[-1],
+                        "message": report_version["message"],
+                        "path": f'{str(self.root_citros / "reports" / report_version["name"]/ version.removesuffix("/").split("/")[-1])}',
+                        "progress": report_version["progress"],
+                        "status": report_version["status"],
+                    }
+                )
+
+        return ret

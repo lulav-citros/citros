@@ -1,13 +1,11 @@
 log
 
-
 citros comands... will:
 
 citros_imp -> prints all cli stuff to screen and file.
 all Citros implementation will print only to the given logger (can be configured with handlers and formatters)
 all logs from cli willbe written to .citros/citros.log
 this file shoule be in .gitignore
-
 
 # cli
 CITROS cli
@@ -29,6 +27,7 @@ CITROS cli
 - citros [report](#reports)
 - citros [observability](#observability)
 - usefull [usefull](#usefull)
+
 
 ---
 ## initialization
@@ -267,7 +266,6 @@ citros data access
 # run citros cli inside docker
 docker run -it -p 8000:8000 citros data access
 ```
-
 
 
 

@@ -26,7 +26,9 @@ def parser_parameter_setup_new(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -57,7 +59,9 @@ def parser_parameter_setup_list(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -88,7 +92,9 @@ def parser_parameter_setup(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
@@ -125,7 +131,9 @@ def parser_parameter(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),

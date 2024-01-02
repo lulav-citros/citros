@@ -22,7 +22,7 @@ def parser_run(main_sub, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath("run.md"), "r"
+                    importlib_resources.files(f"data.doc.cli").joinpath("run.md"), "r"
                 ).read()
             ),
         ),

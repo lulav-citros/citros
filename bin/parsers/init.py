@@ -22,7 +22,7 @@ def parser_init(main_sub, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath("init.md"), "r"
+                    importlib_resources.files(f"data.doc.cli").joinpath("init.md"), "r"
                 ).read()
             ),
             subtitle=f"[{citros_version}]",
@@ -31,7 +31,9 @@ def parser_init(main_sub, epilog=None):
         help="init section",
         formatter_class=RichHelpFormatter,
     )
-    parser.add_argument("-dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-dir", "--dir", default=".", help="The working dir of the project"
+    )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )

@@ -163,6 +163,9 @@ class CitrosDB:
     def create_table(self, connection, schema_name, table_name):
         from jinja2 import Environment, FileSystemLoader
 
+        if connection is None:
+            self.log.error("No connection to database, cant create table.")
+            return
         self.log.debug(f"creating table: {schema_name}.{table_name}")
 
         cursor = connection.cursor()

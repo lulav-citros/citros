@@ -5,13 +5,17 @@ import yaml
 import logging
 import psycopg2
 import traceback
-from glob import glob
-from decouple import config
-from jinja2 import Environment, FileSystemLoader
-from rich import print, inspect, print_json
 
-from .logger import get_logger, shutdown_log
+from glob import glob
+from rich import print, inspect, print_json
+from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+from decouple import config
+
+
+class NoConnectionToCITROSDBException(Exception):
+    def __init__(self, message="No connection to citros db."):
+        super().__init__(message)
 
 
 class BatchUploader:
@@ -417,10 +421,27 @@ class BatchUploader:
         #         self.log.debug(f"PostgreSQL connection is closed")
         #         logging.shutdown()
 
+    def get_state(self):
+        return json.loads(
+            (Path(self.root) / self.simulation_name / self.name / "hr.json").read_text()
+        )
+
+    def save_state(self, status):
+        # print("_save self.path()", self.path())
+        with open(
+            Path(self.root) / self.simulation_name / self.name / "hr.json", "w"
+        ) as file:
+            json.dump(
+                {"status": status, "version": self.version},
+                file,
+                indent=4,
+                sort_keys=True,
+            )
+
     def upload(self):
         self.log.debug(f"{self.__class__.__name__}.upload()")
 
-        self["data_status"] = "LOADING"
+        self.save_state("LOADING")
 
         # inspect(self)
         # print(f"self.batch_dir: {self.batch_dir}")
@@ -432,9 +453,12 @@ class BatchUploader:
         )  # TODO[critical]: fill with data
 
         schema_name = f"{self.simulation_name}"
-        table_name = f"{self.name}-{self.version}"
+        table_name = f"{self.name}"
 
         connection = citrosDB.connect()
+        if connection is None:
+            self.log.error("No creating connection to database. Aborting.")
+            raise NoConnectionToCITROSDBException
 
         citrosDB.create_table(connection, schema_name, table_name)
 
@@ -460,6 +484,7 @@ class BatchUploader:
 
             # uplaod bags
             bags = self._get_citros_bags(f"{self.batch_dir}/{sid}/bags/")
+
             # print(bags)
             msgs = self._get_custom_message(f"{self.batch_dir}/{sid}/msgs/")
             # print(msgs)
@@ -481,7 +506,7 @@ class BatchUploader:
                     self.log.error(e)
                     connection = citrosDB.connect()
 
-        self["data_status"] = "LOADED"
+        self.save_state("LOADED")
         cursor.close()
         connection.close()
 
@@ -493,10 +518,13 @@ class BatchUploader:
         )  # TODO[critical]: fill with data
 
         schema_name = f"{self.simulation_name}"
-        table_name = f"{self.name}-{self.version}"
+        table_name = f"{self.name}"
 
         connection = citrosDB.connect()
+        if connection is None:
+            self.log.error("No creating connection to database. Aborting.")
+            raise NoConnectionToCITROSDBException
 
         citrosDB.drop_table(connection, schema_name, table_name)
 
-        self["data_status"] = "UNLOADED"
+        self.save_state("UNLOADED")

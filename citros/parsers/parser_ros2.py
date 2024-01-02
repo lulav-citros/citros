@@ -18,9 +18,10 @@ class ParserRos2(ParserBase):
     Class to parse ROS2 package files (XML, CMakeLists.txt, setup.py etc).
     """
 
-    def __init__(self, log):
+    def __init__(self, log, ignore_list=[]):
         self.log = log
         self.project = None
+        self.ignore_list = ignore_list
 
     ################################ Any lang #################################
 
@@ -71,7 +72,14 @@ class ParserRos2(ParserBase):
     def parse_makefile(self, package_path):
         path_to_cmake = Path(package_path, "CMakeLists.txt")
 
-        nodes = self.find_install_targets(path_to_cmake)
+        try:
+            nodes = self.find_install_targets(path_to_cmake)
+        except Exception as e:
+            self.log.exception(
+                f"Exception raised while trying to parse {path_to_cmake}"
+            )
+            print(f"[red]Could not parse {path_to_cmake}[/red]")
+            nodes = []
 
         return {"cmake": str(path_to_cmake), "nodes": nodes}
 
@@ -477,6 +485,10 @@ class ParserRos2(ParserBase):
                 os.path.join(package_path, "**", "*.launch.py"), recursive=True
             )
 
+            package_launch_paths = [
+                plp for plp in package_launch_paths if plp not in self.ignore_list
+            ]
+
             packages.append(
                 {
                     "name": parsed_data["package_name"],
@@ -609,6 +621,9 @@ class ParserRos2(ParserBase):
         # save paths relative to project path
         package_paths = [os.path.relpath(pp, project_path) for pp in package_paths]
 
+        # filter files from ignore list
+        package_paths = [pp for pp in package_paths if pp not in self.ignore_list]
+
         return package_paths
 
     def get_project_launch_paths(self, project_path, package_paths):
@@ -625,6 +640,11 @@ class ParserRos2(ParserBase):
         project_launch_paths = project_launch_paths + glob.glob(
             os.path.join(project_path, "launch", "*.launch.py")
         )
+
+        # filter ignored files
+        project_launch_paths = [
+            plp for plp in project_launch_paths if plp not in self.ignore_list
+        ]
 
         return project_launch_paths
 

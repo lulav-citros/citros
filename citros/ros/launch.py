@@ -25,7 +25,9 @@ from datetime import datetime
 ################################
 # Entrypoint
 ################################
-def generate_launch_description(simulation: Simulation, destination: str, events):
+def generate_launch_description(
+    simulation: Simulation, destination: str, sid: str, events
+):
     """
     Generates a ROS2 LaunchDescription for a simulation run.
 
@@ -87,7 +89,7 @@ def generate_launch_description(simulation: Simulation, destination: str, events
     ld.add_action(SetLaunchConfiguration("timeout", timeout))
 
     simulation.log.info(
-        f"initializing simulation: {simulation.name} , timeout: {timeout}"
+        f"initializing simulation: {simulation.name}, sid: {sid} , timeout: {timeout}"
     )
 
     ################################
@@ -192,7 +194,13 @@ def generate_launch_description(simulation: Simulation, destination: str, events
         # simulation_run_id = LaunchConfiguration("simulation_run_id").perform(context)
 
         # config
-        config = simulation.parameter_setup.render(destination)
+        config = simulation.parameter_setup.render(
+            destination,
+            context={
+                "sid": sid,
+                "simulation": simulation.name,
+            },
+        )
 
         # send event with the config to CiTROS
         events.starting(

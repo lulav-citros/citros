@@ -3,6 +3,8 @@ import json
 import sys
 import uuid
 import shutil
+import importlib_resources
+
 from pathlib import Path
 from citros.stats import SystemStatsRecorder
 from rich import print, inspect, print_json
@@ -335,7 +337,7 @@ class Simulation(CitrosObj):
             file_name = os.path.splitext(file_name_with_ext)[0]
             self._create_citros_bag(bag_path, bag_path + f"{file_name}.citros/")
 
-    def run(self, simulation_rec_dir, trace_context=None, ros_domain_id=None):
+    def run(self, simulation_rec_dir, sid=0, trace_context=None, ros_domain_id=None):
         """Run simulation."""
         # create .citros/data if not exists
         simulation_rec_dir.mkdir(parents=True, exist_ok=True)
@@ -362,7 +364,7 @@ class Simulation(CitrosObj):
 
         # launch
         launch_description = generate_launch_description(
-            self, simulation_rec_dir, events
+            self, simulation_rec_dir, sid, events
         )
 
         if launch_description is None:

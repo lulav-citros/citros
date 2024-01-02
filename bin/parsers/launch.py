@@ -26,7 +26,9 @@ def parser_launch(subparser, epilog=None):
         description=Panel(
             Markdown(
                 open(
-                    importlib_resources.files(f"data.doc").joinpath(description_path),
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
                     "r",
                 ).read()
             ),
