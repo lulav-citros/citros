@@ -13,7 +13,7 @@ import warnings
 import time
 
 class CitrosDB(_PgCursor):
-    '''
+    """
     CitrosDB object allows to get general information about the batch and make queries.
 
     Parameters
@@ -42,7 +42,7 @@ class CitrosDB(_PgCursor):
     debug : bool, default False
         If `True`, record how many connections and queries were done by all CitrosDB objects existing in the current session.
         The information is recorded to the _stat.Stat() object.
-    '''
+    """
 
     def __init__(self, simulation = None, batch = None, sid = None, host = None, port = None, database = None, 
                    user = None, password = None, debug = False):
@@ -58,13 +58,13 @@ class CitrosDB(_PgCursor):
         self._topic = None        
 
     def _copy(self):
-        '''
+        """
         Make a copy of the CitrosDB object.
 
         Returns
         -------
         CitrosDB
-        '''
+        """
         ci = CitrosDB(simulation = self._simulation,
                       batch = self._batch_name,                  
                       sid = self._sid,
@@ -136,9 +136,9 @@ class CitrosDB(_PgCursor):
             return True
         
     def _is_batch_available(self):
-        '''
+        """
         Check if the batch is set and in the database.
-        '''
+        """
         if hasattr(self, '_test_mode'):
             return True
         
@@ -154,8 +154,46 @@ class CitrosDB(_PgCursor):
                 print(f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database.")
                 return False
     
+    def get_connection(self):
+        """
+        Return connection to the PostgreSQL database.
+
+        Get connection to the database to execute your own queries.
+
+        Returns
+        -------
+        connection : psycopg2.extensions.connection or None
+            The connection object for the database, or None if the connection fails.
+
+        Examples
+        --------
+        Get connection to the database and query first 5 rows of the batch "batch_1" from the "simulation_cannon_numeric" simulation:
+
+        >>> citros = da.CitrosDB()
+        >>> curs = citros.get_connection().cursor()
+        >>> curs.execute('SELECT * FROM "simulation_cannon_numeric"."batch_1" LIMIT 5')
+        >>> curs.fetchall()
+        [(1,
+          0,
+          0,
+          0,
+          '/config',
+          '.citros/data/simulation_cannon_numeric/batch_1/20240102121732/0/config/cannon_analytic.yaml',
+          {'analytic_dynamics': {'ros__parameters': {'dt': 0.01,
+             'init_angle': 30.0,
+             'init_speed': 50.0}}},
+          datetime.datetime(2024, 1, 2, 12, 23, 44, 804131, tzinfo=datetime.timezone.utc)),
+         (2,
+         ...
+        ]
+        """
+        connection = self.connect()
+        if self._debug and connection is not None:
+            _PgCursor.n_pg_connections += 1
+        return connection
+
     def simulation(self, simulation: str = None, inplace: bool = False):
-        '''
+        """
         Set batch to the CitrosDB object.
 
         Parameters
@@ -199,7 +237,7 @@ class CitrosDB(_PgCursor):
          'topic_list': ['/cannon/state', '/config', '/scheduler'],
          'message_count': 3835
         }
-        '''
+        """
         if inplace:
             self._set_simulation(simulation)
             return None
@@ -209,7 +247,7 @@ class CitrosDB(_PgCursor):
             return ci
     
     def get_simulation(self):
-        '''
+        """
         Get information about the current simulation if the simulation is set.
 
         Returns
@@ -224,11 +262,11 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB(simulation = 'simulation_cannon_analytic')
         >>> citros.get_simulation()
         {'name': 'simulation_cannon_analytic'}
-        '''
+        """
         return CitrosDict({'name': self._simulation})
         
     def get_simulation_name(self):
-        '''
+        """
         Get the simulation name if the simulation is set.
 
         Returns
@@ -243,11 +281,11 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB(simulation = 'simulation_cannon_analytic')
         >>> citros.get_simulation_name()
         'simulation_cannon_analytic'
-        '''
+        """
         return self._simulation
 
     def batch(self, batch: str = None, inplace: bool = False) -> Optional[CitrosDB]:
-        '''
+        """
         Set batch name to the CitrosDB object.
 
         Parameters
@@ -279,7 +317,7 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB()
         >>> citros.batch('test', inplace = True)
         >>> df = citros.simulation('simulation_cannon_analytic').topic('A').data()
-        '''            
+        """            
         if inplace:
             self._set_batch(batch)
             return None
@@ -289,7 +327,7 @@ class CitrosDB(_PgCursor):
             return ci
 
     def get_batch_name(self):
-        '''
+        """
         Get the name of the current batch if the batch is set.
 
         Returns
@@ -299,89 +337,63 @@ class CitrosDB(_PgCursor):
 
         Examples
         --------
-        Get name of the most recently created batch:
+        Get name of the previously set batch:
 
-        >>> citros = da.CitrosDB()
-        >>> citros.batch(-1).get_batch_name()
-        'dynamics'
-        '''
+        >>> citros = da.CitrosDB(batch = 'galaxies')
+        >>> citros.get_batch_name()
+        'galaxies'
+        """
         return self._batch_name
     
     def get_batch_sizes(self):
-        '''
-        Print sizes of the all batches of the simulation that are downloaded in the database.
+        """
+        Return sizes of the batches according to simulation() and batch() settings.
 
         Print table with batch names, batch sizes and total batch sizes with indexes.
 
         See Also
         --------
-        CitrosDB.search_batch
+        CitrosDB.simulation, CitrosDB.batch()
 
         Examples
         --------
-        Display sizes of the all batches of the simulation 'simulation_cannon_analytic':
+        Display sizes of the all batches:
 
         >>> citros = da.CitrosDB()
-        >>> citros.simulation('simulation_cannon_analytic').get_batch_sizes()
-        +-----------+--------------------------------------+-------------+------------+
-        | batch     | batch id                             | size        | total size |
-        +-----------+--------------------------------------+-------------+------------+
-        | stars     | 00000000-1111-2222-3333-444444444444 | 32 kB       | 64 kB      |
-        | galaxies  | 00000000-aaaa-2222-3333-444444444444 | 8192 bytes  | 16 kB      |
-        +-----------+--------------------------------------+-------------+------------+
-        '''
-        table_to_display = self._get_batch_size(mode = 'all')
-        table = PrettyTable(field_names=['batch name', 'size', 'total size'], align='l')
+        >>> citros.get_batch_sizes()
+        +-----------+-------------+------------+
+        | batch     | size        | total size |
+        +-----------+-------------+------------+
+        | stars     | 32 kB       | 64 kB      |
+        | galaxies  | 8192 bytes  | 16 kB      |
+        +-----------+-------------+------------+
+
+        Display sizes of the batches of the simulation 'simulation_star':
+
+        >>> citros.simulation('simulation_star').get_batch_sizes()
+        +--------+-------------+------------+
+        | batch  | size        | total size |
+        +--------+-------------+------------+
+        | stars  | 32 kB       | 64 kB      |
+        +--------+-------------+------------+
+
+        Display size of the batch "galaxies":
+
+        >>> citros.batch("galaxies").get_batch_sizes()
+        +-----------+-------------+------------+
+        | batch     | size        | total size |
+        +-----------+-------------+------------+
+        | galaxies  | 8192 bytes  | 16 kB      |
+        +-----------+-------------+------------+
+        """
+        table_to_display = self._get_batch_sizes()
+        table = PrettyTable(field_names=['batch', 'size', 'total size'], align='l')
         if table_to_display is not None:
             table.add_rows(table_to_display)
         print(table)
-
-    def get_batch_size(self):
-        '''
-        Print size of the current batch.
-
-        Print table with batch name, batch size and total batch size with indexes.
-
-        See Also
-        --------
-        CitrosDB.get_batch, CitrosDB.info
-
-        Examples
-        --------
-        Display size of the batch 'galaxies' of the simulation 'galactic_orbits':
-
-        >>> citros = da.CitrosDB()
-        >>> citros.simulation('galactic_orbits').batch('galaxies').get_batch_size()
-        +-----------+--------------------------------------+-------------+------------+
-        | batch     | batch id                             | size        | total size |
-        +-----------+--------------------------------------+-------------+------------+
-        | galaxies  | 00000000-1111-2222-3333-444444444444 | 8192 bytes  | 16 kB      |
-        +-----------+--------------------------------------+-------------+------------+
-        '''        
-        if not self._is_batch_available():
-            return None
-        table_to_display = self._get_batch_size(mode = 'current')
-        table = PrettyTable(field_names=['batch name', 'size', 'total size'], align='l')
-        if table_to_display is not None:
-            table.add_rows(table_to_display)
-        print(table)
-
-    def _get_batch_size(self, mode = 'all'):
-        '''
-        Return sizes of the all tables in the current schema.
-
-        Returns
-        -------
-        list of tuples
-            Each tuple contains name of the table, table size and total size with indexes.
-        '''
-        table_size, error_name = _PgCursor._get_batch_size(self, mode = mode)
-        if table_size is None:
-            return None
-        return table_size
     
     def topic(self, topic_name: Optional[Union[str, list]] = None) -> CitrosDB:
-        '''
+        """
         Select topic.
 
         Parameters
@@ -393,6 +405,14 @@ class CitrosDB(_PgCursor):
         -------
         out : CitrosDB
             CitrosDB with set 'topic' parameter.
+
+        See Also
+        --------
+        CitrosDB.sid : set sid values to query
+        CitrosDB.rid : set rid values to query
+        CitrosDB.time : set time constraints
+        CitrosDB.set_filter : set constraints on query
+        CitrosDB.set_order : set order of the output
 
         Examples
         --------
@@ -406,13 +426,13 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB()
         >>> citros.simulation('engine_system').batch('dynamics').topic(['A', 'B']).get_max_value('sid')
         3
-        '''
+        """
         ci = self._copy()
         _PgCursor.topic(ci, topic_name = topic_name)
         return ci
         
     def sid(self, value: Optional[Union[int, list]] = None, start: int = 0, end: int = None, count: int = None) -> CitrosDB:
-        '''
+        """
         Set constraints on sid.
 
         Parameters
@@ -434,6 +454,14 @@ class CitrosDB(_PgCursor):
         out : CitrosDB
             CitrosDB with set 'sid' parameter.
 
+        See Also
+        --------
+        CitrosDB.topic : set topic name to query
+        CitrosDB.rid : set rid values to query
+        CitrosDB.time : set time constraints
+        CitrosDB.set_filter : set constraints on query
+        CitrosDB.set_order : set order of the output
+
         Examples
         --------
         Get data from batch 'robotics' of the simulation 'robot' for topic 'A' where sid values are 1 or 2:
@@ -453,13 +481,13 @@ class CitrosDB(_PgCursor):
         For sid >= 7:
         
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid(start = 7).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.sid(ci, value = value, start = start, end = end, count = count)
         return ci
         
     def rid(self, value: Optional[Union[int, list]] = None, start: int = 0, end: int = None, count: int = None) -> CitrosDB:
-        '''
+        """
         Set constraints on rid.
 
         Parameters
@@ -478,6 +506,14 @@ class CitrosDB(_PgCursor):
         -------
         out : CitrosDB
             CitrosDB with set 'rid' parameter.
+
+        See Also
+        --------
+        CitrosDB.topic : set topic name to query
+        CitrosDB.sid : set sid values to query
+        CitrosDB.time : set time constraints
+        CitrosDB.set_filter : set constraints on query
+        CitrosDB.set_order : set order of the output
 
         Examples
         --------
@@ -498,13 +534,13 @@ class CitrosDB(_PgCursor):
         For rid >= 5:
         
         >>> df = citros.simulation('plane_test').batch('aero').topic('A').rid(start = 5).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.rid(ci, value = value, start = start, end = end, count = count)
         return ci
 
     def time(self, start: int = 0, end: int = None, duration: int = None) -> CitrosDB:
-        '''
+        """
         Set constraints on time.
 
         Parameters
@@ -522,6 +558,14 @@ class CitrosDB(_PgCursor):
         out : CitrosDB
             CitrosDB with set 'time' parameter.
 
+        See Also
+        --------
+        CitrosDB.topic : set topic name to query
+        CitrosDB.sid : set sid values to query
+        CitrosDB.rid : set rid values to query
+        CitrosDB.set_filter : set constraints on query
+        CitrosDB.set_order : set order of the output
+
         Examples
         --------
         Get data from the batch 'kinematics' of the simulation 'radar' for topic 'A' where time is in the range 10ns <= time <= 20ns:
@@ -536,13 +580,13 @@ class CitrosDB(_PgCursor):
         For time >= 20:
         
         >>> df = citros.simulation('radar').batch('kinematics').topic('A').time(start = 20).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.time(ci, start = start, end = end, duration = duration)
         return ci
     
     def info(self) -> CitrosDict:
-        '''
+        """
         Return information about the batch, based on the configurations set by topic(), rid(), sid() and time() methods.
 
         The output is a dictionary, that contains:
@@ -713,14 +757,14 @@ class CitrosDB(_PgCursor):
            }
          }
         }
-        '''
+        """
         if not self._is_batch_available():
             return CitrosDict({})
-        result, error_name = _PgCursor._pg_info(self)
+        result = _PgCursor._pg_info(self)
         return result
     
     def get_data_structure(self, topic: str = None):
-        '''
+        """
         Display table with topic names, types and corresponding them data structures of the json-data columns for the specific batch.
 
         Batch must be set during initialization of CitrosDB object or by `batch()` method.
@@ -735,7 +779,7 @@ class CitrosDB(_PgCursor):
 
         See Also
         --------
-        CitrosDB.batch
+        CitrosDB.simulation, CitrosDB.batch
 
         Examples
         --------
@@ -772,14 +816,13 @@ class CitrosDB(_PgCursor):
         |       |      |   height: float |
         |       |      | }               |
         +-------+------+-----------------+
-        '''
-
+        """
         if not self._is_batch_available():
             return None
-        error_name = _PgCursor._pg_get_data_structure(self, topic = topic)
+        _PgCursor._pg_get_data_structure(self, topic = topic)
     
     def set_filter(self, filter_by: dict = None) -> CitrosDB:
-        '''
+        """
         Set constraints on query.
 
         Allows to set constraints on json-data columns before querying.
@@ -834,13 +877,13 @@ class CitrosDB(_PgCursor):
         0      0    1  4862     A    a          22      [11, 35]
         1      0    2  7879     A    a          12      [12, 36]
         ...
-        '''
+        """
         ci = self._copy()
         _PgCursor.set_filter(ci, filter_by = filter_by)
         return ci
 
     def set_order(self, order_by: Optional[Union[str, list, dict]] = None) -> CitrosDB:
-        '''
+        """
         Apply sorting to the result of the data querying.
 
         Sort the result of the query in ascending or descending order.
@@ -850,6 +893,14 @@ class CitrosDB(_PgCursor):
         order_by : str, list of str or dict, optional
             If `order_by` is a single string or a list of strings, it represents the column label(s) by which the result is sorted in ascending order.
             For more control, use a dictionary with column labels as keys and values ('asc' for ascending, 'desc' for descending) to define the sorting order.
+
+        See Also
+        --------
+        CitrosDB.topic : set topic name to query
+        CitrosDB.sid : set sid values to query
+        CitrosDB.rid : set rid values to query
+        CitrosDB.time : set time constraints
+        CitrosDB.set_filter : set constraints on query
 
         Examples
         --------
@@ -862,13 +913,13 @@ class CitrosDB(_PgCursor):
 
         >>> citros = da.CitrosDB(simulation = 'starship')
         >>> df = citros.batch('aerodynamics').topic('A').set_order(['sid', 'rid']).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.set_order(ci, order_by = order_by)
         return ci
     
     def skip(self, s: int = None):
-        '''
+        """
         Select each `s`-th message.
 
         `skip` is aimed to reduce the number of rows in the query output.
@@ -897,13 +948,13 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB(simulation = 'mechanics', batch = 'velocity')
         >>> df = citros.topic('A').skip(3).data()
         the 1th, the 4th, the 7th ... messages will be selected
-        '''
+        """
         ci = self._copy()
         _PgCursor.skip(ci, n_skip = s)
         return ci
     
     def avg(self, n: int = None) -> CitrosDB:
-        '''
+        """
         Set the directive to group and average every set of `n` consecutive messages in the database before querying.
 
         `avg()` is aimed to reduce number of rows before querying.
@@ -932,13 +983,13 @@ class CitrosDB(_PgCursor):
         
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('mechanics').batch('velocity').topic('A').avg(3).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.avg(ci, n_avg = n)
         return ci
     
     def move_avg(self, n: int = None, s: int = 1):
-        '''
+        """
         Set the directive to compute moving average with the window size equals `n` and then during querying select each `s`-th message of the result.
 
         `move_avg()` is aimed to smooth data and reduce number of rows in the query output.
@@ -966,13 +1017,13 @@ class CitrosDB(_PgCursor):
         
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('pendulum').batch('coords').topic('A').move_avg(5,2).data()
-        '''
+        """
         ci = self._copy()
         _PgCursor.move_avg(ci, n_avg = n, n_skip = s)
         return ci
 
     def data(self, data_names: list = None, additional_columns: list = None) -> pd.DataFrame:
-        '''
+        """
         Return pandas.DataFrame with data.
 
         Query data according to the constraints set by `batch()`, `topic()`, `rid()`, `sid()` and `time()` methods
@@ -1047,14 +1098,14 @@ class CitrosDB(_PgCursor):
         0      2    0      A         1.5           8
         1      2    2      A           5          10
         ...
-        '''
+        """
         if not self._is_batch_available():
             return None
-        result, error_name = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
+        result = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
         return result
     
     def data_dict(self, data_names: list = None, additional_columns: list = None) -> pd.DataFrame:
-        '''
+        """
         Return a dict where a dict key is a simulation run id (sid), and a dict value is a pandas.DataFrame related to that sid.
 
         Parameters
@@ -1117,10 +1168,10 @@ class CitrosDB(_PgCursor):
         0      2    0      A         1.5           8
         1      2    2      A           5          10
         ...
-        '''
+        """
         if not self._is_batch_available():
             return {}
-        result_table, error_name = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
+        result_table = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
         
         if result_table is not None:
             sid_list = list(set(result_table['sid']))
@@ -1133,7 +1184,7 @@ class CitrosDB(_PgCursor):
             return {}
     
     def get_min_value(self, column_name: str, filter_by: dict = None, return_index: bool = False):
-        '''
+        """
         Return minimum value of the column `column_name`.
 
         Parameters
@@ -1188,16 +1239,16 @@ class CitrosDB(_PgCursor):
         ...                                            'data.x.x_1' : {'>':10}})
         >>> print(result)
         -4.0
-        '''
+        """
         if not self._is_batch_available():
             return None, None, None if return_index else None
 
-        result, error_name = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
+        result = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
                                            return_index = return_index, mode = 'MIN')
         return result
     
     def get_max_value(self, column_name: str, filter_by: dict = None, return_index: bool = False):
-        '''
+        """
         Return maximum value of the column `column_name`.
 
         Parameters
@@ -1251,16 +1302,16 @@ class CitrosDB(_PgCursor):
         ...                                            'data.x.x_1' : {'>':10}})
         >>> print(result)
         76.0
-        '''
+        """
         if not self._is_batch_available():
             return None, None, None if return_index else None
-        result, error_name = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
+        result = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
                                            return_index = return_index, mode = 'MAX')
         return result
 
     def get_counts(self, column_name: str = None, group_by: Optional[Union[str, list]] = None, filter_by: dict = None, 
                    nan_exclude: bool = False) -> list:
-        '''
+        """
         Return number of the rows in the column `column_name`.
 
         Parameters
@@ -1331,16 +1382,16 @@ class CitrosDB(_PgCursor):
         ...                                 'time': {'>=': 10, '<=': 5000}, 
         ...                                 'data.x.x_1' : {'>':10}})
         [('A', 17), ('B', 13)]
-        '''
+        """
         if not self._is_batch_available():
             return None
-        result, error_name = _PgCursor._get_counts(self, column_name = column_name, group_by = group_by, filter_by= filter_by, 
+        result = _PgCursor._get_counts(self, column_name = column_name, group_by = group_by, filter_by= filter_by, 
                                                        nan_exclude = nan_exclude)
         return result
 
     def get_unique_counts(self, column_name: str = None, group_by: list = None, filter_by: dict = None, 
                           nan_exclude: bool = False) -> list:
-        '''
+        """
         Return number of the unique values in the column `column_name`.
 
         Parameters
@@ -1399,15 +1450,15 @@ class CitrosDB(_PgCursor):
         ...                                        'time': {'>=': 10, '<=': 5000}, 
         ...                                        'data.x.x_1' : {'>':10}})
         [('A', 2), ('B', 2)]
-        '''
+        """
         if not self._is_batch_available():
             return None
-        result, error_name = _PgCursor._get_unique_counts(self, column_name = column_name, group_by = group_by, filter_by = filter_by, 
+        result = _PgCursor._get_unique_counts(self, column_name = column_name, group_by = group_by, filter_by = filter_by, 
                         nan_exclude = nan_exclude)
         return result
 
     def get_unique_values(self, column_names: Optional[Union[str, list]], filter_by: dict = None) -> list:
-        '''
+        """
         Return unique values of the columns `column_names`.
 
         Parameters
@@ -1445,16 +1496,16 @@ class CitrosDB(_PgCursor):
         ...                                       'data.x.x_1': {'>':10}})
         >>> print(result)
         ['a', 'b']
-        '''
+        """
         if not self._is_batch_available():
             return None
-        result, error_name = _PgCursor._get_unique_values(self, column_names = column_names, filter_by = filter_by)
+        result = _PgCursor._get_unique_values(self, column_names = column_names, filter_by = filter_by)
         return result
     
     def time_plot(self, ax: plt.Axes, *args, topic_name: Optional[str] = None, var_name: Optional[str] = None, 
                   time_step: Optional[float] = 1.0, sids: list = None, y_label: Optional[str] = None, title_text: Optional[str] = None, 
                   legend: bool = True, remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
-        '''
+        """
         Query data and make plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
 
         Both `CitrosDB.time_plot()` and `CitrosDB.xy_plot()` methods are aimed to quickly make plots.
@@ -1521,12 +1572,19 @@ class CitrosDB(_PgCursor):
                   .time_plot(ax, '--', var_name = 'data.x.x_1', time_step = 0.5)
 
         ![time_plot_2](../../img_documentation/time_plot_2.png "time_plot_2")
-        '''
-        for _ in range(2):
-            waiting_event = False
+        """
         if not self._is_batch_available():
             return None
-        var_df, sids, error_name = _PgCursor.data_for_time_plot(self, topic_name, var_name, time_step, sids, remove_nan, inf_vals)
+        
+        if sids is None or sids == []:
+            if hasattr(self, "_sid"):
+                sids = self._sid
+            else:
+                sids = None
+        elif isinstance(sids, int):
+            sids = [sids]
+
+        var_df = _PgCursor.data_for_time_plot(self, topic_name, var_name, time_step, sids, remove_nan, inf_vals)
         if var_df is None:
             return
     
@@ -1537,7 +1595,7 @@ class CitrosDB(_PgCursor):
                 var_y_name: Optional[str] = None, sids: Optional[Union[int, list]] = None, x_label: Optional[str] = None, 
                 y_label: Optional[str] = None, title_text: Optional[str] = None, legend: bool = True, remove_nan: bool = True, 
                 inf_vals: Optional[float] = 1e308, **kwargs):
-        '''
+        """
         Query data and make plot `var_y_name` vs. `var_x_name` for each of the sids.
 
         Both `CitrosDB.time_plot()` and `CitrosDB.xy_plot()` methods are aimed to quickly make plots.
@@ -1604,10 +1662,18 @@ class CitrosDB(_PgCursor):
                   .xy_plot(ax, '--', var_x_name = 'data.x.x_1', var_y_name = 'data.time')
 
         ![xy_plot_2](../../img_documentation/xy_plot_2.png "xy_plot_1")
-        '''
+        """
         if not self._is_batch_available():
             return None
-        xy_df, sids, error_name = _PgCursor.data_for_xy_plot(self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals)
+        
+        if sids is None or sids == []:
+            if hasattr(self, "_sid"):
+                sids = self._sid
+            else:
+                sids = None
+        elif isinstance(sids, int):
+            sids = [sids]
+        xy_df = _PgCursor.data_for_xy_plot(self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals)
         if xy_df is None:
             return
         
@@ -1617,7 +1683,7 @@ class CitrosDB(_PgCursor):
     def plot_graph(self, df: pd.DataFrame, x_label: str, y_label: str, *args, ax: Optional[plt.Axes] = None, legend: bool = True, 
                    title: Optional[str] = None, set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, 
                    remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
-        '''
+        """
         Plot graph '`y_label` vs. `x_label`' for each sid, where `x_label` and `y_label`
         are the labels of columns of the pandas.DataFrame `df`.
 
@@ -1689,7 +1755,7 @@ class CitrosDB(_PgCursor):
         >>> fig.show()
 
         ![plot_graph_2](../../img_documentation/plot_graph_2.png "plot_graph_2")
-        '''
+        """
         plotter = _Plotter()
         return plotter.plot_graph(df, x_label, y_label, ax, legend, title , set_x_label, set_y_label, 
                                   remove_nan, inf_vals,  *args, **kwargs)
@@ -1698,7 +1764,7 @@ class CitrosDB(_PgCursor):
                      scale: bool = True, legend: bool = True, title: Optional[str] = None, 
                      set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, set_z_label: Optional[str] = None, 
                      remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
-        '''
+        """
         Plot 3D graph '`z_label` vs. `x_label` and `y_label`' for each sid, where `x_label`, `y_label` and `z_label`
         are the labels of columns of the pandas.DataFrame `df`.
 
@@ -1768,7 +1834,7 @@ class CitrosDB(_PgCursor):
         >>> citros.plot_3dgraph(df, 'data.x.x_1', 'data.x.x_2', 'data.x.x_3', '--', ax = ax, scale = True)
 
         ![plot_3dgraph_1](../../img_documentation/plot_3dgraph_1.png "plot_3dgraph_1")
-        '''
+        """
         plotter = _Plotter()
         return plotter.plot_3dgraph(df, x_label, y_label, z_label, ax, scale, legend, title, 
                                     set_x_label, set_y_label, set_z_label, remove_nan, inf_vals, *args, **kwargs)
@@ -1776,7 +1842,7 @@ class CitrosDB(_PgCursor):
     def multiple_y_plot(self, df: pd.DataFrame, x_label: str, y_labels: str, *args, fig: Optional[matplotlib.figure.Figure] = None, 
                         legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, 
                         set_y_label: Optional[str] = None, remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
-        '''
+        """
         Plot a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels 
         specified in the `y_labels` parameter.
 
@@ -1844,7 +1910,7 @@ class CitrosDB(_PgCursor):
         >>> fig, ax = citros.multiple_y_plot(df, 'data.time', ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'], '.')
 
         ![multiple_y_plot_2](../../img_documentation/multiple_y_plot_2.png "multiple_y_plot_2")
-        '''
+        """
         plotter = _Plotter()
         return plotter.multiple_y_plot(df, x_label, y_labels,  fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, *args, **kwargs)
         
@@ -1853,7 +1919,7 @@ class CitrosDB(_PgCursor):
                   legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, 
                   remove_nan: bool = True, inf_vals: Optional[float] = 1e308, label_all_xaxis: bool = False, 
                   label_all_yaxis: bool = False, num: int = 5, **kwargs):
-        '''
+        """
         Plot a matrix of N x N graphs, each displaying either the histogram with values distribution (for graphs on the diogonal) or
         the relationship between variables listed in `labels`, with N being the length of `labels` list.
 
@@ -1923,7 +1989,7 @@ class CitrosDB(_PgCursor):
         >>> fig.show()
 
         ![multiplot](../../img_documentation/multiplot.png "multiplot")
-        '''
+        """
         plotter = _Plotter()
         return plotter.multiplot(df, labels, scale, fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, label_all_xaxis, 
                   label_all_yaxis, num, *args, **kwargs)
@@ -1932,7 +1998,7 @@ class CitrosDB(_PgCursor):
                            plot_origin: bool = True, bounding_error: bool = False, inf_vals: Optional[float] = 1e308, 
                            legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, 
                            set_y_label: Optional[str] = None, scale: bool = False, return_ellipse_param: bool = False):
-        '''
+        """
         Plot sigma ellipses for the set of data.
 
         Parameters
@@ -2027,7 +2093,7 @@ class CitrosDB(_PgCursor):
         ...                                     title = 'Coordinates')
 
         ![plot_sigma_ellipse_2](../../img_documentation/plot_sigma_ellipse_2.png "plot_sigma_ellipse_2")
-        '''
+        """
         plotter = _Plotter()
         return plotter.plot_sigma_ellipse(df, x_label, y_label, ax, n_std, plot_origin, bounding_error, inf_vals, 
                            legend, title, set_x_label, set_y_label, scale, return_ellipse_param)
