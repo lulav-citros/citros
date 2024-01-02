@@ -272,7 +272,7 @@ after you execute a remote (-r) run command, a link directly to the *runs* tab o
 created new batch_id: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeeeee. Running on Citros cluster. See https://citros.io/cannon/batch/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeeeee.
 ```
 
-For mor run commands parameters and options check [CLI Commands](/docs/cli_commands).
+For mor run commands parameters and options check [CLI Commands](/docs/cli/cli_commands).
 
 
 import Tabs from '@theme/Tabs';

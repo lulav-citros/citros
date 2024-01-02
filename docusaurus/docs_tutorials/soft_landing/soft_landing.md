@@ -62,7 +62,7 @@ This is a list of all the ROS 2 parameters that can be control by the user wish:
 | e | stoping condition value | controller |
 | dt | time interval | controller |
 
-[citros_cli](/docs/config_params) provides more information about how to change the parameters by the user.
+[citros_cli](/docs/cli/config_params) provides more information about how to change the parameters by the user.
 
 The launch files:  
  `dynamics_controller.launch.py` launch the dynamics with the controller and `dynamics.launch.py` launch only the dynamics.  
@@ -122,9 +122,9 @@ simulation_dynamics
 
 The simulation will now commence on the CITROS server, and the results will be uploaded automatically to the CITROS database.
 
-For more run options check [cli commands documentation](/docs/cli_commands#command-run). 
+For more run options check [cli commands documentation](/docs/cli/cli_commands#command-run). 
 
-You can also **(run simulations/docs/simulations/sim_step_by_step)** directly from [Runs tab](https://citros.io/soft_landing/batch) in your soft landing repository.
+You can also **(run simulations/docs/cli/simulations/sim_step_by_step)** directly from [Runs tab](https://citros.io/soft_landing/batch) in your soft landing repository.
 
 ## Results
 
