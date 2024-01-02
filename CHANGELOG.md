@@ -2,6 +2,13 @@
 
 
 
+## v0.2.8 (2024-01-02)
+
+### Fix
+
+* fix(simulaiton): remove __ ([`cfab4af`](https://github.com/lulav-citros/citros/commit/cfab4af932996fd09a12dd520fc6f52a81008b88))
+
+
 ## v0.2.7 (2024-01-02)
 
 ### Fix
