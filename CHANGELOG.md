@@ -2,6 +2,47 @@
 
 
 
+## v0.2.7 (2024-01-02)
+
+### Fix
+
+* fix(reademe): commands
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability
+
+* Add title to citros report
+
+* Refactor CLI command handling
+
+* Refactor report_list function to improve readability and remove unnecessary code
+
+* Add keybindings for skip action in CLI implementation
+
+* Update CLI documentation and fix report generation path
+
+* Remove unused files and update report generate description ([`a434b02`](https://github.com/lulav-citros/citros/commit/a434b02c0339e678f43bbc125f3cf2269efaa1e7))
+
+
 ## v0.2.6 (2024-01-02)
 
 ### Fix
