@@ -129,7 +129,7 @@ const config = {
           {
             type: "docSidebar",
             sidebarId: "gettingStartedSidebar",
-            label: "CLI",
+            label: "Docs",
             position: "left",
             activeBaseRegex: `/docs/`,
           },

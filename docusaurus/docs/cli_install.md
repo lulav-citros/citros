@@ -1,4 +1,4 @@
-# CLI Installation
+# Installation
 
 The following document will guide you through CITROS CLI installation.
 
