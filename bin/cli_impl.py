@@ -122,7 +122,7 @@ def run(args, argv):
     :param args.debug:
     :param args.verbose:
     """
-    inspect(args)
+    # inspect(args)
     is_interactive = False
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
