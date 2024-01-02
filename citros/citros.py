@@ -421,6 +421,22 @@ class Citros(CitrosObj):
             for version in versions:
                 report_version = json.loads((Path(version) / "info.json").read_text())
 
+                notebooks = ""
+                if (
+                    report_version.get("notebooks") == None
+                    or report_version["notebooks"] == None
+                    or len(report_version["notebooks"]) == 0
+                ):
+                    continue
+                else:
+                    notebooks = str(
+                        Path(version)
+                        / report_version["notebooks"][0]
+                        .removesuffix("/")
+                        .split("/")[-1]
+                        .removesuffix(".ipynb")
+                    )
+
                 ret.append(
                     {
                         "started_at": report_version["started_at"],
@@ -428,14 +444,7 @@ class Citros(CitrosObj):
                         "name": report_version["name"],
                         "version": version.removesuffix("/").split("/")[-1],
                         "message": report_version["message"],
-                        "path": str(
-                            Path(version)
-                            / report_version["notebooks"][0]
-                            .removesuffix("/")
-                            .split("/")[-1]
-                            .removesuffix(".ipynb")
-                        )
-                        + ".pdf",
+                        "path": f'{str(self.root_citros / "reports" / report_version["name"]/ version.removesuffix("/").split("/")[-1])}',
                         "progress": report_version["progress"],
                         "status": report_version["status"],
                     }
