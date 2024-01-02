@@ -39,7 +39,9 @@ def parser_data_list(parent_subparser, epilog=None):
         help=help,
         formatter_class=RichHelpFormatter,
     )
-    parser.add_argument("-dir","--dir", default=".", help="The working dir of the project")
+    parser.add_argument(
+        "-dir", "--dir", default=".", help="The working dir of the project"
+    )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
@@ -47,85 +49,6 @@ def parser_data_list(parent_subparser, epilog=None):
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.set_defaults(func=data_list)
-
-    return parser
-
-
-# citros data service status
-def parser_data_service_status(parent_subparser, epilog=None):
-    description_path = "data/service/status.md"
-    help = "data service status section"
-
-    parser = parent_subparser.add_parser(
-        "service",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc.cli").joinpath(
-                        description_path
-                    ),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=epilog,
-        help=help,
-        formatter_class=RichHelpFormatter,
-    )
-
-    parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    parser.set_defaults(func=data_service_status)
-
-    subparser = parser.add_subparsers(dest="type")
-
-    return parser
-
-
-# citros data service
-def parser_data_service(parent_subparser, epilog=None):
-    description_path = "data/service.md"
-    help = "data service section"
-
-    parser = parent_subparser.add_parser(
-        "service",
-        description=Panel(
-            Markdown(
-                open(
-                    importlib_resources.files(f"data.doc.cli").joinpath(
-                        description_path
-                    ),
-                    "r",
-                ).read()
-            ),
-            subtitle=f"[{citros_version}]",
-            title="description",
-        ),
-        epilog=epilog,
-        help=help,
-        formatter_class=RichHelpFormatter,
-    )
-    parser.add_argument("-dir", default=".", help="The working dir of the project")
-    parser.add_argument("-H", "--host", default="0.0.0.0", help="host")
-    parser.add_argument("-p", "--port", default="8000", help="post to listen to")
-    parser.add_argument("-t", "--time", action="store_true", help="print request times")
-    parser.add_argument(
-        "-d", "--debug", action="store_true", help="set logging level to debug"
-    )
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="use verbose console prints"
-    )
-    parser.set_defaults(func=data_service)
-
-    subparser = parser.add_subparsers(dest="type")
-
-    parser_data_service_status(subparser)
 
     return parser
 
@@ -316,7 +239,7 @@ def parser_data_db_logs(parent_subparser, epilog=None):
 
 
 # citros data db clean
-def parser_data_db_clean(parent_subparser, epilog=None):
+def parser_data_db_remove(parent_subparser, epilog=None):
     description_path = "data/db/clean.md"
     help = "data db clean section"
 
@@ -345,7 +268,7 @@ def parser_data_db_clean(parent_subparser, epilog=None):
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
-    parser.set_defaults(func=data_db_clean)
+    parser.set_defaults(func=data_db_remove)
 
     # subparser = parser.add_subparsers(dest="type")
 
@@ -390,7 +313,7 @@ def parser_data_db(parent_subparser, epilog=None):
     parser_data_db_status(subparser)
     parser_data_db_stop(subparser)
     parser_data_db_logs(subparser)
-    parser_data_db_clean(subparser)
+    parser_data_db_remove(subparser)
 
     return parser
 
@@ -429,7 +352,6 @@ def parser_data(main_sub, epilog=None):
 
     subsubparser = parser.add_subparsers(dest="type")
     parser_data_list(subsubparser, epilog)
-    parser_data_service(subsubparser, epilog)
     parser_data_db(subsubparser, epilog)
 
     return parser

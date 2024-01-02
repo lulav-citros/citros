@@ -20,6 +20,7 @@ from .parsers import (
     parser_run,
     parser_init,
     parser_data,
+    parser_service,
     parser_report,
     parser_launch,
     parser_parameter,
@@ -90,6 +91,10 @@ def main():
         epilog(),  # TODO: fill with correct doc URL
     )
     parser_report(
+        subparsers,
+        epilog(),  # TODO: fill with correct doc URL
+    )
+    parser_service(
         subparsers,
         epilog(),  # TODO: fill with correct doc URL
     )
