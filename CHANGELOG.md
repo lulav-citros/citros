@@ -2,6 +2,13 @@
 
 
 
+## v0.2.6 (2024-01-02)
+
+### Fix
+
+* fix(cli_impl): remove inspect ([`dede5a3`](https://github.com/lulav-citros/citros/commit/dede5a3e3a1ddf50c0aa54d9330df3eb1831eca2))
+
+
 ## v0.2.5 (2024-01-02)
 
 ### Fix
