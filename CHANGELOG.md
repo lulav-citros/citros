@@ -2,6 +2,13 @@
 
 
 
+## v0.2.10 (2024-01-02)
+
+### Fix
+
+* fix(ignore): Remove unnecessary files and code ([`d8c2681`](https://github.com/lulav-citros/citros/commit/d8c2681a439c094d05442a637c0aadebb1c9ecfa))
+
+
 ## v0.2.9 (2024-01-02)
 
 ### Fix
