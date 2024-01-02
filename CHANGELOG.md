@@ -2,6 +2,17 @@
 
 
 
+## v0.2.9 (2024-01-02)
+
+### Fix
+
+* fix(dommands): dixes ([`9b17d58`](https://github.com/lulav-citros/citros/commit/9b17d585b6cbf35fbc28f0109c76fe271c643cda))
+
+### Unknown
+
+* Add service parser to CLI ([`101d61f`](https://github.com/lulav-citros/citros/commit/101d61f178b01b5a742384a738a4a12b869301db))
+
+
 ## v0.2.8 (2024-01-02)
 
 ### Fix
