@@ -904,7 +904,7 @@ def choose_batch(
     chosen_simulation = simulation_name
     if chosen_simulation is None:
         simulations = []
-        for simulation_path in glob.glob(f"{data_root}/*/"):
+        for simulation_path in glob.glob(f"{data_root}/[!_]*/"):
             simulation = simulation_path.removesuffix("/").split("/")[-1]
             simulations.append(simulation)
         # print(f"simulations: {simulations}")
@@ -924,7 +924,7 @@ def choose_batch(
     chosen_batch = batch_name
     if chosen_batch is None:
         batch_list = []
-        for batch_path in glob.glob(f"{data_root}/{chosen_simulation}/*/"):
+        for batch_path in glob.glob(f"{data_root}/{chosen_simulation}/[!_]*/"):
             batch_name = batch_path.removesuffix("/").split("/")[-1]
             batch_list.append(batch_name)
 
@@ -947,7 +947,7 @@ def choose_batch(
     if chosen_version is None:
         version_list = []
         for version_path in glob.glob(
-            f"{data_root}/{chosen_simulation}/{chosen_batch}/*/"
+            f"{data_root}/{chosen_simulation}/{chosen_batch}/[!_]*/"
         ):
             version = version_path.removesuffix("/").split("/")[-1]
             version_list.append(version)
