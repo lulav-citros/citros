@@ -16,24 +16,7 @@ This tutorial will guide you through the CITROS CLI interface, using a simple RO
 
 ![orangesqueeze](img/orange_squeeze.jpg "CITROS CLI")
 
-## Table of Contents
-
-1. [The Cannon Example Project](#the-cannon-example-project)
-    1. [Prerequisites](#prerequisites)
-    2. [Installation](#installation)
-    3. [Build](#build)
-    4. [Implementation Overview](#implementation-overview)
-    5. [Running the Solutions](#running-the-solutions)
-    7. [Visualization with Foxglove](#visualization-with-foxglove)
-2. [Working with CITROS](#working-with-citros)
-    1. [Prerequisites](#prerequisites-1)
-    2. [Running a Simulation](#running-a-simulation)
-    3. [Configuring a Simulation](#configuring-a-simulation)
-    4. [Data analysis](#data-analysis-online-only)
-
-
-
-## The Cannon Example Project
+## The Cannon Example Project Overview
 
 This project is a ROS 2 implementation of the [cannonball simulation](https://nasa.github.io/trick/tutorial/ATutASimpleSim) provided by NASA Johnson Space Center as part of the tutorial for the 
 [Trick Simulation Environment](https://nasa.github.io/trick/).
@@ -44,13 +27,25 @@ It determines the trajectory and time of impact of a cannon ball that is fired w
 
 Two versions of the simulation are provided: an analytic solution and a numeric integration solution.
 
-### Prerequisites
+## Table of Contents
 
-- Install [Visual Studio code](https://code.visualstudio.com/download)
-- Install and Run [Docker](https://docs.docker.com/get-docker/)
-- Install [Foxglove](https://foxglove.dev/download) (optional)
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Workspace Overview](#implementation-overview)
+4. [Running the Solutions](#running-the-solutions)
+5. [Visualization with Foxglove](#visualization-with-foxglove)
+6. [Working with CITROS](#working-with-citros)
+7. [CITROS Initialization](#citros-initialization)
+8. [Simulations](#simulations)
+9. [Data analysis](#data-analysis)
 
-### Installation
+## Prerequisites
+
+1. Install [Visual Studio code](https://code.visualstudio.com/download)
+2. Install and Run [Docker](https://docs.docker.com/get-docker/)
+3. Install [Foxglove](https://foxglove.dev/download) (optional)
+
+## Installation
 
 Open cmd on your desktop
 
@@ -91,12 +86,14 @@ $ code .
 From this point, all the actions should be typed in VScode terminal.
 :::
 
-### Build 
-```bash
-$ colcon build
-$ source install/local_setup.bash
-```
-### Implementation Overview
+7. Build your project
+
+ ```bash
+ $ colcon build
+ $ source install/local_setup.bash
+ ```
+
+## Workspace Overview
 The project is made out of three ROS nodes - `cannon_analytic`, `cannon_numeric` and `scheduler`. The scheduler node is responsible for driving the simulation by publishing a `scheduler` topic at a given rate (say, 100Hz). The cannon nodes subscribe to this topic, and upon receiving it perform a single calculation step. The rate (`dt`) is a ROS parameter for the scheduler node, which means you may change its value in the `config/params.yaml` file, without the need to recompile. The two cannon nodes also have `params.yaml` files of their own, in which you can set the initial speed and angle, and also the time/integration delta (`dt`).
 
 Additionally, the `scheduler` node subscribes to a `debug` topic, which, together with the provided Foxglove layout, facilitates a play/pause/step/resume functionality.
@@ -107,7 +104,7 @@ The output of the simulation, i.e. the topic containing the calculated results, 
 
 The simulation will halt when `position_y` reaches zero (i.e. impact).
 
-### Running the Solutions
+## Running the Solutions
 
 The cannon project contains two launch files, one for each solution
 
@@ -128,7 +125,7 @@ Running either of the two simulations will result in the logger output being wri
 :::
 
 
-### Visualization with Foxglove
+## Visualization with Foxglove
 To view a graphical representation of the simulation:
 1. Open [Foxglove](https://foxglove.dev/) 
 2. Press on Foxglove icon at the top right
@@ -158,62 +155,90 @@ Output example:
 
 Working with the CITROS CLI is pretty straight forward, since there are only two things you need to do - initialize your CITROS repository, and run your project. Additionally, you may configure your CITROS repository to fit your simulation needs, but if all you want to do is to run your project via CITROS with the default configuration, than only two commands are necessary.
 
-### Prerequisites
-But first, let's make sure all the prerequisites for running CITROS have been met:
-- Open the project (in this case Cannon) inside a VS Code dev-container.
-- Build and source your project by running:
+## CITROS Initialization
+
+### Installation
+First, let's make sure we can run CITROS:
+
+1. Make sure the project (in this case Cannon) is opened inside a VS Code dev-container.
+2. Build and source your project by running:
     ```bash
     $ colcon build
     $ source install/local_setup.bash
     ```
-- in the dev-container's terminal, run
+3. in the dev-container's terminal, run
     ```bash
     $ pip install citros
     ```
 
     You can verify that the installation succeeded by running 
     ```bash
-    $ citros -V
+    $ citros -h
     1.2.3
     ```
 
     to get the CITROS CLI version installed.
 
-### Running a Simulation
-
-
-<Tabs>
-<TabItem value="web" label="Working Offline">
 
 ### Initialization
+
 Alrighty then! You're now ready to run the first command - `init`, which will initialize your local CITROS repository:
 ```bash
 $ citros init
-User is not logged in. Initializing Citros locally.
-Creating new citros branch `main`.
-Creating an initial commit.
-Checking out new citros branch `main`.
-Initialized Citros repository.
 ```
 
-This command creates a folder named `.citros` under your project directory, and initializes it as a git repository. The current git branch of the `.citros` repository should always be named as the current branch in your ROS project (i.e. `main` in the example above). In case they are different, CITROS will create and/or checkout the branch for you, as can be seen in the output above.
-
+This command creates a folder named `.citros` under your project directory.<br />
 The `.citros` directory contains several files and folders that capture the state of your project and allow you to configure your simulations according to your needs. We will discuss some of them briefly later on. For a full and detailed description of the contents of the `.citros`  directory, refer to the [CLI Documentation](https://citros.io/doc/docs_cli).
 
-### Run the Simulation
+## Simulations
+
+### Running a Simulation
 
 After your `.citros` repository has been initialized, you're ready to run a CITROS simulation, albeit with all the default configurations, by using the `run` command:
 
 ```bash
-$ citros run -n "my_first_batch" -m "my first Citros simulation!"
+$ citros
+```
+
+Choose the `Run` action:
+
+```sh
+? Select Action: 
+Init: initialize .citros in current directory 
+❯ Run: new simulation                  
+Data: for data management                                            
+Report: generation and management                                               
+```
+
+Name the batch run (or press enter for *"citros"* as a default batch name):
+
+```sh
+Please name this batch run: my_first_batch
+```
+
+Enter a message for the batch (or press enter for *"This is a default batch message from citros"* as a default batch name):
+
+```sh
+Enter a message for this batch run: My first CITROS simulation!
+```
+
+Choose number of runs (or press enter to run once):
+
+```sh
+How many times you want the simulation to run?: 1
+```
+
+Lastly choose *"simulation_cannon_analytic"*:
+```sh
 ? Please choose the simulation you wish to run: 
 ❯ simulation_cannon_analytic
   simulation_cannon_numeric
 ```
 
+
 :::note
 
-This command will run the simulation on your machine, and save all the results under `.citros/runs/[simulation_name]` folder. The content of the [folder](/docs/citros_structure#directory-runs) will contain 
+This command will run the simulation on your machine, and save all the results under `.citros/data/[simulation_name]` folder. The content of the [folder](/docs/citros_structure#directory-runs) will contain 
 - recorded bags
 - logs from the simulation and citros itself
 - metadata about the run
@@ -222,158 +247,7 @@ This command will run the simulation on your machine, and save all the results u
 
 :::
 
-</TabItem>
-
-<TabItem value="cli" label="Working Online">
-
-
-### Prerequisites
-In addition to the prerequisites for working with the CITROS CLI offline, make sure:
-
-- You have a working internet connection.
-- You have signed up to [CITROS](https://citros.io) and have your login password.
-
-
-Using the CITROS CLI online is very similar, from the user's standpoint, to using it offline. We still use the `init` and `run` commands, albeit with slight alterations or different consequences. In addition, there are a few more commands necessary to interact with the CITROS cloud.
-
-### logging in
-
-First and foremost, we need to log in:
-```bash
-$ citros login
-email: example@lulav.space
-Password: 
-User logged in.
-```
-
-### ssh
-
-Before we continue to initialize our project, there is one more prerequisite we need to check off that was not yet mentioned: setting up ssh communication with CITROS. Since this process only needs to be performed once per computer, and can be performed using the CITROS website, we will not delve into it here, except to mention that it can be performed via the CLI using the command:
-```bash
-$ citros setup-ssh
-```
-for further details, see the [CLI Documentation](https://citros.io/doc/docs_cli)
-
-
-### Initialization
-
-#### Before Running `citros init`
-
-First and foremost, the `.citros` directory can only be **initialized once**. 
-If the `.citros` directory exists in your local project and the project [**already exists on the remote server**](https://citros.io/cannon), you have to delete the `.citros` directory from your project before 
-running `citros init` command.
-
-#### Running `citros init`
-
-```bash
-$ citros init
-Checking internet connection...
-Checking ssh...
-Updating Citros...
-Waiting for repo to be ready...
-Citros repo successfully cloned from remote.
-Creating and checking out a new local branch `main` that will track the remote branch.
-Default branch of remote 'origin' set to: main
-Citros successfully synched with local project.
-You may review your changes via `citros status` and commit them via `citros commit`.
-Initialized Citros repository.
-```
-As you can see, a lot more is happening when you initialize your repository while being logged in. We will not delve into all the details behind the scenes, but as always, feel free to roam through the [CLI Documentation](https://citros.io/doc/docs_cli) for further details.
-
-:::caution Warning
-
- If you try to run `init` while a `.citros` directory already exists in your project, you will get a response similar to this:
-```bash
-$ citros init
-The directory /workspaces/cannon has already been initialized.
-working remotely with [git@citros.io:lulav/cannon.git].
-```
-
- 1. If you want to reinitialize your CITROS repository, you'll have to first delete the current `.citros` directory.
-
-2. If you initialized the CITROS repository offline, and it [**doesn't exist** on the remote server yet](https://citros.io/cannon) (i.e. it has not been initialized online by you or anyone else) - then rather than deleting the `.citros` directory, you can run:
- ```bash
- citros add-remote
- ```
-
- which will add the CITROS server as a remote for your CITROS repo on your behalf, and take care of a few other details that are handled when initializing while being logged in.
- 
- At this point it is recommended you commit and push your changes to the remote by running:
- ```bash
- citros commit
- citros push
- ``` 
-:::
-
-### Building and Pushing a Docker Image
-
-Now that our CITROS repository is initialized and synched with the CITROS remote, we have one more important thing we need to do before we can run our simulation on the cloud - we need to build a docker image of our ROS project, tag it with the current commit hash for the project, and upload it to CITROS. Sounds complicated? Not to worry - all this is accomplished by running a single command:
-```bash
-citros docker-build-push
-``` 
-:::note
-
-As a prerequisite for this command, the working directory of your ROS project must be clean. If it isn't, simply commit your changes first.
- ```bash
- citros commit
- citros push
- ``` 
-
-:::
-
-#### Running on The Cloud
-
-After running the previous command, CITROS has a docker image of your ROS project, so we can finally run the simulation on the cloud (notice the `-r` flag):
-```bash
-citros run -n "cloud_test" -m "running in the cloud!" -c 3 -r
-? Please choose the simulation you wish to run: simulation_cannon_analytic
-created new batch_id: zzzzzzzz-xxxx-cccc-vvvv-bbbbbbbbbbbb. Running on Citros cluster. See https://citros.io/cannon/batch/zzzzzzzz-xxxx-cccc-vvvv-bbbbbbbbbbbb.
-```
-
-The above command will run the `cannon_analytic` simulation 3 times on the CITROS cloud.
-By clicking the provided link shown in the terminal, you can directly navigate to the *`runs`* tab on the CITROS website, and see your runs in action.
-
-#### Configuring a `runner`
-
-The runner is the actual machine that will run your image, this machine can be configured and optimized for your simulation. 
-
-:::note
-
-keep in mind that this resources is not free of charge and will be charged accordingly. please refer to the [pricing](https://citros.io/pricing) for further details.
-
-:::
-
-When working online, there are several more ways with which you can configure your runner. Specifically, you can directly set the hardware resources that will be used on the cloud. Simply open the `.citros/simulations/simulation_cannon_analytic.json` file (for example), set the values according to your needs:
-
-    "GPU": 0,
-    "CPU": 2,
-    "MEM": 265,
-
-:::note
-
-the `MEM` field denotes the amount of RAM your simulation requires when running on the cloud in *Megabytes*.
-
-the `CPU` field denotes the amount of CPU cores needed by your simulation when running on the cloud.
-
-:::
-
-In addition there are several more useful fields, which are also relevant when working offline:
-
-    "launch": {
-        "file": "cannon_analytic.launch.py",
-        "package": "scheduler"
-    },
-    "timeout": 64,
-
-The `launch` field specifies the specific launch file for this simulation and the package it resides in. You may change it according to your needs.
-
-The `timeout` field, surprisingly enough, sets a timeout (in *seconds*) for each simulation run, after which it will be automatically halted.
-
-
-</TabItem>
-</Tabs>
-
-
+### Short Simulations Structure Overview
 
 To fully understand what's going on, we need to familiarize ourselves with three concepts that are core to the way CITROS works:
 - ## **[simulation](/docs/citros_structure#directory-simulations)** 
@@ -387,7 +261,7 @@ To fully understand what's going on, we need to familiarize ourselves with three
 
 - ## **batch** 
 
-    Defined as a group of one or more simulation runs. Since you can specify one or more simulations runs ('*completions*') when running a CITROS simulation, a **batch** is simply a convenient way to group them together. For instance, in the case of the above example, if we choose `simulation_cannon_analytic` from the menu, the following folder structure will be created: `.citros/runs/simulation_cannon_analytic/my_first_batch/0`. The last folder - `0`, is the folder corresponding to the only run for this batch - when you don't specify the number of completions (i.e. runs) using the `-c` flag, it will default to 1, and the name of each run is a zero based index, incremented by one for each additional run.
+    Defined as a group of one or more simulation runs. Since you can specify one or more simulations runs ('*completions*') when running a CITROS simulation, a **batch** is simply a convenient way to group them together. For instance, in the case of the above example, if we choose `simulation_cannon_analytic` from the menu, the following folder structure will be created: `.citros/data/simulation_cannon_analytic/my_first_batch/20231231120623/0`. The last folder - `0`, is the folder corresponding to the only run for this batch - when you don't specify the number of completions (i.e. runs) using the `-c` flag, it will default to 1, and the name of each run is a zero based index, incremented by one for each additional run.
 
 - ## **run**
 
@@ -396,7 +270,7 @@ To fully understand what's going on, we need to familiarize ourselves with three
     The folder corresponding to a simulation run will contain all the information relevant for that run. Look through such a folder after running a simulation and see for yourself. For further details refer to the [CLI Documentation](https://citros.io/doc/docs_cli)
 
 
-By default, when using the `run` command, you must provide a batch name (using the `-n` flag) and a message (using the `-m` flag). The name you provide will be used as the name of the directory in which all runs for this batch will be saved. If a batch by that name already exists - no worries, CITROS will simply add an underscore and an index to the name you provided, thereby keeping the batch directory names unique for each simulation. 
+By default, when using the `run` command, you must provide a batch name (using the `-n` flag) and a message (using the `-m` flag). The name you provide will be used as the name of the directory in which all runs for this batch will be saved. If a batch by that name already exists - no worries, CITROS will simply add a new version under the simulation name you provided, thereby keeping the batch version unique for each simulation. 
 
 Now that you understand what's going on, choose one of the simulations presented in the menu, press enter and see it run...
 
@@ -438,20 +312,49 @@ Let's say we want to find out the optimal initial angle for the cannon, which wi
 
 This will cause a normal distribution with a standard deviation of 15 around 45 to be evaluated for every simulation run.
 
-Now, if we run
-```batch
+Another way to use the run command is writing the full command: 
+
+```bash
 citros run -n "test_params" -m "testing random initial angle" -c 10
 ```
-:::note
-
-to run online you need to add `-r` tag
-
-:::
 
 and choose `simulation_cannon_analytic` from the menu, the simulation will run 10 times (sequentially if working offline), and each time the cannon will have a different initial angle. By looking at the [results](#data-analysis-online-only), we can hopefully come to the conclusion that 45 degrees is the optimal angle. 
 
-### Data Analysis (Online Only)
+### Review All Simulations Data
 
+To view all simulations use the data command:
+
+```bash
+$ citros
+```
+
+Choose the `Data` action:
+
+```sh
+? Select Action: 
+Init: initialize .citros in current directory 
+Run: new simulation                  
+❯ Data: for data management                                            
+Report: generation and management                                            
+```
+
+Choose `List` to view all simulations
+
+```sh
+❯ List: list all runs
+simulation_cannon_analytic
+simulation_cannon_numeric   
+```
+
+Table of all the simulations will be shown as output. <br />
+The table contains the following fields: Run name, Versions, message, status, completions, path
+
+![Alt text](img/cannon_data.png)
+
+
+## Data Analysis
+
+### Execute Notebook
 After you've run a batch run on CITROS, your data is stored on CITROS's servers.
 you can access the data using Python [citros data analysis package](https://pypi.org/project/citros-data-analysis/) either from the Python [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb) or from a local kernel Python environment.
 
@@ -461,9 +364,6 @@ citros data analysis package is installed while running `pip install citros`, so
 
 :::
 
-<Tabs>
-<TabItem value="local_nb" label="Run Local Notebook">
-
 1. Open .citros directory
 
 2. Go to notebooks.
@@ -471,22 +371,6 @@ citros data analysis package is installed while running `pip install citros`, so
 3. Open data_analysis.ipynb
 
 4. Press `Run All` button
-
-</TabItem>
-
-<TabItem value="remote_nb" label="Run Remote Notebook">
-
-1. Make sure your batch run status changed to `DONE`
-
-2. Open [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb)
-
-3. Start Kernel by pressing on `Start` button
-
-4. Press `Execute All` button
-
-</TabItem>
-
-</Tabs>
 
 5. Scroll down the notebook to see the results.
 
@@ -507,7 +391,76 @@ citros.batch(-1).topic('/cannon/state').sid([0,1,2,3,4]).\
 ![Alt text](img/nb_sample.png)
 
 
+### Generate Report
 
+After running the notebook and verifying that everything works properly you can generate a report from your Python Notebook signed by CITROS.
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+run citros command
+
+```bash
+$ citros
+```
+
+Choose the `Report` action:
+
+```sh
+? Select Action:                  
+Init: initialize .citros in current directory 
+Run: new simulation                  
+Data: for data management                                            
+❯ Report: generation and management                              
+```
+
+Choose `Generate` to generate a report
+
+```sh
+List: reports list
+❯ Generate: new report
+Validate: report integrity 
+```
+
+Choose the simulation source for the report
+
+```sh
+simulation_cannon_analytic 
+❯ simulation_cannon_numeric
+```
+
+Select a batch from you batch list
+
+```sh
+Select Batch: numeric simulations
+```
+
+Select a version
+```sh
+Select Batch: numeric simulations
+```
+
+Name your report *(or press enter for "citros" as a default report name)*:
+```sh
+Please name this report: My first report
+```
+
+Enter a message for the report (or press enter for "This is a default message message from citros" as a default report message):
+```sh
+Enter a message for this report: Best report ever
+```
+
+choose the notebook for the report
+
+```sh
+❯ citros_template/notebooks/data_analysis.ipynb
+citros_template/notebooks/test1.ipynb
+```
+
+To view your generated report go to .citros/reports/[report_name]
+
+:::note
+
+The content of the [Reports folder](/docs/citros_structure#directory-reports) will contain 
+- output of the python notebook
+- Report info
+- Generated pdf report
+
+:::

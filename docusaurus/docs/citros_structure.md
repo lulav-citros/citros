@@ -1,81 +1,52 @@
-# CITROS Repository File Structure
+# .CITROS File Structure
 
-The following folder and file structure is automatically generated for you (when you run `citros init`):
+.CITROS folder and file structure is automatically generated for you (when you run `citros init`):
 
 ```
 └── .citros
+    ├──data
+    ├── logs
     ├── notebooks
     ├── parameter_setups
-        └── functions
-            └── my_func.py
-        └── default_param_setup.json
+    │   ├── default_param_setup.json
+    │   └── functions
+    │       └── my_func.py
     ├── reports
-    ├── runs
     ├── simulations
-        ├── simulation_foo.json
-        └── simulation_bar.json
-    ├── workflows
-        └──default_flow.json
-    ├── foxglove
-        ├── my_layout.json
-        └── another_layout.json
-    ├── .citrosignore
-    ├── citros_repo_id
+    │   ├── simulation_1.json
+    │   ├── simulation_2.json
+    │   └── simulation_3.json
+    ├── .gitignore
     ├── project.json
-    ├── settings.json
-    └── user_commit
+    └── settings.json
 
 ```
-
-## Directory `notebooks`
-<details>
-  <summary>Description</summary>
-  This folder contains Jupiter notebook files you may use for data analysis of your simulation results.
-</details>
-
-## Directory `parameter_setups`
-<details>
-
-<summary>Description</summary>
-
-The `parameter_setups` directory stores your JSON-formatted parameter setup files. When you initialize your CITROS repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
-
-The file `default_param_setup.json` will not be overwritten during CITROS `init`, `run` or `status` commands. Nevertheless, it is recommended to duplicate this file under a different name within the `parameter_setups` directory before making any modifications. This practice ensures your custom setups are preserved and allows you to experiment with various parameter configurations.
-    
-The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior. Take, for instance, a static parameter value like 42. Instead of hard-coding it, you could use a *function object* to derive a value from a normal distribution centered at 42. The introduction of function objects broadens your horizons, enabling you to use any numpy function or even craft user-defined functions for meticulous computational adjustments. A prime example is when parameter values are intricate, making them cumbersome to hard-code; in such scenarios, you can devise a function to fetch them from a file. In essence, this newfound flexibility paves the way for limitless computational and manipulative possibilities for your parameters.
-    
-To learn how to add functions to parameter setups, please refer to the [Adding functions to parameter setup](../docs/config_params.md) section.
-</details>
-
-## Directory `reports`
-<details>
-  <summary>Description</summary>
-  This folder holds reports describing the results of your simulation runs on the CITROS cloud.
-</details>
-
-## Directory `runs`
+## Directory `data`
 <details>
 <summary>Description</summary>
 The runs directory stores data and metadata about each run of your simulations. Its structure is as follows:
 
+
 ```
-└── Simulation Name
-    └── Batch Name
-        └── Run ID
-            ├── bag
-                ├── simulation_foo.json
-                └── simulation_bar.json
-            ├── config
-            ├── msgs
-            ├── citros.log
-            ├── ros.log
-            ├── environment.json
-            ├── info.json
-            └── metrics.csv
+data
+   └── Simulation Name
+       └── Batch Name
+           └── version
+               ├── Run ID
+               │   ├── bags
+               │   ├── citros.log
+               │   ├── config
+               │   ├── environment.json
+               │   ├── ros.log
+               │   └── stats.csv
+               ├── citros.log
+               └── info.json
 ```
 - Simulation Name: These directories are named after each of the simulations defined in the simulation files. For every simulation file that is run, a corresponding directory is created here. Each Simulation Name directory may include multiple Batch Name directories.
 
 - Batch Name: This directory holds a batch of simulation runs. A batch consists of multiple runs of the same simulation with different parameters.
+
+- Version ID: 
 
 - Run ID: Each unique simulation run has its own directory, identified by a Run ID. Under this directory, there are several files and sub-directories:
 
@@ -86,9 +57,7 @@ The runs directory stores data and metadata about each run of your simulations. 
 - metadata.yaml: A file holding metadata information associated with the bag file.
 
 - `config`: This sub-directory contains YAML files (pkg1.yaml, pkg2.yaml, etc.) for each package in your ROS project, detailing the actual parameters used in the simulation. If you used any functions in your parameter setup, the values appearing here will be those that were evaluated according to the function you defined.
-
-- `msgs`: This sub-directory contains all the ROS msg files you may have in your project, each under yet another sub-directory with a name corresponding to the package the msg file belongs to.
-            
+         
 - `citros.log`: A standard log file, documenting CITROS actions and events that took place during the execution of CITROS commands. Running a CITROS command with the `-d` flag, will change the log level (which is set to `INFO` by default), to `DEBUG`.
 
 - `ros.log`: A standard log file that was active during the simulation run, documenting ROS actions and events throughout the simulation. 
@@ -121,6 +90,37 @@ These files collectively provide a comprehensive record of each simulation run, 
 
 </details>
 
+## Directory `logs`
+<details>
+  <summary>Description</summary>
+</details>
+
+## Directory `notebooks`
+<details>
+  <summary>Description</summary>
+  This folder contains Jupiter notebook files you may use for data analysis of your simulation results.
+</details>
+
+## Directory `parameter_setups`
+<details>
+
+<summary>Description</summary>
+
+The `parameter_setups` directory stores your JSON-formatted parameter setup files. When you initialize your CITROS repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
+
+The file `default_param_setup.json` will not be overwritten during CITROS `init`, `run` or `status` commands. Nevertheless, it is recommended to duplicate this file under a different name within the `parameter_setups` directory before making any modifications. This practice ensures your custom setups are preserved and allows you to experiment with various parameter configurations.
+    
+The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior. Take, for instance, a static parameter value like 42. Instead of hard-coding it, you could use a *function object* to derive a value from a normal distribution centered at 42. The introduction of function objects broadens your horizons, enabling you to use any numpy function or even craft user-defined functions for meticulous computational adjustments. A prime example is when parameter values are intricate, making them cumbersome to hard-code; in such scenarios, you can devise a function to fetch them from a file. In essence, this newfound flexibility paves the way for limitless computational and manipulative possibilities for your parameters.
+    
+To learn how to add functions to parameter setups, please refer to the [Adding functions to parameter setup](../docs/config_params.md) section.
+</details>
+
+## Directory `reports`
+<details>
+  <summary>Description</summary>
+  This folder holds reports describing the results of your simulation runs.
+</details>
+
 ## Directory `simulations`
 <details>
 <summary>Description</summary>
@@ -151,33 +151,7 @@ You can modify these fields to suit your simulation needs, just remember to save
 
 </details>
 
-## Directory `workflows`
-<details>
-<summary>Description</summary>
-
-The `workflows` directory stores your JSON-formatted workflow files.
-
-A flow.json file (e.g. `default_flow.json` which is auto-generated during `citros init`) is a user-crafted file used to automate and manage the flow of simulations in a CITROS repository. This file controls when the flow is triggered, which simulations are running, the post-processing analysis using Jupyter notebooks, and the recipients of the final reports. Here is a breakdown of its structure and content:
-
-- `trigger`: This field specifies the event that initiates the flow. It is usually tied to some form of version control event, like a Git push, but can be configured according to the user's needs.
-
-- `simulations`: This is an array of simulations to be run, specified as pairs of simulation name and the number of times to run them. For example, ["sim1", 17] means the simulation "sim1" will be run 17 times. Multiple simulations can be listed and each will be run the specified number of times.
-
-- `notebooks`: This is a list of Jupyter notebooks used for post-processing analysis of the simulation results. For example, ["nb1.ipynb", "nb2.ipynb"] means these two notebooks will be run once the simulations complete, with the results used as their input data.
-
-- `recipients`: This is a list of email addresses that will receive the reports generated from the notebooks' analysis.
-
-The flow.json file helps to streamline and automate your CITROS repository by tying together simulation runs, data analysis, and report distribution into a single manageable file. You can customize it to suit the specifics of your project.
-
-</details>
-
-## Directory `foxglove`
-<details>
-  <summary>Description</summary>
-  Foxglove layout files in this folder can be used by CITROS while running Foxglove on the CITROS cloud.
-</details>
-
-## File `.citrosignore`
+## File `.gitignore`
 <details>
 <summary>Description</summary>
 This file may be used by the user to specify names of packages and launch files in the project that should be ignored by CITROS. These packages and launch files will not be parsed and validated. Note that a launch file from another package may still use nodes from ignored packages.
