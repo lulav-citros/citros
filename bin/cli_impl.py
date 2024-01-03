@@ -73,7 +73,7 @@ def citros(args, argv):
         choices=[
             Choice("init", name="🍋 Init: initialize .citros in current directory"),
             Choice("run", name="🔥 Run: new simulation"),
-            Choice("data", name="📊 Data: for data managment "),
+            Choice("data", name="📊 Data: for data management "),
             Choice("report", name="📝 Report: generation and management"),
             Choice("service", name="🔖 Service: CITROS API service functions"),
             Separator(),
