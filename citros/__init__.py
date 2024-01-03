@@ -7,7 +7,7 @@
 #  ╚═════╝╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝
 # ==============================================
 
-from .database import CitrosDB
+
 from .citros import Citros
 from .citros_obj import (
     CitrosException,
@@ -16,28 +16,55 @@ from .citros_obj import (
     NoValidException,
 )
 from .utils import str_to_bool, suppress_ros_lan_traffic
+
 from .batch import Batch
 from .batch_uploader import NoConnectionToCITROSDBException
+
 from .logger import get_logger, shutdown_log
+
 from .service import data_access_service, NoDataFoundException
 
-# reporting
 from .report import Report, NoNotebookFoundException
 
+from .data import (
+    CitrosDB,
+    CitrosDict,
+    get_version,
+    CitrosData,
+    CitrosDataArray,
+    CitrosStat,
+    Validation,
+)
+
 __all__ = [
+    # citros
     Citros,
+    # citros_obj
     CitrosException,
     CitrosNotFoundException,
     FileNotFoundException,
     NoValidException,
-    get_logger,
-    shutdown_log,
-    CitrosDB,
-    data_access_service,
-    NoDataFoundException,
-    Batch,
+    # utils
     str_to_bool,
     suppress_ros_lan_traffic,
+    # batch
+    Batch,
+    NoConnectionToCITROSDBException,
+    # logs
+    get_logger,
+    shutdown_log,
+    # service
+    data_access_service,
+    NoDataFoundException,
+    # reporting
     Report,
     NoNotebookFoundException,
+    # data
+    CitrosDB,
+    CitrosDict,
+    get_version,
+    CitrosData,
+    CitrosDataArray,
+    CitrosStat,
+    Validation,
 ]

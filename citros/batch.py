@@ -155,7 +155,7 @@ class Batch(BatchUploader):
     # - all files is intact.
     # - if files is signed check all signings (sha)
     def _validate(self):
-        # TODO: add validations
+        # TODO[critical]: add validations
         return True, None
 
     def _new(self):
@@ -208,8 +208,6 @@ class Batch(BatchUploader):
 
         self.log.debug(f"loading version: {batch_info}")
 
-        # TODO: use self.index to load the last batch run
-
         try:
             with open(Path(batch_info), "r") as file:
                 batch_run = json.load(file)
@@ -219,8 +217,6 @@ class Batch(BatchUploader):
             self.log.error(f"no file for {batch_info}")
         except Exception as e:
             self.log.exception(e, self.data)
-
-        # TODO[critical]: add all simulations to the batch {... simulations: [sim1, ...]}
 
     ###################
     ##### public ######
@@ -267,7 +263,7 @@ class Batch(BatchUploader):
 
         if sid != -1:
             self.simulation_run(sid, ros_domain_id, trace_context)
-            return        
+            return
         for i in range(int(completions)):
             self.log.debug(f"run {i}")
             self.simulation_run(i, ros_domain_id, trace_context)

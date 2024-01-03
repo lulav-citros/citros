@@ -27,16 +27,6 @@ class NoNotebookFoundException(Exception):
         super().__init__(message)
 
 
-# citros report -n best_report_ever -notebook notebooks/notebook_name.ipynb -b vova_batch_1/version
-
-# TODO: check that vova_batch_1/version is loaded, if not, load it
-# reports/report_name/
-# reports/report_name/notebooks/
-# reports/report_name/batch/name (soft link)
-# reports/report_name/info.json (status of report)
-# reports/report_name/output/ (render output of notebooks + pdfs )
-
-
 class Report:
     """
 
@@ -215,8 +205,6 @@ class Report:
     def start(self):
         self.log.debug(f"{self.__class__.__name__}.start()")
         self.state["status"] = "START"
-        # TODO: copy notebooks to report folder
-        # TODO: create soft link to batch folder
 
     def proccess(self, progress):
         self.state["progress"] = progress
@@ -360,6 +348,7 @@ class Report:
             private_key_path (str): path to private key
             output_folder (str): path to folder where signed pdf should be saved
         """
+        # TODO[critical]: implement signing
         raise NotImplementedError
         self.log.debug(f"{self.__class__.__name__}.sign_pdf_with_key()")
         with open(private_key_path, "rb") as key_file:

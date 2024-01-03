@@ -1,5 +1,8 @@
-from citros_data_analysis.error_analysis.citros_data import CitrosData
-from citros_data_analysis.data_access import citros_db as da
+# from citros_data_analysis.error_analysis.citros_data import CitrosData
+from ..analysis import CitrosData
+
+# from citros_data_analysis.data_access import citros_db as da
+from ..access import CitrosDB, CitrosDict, get_version
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -53,7 +56,7 @@ class Validation:
 
     For topic 'A' from json-data column download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
 
-    >>> citros = da.CitrosDB()
+    >>> citros = CitrosDB()
     >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
     >>> print(df)
         sid   rid   time        topic   type   data.x.x_1   data.time
@@ -284,7 +287,7 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -400,11 +403,11 @@ class Validation:
         # adding information about nan values of the standard deviations
         for col in self.db.data.columns:
             if if_nan_sigma[col]:
-                log[col]["nan_std"] = da.CitrosDict(
+                log[col]["nan_std"] = CitrosDict(
                     result[self.db.x_label].loc[nan_std[col]].to_dict()
                 )
             else:
-                log[col]["nan_std"] = da.CitrosDict()
+                log[col]["nan_std"] = CitrosDict()
 
         # print_result
         all_pass = []
@@ -480,7 +483,7 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -684,7 +687,7 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -766,11 +769,11 @@ class Validation:
         # adding information about nan values of the standard deviations
         for col in self.db.data.columns:
             if if_nan_sigma[col]:
-                log[col]["nan_std"] = da.CitrosDict(
+                log[col]["nan_std"] = CitrosDict(
                     result[self.db.x_label].loc[nan_std[col]].to_dict()
                 )
             else:
-                log[col]["nan_std"] = da.CitrosDict()
+                log[col]["nan_std"] = CitrosDict()
 
         # print_result
         all_pass = []
@@ -862,14 +865,14 @@ class Validation:
             Dictionary with information for each column: 'passed' (True or False), 'pass_rate', 'failed' (indexes and x values of the
             points that fail the test).
         """
-        log = da.CitrosDict()
+        log = CitrosDict()
 
         # init parameters
-        log["test_param"] = da.CitrosDict(init_param)
+        log["test_param"] = CitrosDict(init_param)
 
         # calculate pass rate (how many points pass)
         try:
-            pass_rate = da.CitrosDict(
+            pass_rate = CitrosDict(
                 (
                     result[self.db.data.columns].apply(pd.Series.value_counts).loc[True]
                     / len(result)
@@ -879,15 +882,15 @@ class Validation:
             )
         except KeyError:
             # in case all points failed test and there is no True values
-            pass_rate = da.CitrosDict()
+            pass_rate = CitrosDict()
             for col in self.db.data.columns:
                 pass_rate[col] = 0.0
 
         for col in self.db.data.columns:
-            log[col] = da.CitrosDict()
+            log[col] = CitrosDict()
             log[col]["passed"] = True if result[col].all() else False
             log[col]["pass_rate"] = pass_rate[col]
-            log[col]["failed"] = da.CitrosDict(
+            log[col]["failed"] = CitrosDict(
                 result[self.db.x_label]
                 .loc[result.index[result[col] == False]]
                 .to_dict()
@@ -1016,7 +1019,7 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
                                   .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -1124,11 +1127,11 @@ class Validation:
             )
         except KeyError:
             # in case all points failed test and there is no True values
-            pass_rate = da.CitrosDict()
+            pass_rate = CitrosDict()
             for col in self.db.data.columns:
                 sid = list(set(result[col].index.get_level_values("sid")))
                 sid.sort()
-                pass_rate[col] = da.CitrosDict(dict.fromkeys(sid, 0.0))
+                pass_rate[col] = CitrosDict(dict.fromkeys(sid, 0.0))
 
         try:
             pass_rate_overall = (
@@ -1145,31 +1148,31 @@ class Validation:
             )
         except KeyError:
             # in case all points failed test and there is no True values
-            pass_rate_overall = da.CitrosDict()
+            pass_rate_overall = CitrosDict()
             for col in self.db.data.columns:
                 pass_rate_overall[col] = 0.0
 
         passed = result.groupby("sid")[self.db.data.columns].all().all()
 
-        log = da.CitrosDict()
+        log = CitrosDict()
 
-        log["test_param"] = da.CitrosDict({"limits": limits})
+        log["test_param"] = CitrosDict({"limits": limits})
 
         for col in self.db.data.columns:
-            log[col] = da.CitrosDict()
+            log[col] = CitrosDict()
             log[col]["passed"] = passed[col]
-            log[col]["pass_rate"] = da.CitrosDict()
+            log[col]["pass_rate"] = CitrosDict()
             log[col]["pass_rate"]["sid_fraction"] = pass_rate_overall[col]
-            log[col]["pass_rate"].update(da.CitrosDict(pass_rate[col]))
+            log[col]["pass_rate"].update(CitrosDict(pass_rate[col]))
             if log[col]["passed"]:
-                log[col]["failed"] = da.CitrosDict()
+                log[col]["failed"] = CitrosDict()
             else:
-                log[col]["failed"] = da.CitrosDict(
+                log[col]["failed"] = CitrosDict(
                     result[result[col] == False]
                     .swaplevel()
                     .groupby("sid")
                     .apply(
-                        lambda f: da.CitrosDict(f.xs(f.name)[self.db.x_label].to_dict())
+                        lambda f: CitrosDict(f.xs(f.name)[self.db.x_label].to_dict())
                     )
                     .to_dict()
                 )
@@ -1249,7 +1252,7 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals,
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
         >>> V = va.Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
         ...                   method = 'bin', num = 50, units = 'm')
@@ -1320,18 +1323,18 @@ class Validation:
                 .to_dict()
             )
         except KeyError:
-            pass_rate = da.CitrosDict()
+            pass_rate = CitrosDict()
             for col in self.db.data.columns:
                 pass_rate[col] = 0.0
 
-        log = da.CitrosDict()
-        log["test_param"] = da.CitrosDict({"limits": limits})
+        log = CitrosDict()
+        log["test_param"] = CitrosDict({"limits": limits})
 
         for col in self.db.data.columns:
-            log[col] = da.CitrosDict()
+            log[col] = CitrosDict()
             log[col]["passed"] = result.all()[col]
             log[col]["pass_rate"] = pass_rate[col]
-            log[col]["norm_value"] = da.CitrosDict(norm[col].to_dict())
+            log[col]["norm_value"] = CitrosDict(norm[col].to_dict())
             log[col]["failed"] = [k for k, v in result[col].to_dict().items() if not v]
 
         all_pass = []
@@ -1583,7 +1586,7 @@ class Validation:
         From topic 'A' download 3-dimensional json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
         and column with time 'data.time'.
 
-        >>> citros = da.CitrosDB()
+        >>> citros = CitrosDB()
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
         >>> print(df['data.x'])
         0          {'x_1': 0.0, 'x_2': 0.08, 'x_3': 0.047}
@@ -1686,7 +1689,7 @@ class Validation:
         """
         methods = test_method.keys()
 
-        logs = da.CitrosDict()
+        logs = CitrosDict()
         figures = {}
         tables = {}
 

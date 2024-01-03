@@ -448,9 +448,7 @@ class BatchUploader:
 
         from .database import CitrosDB
 
-        citrosDB = CitrosDB(
-            log=self.log, debug=self.debug, verbose=self.verbose
-        )  # TODO[critical]: fill with data
+        citrosDB = CitrosDB(log=self.log, debug=self.debug, verbose=self.verbose)
 
         schema_name = f"{self.simulation_name}"
         table_name = f"{self.name}"
@@ -513,9 +511,7 @@ class BatchUploader:
     def unload(self):
         from .database import CitrosDB
 
-        citrosDB = CitrosDB(
-            log=self.log, debug=self.debug, verbose=self.verbose
-        )  # TODO[critical]: fill with data
+        citrosDB = CitrosDB(log=self.log, debug=self.debug, verbose=self.verbose)
 
         schema_name = f"{self.simulation_name}"
         table_name = f"{self.name}"

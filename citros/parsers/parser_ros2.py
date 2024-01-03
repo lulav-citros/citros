@@ -462,7 +462,7 @@ class ParserRos2(ParserBase):
                         all_parameters[node_name].append(
                             {
                                 "name": key,
-                                "parameterType": type(val).__name__,  # TODO[]: Fix type
+                                "parameterType": type(val).__name__,
                                 "value": val,
                                 "description": "Parameter loaded from config.yaml",
                             }
