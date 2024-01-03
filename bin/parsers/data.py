@@ -53,6 +53,42 @@ def parser_data_list(parent_subparser, epilog=None):
     return parser
 
 
+def parser_data_tree(parent_subparser, epilog=None):
+    description_path = "data/tree.md"
+    help = "data tree section"
+
+    parser = parent_subparser.add_parser(
+        "tree",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument(
+        "-dir", "--dir", default=".", help="The working dir of the project"
+    )
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_tree)
+
+    return parser
+
+
 # citros data db create
 def parser_data_db_create(parent_subparser, epilog=None):
     description_path = "data/db/create.md"
@@ -352,6 +388,7 @@ def parser_data(main_sub, epilog=None):
 
     subsubparser = parser.add_subparsers(dest="type")
     parser_data_list(subsubparser, epilog)
+    parser_data_tree(subsubparser, epilog)
     parser_data_db(subsubparser, epilog)
 
     return parser
