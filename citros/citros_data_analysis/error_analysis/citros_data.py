@@ -323,10 +323,15 @@ class CitrosData:
 
         Examples
         --------
-        Query some data from the topic 'A'
+        Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
+        >>> citros = da.CitrosDB()
+        >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
         >>> print(df)
+            sid rid time    topic   type    data.x.x_1  data.time
+        0   0   0   17...   coords  Array   0.0         0.0
+        1   0   1   17...   coords  Array   0.005       0.1
+        ...
 
         Construct CitrosData object with one data-column 'data.x.x_1':
 
@@ -515,10 +520,15 @@ class CitrosData:
 
         Examples
         --------
-        Query some data from the topic 'A'
+        Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
+        >>> citros = da.CitrosDB()
+        >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
         >>> print(df)
+            sid rid time    topic   type    data.x.x_1  data.time
+        0   0   0   17...   coords  Array   0.0         0.0
+        1   0   1   17...   coords  Array   0.005       0.1
+        ...
 
         Construct CitrosData object with one data-column 'data.x.x_1':
 
@@ -630,13 +640,14 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
+        to query data from the batch 'star' of the simulation 'simulation_galaxy':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import error_analysis as analysis
+        >>> citros = da.CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
 
-        Let's consider a data of the topic 'A', json-data part of which has the following structure:
+        Let's consider a json-data part of the topic 'coords' has the following structure:
 
         ```python
         data
@@ -648,12 +659,12 @@ class CitrosData:
         Let's query data and pass it to CitrosData object to perform analysis.
         It is possible to query all columns separately:
 
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
+        >>> df = citros.topic('coords').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
         >>> print(df)
            sid   rid   time       topic   type   data.x.x_1   data.x.x_2   data.x.x_3   data.time
-        0  1     0     312751159  A       a      0.000        0.080        154.47       10.0
-        1  1     1     407264008  A       a      0.008        0.080        130.97       17.9
-        2  1     2     951279608  A       a      0.016        0.078        117.66       20.3
+        0  1     0     312751159  coords  Array  0.000        0.080        154.47       10.0
+        1  1     1     407264008  coords  Array  0.008        0.080        130.97       17.9
+        2  1     2     951279608  coords  Array  0.016        0.078        117.66       20.3
         ...
 
         and define data labels for the CitrosData object as follows:
@@ -664,12 +675,12 @@ class CitrosData:
 
         or query 'data.x' as a one column:
 
-        >>> df = citros.topic('A').data(['data.x', 'data.time'])
+        >>> df = citros.topic('coords').data(['data.x', 'data.time'])
         >>> print(df)
            sid   rid   time       topic   type   data.x                                       data.time
-        0  1     0     312751159  A       a      {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
-        1  1     1     407264008  A       a      {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
-        2  1     2     951279608  A       a      {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
+        0  1     0     312751159  coords  Array  {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
+        1  1     1     407264008  coords  Array  {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
+        2  1     2     951279608  coords  Array  {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
         ...
 
         and correspondingly set data_label:
@@ -864,9 +875,6 @@ class CitrosData:
         if isinstance(statistics, CitrosStat):
             statistics = statistics.to_pandas()
 
-        # if not isinstance(statistics['mean'].iloc[0], np.ndarray):
-        #     N = 1
-        # else:
         N = len(statistics['mean'].iloc[0])
         if fig is None:
             fig, ax = plt.subplots(nrows = N, ncols = 1,figsize=(6, 6))
@@ -947,17 +955,19 @@ class CitrosData:
 
         See Also
         --------
-        CitrosData.get_statistics(), CitrosData.bin_data(), CitrosData.scale_data()
+        CitrosData.get_statistics, CitrosData.bin_data, CitrosData.scale_data
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
+        to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import error_analysis as analysis
+        >>> citros = da.CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
         
-        Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time':
+        Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time'
+        from the topic 'A':
 
         >>> df = citros.topic('A').data(['data.x', 'data.time'])
 
@@ -1057,11 +1067,12 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
+        to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import error_analysis as analysis
+        >>> citros = da.CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
 
         For topic 'B' query json-data column 'data.x.x_1', 'data.x.x_2' and 'data.time':
 

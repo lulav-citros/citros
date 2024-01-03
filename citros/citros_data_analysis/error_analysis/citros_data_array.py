@@ -139,12 +139,15 @@ class CitrosDataArray:
         --------
         Create CitrosDataArray object:
 
+        >>> from citros.citros_data_analysis import error_analysis as analysis
         >>> db_array = analysis.CitrosDataArray()
 
-        Let's assume that for the topic 'A' there are simulations for the four different values of the some parameter 't', 
-        that is written in json-data column 'data.t'. To get list of the 'data.t' parameters get_unique_values() 
-        method may be used:
+        Let's assume that for the topic 'A' from the batch 'star' of the simulation 'simulation_galaxy' we have simulations 
+        for the four different values of the some parameter 't', that is written in json-data column 'data.t'. 
+        To get list of the 'data.t' parameters get_unique_values() method may be used:
 
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> citros = da.CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
         >>> list_t = citros.topic('A').get_unique_values('data.t')
         >>> print(list_t)
         [-1.5, 0, 2.5, 4]
@@ -349,7 +352,6 @@ class CitrosDataArray:
                 except Exception as e:
                     if CitrosDataArray._debug_flag:
                         raise e
-                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
                     mu_calculated.append(np.array([np.nan]*N_ax))
 
         elif method == 'gmm':

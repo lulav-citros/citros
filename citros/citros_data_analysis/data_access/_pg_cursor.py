@@ -262,10 +262,7 @@ class _PgCursor(CitrosDB_base):
                 if j == 0:
                     self._make_connection_postgres()
                 else:
-                    if self._debug:
-                        raise e
-                    else:
-                        print("Error:", e)
+                    print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.InFailedSqlTransaction,
@@ -275,27 +272,18 @@ class _PgCursor(CitrosDB_base):
                     _PgCursor.pg_connection.close()
                     self._make_connection_postgres()
                 else:
-                    if self._debug:
-                        raise e
-                    else:
-                        print("Error:", e)
+                    print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.UndefinedColumn,
                 psycopg2.errors.UndefinedFunction,
             ) as e:
-                if self._debug:
-                    raise e
-                else:
-                    print("Error:", e.args[0].split("\n")[0])
+                print("Error:", e.args[0].split("\n")[0])
                 return {"res": None, "error": type(e).__name__}
             except psycopg2.errors.UndefinedTable as e:
                 return {"res": None, "error": type(e).__name__}
             except Exception as e:
-                if self._debug:
-                    raise e
-                else:
-                    print("Error:", e)
+                print("Error:", e)
                 return {"res": None, "error": type(e).__name__}
 
     def _calculate_pg_calls(self, method):
@@ -2198,11 +2186,8 @@ class _PgCursor(CitrosDB_base):
                 n_avg=n_avg,
             )
         else:
-            if self._debug:
-                raise NameError('method "{}" does not exist'.format(method))
-            else:
-                print('method "{}" does not exist'.format(method))
-                return None
+            print('method "{}" does not exist'.format(method))
+            return None
         if df is not None:
             if divide_by_columns:
                 df["data"] = df["data"].apply(

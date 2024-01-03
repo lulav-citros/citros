@@ -169,6 +169,7 @@ class CitrosDB(_PgCursor):
         --------
         Get connection to the database and query first 5 rows of the batch "batch_1" from the "simulation_cannon_numeric" simulation:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> curs = citros.get_connection().cursor()
         >>> curs.execute('SELECT * FROM "simulation_cannon_numeric"."batch_1" LIMIT 5')
@@ -215,6 +216,7 @@ class CitrosDB(_PgCursor):
         --------
         Show information about the batch 'test' that was created in 'simulation_cannon_analytic' simulation:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.simulation('simulation_cannon_analytic').batch('test').info().print()
         {
@@ -261,6 +263,7 @@ class CitrosDB(_PgCursor):
         --------
         Get the name of the simulation that was set during initialization of CitrosDB object:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'simulation_cannon_analytic')
         >>> citros.get_simulation()
         {'name': 'simulation_cannon_analytic'}
@@ -280,6 +283,7 @@ class CitrosDB(_PgCursor):
         --------
         Get the name of the simulation that was set during initialization of CitrosDB object:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'simulation_cannon_analytic')
         >>> citros.get_simulation_name()
         'simulation_cannon_analytic'
@@ -313,6 +317,7 @@ class CitrosDB(_PgCursor):
         --------
         Get data for topic 'A' from the batch 'test' of the simulation 'simulation_cannon_analytic':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('simulation_cannon_analytic').batch('test').topic('A').data()
 
@@ -343,6 +348,7 @@ class CitrosDB(_PgCursor):
         --------
         Get name of the previously set batch:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(batch = 'galaxies')
         >>> citros.get_batch_name()
         'galaxies'
@@ -357,12 +363,13 @@ class CitrosDB(_PgCursor):
 
         See Also
         --------
-        CitrosDB.simulation, CitrosDB.batch()
+        CitrosDB.simulation, CitrosDB.batch
 
         Examples
         --------
         Display sizes of the all batches:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.get_batch_sizes()
         +-----------+-------------+------------+
@@ -424,12 +431,12 @@ class CitrosDB(_PgCursor):
         --------
         Get data for topic name 'A' from batch 'dynamics' of the simulation 'engine_system':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('engine_system').batch('dynamics').topic('A').data()
 
         Get maximum value of the 'sid' among topics 'A' and 'B':
 
-        >>> citros = da.CitrosDB()
         >>> citros.simulation('engine_system').batch('dynamics').topic(['A', 'B']).get_max_value('sid')
         3
         """
@@ -472,6 +479,7 @@ class CitrosDB(_PgCursor):
         --------
         Get data from batch 'robotics' of the simulation 'robot' for topic 'A' where sid values are 1 or 2:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid([1,2]).data()
 
@@ -525,6 +533,7 @@ class CitrosDB(_PgCursor):
         --------
         Get data from the batch 'aero' of the simulation 'plane_test' for topic 'A' where rid values are 10 or 20:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'plane_test')
         >>> df = citros.batch('aero').topic('A').rid([10, 20]).data()
 
@@ -575,7 +584,8 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         Get data from the batch 'kinematics' of the simulation 'radar' for topic 'A' where time is in the range 10ns <= time <= 20ns:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('radar').batch('kinematics').topic('A').time(start = 10, end = 20).data()
 
@@ -632,7 +642,8 @@ class CitrosDB(_PgCursor):
         ...
         ```
         to get data of the batch 'testing' for topic 'A' where values of json-data column 10 < data.x.x_1 <= 20:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'simulation_cannon_analytic')
         >>> citros.batch('testing').topic('A').set_filter({'data.x.x_1': {'>': 10, '<=': 20}}).data()
              sid  rid  time topic type  data.x.x_1     data.note
@@ -676,6 +687,7 @@ class CitrosDB(_PgCursor):
         --------
         Get data from the batch 'aerodynamics' of the simulation 'starship' for topic 'A' and sort the result by sid in ascending order and by rid in descending order.
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('starship').batch('aerodynamics').topic('A').set_order({'sid': 'asc', 'rid': 'desc'}).data()
 
@@ -716,7 +728,8 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         Get every 3th message of the topic 'A' of the batch 'velocity' of the simulation 'mechanics':
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'mechanics', batch = 'velocity')
         >>> df = citros.topic('A').skip(3).data()
         the 1th, the 4th, the 7th ... messages will be selected
@@ -752,7 +765,8 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         Average each 3 messages of the topic 'A' from the batch 'velocity' from the simulation 'mechanics' and then query the result:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('mechanics').batch('velocity').topic('A').avg(3).data()
         """
@@ -782,11 +796,16 @@ class CitrosDB(_PgCursor):
         out : CitrosDB
             CitrosDB with parameters set for sampling method 'move_avg'.
 
+        See Also
+        --------
+        CitrosDB.skip, CitrosDB.avg, CitrosDB.data, CitrosDB.data_dict
+
         Examples
         --------
         In the batch 'coords' in the simulation 'pendulum' for data in topic 'A' calculate moving average with the window equals 5 
         and select every second row of the result:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('pendulum').batch('coords').topic('A').move_avg(5,2).data()
         """
@@ -854,6 +873,7 @@ class CitrosDB(_PgCursor):
         --------
         Display information about the batch 'dynamics' of the simulation 'mechanics':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.simulation('mechanics').batch('dynamics').info().print()
         {
@@ -996,6 +1016,7 @@ class CitrosDB(_PgCursor):
         --------
         Print structure of the json-data column for topics 'A' and 'C' of the batch 'kinematics' of the simulation 'mechanics':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'mechanics')
         >>> citros.batch('kinematics').topic(['A', 'C']).get_data_structure()
         
@@ -1073,6 +1094,7 @@ class CitrosDB(_PgCursor):
         to get the column with the values of json-object 'x_1'
         and the column with the values from the first position in the json-array 'note':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'airship')
         >>> df = citros.batch('dynamics').topic('A').data(["data.x.x_1", "data.note[0]"])
         >>> df
@@ -1136,6 +1158,7 @@ class CitrosDB(_PgCursor):
 
         See Also
         --------
+        CitrosDB.batch, CitrosDB.topic, CitrosDB.rid, CitrosDB.sid, CitrosDB.time, CitrosDB.skip, CitrosDB.avg, CitrosDB.move_avg, CitrosDB.set_order,
         CitrosDB.data
 
         Examples
@@ -1152,6 +1175,7 @@ class CitrosDB(_PgCursor):
 
         Download averaged data for each sid separately, return output in ascending order by 'rid':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'airship')
         >>> dfs = citros.batch('dynamics').topic('A').set_order({'rid': 'asc'}).avg(2)\\
                         .data_dict(['data.x.x_1', 'data.x.x_2'])
@@ -1226,6 +1250,7 @@ class CitrosDB(_PgCursor):
         --------
         For batch 'test_vel' of the simulation 'car_motion' get min value of the column 'data.x.x_2' where topics are 'A' or 'B', 10 <= 'time' <= 5000 and data.x.x_1 > 10:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation ='car_motion', batch = 'test_vel')
         >>> result = citros.topic(['A', 'B'])\\
         ...                .set_filter({'data.x.x_1': {'>=': 10}})\\
@@ -1288,7 +1313,8 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         For batch 'test_vel' of the simulation 'car_motion' get max value of the column 'data.x.x_2' where topics are 'A' or 'B', 10 <= 'time' <= 5000 and data.x.x_1 > 10:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation ='car_motion', batch = 'test_vel')
         >>> result = citros.topic(['A', 'B'])\\
         ...                .set_filter({'data.x.x_1': {'>=': 10}})\\
@@ -1350,6 +1376,7 @@ class CitrosDB(_PgCursor):
         --------
         Calculate the total number of rows for batch 'test_vel' of the simulation 'car_engine':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.simulation('car_engine').batch('test_vel').get_counts()
         [(300,)]
@@ -1439,6 +1466,7 @@ class CitrosDB(_PgCursor):
         to get the number of unique values from the first position of the json-array 'note' for topics 'A' or 'B',
         where 10 <= 'time' <= 5000 and data.x.x_1 > 10:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'car_engine', batch = 'test_vel')
         >>> citros.topic(['A', 'B'])\\
         ...       .set_filter({'data.x.x_1': {'>': 10}})\\
@@ -1492,7 +1520,8 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         Get unique values of type for the batch 'angles' of the simulation 'aircraft' for topics 'A' or 'B', where 10 <= 'time' <= 5000 and data.x.x_1 > 10:
-        
+
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'aircraft', batch = 'angles')
         >>> result = citros.topic(['A', 'B'])\\
         ...                .set_filter({'data.x.x_1': {'>': 10}})\\
@@ -1574,6 +1603,7 @@ class CitrosDB(_PgCursor):
 
         For batch 'dynamics', simulation 'pendulum' for topic 'A' plot `data.x.x_1` vs. `Time` for all existing sids, `Time` = 0.5 * rid
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.simulation('pendulum').batch('dynamics').topic('A').time_plot(ax, var_name = 'data.x.x_1', time_step = 0.5)
 
@@ -1664,6 +1694,7 @@ class CitrosDB(_PgCursor):
 
         For batch 'dynamics', simulation 'pendulum' for topic 'A' plot 'data.x.x_1' vs. 'data.time' for all existing sids:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> citros.simulation('pendulum').batch('dynamics').topic('A').xy_plot(ax, var_x_name = 'data.x.x_1', var_y_name = 'data.time')
 
@@ -1753,6 +1784,7 @@ class CitrosDB(_PgCursor):
 
         Download from batch 'kinematics', simulation 'cube_system' for topic 'A' from json-data column 'data.x.x_1' and 'data.x.x_2' columns:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('cube_system').batch('kinematics').topic('A').data(['data.x.x_1', 'data.x.x_2'])
 
@@ -1840,6 +1872,7 @@ class CitrosDB(_PgCursor):
 
         For topic 'A' from batch 'testing' of the 'pendulum' simulation from json-data column download 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('pendulum').batch('testing').topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3'])
 
@@ -1909,6 +1942,7 @@ class CitrosDB(_PgCursor):
         --------
         For topic 'A' from batch 'testing' of the 'pendulum' simulation from json-data column download 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' and 'data.time' columns:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('pendulum').batch('testing').topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
 
@@ -1991,6 +2025,7 @@ class CitrosDB(_PgCursor):
         --------
         For topic 'A' from the batch 'testing_robotics' of the 'robots' simulation from json-data column download 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3':
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('robots').batch('testing_robotics').topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3'])
 
@@ -2074,6 +2109,7 @@ class CitrosDB(_PgCursor):
         We would like to analyze the spread of these values from their mean.
         First, we'll query the data and compute new columns 'X1' and 'X2', which will represent the deviations of 'data.x.x_1' and 'data.x.x_2' from their respective mean values:
 
+        >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'aircraft')
         >>> df = citros.batch('aerostatic').topic('A').data(['data.x.x_1', 'data.x.x_2'])
         >>> df['X1'] = df['data.x.x_1'] - df['data.x.x_1'].mean()

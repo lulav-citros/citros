@@ -48,12 +48,13 @@ class Validation:
     --------
     Import validation and data_analysis packages:
 
-    >>> import data_analysis as da
-    >>> import validation as va
+    >>> from citros.citros_data_analysis import data_access as da
+    >>> from citros.citros_data_analysis import validation as va
 
-    For topic 'A' from json-data column download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
+    From the batch 'albedo' of the simulation 'planetary_nebula' from the json-data column of the topic 'A' 
+    download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
 
-    >>> citros = da.CitrosDB()
+    >>> citros = da.CitrosDB(simulation = 'planetary_nebula', batch = 'albedo')
     >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
     >>> print(df)
         sid   rid   time        topic   type   data.x.x_1   data.time
@@ -276,15 +277,16 @@ class Validation:
         --------
         Import validation and data_analysis packages:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -472,15 +474,16 @@ class Validation:
         --------
         Import validation and data_analysis packages:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -539,7 +542,7 @@ class Validation:
         Set different limits on 3-dimensional vector: [-0.5, 0.5] for the first element, [-1.5, 1.5] for the second,
         [-20, 10] for the third:
         
-        >>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]], n_std = 3)
+        >>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]])
         mean_test: passed
         """
         fig, ax = self.db._plot_statistics(
@@ -674,17 +677,18 @@ class Validation:
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import validation and data_access modules:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -899,15 +903,16 @@ class Validation:
         --------
         Import validation and data_analysis packages:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
                                   .data(['data.x.x_1','data.x.x_2','data.time'])
         >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
@@ -1132,15 +1137,16 @@ class Validation:
         --------
         Import validation and data_analysis packages:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        For topic 'A' download 1 columns of the simulated data labeled 'data.x.x_1' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 1 columns of the simulated data 
+        labeled 'data.x.x_1' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' as a dependent one.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals,
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
         >>> V = va.Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
         ...                   method = 'bin', num = 50, units = 'm')
@@ -1437,19 +1443,20 @@ class Validation:
 
         See Also
         --------
-        Validation.std_bound_test, Validation.mean_test, Validation.sid_test, Validation.norm_test
+        Validation.std_bound_test, Validation.mean_test, Validation.std_test, Validation.sid_test, Validation.norm_test
 
         Examples
         --------
         Import validation and data_analysis packages:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros.citros_data_analysis import data_access as da
+        >>> from citros.citros_data_analysis import validation as va
 
-        From topic 'A' download 3-dimensional json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 3-dimensional 
+        json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
         and column with time 'data.time'.
 
-        >>> citros = da.CitrosDB()
+        >>> citros = da.CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
         >>> print(df['data.x'])
         0          {'x_1': 0.0, 'x_2': 0.08, 'x_3': 0.047}
