@@ -8,9 +8,6 @@ import matplotlib.figure
 from ._pg_cursor import _PgCursor
 from ._plotter import _Plotter
 from .citros_dict import CitrosDict
-from citros.batch import Batch
-import warnings
-import time
 
 class CitrosDB(_PgCursor):
     """
@@ -40,7 +37,8 @@ class CitrosDB(_PgCursor):
         Password.
         Default is citros.database.CitrosDB.db_password.
     debug : bool, default False
-        If `True`, record how many connections and queries were done by all CitrosDB objects existing in the current session.
+        If `True`, the number of connections and queries which were done by all CitrosDB objects with `debug` set `True` 
+        existing in the current session is recorded.
         The information is recorded to the _stat.Stat() object.
     """
 

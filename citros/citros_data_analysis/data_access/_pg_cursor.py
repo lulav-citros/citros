@@ -175,6 +175,8 @@ class _PgCursor(CitrosDB_base):
         Make connection to Postgres database to execute PostgreSQL commands.
         """
         _PgCursor.pg_connection = self.connect()
+        if _PgCursor.pg_connection is None:
+            print("Could not connect to the database")
         if self._debug and _PgCursor.pg_connection is not None:
             _PgCursor.n_pg_connections += 1
 
@@ -237,7 +239,10 @@ class _PgCursor(CitrosDB_base):
                 return {"res": None, "error": None}
         if _PgCursor.pg_connection is None:
             self._make_connection_postgres()
-            self._change_connection_parameters()
+            if _PgCursor.pg_connection is None:
+                return {"res": None, "error": None}
+            else:
+                self._change_connection_parameters()
         else:
             if self._if_connection_parameters_changed():
                 try:
@@ -246,7 +251,10 @@ class _PgCursor(CitrosDB_base):
                     # connection is already closed
                     pass
                 self._make_connection_postgres()
-                self._change_connection_parameters()
+                if _PgCursor.pg_connection is None:
+                    return {"res": None, "error": None}
+                else:
+                    self._change_connection_parameters()
 
         for j in range(2):
             try:
@@ -261,6 +269,8 @@ class _PgCursor(CitrosDB_base):
             except psycopg2.InterfaceError as e:
                 if j == 0:
                     self._make_connection_postgres()
+                    if _PgCursor.pg_connection is None:
+                        return {"res": None, "error": None}
                 else:
                     print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
@@ -271,6 +281,8 @@ class _PgCursor(CitrosDB_base):
                 if j == 0:
                     _PgCursor.pg_connection.close()
                     self._make_connection_postgres()
+                    if _PgCursor.pg_connection is None:
+                        return {"res": None, "error": None}
                 else:
                     print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
