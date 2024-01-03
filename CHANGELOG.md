@@ -2,6 +2,29 @@
 
 
 
+## v0.2.15 (2024-01-03)
+
+### Fix
+
+* fix(data analysis): Merge pull request #23 from lulav-citros/dev
+
+Dev ([`4adf16f`](https://github.com/lulav-citros/citros/commit/4adf16fe899c5dae5b13eed003f747beadb35991))
+
+### Unknown
+
+* Add rich.theme file with custom styles ([`98ef7ac`](https://github.com/lulav-citros/citros/commit/98ef7ac4cbd8f0af0a01b78547469034aab759dd))
+
+* Update requirements.txt and citros_meta.py ([`1350cfb`](https://github.com/lulav-citros/citros/commit/1350cfb152fea013b19429803a859ca317733031))
+
+* Remove specific version for psycopg2-binary in requirements.txt ([`3ac44c4`](https://github.com/lulav-citros/citros/commit/3ac44c4f9ef2ef85373e0731df22e3c1c3123179))
+
+* Update CLI documentation ([`211d26c`](https://github.com/lulav-citros/citros/commit/211d26ca3bf3f78847ae478db67108737a1b6aab))
+
+* Remove unused code and add TODOs for critical tasks ([`514109c`](https://github.com/lulav-citros/citros/commit/514109cf333ddb3faf9a1535f9fab81830b1cbe8))
+
+* Merge branch &#39;main&#39; into dev ([`cde8885`](https://github.com/lulav-citros/citros/commit/cde8885037a0950500640c833d6972ce6bdea66f))
+
+
 ## v0.2.14 (2024-01-03)
 
 ### Fix
@@ -20,6 +43,8 @@
 * fix(tree): Add data tree parser to CLI ([`a9076c8`](https://github.com/lulav-citros/citros/commit/a9076c81fd9aa81608b317e308c893a671801271))
 
 ### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`00e6871`](https://github.com/lulav-citros/citros/commit/00e68717f9b2fe31b9f19adb8ad31005a751fd9d))
 
 * Documentation (#7)
 
@@ -117,6 +142,10 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 * fix(ignore): Remove unnecessary files and code ([`d8c2681`](https://github.com/lulav-citros/citros/commit/d8c2681a439c094d05442a637c0aadebb1c9ecfa))
 
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`fbfff0e`](https://github.com/lulav-citros/citros/commit/fbfff0ef595a75d2635f9dfd3b046b87b2d4c72f))
+
 
 ## v0.2.9 (2024-01-02)
 
@@ -126,6 +155,8 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 ### Unknown
 
+* Merge branch &#39;main&#39; into dev ([`68423b8`](https://github.com/lulav-citros/citros/commit/68423b89f3448b1c7b23986b50cb2469da78e99a))
+
 * Add service parser to CLI ([`101d61f`](https://github.com/lulav-citros/citros/commit/101d61f178b01b5a742384a738a4a12b869301db))
 
 
@@ -134,6 +165,10 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 ### Fix
 
 * fix(simulaiton): remove __ ([`cfab4af`](https://github.com/lulav-citros/citros/commit/cfab4af932996fd09a12dd520fc6f52a81008b88))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`be8a893`](https://github.com/lulav-citros/citros/commit/be8a893e0480f95fb2bcbed52bf9f35d4b4bf1a3))
 
 
 ## v0.2.7 (2024-01-02)
@@ -176,12 +211,22 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 * Remove unused files and update report generate description ([`a434b02`](https://github.com/lulav-citros/citros/commit/a434b02c0339e678f43bbc125f3cf2269efaa1e7))
 
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`da6ac7e`](https://github.com/lulav-citros/citros/commit/da6ac7e6a4d0782464b53b78817e72da5560957c))
+
 
 ## v0.2.6 (2024-01-02)
 
 ### Fix
 
 * fix(cli_impl): remove inspect ([`dede5a3`](https://github.com/lulav-citros/citros/commit/dede5a3e3a1ddf50c0aa54d9330df3eb1831eca2))
+
+### Unknown
+
+* Remove unused files and update report generate description ([`acdbf6c`](https://github.com/lulav-citros/citros/commit/acdbf6c0a1f5152fb949c41fd1f89ae4eb0e8b59))
+
+* Merge branch &#39;main&#39; into dev ([`a7b8bae`](https://github.com/lulav-citros/citros/commit/a7b8bae1b7287b925ff019bf123437d3da51fcf3))
 
 
 ## v0.2.5 (2024-01-02)
@@ -222,6 +267,20 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 * Update CLI documentation and fix report generation path ([`7b4b3c0`](https://github.com/lulav-citros/citros/commit/7b4b3c0d9fa57427dc00c8c9954062adf6ad8da4))
 
+### Unknown
+
+* Update CLI documentation and fix report generation path ([`f23588b`](https://github.com/lulav-citros/citros/commit/f23588b3405787f938f83dd8f64fa48fccc7789d))
+
+* Add keybindings for skip action in CLI implementation ([`02df0b3`](https://github.com/lulav-citros/citros/commit/02df0b39855a92e8af9c718e63204016b5a4e2c9))
+
+* Refactor report_list function to improve readability and remove unnecessary code ([`0c150c4`](https://github.com/lulav-citros/citros/commit/0c150c49ac67fa112d36eb88ea0f788211eac060))
+
+* Merge branch &#39;main&#39; into dev ([`0e1ab08`](https://github.com/lulav-citros/citros/commit/0e1ab087ef3fff1cc99d3c5aaadb46a56efc6e79))
+
+* Refactor CLI command handling ([`98cf7cb`](https://github.com/lulav-citros/citros/commit/98cf7cb8e4d9e9f08c03789b8c9fa782f3abda20))
+
+* Add title to citros report ([`c011d41`](https://github.com/lulav-citros/citros/commit/c011d41673e528c2afb0404fdbd7cdf4145e92af))
+
 
 ## v0.2.4 (2023-12-31)
 
@@ -251,6 +310,20 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 * Refactor code and improve readability ([`457f544`](https://github.com/lulav-citros/citros/commit/457f5445a9a511f9a9b4310ce4dba2b8584542a6))
 
+### Unknown
+
+* Refactor code and improve readability ([`edba319`](https://github.com/lulav-citros/citros/commit/edba319206e41d6becce9f9f79dc748482faa26e))
+
+* Add new command line options and implement citros function ([`19b5a0f`](https://github.com/lulav-citros/citros/commit/19b5a0f6df68085b5fa29c113f8ca5bd56c5ee7f))
+
+* Fix initialization error and improve logging ([`c7491cd`](https://github.com/lulav-citros/citros/commit/c7491cd93b51e861bee7fbccbe9a7a93f33b9c5e))
+
+* Remove duplicate batch_message assignment ([`e54ba3b`](https://github.com/lulav-citros/citros/commit/e54ba3b7f07c6cc4b05c08dd5b141b857b136eba))
+
+* Merge branch &#39;main&#39; into dev ([`edf9520`](https://github.com/lulav-citros/citros/commit/edf95204b78d0afd851b5b8ee8ec2ac66fad24f4))
+
+* Refactor batch upload and add output folder option for report generation ([`0663467`](https://github.com/lulav-citros/citros/commit/066346708d5fc9ea55bd052b73c73ae13b8ad311))
+
 
 ## v0.2.3 (2023-12-30)
 
@@ -270,12 +343,30 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 
 * Refactor batch.run() method and handle ModuleNotFoundError gracefully ([`a538cab`](https://github.com/lulav-citros/citros/commit/a538cab4edcdcf37bc899bffa39905dc9d305f6b))
 
+### Unknown
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully ([`ac057fe`](https://github.com/lulav-citros/citros/commit/ac057fecf2750831f55c85dafd317745e1538423))
+
+* Refactor Batch class to separate simulation_run method ([`09dea2d`](https://github.com/lulav-citros/citros/commit/09dea2dd427c8c20ffb6e2696d6259efacc95afb))
+
+* Merge branch &#39;main&#39; into dev ([`61adaed`](https://github.com/lulav-citros/citros/commit/61adaed119830454849f4d03b9514b96205cfde3))
+
+* Fix database connection issue and handle exception in batch uploader ([`61a447e`](https://github.com/lulav-citros/citros/commit/61a447eb9244b6cd8c6dec728007df37418ce98c))
+
 
 ## v0.2.2 (2023-12-29)
 
 ### Fix
 
 * fix(package): Add *.j2 files to package_data ([`52364ca`](https://github.com/lulav-citros/citros/commit/52364ca7e1ddcc038a61f8b64882babe4bf387ae))
+
+### Unknown
+
+* Fix error messages and provide help instructions ([`1b9206b`](https://github.com/lulav-citros/citros/commit/1b9206be589d7c0597ccbb1e64be6d3054771c71))
+
+* Add path column to report_list function and update path value in Citros class ([`8e6d04c`](https://github.com/lulav-citros/citros/commit/8e6d04c5d0e3244f0ef52b03c1ddb85491752ce6))
+
+* Fix typos and update report generation ([`a5c7020`](https://github.com/lulav-citros/citros/commit/a5c70204985f756d99902b4f9ceae140781b514d))
 
 
 ## v0.2.1 (2023-12-28)
