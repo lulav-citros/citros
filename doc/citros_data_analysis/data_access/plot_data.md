@@ -1,11 +1,18 @@
 ---
 toc_max_heading_level: 4
 hide_title: true
-sidebar_position: 7
+sidebar_position: 5
 sidebar_label: 'Plot Data'
 description: 'Visualizing data with plots'
 ---
 # Plot Data
+
+Let's import **data_access** package and create **CitrosDB** object, setting simulation and batch names:
+
+```python
+>>> from citros.citros_data_analysis import data_access as da
+>>> citros = da.CitrosDB(simulation = 'simulation_name', batch = 'batch_name')
+```
 
 Let's make query that select 'data.x.x_1' and 'data.x.x_2' from the json-data column of the topic 'B' with sids equals 1,2 or 3, where 10 <= rid <= 200, 0ns <= time < 200ns. Let's also apply moving average sampling, that averages over 5 messages and select each second row of the result and save the output in variable named **df**:
 

@@ -1,11 +1,11 @@
 ---
 toc_max_heading_level: 4
 hide_title: true
-sidebar_position: 3
-sidebar_label: 'Setting the Simulation and the Batch'
-description: 'Setting the Simulation and the Batch'
+sidebar_position: 2
+sidebar_label: 'Simulations and Batches'
+description: 'Simulations and Batches'
 ---
-# Setting the Simulation and the Batch
+# Simulations and Batches
 
 *Batches* (tables with data) are created by various *simulation* scenarios and stored in the database under corresponding *simulation* names. To access a specific batch, both its name and the name of the simulation are needed.
 
@@ -14,6 +14,7 @@ description: 'Setting the Simulation and the Batch'
 Simulation name can be set when the [**CitrosDB**](getting_started.md#connection-to-the-database) object is created:
 
 ```python
+>>> from citros.citros_data_analysis import data_access as da
 >>> citros = da.CitrosDB(simulation = 'simulation_name')
 ```
 
@@ -80,3 +81,44 @@ current batch name: batch_name
 ```
 
 The method [**get_batch_name()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_batch_name) returns the name of the batch.
+
+## Batch Sizes
+
+To list sizes of the all batches uploaded to the database the method [**get_batch_sizes()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_batch_sizes) is used:
+
+```python
+>>> citros = da.CitrosDB()
+>>> citros.get_batch_sizes()
+```
++---------------------------+--------+------------+
+| batch                     | size   | total size |
++---------------------------+--------+------------+
+| galaxies                  | 656 kB | 800 kB     |
+| quasars                   | 32 kB  | 64 kB      |
+| stars                     | 808 kB | 960 kB     |
++---------------------------+--------+------------+
+
+To show information about the batches of the certain simulation, specify the simulation name. For example, if two batches - 'galaxies' and 'quasars' - belongs to the simulation named 'simulation_deep_space', their sizes can be shown in the following way:
+
+```python
+>>> citros = da.CitrosDB()
+>>> citros.simulation('simulation_deep_space').get_batch_sizes()
+```
++---------------------------+--------+------------+
+| batch                     | size   | total size |
++---------------------------+--------+------------+
+| galaxies                  | 656 kB | 800 kB     |
+| quasars                   | 32 kB  | 64 kB      |
++---------------------------+--------+------------+
+
+And if we also specify the name of the batch, only information about it will be displayed:
+
+```python
+>>> citros = da.CitrosDB()
+>>> citros.simulation('simulation').batch('galaxies').get_batch_sizes()
+```
++---------------------------+--------+------------+
+| batch                     | size   | total size |
++---------------------------+--------+------------+
+| galaxies                  | 656 kB | 800 kB     |
++---------------------------+--------+------------+

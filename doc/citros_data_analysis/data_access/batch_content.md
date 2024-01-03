@@ -3,24 +3,20 @@ toc_max_heading_level: 4
 hide_title: true
 sidebar_label: 'Batch Content'
 description: 'Information about batch content and topics'
-sidebar_position: 5
+sidebar_position: 3
 ---
 # Batch Content
 
-Projects are organized and stored within *repositories*. Each repository may comprise multiple [*batches* (tables)](batch_overview.md#batch-overview), that contain specific datasets, divided by [*topics*](query_data.md#query-data). Method [**search_repo()**](#repository-information) provides an overview of the existing repositories, offering insights into their properties and contents. When you wish to work with a specific repository, you can utilize the [**repo()**](#setting-repository) method to set the target repository. This can be particularly useful to narrow down searches or operations to batches within that chosen repository. Methods [**get_repo()**, **get_repo_name()** and **get_repo_id()**](#current-repository) return the general information of the current repository.
-
-Different simulation runs are identified by their *sid* numbers, with each step of the simulation being sequentially numbered by *rid*. Batches typically contain multiple topics that encapsulate related datasets.
-
-To get the information about all the existing batches the method [**search_batch**](#batch-information) is used. The batch is set when the [**CitrosDB**](getting_started.md#connection-to-the-database) object is created or by [**batch()**](#setting-batch) method. Methods [**get_batch()**, **get_batch_name()** and **get_batch_id()**](#current-batch) return the general information of the current batch, if it was set previously.
+In the *batch* different simulation runs are identified by their *sid* numbers, with each step of the simulation being sequentially numbered by *rid*. Batches typically contain multiple topics that encapsulate related datasets.
 
 Each batch contains the following columns:
 
-||user\_id | sid | rid | time | topic | type| data |
-|--|--|--|--|--|--|--|--|
-|description |user name | simulation id| run id| ros time message | topic name| type name | json-format data|
-|type| uuid | int | int | big int | str | str | jsonb|
+|| sid | rid | time | topic | type| data |
+|--|--|--|--|--|--|--|
+|description | simulation id| run id| ros time message | topic name| type name | json-format data|
+|type| BIGINT | BIGINT | BIGINT  | VARCHAR | VARCHAR | JSONB |
 
-Batch may have several *topic*s - to list them along with structure of the json-data column for the current batch the method [**get_data_structure()**](batch_content.md#data-structure) or [**info()**](batch_content.md#data-overview) is used. Initial parameters of the simulation are usually written under the topic '/config'.
+Batch may have several *topic*s - to list them along with structure of the json-data column for the current batch the method [**get_data_structure()**](batch_content.md#data-structure) or [**info()**](batch_content.md#data-overview) is used. Initial parameters of the simulation are usually written under the topic `'/config'`.
 
 Each simulation in the batch has its own id - *sid*, and each message in the simulation is enumerated by run id - *rid*.
 
@@ -28,10 +24,12 @@ If there are infinite values in the data, they are stored as $\pm 10^{308}$.
 
 ## Data Overview
 
-To get the overview about the exact batch, say 'dynamics', the function [**info()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.info) is used:
+To get the overview about the exact batch, say 'dynamics' from the simulation 'simulation_galactic_rotation', the function [**info()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.info) is used:
 
 ```python
->>> citros.batch('dynamics').info()
+>>> from citros.citros_data_analysis import data_access as da
+>>> citros = da.CitrosDB()
+>>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info()
 ```
 It returns dictionary, that contains:
 * 'size': size of the selected data
@@ -49,7 +47,7 @@ The result is a [**CitrosDict**](../documentation/data_access/citros_dict.md#cit
 [**CitrosDict**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict) object can be converted to json string by the method [**to_json()**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict.to_json):
 
 ```python
->>> citros.batch('dynamics').info().to_json()
+>>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info().to_json()
 ```
 ```js
 {
@@ -73,7 +71,7 @@ The result is a [**CitrosDict**](../documentation/data_access/citros_dict.md#cit
 or printed by the method [**print()**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict.print):
 
 ```python
->>> citros.batch('dynamics').info().print()
+>>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info().print()
 ```
 ```js
 {
@@ -88,12 +86,12 @@ or printed by the method [**print()**](../documentation/data_access/citros_dict.
 </details>
 
 :::note
-It is not necessary to call method [**batch()**](batch_overview.md#setting-batch) every time to set batch id or name. By parameter `inplace` the batch may be set to current [**CitrosDB**](getting_started.md#connection-to-the-database) object:
+It is not necessary to call method [**batch()**](batch_overview.md#setting-batch) and [**simulation()**](batch_overview.md#setting-simulation) every time to set batch and simulation names. By parameter `inplace` they can be set to current [**CitrosDB**](getting_started.md#connection-to-the-database) object:
 ```python
+>>> citros.simulation('simulation_galactic_rotation', inplace = True)
 >>> citros.batch('dynamics', inplace = True)
 >>> print(f"current batch name: {citros.get_batch_name()}")
 ```
-
 ```text
 current batch name: dynamics
 ```
@@ -112,10 +110,10 @@ If specific sid is set, [**citros.info()**](../documentation/data_access/citros_
 
 sid may be passed during [**CitrosDB** initialization](getting_started.md#connection-to-the-database) or by [**citros.sid()**](query_data.md#sid-constraints) method.
 
-Let's assume that the batch has been already successfully set:
+Let's create [**CitrosDB**](getting_started.md#connection-to-the-database) object, setting the simulation name as 'simulation_galactic_rotation' and batch name as 'dynamics':
 
 ```python
->>> citros.batch('dynamics', inplace = True)
+>>> citros = CitrosDB(simulation = 'simulation_galactic_rotation', batch = 'dynamics')
 ```
 
 To get information about data with sid = 1 or 2 and print it:
@@ -277,7 +275,7 @@ total number of messages in topic "A": 474
 
 ## Data Structure
 
-[**get_data_structure(topic = None)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_data_structure) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object may be used to display json-data structure of the exact batch for the specific topics, set by [**topic**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) or listed in `topic`:
+[**get_data_structure()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_data_structure) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object may be used to display json-data structure of the exact batch for the specific topics, set by [**topic**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) or listed in `topic`:
 
 ```python
 >>> citros.batch('dynamics').topic(['A', 'C']).get_data_structure()

@@ -1,13 +1,13 @@
 ---
 toc_max_heading_level: 4
 hide_title: true
-sidebar_position: 6
+sidebar_position: 4
 sidebar_label: 'Query Data'
 description: 'How to query data'
 ---
 # Query Data
 
-Assuming, that the batch has already been set (see [**batch()**](batch_overview.md#setting-batch) method, `inplace` = True), the general query scheme is as follows:
+Assuming, that the batch and simulation has already been set (see [Simulations and Batches](batch_overview.md)), the general query scheme is as follows:
 
 ```mermaid
 flowchart LR
@@ -31,6 +31,13 @@ flowchart LR
 where [**topic()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) and [**data()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.data) methods are necessary methods and all other are optional to use.
 
 The method [**data()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.data) of the [**CitrosDB**](getting_started.md#connection-to-the-database) object is dedicated to query data. Data is always querying for the specific topic, which is defined by [**topic()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) method, which must be called before [**data()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.data) method. The result is returned as a [**DataFrame**](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) of the [**pandas** package](https://pandas.pydata.org/) - a widely used format in data science.
+
+Let's import **data_access** package and create **CitrosDB** object, setting simulation and batch names:
+
+```python
+>>> from citros.citros_data_analysis import data_access as da
+>>> citros = da.CitrosDB(simulation = 'simulation_name', batch = 'batch_name')
+```
 
 To query all data for the topic 'B':
 ```python
