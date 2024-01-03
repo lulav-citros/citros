@@ -2,6 +2,13 @@
 
 
 
+## v0.2.12 (2024-01-03)
+
+### Fix
+
+* fix(citros/citros_data_analysis): adjustments and documentation generation (#22) ([`1555494`](https://github.com/lulav-citros/citros/commit/1555494474b7e4b7731354b4a7e2a53b6d611116))
+
+
 ## v0.2.11 (2024-01-03)
 
 ### Fix

@@ -1,7 +1,7 @@
 __title__ = "citros"
 __description__ = "citros"
 __url__ = "https://citros.io"
-__version__ = "0.2.11"
+__version__ = "0.2.12"
 __author__ = "lulav"
 __author_email__ = "contact@lulav.space"
 __license__ = "LICENSE"
