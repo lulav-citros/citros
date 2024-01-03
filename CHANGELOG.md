@@ -2,6 +2,216 @@
 
 
 
+## v0.2.13 (2024-01-03)
+
+### Fix
+
+* fix(tree): Add data tree parser to CLI ([`a9076c8`](https://github.com/lulav-citros/citros/commit/a9076c81fd9aa81608b317e308c893a671801271))
+
+### Unknown
+
+* Documentation (#7)
+
+* add cli documentation
+
+* add tutorials tab
+
+* Add data analysis
+
+* Add data analysis versioning
+
+* update home page
+
+* gitignore
+
+* remove node_modules
+
+* update git ignore
+
+* git ignore update
+
+* remove docusaurus folder
+
+* remove data analysis versions
+
+* test
+
+* test2
+
+* test3
+
+* test4
+
+* test5
+
+* test6
+
+* test7
+
+* test 8
+
+* Delete unused image files and data analysis version file
+
+* Update folder path for GitHub Pages deployment
+
+* Update directory name in workflow file
+
+* vova
+
+* Add permissions and concurrency to build-and-deploy job
+
+* Update copyright year to 2024
+
+* Update copyright in docusaurus.config.js
+
+* Fix copyright typo
+
+* Update copyright in docusaurus.config.js
+
+* update home url
+
+* Documentation update
+intro tutorial update
+
+* Update structure
+
+* merge
+
+undefined
+
+* Update structure
+
+---------
+
+Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.github.com&gt; ([`102a3f0`](https://github.com/lulav-citros/citros/commit/102a3f0e2c8b36e56ee65ff0d432683ec82f7e77))
+
+
+## v0.2.12 (2024-01-03)
+
+### Fix
+
+* fix(citros/citros_data_analysis): adjustments and documentation generation (#22) ([`1555494`](https://github.com/lulav-citros/citros/commit/1555494474b7e4b7731354b4a7e2a53b6d611116))
+
+
+## v0.2.11 (2024-01-03)
+
+### Fix
+
+* fix(cli): Update CLI description and add exit option ([`aa544d1`](https://github.com/lulav-citros/citros/commit/aa544d139f80b8904cf21820c4bee239c3743f0c))
+
+
+## v0.2.10 (2024-01-02)
+
+### Fix
+
+* fix(ignore): Remove unnecessary files and code ([`d8c2681`](https://github.com/lulav-citros/citros/commit/d8c2681a439c094d05442a637c0aadebb1c9ecfa))
+
+
+## v0.2.9 (2024-01-02)
+
+### Fix
+
+* fix(dommands): dixes ([`9b17d58`](https://github.com/lulav-citros/citros/commit/9b17d585b6cbf35fbc28f0109c76fe271c643cda))
+
+### Unknown
+
+* Add service parser to CLI ([`101d61f`](https://github.com/lulav-citros/citros/commit/101d61f178b01b5a742384a738a4a12b869301db))
+
+
+## v0.2.8 (2024-01-02)
+
+### Fix
+
+* fix(simulaiton): remove __ ([`cfab4af`](https://github.com/lulav-citros/citros/commit/cfab4af932996fd09a12dd520fc6f52a81008b88))
+
+
+## v0.2.7 (2024-01-02)
+
+### Fix
+
+* fix(reademe): commands
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability
+
+* Add title to citros report
+
+* Refactor CLI command handling
+
+* Refactor report_list function to improve readability and remove unnecessary code
+
+* Add keybindings for skip action in CLI implementation
+
+* Update CLI documentation and fix report generation path
+
+* Remove unused files and update report generate description ([`a434b02`](https://github.com/lulav-citros/citros/commit/a434b02c0339e678f43bbc125f3cf2269efaa1e7))
+
+
+## v0.2.6 (2024-01-02)
+
+### Fix
+
+* fix(cli_impl): remove inspect ([`dede5a3`](https://github.com/lulav-citros/citros/commit/dede5a3e3a1ddf50c0aa54d9330df3eb1831eca2))
+
+
+## v0.2.5 (2024-01-02)
+
+### Fix
+
+* fix(reports): fixed cli commands
+
+* Fix typos and update report generation
+
+* Add path column to report_list function and update path value in Citros class
+
+* Fix error messages and provide help instructions
+
+* Fix database connection issue and handle exception in batch uploader
+
+* Refactor Batch class to separate simulation_run method
+
+* Refactor batch.run() method and handle ModuleNotFoundError gracefully
+
+* Refactor batch upload and add output folder option for report generation
+
+* Remove duplicate batch_message assignment
+
+* Fix initialization error and improve logging
+
+* Add new command line options and implement citros function
+
+* Refactor code and improve readability
+
+* Add title to citros report
+
+* Refactor CLI command handling
+
+* Refactor report_list function to improve readability and remove unnecessary code
+
+* Add keybindings for skip action in CLI implementation
+
+* Update CLI documentation and fix report generation path ([`7b4b3c0`](https://github.com/lulav-citros/citros/commit/7b4b3c0d9fa57427dc00c8c9954062adf6ad8da4))
+
+
 ## v0.2.4 (2023-12-31)
 
 ### Fix
