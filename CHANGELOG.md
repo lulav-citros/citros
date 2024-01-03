@@ -2,6 +2,17 @@
 
 
 
+## v0.2.14 (2024-01-03)
+
+### Fix
+
+* fix(init): ovveride defualts ([`6e28072`](https://github.com/lulav-citros/citros/commit/6e28072dc6cb2a415f73cedb89f6ab1a316b6ae9))
+
+### Unknown
+
+* Fix( typo): in data management choice ([`d05b000`](https://github.com/lulav-citros/citros/commit/d05b000befdc42dd1f747d168a05e56ee6a00cb7))
+
+
 ## v0.2.13 (2024-01-03)
 
 ### Fix
