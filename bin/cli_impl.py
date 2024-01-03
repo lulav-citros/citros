@@ -1280,7 +1280,7 @@ def choose_batch(
             mandatory=False,
             keybindings=keybindings,
             message="Select Version:",
-            choices=version_list,
+            choices=sorted(version_list, reverse=True),
             default="",
             border=True,
         ).execute()
