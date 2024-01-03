@@ -3,16 +3,21 @@ module.exports = {
     {
       type: 'category',
       label: 'Getting Started',
-      link: {
-        type: 'doc',
-        id: 'cli/index',
-      },
+      // link: {
+      //   type: 'doc',
+      //   id: 'cli/index',
+      // },
       items: [
 
         {
           type: 'doc',
           id: 'cli/cli_install',
           label: 'Installation',
+        },
+        {
+          type: 'doc',
+          id: 'cli/cli_quickstart',
+          label: 'Quick Start',
         },
       ],
 
