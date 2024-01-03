@@ -15,8 +15,8 @@ The initialization process involves creating a `.citros` directory within your R
 
 
 ### Example:
-`bash
+```bash
 $ citros init
 initializing CITROS at "/path/to/ros2/project". 
-`
+```
 
