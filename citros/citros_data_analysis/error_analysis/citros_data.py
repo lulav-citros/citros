@@ -12,7 +12,7 @@ from .citros_stat import CitrosStat
 import warnings
 
 class CitrosData:
-    '''
+    """
     Create CitrosData object, that allows to bin and interpolate data.
 
     CitrosData object has two main attributes: 'data' - the vector of depending variables, 
@@ -81,7 +81,7 @@ class CitrosData:
     | 3.5 | 6 | 6.5 |      | 2.5 | 5 | 6 |
     +-----+---+-----+      +-----+---+---+
     ```
-    '''
+    """
 
     def __init__(self, db = None, type_name = '', units = '', data_label = 'data', 
                  parameters = None, parameter_label ='', sid_label = 'sid', omit_nan_rows = None, inf_vals = 1e308):
@@ -139,11 +139,6 @@ class CitrosData:
             
             self.parameters = parameters.copy()
             self.sid_label = sid_label
-
-            # if isinstance(data_label, str):
-            #     data_label = [data_label]
-            # elif isinstance(data_label, list):
-            #     data_label = data_label.copy()
             
         if isinstance(db, CitrosData):
             if type_name == '':
@@ -233,14 +228,14 @@ class CitrosData:
         self._set_index_level_names()
 
     def _set_data(self, dataset):
-        '''
+        """
         Set 'data' attribute of the CitrosData object
 
         Parameters
         ----------
         dataset : Series or DataFrame
             May contains dicts or lists in rows or their combination (dict of lists, list of dicts, etc)
-        '''
+        """
         k = []
         self._resolve_data(dataset, k)
         self.data = pd.concat(k, axis = 1).fillna(np.nan)
@@ -257,7 +252,7 @@ class CitrosData:
             self.filter= pd.DataFrame(columns = self.data.columns, index = self.data.index, data = {col: self.filter.all(axis = 1) for col in self.data.columns})
         
     def _resolve_data(self, dataset, k):
-        '''
+        """
         Recursively turns all dictionaries and lists to columns.
 
         Parameters
@@ -266,7 +261,7 @@ class CitrosData:
             Input data
         k : list
             Output list of pandas.Series
-        '''
+        """
         if isinstance(dataset, pd.Series):
             if isinstance(dataset.iloc[0], (list, np.ndarray)):
                 dataset_item = dataset.apply(lambda x: x[n] for n in range(len(dataset.iloc[0])))
@@ -291,317 +286,11 @@ class CitrosData:
             self.xid_label = None
             self.x_label = None
     
-    def to_pandas(self):
-        '''
-        Concatenate `data` and `addData` attributes and return the result table as a pandas.DataFrame.
-
-        Returns
-        -------
-        df : pandas.DataFrame
-            Concatenated table.
-        '''
-        return pd.concat([self.data, self.addData], axis = 1)
-
-    def set_parameter(self, key: Optional[str] = None, value: Optional[Union[int, float]] = None, item: Optional[dict] = None):
-        '''
-        Set parameter value to a CitrosData object.
-
-        Parameters
-        ----------
-        key : str
-            Label of the parameter.
-        value : int or float
-            Parameter value.
-        item : dict
-            Dictionary with parameters.
-        '''
-        if key is not None and value is not None:
-            if key in self.parameters.keys():
-                print('key "{}" already exists, its value will be set to {}'.format(key, value))
-            self.parameters[key] = value
-        if item is not None:
-            if isinstance(item, dict):
-                for k, v in item.items():
-                    if k in self.parameters.keys():
-                        print('key "{}" already exists, its value will be set to {}'.format(k, v))
-                    self.parameters[k] = v
-        
-    def drop_parameter(self, key: Optional[str] = None):
-        '''
-        Delete parameter labeled `key` and associated value.
-
-        Parameters
-        ----------
-        key : str
-            Label of the parameter to remove.
-        '''
-        if key in self.parameters:
-            self.parameters.pop(key)
-        else:
-            print('key "{}" does not exists'.format(key))
-
-    def add_addData(self, column: ArrayLike, column_label: str):
-        '''
-        Add column to 'addData' attribute.
-
-        Parameters
-        ----------
-        column : array-like object
-            Column to add.
-        column_label : str
-            Label of the new column in 'addData'.
-        '''
-        self.addData[column_label] = column
-
-    def drop_addData(self, column_label: str):
-        '''
-        Delete column from 'addData' attribute.
-
-        Parameters
-        ----------
-        column_label : str
-            Label of the column to delete .
-        '''
-        self.addData.drop(columns = column_label, inplace = True)
+    # Correspondence Between Simulations
     
-    def _set_index_levels(self, index_levels):
-        '''
-        Set indexes to database.
-
-        Parameters
-        ----------
-        index_levels : list of str
-            Labels of columns in 'addData' to assign as indexes.
-        '''
-        self.data.set_index([self.addData[p] for p in index_levels], inplace = True)
-        self.addData.set_index(index_levels, inplace = True)
-        # self.filter = self.data.notna().all(axis = 1)
-        self.filter = self.data.notna()
-        pass
-
-    def _get_index(self, n_bins, param_label, min_lim = None, max_lim = None, show_fig = False):
-        '''
-        Bin values of column `param_label` in `n_bins` intervals and find indexes for the values according to these intervals.
-        
-        The range for binning is specified with the `min_lim` and `max_lim` parameters.
-
-        Parameters
-        ----------
-        n_bins : int
-            Number of bins.
-        param_label : str
-            Label of the column on the basis of which the indices will be calculated.
-        min_lim : float
-            The minimum value of the range for binning, `min_lim` < `max_lim`.
-            If None then the minimum value of the entire range is selected.
-        max_lim : float
-            The maximum value of the range for binning, `min_lim` < `max_lim`.
-            If None then the maximum value of the entire range is selected.
-        show_fig : bool, default False
-            If the histogram that represents the distribution of the values in `param_label` should be shown.
-
-        Returns
-        -------
-        new_indexes : pandas.Series
-            Index of the bin for each value in `param_label`. 
-            The indexes of this Series itself are corresponding to levels of the indexes of the `df`.
-            The label of the column is `param_label`_id.
-        bins_dict : dict
-            Indexes of the bins and corresponding to them values of the bins centers.
-        bins : numpy.ndarray
-            Edges of the bins.
-        '''
-        if self.inf_vals is not None and self.inf_vals not in ['None', 'none']:
-            flag_x = self.addData[param_label].notna() & ((self.addData[param_label].abs() - self.inf_vals) < 0)
-        else:
-            flag_x = self.addData[param_label].notna()
-        db = self.addData[flag_x].copy()
-        try :
-            h_list = list(set(db[param_label]))
-        except KeyError:
-            print('There is no column labeled "'+param_label+'"')
-            return (None,)*3
-        if min_lim is None:
-            min_lim = min(h_list)
-        if max_lim is None:
-            max_lim = max(h_list)
-        bins = np.linspace(min_lim, max_lim, n_bins+1)
-        bin_centers = bins[:-1]+np.diff(bins)/2
-        h_id = [i for i in range(n_bins)]
-        bins_dict = dict(zip(h_id, bin_centers))
-        new_indexes = pd.cut(db[param_label], bins, labels = h_id, include_lowest = True)
-        new_indexes.name = param_label+'_id'
-        if show_fig:
-            if n_bins > 100:
-                edge_color = None
-            else:
-                edge_color = "k"
-            fig, ax = plt.subplots(ncols = 1, nrows = 1, figsize = (6,6))
-            counts = new_indexes.value_counts().sort_index().to_list()
-            ax.bar(bins[:-1],counts,width=np.diff(bins),align = 'edge', edgecolor = edge_color)
-            ax2 = ax.twiny()
-            ax2.set_xlim(ax.get_xlim())
-            n = 4
-            h_id = [i for i in range(n_bins)]
-            if len(h_id) <= 2*n:
-                new_ticks_indexes = h_id
-            else:
-                new_ticks_indexes = [(len(h_id)-1)//n*i for i in range(0, n+1)]
-                if (len(h_id)-1) not in new_ticks_indexes:
-                    new_ticks_indexes = new_ticks_indexes[:-1] + [len(h_id)-1,]
-            ax2.set_xticks(bin_centers[new_ticks_indexes], labels = np.array(h_id)[new_ticks_indexes])
-            ax2.set_xlabel(param_label+'_id')
-            fig.supxlabel(param_label)
-            fig.supylabel('counts')
-            # fig.suptitle('Binned data')
-            fig.tight_layout()
-            fig.show()
-
-        return (new_indexes, bins_dict, bins, flag_x)
-    
-    def _get_mu(self, X, ret_nonan = False):
-        '''
-        Returns the mean values for the vector of N variables with M values per variable.
-
-        Before calculations all rows with at least one numpy.nan value are removed.
-        
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape (M, N).
-        ret_nonan : bool, default False
-            Specifies if the `X` cleaned from rows containing numpy.nan values should be returned.
-
-        Returns
-        -------
-        mu : numpy.ndarray
-            Mean values of the vector `X`, shape (N, ).
-        x_ : numpy.ndarray
-            If `ret_nonan = True`, returns `X` cleaned from rows containing numpy.nan values.
-        '''
-        x_ = self._remove_nan(X)
-        mu = np.array(x_.mean(axis = 0))
-        if ret_nonan:
-            return mu, x_
-        else:
-            return mu
-
-    def _remove_nan(self, X):
-        '''
-        Remove rows with numpy.nan values.
-
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape (M, N).
-        '''
-        try:
-            XX = X[~np.isnan(X).any(axis = 1)]
-            return XX
-        except:
-            XX = X[~np.isnan(X)]
-            return XX
-
-    def _get_covar_matrix(self, X):
-        '''
-        Return the covariance matrix for the vector of N variables, with M values per variable.
-
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape = (M x N), M > 1, otherwise returns matrix N x N filled with numpy.nan or numpy.nan if M = 1.
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Shape (N, N).
-        '''
-        mu, XX = self._get_mu(X, ret_nonan=True)
-        try:
-            covar_matrix = 1/(XX.shape[0] - 1) * np.dot((XX - mu).T,(XX - mu))
-            return covar_matrix
-        except ZeroDivisionError:
-            try:
-                res = np.empty((XX.shape[1],XX.shape[1]))
-                res.fill(np.nan)
-                return res
-            except IndexError:
-                res = np.nan
-                return res
-
-    def _get_disp(self, X):
-        '''
-        Return the square root of the diagonal elements of the covariance matrix (M x N) for the vector of N variables,
-        with M values per variable.
-        
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas DataFrame
-            Shape = M x N, M > 1 otherwise returns array filled with nan.
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Shape = (N, ).
-        '''
-        try:
-            covar_matrix = self._get_covar_matrix(X)
-            if not isinstance(covar_matrix, np.ndarray):
-                return np.sqrt(covar_matrix)
-            else:
-                disp = np.sqrt(np.diag(covar_matrix))
-            return disp
-        except ValueError:
-            XX = self._remove_nan(X)
-            disp = np.empty((XX.shape[1],))
-            disp.fill(np.nan)
-            return disp
-
-    def _group_data(self, new_indexes, bins_dict, flag_x):
-        '''
-        Group data according to id values in `new_indexes` and calculate mean values of the each group.
-
-        'addData' and 'data' attributes of the new CitrosData object have two levels of indexes, 
-        with id values from `new_indexes` as the first level and 'sid' as the second one.
-
-        Parameters
-        ----------
-        new_indexes : pandas.Series
-            New indexes, obtained by _get_index(...) function. The indexes of this Series itself must match
-            the indexes of the `dataset`.
-        bins_dict : dict
-            The dict with indexes and corresponding to them values.
-            The column with corresponding values are added to addData attribute of the returning CitrosData object.
-            For example, if the `new_indexes` label is 'time_id', then the label of the added column is 'time'.
-
-        Returns
-        -------
-        out : CitrosData
-            New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.      
-        '''
-        new_id = new_indexes.name
-        new_label = new_id.split('_id')[0]
-        bin_mean = new_indexes.apply(lambda x: bins_dict.get(x)).to_list()
-        # data_copy = self.data[self.filter.multiply(flag_x, axis = 0)].copy()
-        data_copy = self.data[flag_x].copy()
-        data_copy[new_id] = new_indexes.to_list()
-        data_copy[self.sid_label] = self.addData[flag_x][self.sid_label]
-        flag = pd.concat([self.filter[flag_x], pd.DataFrame({new_id: [True for i in range(len(data_copy))], 
-                                                             self.sid_label: [True for i in range(len(data_copy))]}, index = data_copy.index)], axis = 1)
-        new_data = data_copy[flag].groupby([new_id, self.sid_label]).mean()
-
-        addData_copy = self.addData[flag_x].copy()
-        addData_copy[new_id] = new_indexes.to_list()
-        addData_copy[new_label] = bin_mean
-        new_addData = pd.DataFrame(addData_copy.groupby([new_id, self.sid_label])[new_label].first())
-        new_db = CitrosData((new_data,new_addData), type_name = self.type, units = self.units, data_label = self.data_label,
-                        parameters = self.parameters, sid_label = self.sid_label, omit_nan_rows=self.omit_nan_rows, 
-                        inf_vals = self.inf_vals)
-        return new_db
-
     def bin_data(self, n_bins: int = 10, param_label: str = 'rid', min_lim: Optional[float] = None, max_lim: Optional[float] = None, 
                  show_fig: bool = False):
-        '''
+        """
         Bin values of column `param_label` in `n_bins` intervals, group data according to the binning and 
         calculate mean data values of each group.
 
@@ -667,14 +356,134 @@ class CitrosData:
                       3     8.458
         1             1     24.774
         ...
-        '''
+        """
 
         new_indexes, bins_dict, bins, flag_x = self._get_index(n_bins, param_label, min_lim = min_lim, max_lim = max_lim, show_fig = show_fig)
         new_db = self._group_data(new_indexes, bins_dict, flag_x)
         return new_db
+    
+    def _get_index(self, n_bins, param_label, min_lim = None, max_lim = None, show_fig = False):
+        """
+        Bin values of column `param_label` in `n_bins` intervals and find indexes for the values according to these intervals.
+        
+        The range for binning is specified with the `min_lim` and `max_lim` parameters.
+
+        Parameters
+        ----------
+        n_bins : int
+            Number of bins.
+        param_label : str
+            Label of the column on the basis of which the indices will be calculated.
+        min_lim : float
+            The minimum value of the range for binning, `min_lim` < `max_lim`.
+            If None then the minimum value of the entire range is selected.
+        max_lim : float
+            The maximum value of the range for binning, `min_lim` < `max_lim`.
+            If None then the maximum value of the entire range is selected.
+        show_fig : bool, default False
+            If the histogram that represents the distribution of the values in `param_label` should be shown.
+
+        Returns
+        -------
+        new_indexes : pandas.Series
+            Index of the bin for each value in `param_label`. 
+            The indexes of this Series itself are corresponding to levels of the indexes of the `df`.
+            The label of the column is `param_label`_id.
+        bins_dict : dict
+            Indexes of the bins and corresponding to them values of the bins centers.
+        bins : numpy.ndarray
+            Edges of the bins.
+        """
+        if self.inf_vals is not None and self.inf_vals not in ['None', 'none']:
+            flag_x = self.addData[param_label].notna() & ((self.addData[param_label].abs() - self.inf_vals) < 0)
+        else:
+            flag_x = self.addData[param_label].notna()
+        db = self.addData[flag_x].copy()
+        try :
+            h_list = list(set(db[param_label]))
+        except KeyError:
+            print('There is no column labeled "'+param_label+'"')
+            return (None,)*3
+        if min_lim is None:
+            min_lim = min(h_list)
+        if max_lim is None:
+            max_lim = max(h_list)
+        bins = np.linspace(min_lim, max_lim, n_bins+1)
+        bin_centers = bins[:-1]+np.diff(bins)/2
+        h_id = [i for i in range(n_bins)]
+        bins_dict = dict(zip(h_id, bin_centers))
+        new_indexes = pd.cut(db[param_label], bins, labels = h_id, include_lowest = True)
+        new_indexes.name = param_label+'_id'
+        if show_fig:
+            if n_bins > 100:
+                edge_color = None
+            else:
+                edge_color = "k"
+            fig, ax = plt.subplots(ncols = 1, nrows = 1, figsize = (6,6))
+            counts = new_indexes.value_counts().sort_index().to_list()
+            ax.bar(bins[:-1],counts,width=np.diff(bins),align = 'edge', edgecolor = edge_color)
+            ax2 = ax.twiny()
+            ax2.set_xlim(ax.get_xlim())
+            n = 4
+            h_id = [i for i in range(n_bins)]
+            if len(h_id) <= 2*n:
+                new_ticks_indexes = h_id
+            else:
+                new_ticks_indexes = [(len(h_id)-1)//n*i for i in range(0, n+1)]
+                if (len(h_id)-1) not in new_ticks_indexes:
+                    new_ticks_indexes = new_ticks_indexes[:-1] + [len(h_id)-1,]
+            ax2.set_xticks(bin_centers[new_ticks_indexes], labels = np.array(h_id)[new_ticks_indexes])
+            ax2.set_xlabel(param_label+'_id')
+            fig.supxlabel(param_label)
+            fig.supylabel('counts')
+            fig.tight_layout()
+            fig.show()
+
+        return (new_indexes, bins_dict, bins, flag_x)
+    
+    def _group_data(self, new_indexes, bins_dict, flag_x):
+        """
+        Group data according to id values in `new_indexes` and calculate mean values of the each group.
+
+        'addData' and 'data' attributes of the new CitrosData object have two levels of indexes, 
+        with id values from `new_indexes` as the first level and 'sid' as the second one.
+
+        Parameters
+        ----------
+        new_indexes : pandas.Series
+            New indexes, obtained by _get_index(...) function. The indexes of this Series itself must match
+            the indexes of the `dataset`.
+        bins_dict : dict
+            The dict with indexes and corresponding to them values.
+            The column with corresponding values are added to addData attribute of the returning CitrosData object.
+            For example, if the `new_indexes` label is 'time_id', then the label of the added column is 'time'.
+
+        Returns
+        -------
+        out : CitrosData
+            New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.      
+        """
+        new_id = new_indexes.name
+        new_label = new_id.split('_id')[0]
+        bin_mean = new_indexes.apply(lambda x: bins_dict.get(x)).to_list()
+        data_copy = self.data[flag_x].copy()
+        data_copy[new_id] = new_indexes.to_list()
+        data_copy[self.sid_label] = self.addData[flag_x][self.sid_label]
+        flag = pd.concat([self.filter[flag_x], pd.DataFrame({new_id: [True for i in range(len(data_copy))], 
+                                                             self.sid_label: [True for i in range(len(data_copy))]}, index = data_copy.index)], axis = 1)
+        new_data = data_copy[flag].groupby([new_id, self.sid_label]).mean()
+
+        addData_copy = self.addData[flag_x].copy()
+        addData_copy[new_id] = new_indexes.to_list()
+        addData_copy[new_label] = bin_mean
+        new_addData = pd.DataFrame(addData_copy.groupby([new_id, self.sid_label])[new_label].first())
+        new_db = CitrosData((new_data,new_addData), type_name = self.type, units = self.units, data_label = self.data_label,
+                        parameters = self.parameters, sid_label = self.sid_label, omit_nan_rows=self.omit_nan_rows, 
+                        inf_vals = self.inf_vals)
+        return new_db
 
     def scale_data(self, n_points: int = 10, param_label: str = 'rid', show_fig: bool = False, intr_kind: str = 'linear'):
-        '''
+        """
         Scale parameter `param_label` for each of the 'sid' and interpolate data on the new scale.
 
         In order to establish a correspondence between the values of the data from different simulations, 
@@ -739,7 +548,7 @@ class CitrosData:
                       3     0.000000
         1             1     0.020408
         ...
-        '''
+        """
         if self.inf_vals is not None and self.inf_vals not in ['None', 'none']:
             flag_x = self.addData[param_label].notna() & ((self.addData[param_label].abs() - self.inf_vals) < 0)
         else:
@@ -789,9 +598,11 @@ class CitrosData:
                 fig.tight_layout()
                 fig.show()
         return new_db
+
+    # Statistics
     
     def get_statistics(self, return_format: str = 'pandas'):
-        '''
+        """
         Return table with statistics for CitrosData object.
 
         Parameters
@@ -919,7 +730,7 @@ class CitrosData:
         [[1.69633333e-03 1.54366667e-03 2.60583167e+00]
         [1.54366667e-03 1.77733333e-03 2.93335333e+00]
         [2.60583167e+00 2.93335333e+00 4.85077763e+03]]
-        '''
+        """
         if self.xid_label is None:
             print('error: data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
@@ -950,7 +761,7 @@ class CitrosData:
         
     def _plot_1Dstatistics(self, statistics, filter_st, ax = None, n_std = 3, num_data = 0, ylabel = None, std_color = 'r', 
                            std_area = False, std_lines = True, line_style_custom = '-'):
-        '''
+        """
         Plot data vs. `x_label` on a single ax for a one-dimensional data.
 
         Plots data vs. `x_label` for different 'sid', for mean value and shows `n_std`-sigma interval.
@@ -981,7 +792,7 @@ class CitrosData:
         Returns
         -------
         out : matplotlib.axes.Axes
-        '''
+        """
         sim_run_id = list(set(self.addData[self.filter.iloc[:, num_data]].index.get_level_values(self.sid_label)))
         N_run = len(sim_run_id)
         color_list =  [tuple(np.random.uniform(0,1, size=3)) for _ in range(N_run)]
@@ -1013,7 +824,7 @@ class CitrosData:
 
     def _plot_statistics(self, statistics, fig = None, fig_title = None, show_fig = True, return_fig = False, n_std = 3, 
                          std_color = 'r', connect_nan_std = True, std_area = False, std_lines = True):
-        '''
+        """
         Plot data vs. `x_label` figure for a N multidimensional data on N axis.
 
         Parameters
@@ -1046,7 +857,7 @@ class CitrosData:
             if `return_fig` set to True
         ax : list of matplotlib.axes.Axes
             if `return_fig` set to True
-        '''
+        """
         if (not show_fig) and (not return_fig):
             return
  
@@ -1101,7 +912,7 @@ class CitrosData:
     def show_statistics(self, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = True, return_fig: bool = False, 
                         n_std: int = 3, fig_title: str = 'Statistics', std_color: str = 'r', connect_nan_std: bool = True, 
                         std_area: bool = False, std_lines: bool = True):
-        '''
+        """
         Collect statistics for CitrosData object and plot it.
 
         Parameters
@@ -1163,7 +974,7 @@ class CitrosData:
         Show statistics plot:
 
         >>> db_sc.show_statistics()
-        '''
+        """
         if self.xid_label is None:
             print('error: data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
@@ -1174,33 +985,13 @@ class CitrosData:
                                      n_std = n_std, std_color = std_color, connect_nan_std = connect_nan_std, std_area = std_area, 
                                      std_lines = std_lines)
 
-    def _get_id_by_val(self, val, cols):
-        '''
-        Return the nearest slice_id for the given `val` where corresponding value of the column `col` is not nan.
-        '''
-        flag = True
-        for col in cols:
-            if isinstance(col, str):
-                flag = self.filter.loc[:, col] & flag
-            elif isinstance(col, int):
-                flag = self.filter.iloc[:, col] & flag
-        return (self.addData[flag][self.x_label] - val).abs().idxmin()[0]
-        # if isinstance(col, str):
-        #     return (self.addData[self.filter.loc[:, col]][self.x_label] - val).abs().idxmin()[0]
-        # elif isinstance(col, int):
-        #     return (self.addData[self.filter.iloc[:, col]][self.x_label] - val).abs().idxmin()[0]
+    # Correlation
     
-    def _get_val_by_id(self, slice_id):
-        '''
-        Return value for the given `slice_id`.
-        '''
-        return self.addData.xs(slice_id, level = self.xid_label)[self.x_label].iloc[0]
-
     def show_correlation(self, db2: Optional[pd.DataFrame] = None, x_col: int = 0, y_col: int = 0, 
                          slice_id: Optional[int] = None, slice_val: Optional[float] = None, n_std: int = 3,
                          bounding_error: bool = False, fig: Optional[matplotlib.figure.Figure] = None, return_fig: bool = False, 
                          display_id: bool = True, return_ellipse_param: bool = False, **kwargs):
-        '''
+        """
         Show data correlation for the given `slice_id`. 
 
         Prepare data from one or more CitrosData objects and plot confidence ellipses for the specified id = `slice_id`.
@@ -1296,7 +1087,7 @@ class CitrosData:
         ...                        bounding_error= False)
         slice_id = 5,
         slice_val = 0.2632
-        '''
+        """
         if self.xid_label is None:
             print('error: data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
@@ -1357,9 +1148,6 @@ class CitrosData:
                 x_units = ''
                 y_units = ''
             
-            # x_name = self.type
-            # y_name = self.type
-            
             try :
                 if isinstance(x_col, str):
                     x = self.data[x_col].xs(slice_id, level = self.xid_label)
@@ -1385,8 +1173,6 @@ class CitrosData:
                 x_units = self.units
             except:
                 x_units = ''
-            
-            # x_name = self.type
 
             try:
                 if isinstance(x_col, str):
@@ -1405,8 +1191,6 @@ class CitrosData:
                 y_units = db2.units
             except:
                 y_units = ''
-            
-            # y_name = db2.type
 
             try:
                 if slice_val is not None:
@@ -1469,11 +1253,29 @@ class CitrosData:
             return_fig = return_fig, fig = fig, plot_points = plot_points, plot_ellipse = plot_ellipse,\
             return_ellipse_param = return_ellipse_param, **kwargs)
 
+    def _get_id_by_val(self, val, cols):
+        """
+        Return the nearest slice_id for the given `val` where corresponding value of the column `col` is not nan.
+        """
+        flag = True
+        for col in cols:
+            if isinstance(col, str):
+                flag = self.filter.loc[:, col] & flag
+            elif isinstance(col, int):
+                flag = self.filter.iloc[:, col] & flag
+        return (self.addData[flag][self.x_label] - val).abs().idxmin()[0]
+    
+    def _get_val_by_id(self, slice_id):
+        """
+        Return value for the given `slice_id`.
+        """
+        return self.addData.xs(slice_id, level = self.xid_label)[self.x_label].iloc[0]
+    
     def _plot_correlation(self, x: ArrayLike, y: ArrayLike, n_std: Union[int, list] = 3, axis_labels: Optional[str] = None, 
                           title: str = 'correlation', bounding_error: bool = True, return_fig: bool = False, 
                           fig: Optional[matplotlib.figure.Figure] = None, plot_points: bool = True, plot_ellipse: bool = True, 
                           return_ellipse_param: bool = False, **kwargs):
-        '''
+        """
         Plot and show figure with one or several confidence ellipses (`x`,`y`).
 
         Parameters
@@ -1526,7 +1328,7 @@ class CitrosData:
               If bounding_error set True:
             - bounding_error : float
                 Radius of the error circle.
-        '''
+        """
         if axis_labels is None:
             axis_labels=['col1','col2']
         if fig is None:
@@ -1594,10 +1396,9 @@ class CitrosData:
             return ellipse_param
         else:
             return None
-        
 
     def _plot_ellipse(self, x, y, n_std, ax, facecolor='none', edgecolor='red', **kwargs):
-        '''
+        """
         Calculate and plot on `ax` confidence ellipse for dataset (`x`, `y`).
 
         Parameters
@@ -1630,7 +1431,7 @@ class CitrosData:
                     Shift of the center along x axis.
                 n : float
                     Shift of the center along y axis.
-        '''
+        """
         X = np.array([x,y]).T
         cov = self._get_covar_matrix(X)
         lambda_, v = np.linalg.eig(cov)
@@ -1647,10 +1448,10 @@ class CitrosData:
         return ax.add_patch(ellipse), parameters
 
     def _plot_bounding_error(self, a, b, alpha, m, n, ax):
-        '''
+        """
         Add bounding error circle to a plot.
 
-        In order to find radious of bounding error circle, the absolute value of the first derivative of the function
+        In order to find radius of bounding error circle, the absolute value of the first derivative of the function
         D = D(phi) is minimized, where D is the distance from the origin to point on ellipse, phi - the angle of the point,
         measured from the longest ellipse axis in polar reference system associated with an ellipse. 
         Several initial guesses are used to avoid falling in minima or local maxima.
@@ -1674,7 +1475,7 @@ class CitrosData:
         -------
         out : float
             Radius of the bounding error circle.
-        '''
+        """
         init_guess_list = np.linspace(0, 360, 13)
         res_phi_list = []
         for init_guess in init_guess_list:
@@ -1687,7 +1488,7 @@ class CitrosData:
         return R
 
     def _abs_derivative(self, phi, a, b, alpha, m, n):
-        '''
+        """
         Calculate the absolute value of the first derivative of the the function D = D(phi), 
         where D is the distance from the origin to point on ellipse, `phi` - the angle of the point,
         measured from the longest ellipse axis in polar reference system associated with an ellipse.
@@ -1695,7 +1496,7 @@ class CitrosData:
         Parameters
         ----------
         phi : float or array-like
-            Angle coodinate, in radians.
+            Angle coordinate, in radians.
         a : float
             Length of the longer axis of the ellipse.
         b : float
@@ -1711,7 +1512,7 @@ class CitrosData:
         ------- 
         float or array-like
             Absolute value of the first derivative.
-        '''
+        """
         xl = a*np.cos(phi)
         yl = b*np.sin(phi)
         x = xl*np.cos(alpha) - yl*np.sin(alpha) + m
@@ -1722,14 +1523,14 @@ class CitrosData:
         return np.abs(f)
 
     def _dist(self, phi,a,b,alpha,m,n):
-        '''
+        """
         Calculate distance between the origin and the point on ellipse with angle `phi`, which is 
         measured from the longest ellipse axis in polar reference system associated with an ellipse.
 
         Parameters
         ----------
         phi : float
-            Angle coodinate, in radians.
+            Angle coordinate, in radians.
         a : float
             Length of the longer axis of the ellipse.
         b : float
@@ -1745,11 +1546,197 @@ class CitrosData:
         -------
         out : float or array-like
             Value of the distance.
-        '''
+        """
         xl = a*np.cos(phi)
         yl = b*np.sin(phi)
         x = (xl)*np.cos(alpha) - (yl)*np.sin(alpha) + m
         y = (xl)*np.sin(alpha) + (yl)*np.cos(alpha) + n
         r = np.sqrt(x**2 + y**2)
         return r
+
+    # Utilities
     
+    def to_pandas(self):
+        """
+        Concatenate `data` and `addData` attributes and return the result table as a pandas.DataFrame.
+
+        Returns
+        -------
+        df : pandas.DataFrame
+            Concatenated table.
+        """
+        return pd.concat([self.data, self.addData], axis = 1)
+
+    def set_parameter(self, key: Optional[str] = None, value: Optional[Union[int, float]] = None, item: Optional[dict] = None):
+        """
+        Set parameter value to a CitrosData object.
+
+        Parameters
+        ----------
+        key : str
+            Label of the parameter.
+        value : int or float
+            Parameter value.
+        item : dict
+            Dictionary with parameters.
+        """
+        if key is not None and value is not None:
+            if key in self.parameters.keys():
+                print('key "{}" already exists, its value will be set to {}'.format(key, value))
+            self.parameters[key] = value
+        if item is not None:
+            if isinstance(item, dict):
+                for k, v in item.items():
+                    if k in self.parameters.keys():
+                        print('key "{}" already exists, its value will be set to {}'.format(k, v))
+                    self.parameters[k] = v
+        
+    def drop_parameter(self, key: Optional[str] = None):
+        """
+        Delete parameter labeled `key` and associated value.
+
+        Parameters
+        ----------
+        key : str
+            Label of the parameter to remove.
+        """
+        if key in self.parameters:
+            self.parameters.pop(key)
+        else:
+            print('key "{}" does not exists'.format(key))
+
+    def add_addData(self, column: ArrayLike, column_label: str):
+        """
+        Add column to 'addData' attribute.
+
+        Parameters
+        ----------
+        column : array-like object
+            Column to add.
+        column_label : str
+            Label of the new column in 'addData'.
+        """
+        self.addData[column_label] = column
+
+    def drop_addData(self, column_label: str):
+        """
+        Delete column from 'addData' attribute.
+
+        Parameters
+        ----------
+        column_label : str
+            Label of the column to delete .
+        """
+        self.addData.drop(columns = column_label, inplace = True)
+    
+    def _set_index_levels(self, index_levels):
+        """
+        Set indexes to database.
+
+        Parameters
+        ----------
+        index_levels : list of str
+            Labels of columns in 'addData' to assign as indexes.
+        """
+        self.data.set_index([self.addData[p] for p in index_levels], inplace = True)
+        self.addData.set_index(index_levels, inplace = True)
+        self.filter = self.data.notna()
+        pass
+    
+    def _get_mu(self, X, ret_nonan = False):
+        """
+        Returns the mean values for the vector of N variables with M values per variable.
+
+        Before calculations all rows with at least one numpy.nan value are removed.
+        
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape (M, N).
+        ret_nonan : bool, default False
+            Specifies if the `X` cleaned from rows containing numpy.nan values should be returned.
+
+        Returns
+        -------
+        mu : numpy.ndarray
+            Mean values of the vector `X`, shape (N, ).
+        x_ : numpy.ndarray
+            If `ret_nonan = True`, returns `X` cleaned from rows containing numpy.nan values.
+        """
+        x_ = self._remove_nan(X)
+        mu = np.array(x_.mean(axis = 0))
+        if ret_nonan:
+            return mu, x_
+        else:
+            return mu
+
+    def _remove_nan(self, X):
+        """
+        Remove rows with numpy.nan values.
+
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape (M, N).
+        """
+        try:
+            XX = X[~np.isnan(X).any(axis = 1)]
+            return XX
+        except:
+            XX = X[~np.isnan(X)]
+            return XX
+
+    def _get_covar_matrix(self, X):
+        """
+        Return the covariance matrix for the vector of N variables, with M values per variable.
+
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape = (M x N), M > 1, otherwise returns matrix N x N filled with numpy.nan or numpy.nan if M = 1.
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Shape (N, N).
+        """
+        mu, XX = self._get_mu(X, ret_nonan=True)
+        try:
+            covar_matrix = 1/(XX.shape[0] - 1) * np.dot((XX - mu).T,(XX - mu))
+            return covar_matrix
+        except ZeroDivisionError:
+            try:
+                res = np.empty((XX.shape[1],XX.shape[1]))
+                res.fill(np.nan)
+                return res
+            except IndexError:
+                res = np.nan
+                return res
+
+    def _get_disp(self, X):
+        """
+        Return the square root of the diagonal elements of the covariance matrix (M x N) for the vector of N variables,
+        with M values per variable.
+        
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas DataFrame
+            Shape = M x N, M > 1 otherwise returns array filled with nan.
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Shape = (N, ).
+        """
+        try:
+            covar_matrix = self._get_covar_matrix(X)
+            if not isinstance(covar_matrix, np.ndarray):
+                return np.sqrt(covar_matrix)
+            else:
+                disp = np.sqrt(np.diag(covar_matrix))
+            return disp
+        except ValueError:
+            XX = self._remove_nan(X)
+            disp = np.empty((XX.shape[1],))
+            disp.fill(np.nan)
+            return disp

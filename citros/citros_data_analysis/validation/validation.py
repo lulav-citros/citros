@@ -845,115 +845,6 @@ class Validation:
 
         return log, result, fig
 
-    def _get_mean_std_log(self, init_param, result):
-        """
-        Write log for std and mean bound tests.
-
-        Parameters
-        ----------
-        init_param : dict
-            Initial parameters to write in the log.
-        result : pandas.DataFrame
-            Table with results of the test.
-
-        Returns
-        -------
-        log: citros_data_analysis.data_access.citros_dict.CitrosDict
-            Dictionary with information for each column: 'passed' (True or False), 'pass_rate', 'failed' (indexes and x values of the
-            points that fail the test).
-        """
-        log = da.CitrosDict()
-
-        # init parameters
-        log["test_param"] = da.CitrosDict(init_param)
-
-        # calculate pass rate (how many points pass)
-        try:
-            pass_rate = da.CitrosDict(
-                (
-                    result[self.db.data.columns].apply(pd.Series.value_counts).loc[True]
-                    / len(result)
-                )
-                .fillna(0)
-                .apply(round, ndigits=3)
-            )
-        except KeyError:
-            # in case all points failed test and there is no True values
-            pass_rate = da.CitrosDict()
-            for col in self.db.data.columns:
-                pass_rate[col] = 0.0
-
-        for col in self.db.data.columns:
-            log[col] = da.CitrosDict()
-            log[col]["passed"] = True if result[col].all() else False
-            log[col]["pass_rate"] = pass_rate[col]
-            log[col]["failed"] = da.CitrosDict(
-                result[self.db.x_label]
-                .loc[result.index[result[col] == False]]
-                .to_dict()
-            )
-            # log[col]['table'] = result[[col]]
-
-        return log
-
-    def _plot_bounds(self, result, lower_limit, upper_limit, fig):
-        """
-        Add bound lines on the plot.
-
-        Parameters
-        ----------
-        result : pandas.DataFrame
-            Table with results of the test.
-        lower_limit : numpy.ndarray
-            Lower limit(s).
-        upper_limit : numpy.ndarray
-            Upper limit(s).
-        fig : matplotlib.figure.Figure
-            Figure to plot bound lines on.
-        """
-        axes = fig.axes
-        for i, ax in enumerate(axes):
-            if isinstance(lower_limit, np.ndarray) and len(lower_limit.shape) != 0:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [lower_limit[i], lower_limit[i]],
-                    "r",
-                )
-            elif isinstance(lower_limit, pd.DataFrame) and len(lower_limit.shape) != 0:
-                ax.plot(result[self.db.x_label], lower_limit, "r")
-            else:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [lower_limit, lower_limit],
-                    "r",
-                )
-
-            if isinstance(upper_limit, np.ndarray) and len(upper_limit.shape) != 0:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [upper_limit[i], upper_limit[i]],
-                    "r",
-                )
-            elif isinstance(upper_limit, pd.DataFrame) and len(upper_limit.shape) != 0:
-                ax.plot(result[self.db.x_label], upper_limit, "r")
-            else:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [upper_limit, upper_limit],
-                    "r",
-                )
-
-        line = Line2D([0], [0], label="test bounds", color="r")
-        handles, labels = axes[-1].get_legend_handles_labels()
-        fig.legend(
-            handles + [line],
-            labels + ["test bounds"],
-            bbox_to_anchor=(1.0, 0.94),
-            loc="upper left",
-        )
-        fig.legends.pop(0)
-        fig.tight_layout()
-
     def sid_test(self, limits: Union[float, list] = 1.0, nan_passed: bool = True):
         """
         Test whether all simulations are within the given limits.
@@ -1404,31 +1295,6 @@ class Validation:
 
         return log, result, fig
 
-    def _get_norm(self, norm_type="L2"):
-        """
-        Calculates norm.
-
-        Parameters
-        ----------
-        norm_type : {'L2', 'Linf'}, default 'L2'
-            Norm type.
-        """
-        if norm_type == "L2":
-            norm = (
-                self.db.data.apply(lambda x: x**2)
-                .groupby("sid")
-                .sum()
-                .apply(lambda x: np.sqrt(x))
-            )
-        elif norm_type == "Linf":
-            norm = (abs(self.db.data)).groupby("sid").max()
-        else:
-            print(
-                "error: can not recognize the norm type, the allowed types are 'L2' and 'Linf'"
-            )
-            norm = None
-        return norm
-
     def set_tests(
         self,
         test_method: dict = {
@@ -1708,8 +1574,142 @@ class Validation:
                     norm_type=norm_tests[method], **test_method[method]
                 )
 
-        return logs, tables, figures
+        return logs, tables, figures    
+    
+    def _get_norm(self, norm_type="L2"):
+        """
+        Calculates norm.
 
+        Parameters
+        ----------
+        norm_type : {'L2', 'Linf'}, default 'L2'
+            Norm type.
+        """
+        if norm_type == "L2":
+            norm = (
+                self.db.data.apply(lambda x: x**2)
+                .groupby("sid")
+                .sum()
+                .apply(lambda x: np.sqrt(x))
+            )
+        elif norm_type == "Linf":
+            norm = (abs(self.db.data)).groupby("sid").max()
+        else:
+            print(
+                "error: can not recognize the norm type, the allowed types are 'L2' and 'Linf'"
+            )
+            norm = None
+        return norm
+
+    def _get_mean_std_log(self, init_param, result):
+        """
+        Write log for std and mean bound tests.
+
+        Parameters
+        ----------
+        init_param : dict
+            Initial parameters to write in the log.
+        result : pandas.DataFrame
+            Table with results of the test.
+
+        Returns
+        -------
+        log: citros_data_analysis.data_access.citros_dict.CitrosDict
+            Dictionary with information for each column: 'passed' (True or False), 'pass_rate', 'failed' (indexes and x values of the
+            points that fail the test).
+        """
+        log = da.CitrosDict()
+
+        # init parameters
+        log["test_param"] = da.CitrosDict(init_param)
+
+        # calculate pass rate (how many points pass)
+        try:
+            pass_rate = da.CitrosDict(
+                (
+                    result[self.db.data.columns].apply(pd.Series.value_counts).loc[True]
+                    / len(result)
+                )
+                .fillna(0)
+                .apply(round, ndigits=3)
+            )
+        except KeyError:
+            # in case all points failed test and there is no True values
+            pass_rate = da.CitrosDict()
+            for col in self.db.data.columns:
+                pass_rate[col] = 0.0
+
+        for col in self.db.data.columns:
+            log[col] = da.CitrosDict()
+            log[col]["passed"] = True if result[col].all() else False
+            log[col]["pass_rate"] = pass_rate[col]
+            log[col]["failed"] = da.CitrosDict(
+                result[self.db.x_label]
+                .loc[result.index[result[col] == False]]
+                .to_dict()
+            )
+            # log[col]['table'] = result[[col]]
+
+        return log
+
+    def _plot_bounds(self, result, lower_limit, upper_limit, fig):
+        """
+        Add bound lines on the plot.
+
+        Parameters
+        ----------
+        result : pandas.DataFrame
+            Table with results of the test.
+        lower_limit : numpy.ndarray
+            Lower limit(s).
+        upper_limit : numpy.ndarray
+            Upper limit(s).
+        fig : matplotlib.figure.Figure
+            Figure to plot bound lines on.
+        """
+        axes = fig.axes
+        for i, ax in enumerate(axes):
+            if isinstance(lower_limit, np.ndarray) and len(lower_limit.shape) != 0:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [lower_limit[i], lower_limit[i]],
+                    "r",
+                )
+            elif isinstance(lower_limit, pd.DataFrame) and len(lower_limit.shape) != 0:
+                ax.plot(result[self.db.x_label], lower_limit, "r")
+            else:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [lower_limit, lower_limit],
+                    "r",
+                )
+
+            if isinstance(upper_limit, np.ndarray) and len(upper_limit.shape) != 0:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [upper_limit[i], upper_limit[i]],
+                    "r",
+                )
+            elif isinstance(upper_limit, pd.DataFrame) and len(upper_limit.shape) != 0:
+                ax.plot(result[self.db.x_label], upper_limit, "r")
+            else:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [upper_limit, upper_limit],
+                    "r",
+                )
+
+        line = Line2D([0], [0], label="test bounds", color="r")
+        handles, labels = axes[-1].get_legend_handles_labels()
+        fig.legend(
+            handles + [line],
+            labels + ["test bounds"],
+            bbox_to_anchor=(1.0, 0.94),
+            loc="upper left",
+        )
+        fig.legends.pop(0)
+        fig.tight_layout()
+ 
     def _get_limit_values(self, limits, data_length):
         """
         Get lower and upper limits from `limits`.

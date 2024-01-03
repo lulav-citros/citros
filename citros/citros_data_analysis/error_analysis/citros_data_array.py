@@ -12,14 +12,14 @@ import matplotlib.figure
 from .citros_data import CitrosData
 
 class CitrosDataArray:
-    '''
+    """
     Store CitrosData objects in a "dbs" attribute for regression analysis.
 
     Parameters
     ----------
     dbs : list
         list of CitrosData objects
-    '''
+    """
 
     _debug_flag = False
 
@@ -33,33 +33,33 @@ class CitrosDataArray:
             self.dbs = []
     
     def add_db(self, db: CitrosData):
-        '''
+        """
         Add one CitrosData object to CitrosDataArray.
 
         Parameters
         ----------
         db : citros_data_analysis.error_analysis.citros_data.CitrosData
             CitrosData object to add to storage.
-        '''
+        """
         if isinstance(db, CitrosData):
             self.dbs.append(db)
         else:
             print('expected CitrosData object, but {} was given'.format(type(db)))
     
     def add_dbs(self, dbs: list):
-        '''
+        """
         Add list of CitrosData objects to CitrosDataArray.
 
         Parameters
         ----------
         dbs : list
             list of CitrosData objects to add to storage.
-        '''
+        """
         for db in dbs:
             self.add_db(db)
 
     def drop_db(self, value: int):
-        '''
+        """
         Remove CitrosData object from CitrosDataArray.
 
         If `value` is an int, then removes by index, 
@@ -69,7 +69,7 @@ class CitrosDataArray:
         ----------
         value : int or citros_data_analysis.error_analysis.citros_data.CitrosData
             Object or index of object to remove.
-        '''
+        """
         if isinstance(value, int):
             try:
                 self.dbs.pop(value)
@@ -81,246 +81,11 @@ class CitrosDataArray:
             except ValueError:
                 print('object is not in CitrosDataArray')
 
-    def _make_prediction(self, method, stat_df, cov_df, slice_id_list, n_poly, parameters, N_ax, hidden_layer_sizes,\
-                        activation, max_iter, solver, alpha, **kwargs):
-        '''
-        Inner function to calculate prediction for mean values by one of the methods.
-
-        Parameters
-        ----------
-        method : str or list of str, default 'poly'
-            - If the method is 'poly', the polynomial regression is solved.
-            - If the method is 'neural_net', the solution is finding by sklearn.neural_network.MLPRegressor.
-            - If the method is 'gmm', the gaussian mixture model is built and used for the prediction.
-        stat_df : pandas.DataFrame
-            DataFrame with prepared means values.
-        cov_df : pandas.DataFrame
-            DataFrame with prepared covariance matrixes.
-        slice_id_list : list
-            List of the indexes.
-        n_poly : int, default 2
-            Only used if method = 'poly'.
-            The highest degree of the polynomial (1 for linear, 2 for quadratic, etc).
-        parameters : dict
-            Names of the independent parameters and their values to calculate the prediction.
-        N_ax : int
-            Number of the axis (equals dimension of the data).
-        hidden_layer_sizes : array-like of shape(n_layers - 2,), default=(10,)
-            Only used if method = 'neural_net'.
-            The ith element represents the number of neurons in the ith hidden layer.
-        activation : str, default 'relu'
-            Only used if method = 'neural_net'.
-            Activation function for the hidden layer, see sklearn.neural_network.MLPRegressor.
-        max_iter : int, default 500
-            Only used if method = 'neural_net'.
-            Maximum number of iterations.
-        solver : str, default 'lbfgs'
-            Only used if method = 'neural_net'.
-            The solver for weight optimization.
-        alpha : float, default 1e-16
-            Only used if method = 'gmm'.
-            Value of the covariance element for parameters.
-        **kwargs : dict, optional
-            Other keyword arguments when method = 'neural_net', see [sklearn.neural_network.MLPRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html).
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Predicted mean values.
-        '''
-        mu_calculated = []
-        if method == 'poly':
-            P_new = [1,] + [p**i for i in range(1, n_poly+1) for p in parameters.values()]
-            P = np.array(list(map(lambda x: [x.parameters[p]**i for i in range(1, n_poly+1) for p in parameters.keys()], self.dbs)))
-            P = np.append(np.array([[1]*len(self.dbs)]).T, P, axis = 1)
-            for slice_id in slice_id_list:
-                mu = np.array(stat_df.loc[slice_id].to_list())
-                try:
-                    mu_param = self._fit_regression(P, mu)
-                    mu_calculated.append(self._calculate_regression(mu_param, P_new))
-                except:
-                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
-                    mu_calculated.append(np.array([np.nan]*N_ax))
-
-        elif method == 'neural_net':
-            P_new = np.array(list(parameters.values())).reshape(1,-1)
-            P=np.array([[db.parameters[k] for k in parameters.keys()] for db in self.dbs])
-            for slice_id in slice_id_list:
-                mu = np.array(stat_df.loc[slice_id].to_list())
-                pr = []
-                try:
-                    for j in range(mu.shape[1]):
-                        nn = MLPRegressor(hidden_layer_sizes=hidden_layer_sizes, activation=activation, \
-                            max_iter=max_iter, solver=solver, verbose=False, **kwargs)
-                        mean = mu[:,j].mean()
-                        std = mu[:,j].std()
-                        try:
-                            X = ((mu[:,j] - mean)/std)
-                            n = nn.fit(P, X)
-                            pr.append(nn.predict(P_new)[0]*std+mean)
-                        except ZeroDivisionError:
-                            n = nn.fit(P, mu[:,j])
-                            pr.append(nn.predict(P_new)[0])
-                    mu_calculated.append(np.array(pr))
-                except Exception as e:
-                    if CitrosDataArray._debug_flag:
-                        raise e
-                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
-                    mu_calculated.append(np.array([np.nan]*N_ax))
-
-        elif method == 'gmm':
-            P=np.array([[db.parameters[k] for k in parameters.keys()] for db in self.dbs])
-            P_new = np.array(list(parameters.values())).reshape(-1,P.shape[1])
-            for slice_id in slice_id_list:
-                mu = np.array(stat_df.loc[slice_id].to_list())
-                cov = np.array(cov_df.loc[slice_id].to_list())
-                X = np.c_[mu, P]
-                X_cov =[]
-                for cov_element in cov:
-                    X_cov.append(np.r_[np.c_[cov_element,np.ones((cov_element.shape[0],P.shape[1]))*alpha],np.ones((P.shape[1],cov_element.shape[1]+P.shape[1]))*alpha])
-                X_cov = np.array(X_cov)
-                try:
-                    gmm_sklearn = GaussianMixture(n_components=len(self.dbs), covariance_type = 'full', verbose=False)
-                    gmm_sklearn.fit(X)
-                    gmm = GMM(
-                        n_components=len(self.dbs), priors=gmm_sklearn.weights_, means=gmm_sklearn.means_,
-                        covariances=X_cov)
-                    pr_index = [i for i in range(N_ax,N_ax+P.shape[1])]
-                    mu_calculated.append(gmm.predict(pr_index, P_new)[0])
-                except Exception as e:
-                    if CitrosDataArray._debug_flag:
-                        raise e
-                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
-                    mu_calculated.append(np.array([np.nan]*N_ax))
-        else:
-            print('there is no method called "{}". Try "poly", "neural_net" or "gmm".')
-        return np.array(mu_calculated)
-    
-    def _data_for_regression(self, slice_id):
-        '''
-        Prepare data for the regression fitting.
-
-        Parameters
-        ----------
-        slice_id : int
-            id at which the data is sliced.
-
-        Returns
-        -------
-        mu : numpy.ndarray
-            array of the mean values.
-        sigma : numpy.ndarray
-            array of the unique elements of the covariance matrix (diagonal and upper half).
-        shape : tuple
-            shape of the covariance matrix.
-        '''
-        mu = []
-        sigma = []
-        for db in self.dbs:
-            stat = db.get_statistics(return_format = 'pandas')
-            mu.append(stat['mean'].loc[slice_id])
-            covar = stat['covar_matrix'].loc[slice_id]
-            s = []
-            for i in range(len(covar)):
-                for j in range(i, len(covar)):
-                    s.append(stat['covar_matrix'].loc[slice_id][i,j])
-            sigma.append(s)
-        sigma = np.array(sigma)
-        mu = np.array(mu)
-        return mu, sigma, covar.shape
-
-    def _fit_regression(self, P, y):
-        '''
-        Fit the regression.
-
-        Calculates the parameters x that solves y = Px.
-
-        Parameters
-        ----------
-        P : numpy.ndarray
-            Matrix of the coefficients.
-        y : numpy.ndarray
-            Vector of the dependent variables.
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Vector of the regression parameters. 
-        '''
-        x, res, rnk, s = np.linalg.lstsq(P, y, rcond = None) 
-        return x
-
-    def _get_regression_coef(self, slice_id, n_poly, parameters = None):
-        '''
-        Calculate coefficients for the regression for mean values and for covariance matrix.
-
-        Parameters
-        ----------
-        slice_id : int
-            id at which the data is sliced.
-        n_poly : int
-            The highest degree of the polynomial (1 for linear, 2 for quadratic, etc)
-        parameters : list
-            Names of the independent parameters. If not specified, all parameters are used.
-
-        Returns
-        -------
-        mu_param : numpy.ndarray
-            Coefficients of the regression for mean value.
-        sigma_param : numpy.ndarray
-            Coefficients of the regression for covariance matrix.
-            The shape is equals the shape of the covariance matrix.
-        '''
-        if parameters is None:
-            parameters = self.dbs[0].parameters.keys()
-        mu, sigma, covar_shape = self._data_for_regression(self.dbs, slice_id)
-        P = np.array(list(map(lambda x: [x.parameters[p]**i for i in range(1, n_poly+1) for p in parameters],self.dbs)))
-        P = np.append(np.array([[1]*len(self.dbs)]).T, P, axis = 1)
-        mu_param = self._fit_regression(P, mu) 
-        res_sigma = self._fit_regression(P, sigma)
-        
-        sigma_param = []
-        for res in res_sigma:
-            k=0
-            sigma_elem = np.empty(covar_shape)
-            for i in range(covar_shape[0]):
-                for j in range(i,covar_shape[0]):
-                    sigma_elem[i,j] = res[k]
-                    k+=1
-                for j in range(i):
-                    sigma_elem[i,j] = sigma_elem[j,i]
-            sigma_param.append(sigma_elem)
-            
-        return mu_param, np.array(sigma_param)
-
-    def _calculate_regression(self, x_param, P):
-        '''
-        Calculate x_param * P.
-
-        Function for checking the results of the regression algorithm.
-
-        Parameters
-        ----------
-        x_param : array-like
-            Parameters of the regression.
-        P : array-like
-            The vector of the coefficients.
-        
-        Returns
-        -------
-        out : float
-            The result of the summing.
-        '''
-        x_calc = 0
-        for i in range(len(x_param)):
-            x_calc = x_calc + P[i]*x_param[i]
-        return x_calc
-
     def get_prediction(self, parameters: dict, method: str = 'poly', n_poly: int = 2, activation: str = 'relu', 
                        max_iter: int = 500, solver: str = 'lbfgs', hidden_layer_sizes: ArrayLike = (10,), 
                        alpha: float = 1e-16, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = False, 
                        return_fig: bool = False, **kwargs):
-        '''
+        """
         Show the predictions based on the results of the regression solution, neural net or gaussian mixture model.
 
         Parameters
@@ -420,7 +185,7 @@ class CitrosDataArray:
         1	0.010101	1.145971
         2	0.020202	1.232255
         ...
-        '''
+        """
         slice_id_list = self.dbs[0].data.index.get_level_values(0).to_list()
         
         if not isinstance(method, list):
@@ -499,3 +264,238 @@ class CitrosDataArray:
             return  predicted_tables, fig, ax
         else:
             return predicted_tables
+    
+    def _make_prediction(self, method, stat_df, cov_df, slice_id_list, n_poly, parameters, N_ax, hidden_layer_sizes,\
+                        activation, max_iter, solver, alpha, **kwargs):
+        """
+        Inner function to calculate prediction for mean values by one of the methods.
+
+        Parameters
+        ----------
+        method : str or list of str, default 'poly'
+            - If the method is 'poly', the polynomial regression is solved.
+            - If the method is 'neural_net', the solution is finding by sklearn.neural_network.MLPRegressor.
+            - If the method is 'gmm', the gaussian mixture model is built and used for the prediction.
+        stat_df : pandas.DataFrame
+            DataFrame with prepared means values.
+        cov_df : pandas.DataFrame
+            DataFrame with prepared covariance matrixes.
+        slice_id_list : list
+            List of the indexes.
+        n_poly : int, default 2
+            Only used if method = 'poly'.
+            The highest degree of the polynomial (1 for linear, 2 for quadratic, etc).
+        parameters : dict
+            Names of the independent parameters and their values to calculate the prediction.
+        N_ax : int
+            Number of the axis (equals dimension of the data).
+        hidden_layer_sizes : array-like of shape(n_layers - 2,), default=(10,)
+            Only used if method = 'neural_net'.
+            The ith element represents the number of neurons in the ith hidden layer.
+        activation : str, default 'relu'
+            Only used if method = 'neural_net'.
+            Activation function for the hidden layer, see sklearn.neural_network.MLPRegressor.
+        max_iter : int, default 500
+            Only used if method = 'neural_net'.
+            Maximum number of iterations.
+        solver : str, default 'lbfgs'
+            Only used if method = 'neural_net'.
+            The solver for weight optimization.
+        alpha : float, default 1e-16
+            Only used if method = 'gmm'.
+            Value of the covariance element for parameters.
+        **kwargs : dict, optional
+            Other keyword arguments when method = 'neural_net', see [sklearn.neural_network.MLPRegressor](https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPRegressor.html).
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Predicted mean values.
+        """
+        mu_calculated = []
+        if method == 'poly':
+            P_new = [1,] + [p**i for i in range(1, n_poly+1) for p in parameters.values()]
+            P = np.array(list(map(lambda x: [x.parameters[p]**i for i in range(1, n_poly+1) for p in parameters.keys()], self.dbs)))
+            P = np.append(np.array([[1]*len(self.dbs)]).T, P, axis = 1)
+            for slice_id in slice_id_list:
+                mu = np.array(stat_df.loc[slice_id].to_list())
+                try:
+                    mu_param = self._fit_regression(P, mu)
+                    mu_calculated.append(self._calculate_regression(mu_param, P_new))
+                except:
+                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
+                    mu_calculated.append(np.array([np.nan]*N_ax))
+
+        elif method == 'neural_net':
+            P_new = np.array(list(parameters.values())).reshape(1,-1)
+            P=np.array([[db.parameters[k] for k in parameters.keys()] for db in self.dbs])
+            for slice_id in slice_id_list:
+                mu = np.array(stat_df.loc[slice_id].to_list())
+                pr = []
+                try:
+                    for j in range(mu.shape[1]):
+                        nn = MLPRegressor(hidden_layer_sizes=hidden_layer_sizes, activation=activation, \
+                            max_iter=max_iter, solver=solver, verbose=False, **kwargs)
+                        mean = mu[:,j].mean()
+                        std = mu[:,j].std()
+                        try:
+                            X = ((mu[:,j] - mean)/std)
+                            n = nn.fit(P, X)
+                            pr.append(nn.predict(P_new)[0]*std+mean)
+                        except ZeroDivisionError:
+                            n = nn.fit(P, mu[:,j])
+                            pr.append(nn.predict(P_new)[0])
+                    mu_calculated.append(np.array(pr))
+                except Exception as e:
+                    if CitrosDataArray._debug_flag:
+                        raise e
+                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
+                    mu_calculated.append(np.array([np.nan]*N_ax))
+
+        elif method == 'gmm':
+            P=np.array([[db.parameters[k] for k in parameters.keys()] for db in self.dbs])
+            P_new = np.array(list(parameters.values())).reshape(-1,P.shape[1])
+            for slice_id in slice_id_list:
+                mu = np.array(stat_df.loc[slice_id].to_list())
+                cov = np.array(cov_df.loc[slice_id].to_list())
+                X = np.c_[mu, P]
+                X_cov =[]
+                for cov_element in cov:
+                    X_cov.append(np.r_[np.c_[cov_element,np.ones((cov_element.shape[0],P.shape[1]))*alpha],np.ones((P.shape[1],cov_element.shape[1]+P.shape[1]))*alpha])
+                X_cov = np.array(X_cov)
+                try:
+                    gmm_sklearn = GaussianMixture(n_components=len(self.dbs), covariance_type = 'full', verbose=False)
+                    gmm_sklearn.fit(X)
+                    gmm = GMM(
+                        n_components=len(self.dbs), priors=gmm_sklearn.weights_, means=gmm_sklearn.means_,
+                        covariances=X_cov)
+                    pr_index = [i for i in range(N_ax,N_ax+P.shape[1])]
+                    mu_calculated.append(gmm.predict(pr_index, P_new)[0])
+                except Exception as e:
+                    if CitrosDataArray._debug_flag:
+                        raise e
+                    # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
+                    mu_calculated.append(np.array([np.nan]*N_ax))
+        else:
+            print('there is no method called "{}". Try "poly", "neural_net" or "gmm".')
+        return np.array(mu_calculated)
+    
+    def _data_for_regression(self, slice_id):
+        """
+        Prepare data for the regression fitting.
+
+        Parameters
+        ----------
+        slice_id : int
+            id at which the data is sliced.
+
+        Returns
+        -------
+        mu : numpy.ndarray
+            array of the mean values.
+        sigma : numpy.ndarray
+            array of the unique elements of the covariance matrix (diagonal and upper half).
+        shape : tuple
+            shape of the covariance matrix.
+        """
+        mu = []
+        sigma = []
+        for db in self.dbs:
+            stat = db.get_statistics(return_format = 'pandas')
+            mu.append(stat['mean'].loc[slice_id])
+            covar = stat['covar_matrix'].loc[slice_id]
+            s = []
+            for i in range(len(covar)):
+                for j in range(i, len(covar)):
+                    s.append(stat['covar_matrix'].loc[slice_id][i,j])
+            sigma.append(s)
+        sigma = np.array(sigma)
+        mu = np.array(mu)
+        return mu, sigma, covar.shape
+
+    def _fit_regression(self, P, y):
+        """
+        Fit the regression.
+
+        Calculates the parameters x that solves y = Px.
+
+        Parameters
+        ----------
+        P : numpy.ndarray
+            Matrix of the coefficients.
+        y : numpy.ndarray
+            Vector of the dependent variables.
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Vector of the regression parameters. 
+        """
+        x, res, rnk, s = np.linalg.lstsq(P, y, rcond = None) 
+        return x
+
+    def _get_regression_coef(self, slice_id, n_poly, parameters = None):
+        """
+        Calculate coefficients for the regression for mean values and for covariance matrix.
+
+        Parameters
+        ----------
+        slice_id : int
+            id at which the data is sliced.
+        n_poly : int
+            The highest degree of the polynomial (1 for linear, 2 for quadratic, etc)
+        parameters : list
+            Names of the independent parameters. If not specified, all parameters are used.
+
+        Returns
+        -------
+        mu_param : numpy.ndarray
+            Coefficients of the regression for mean value.
+        sigma_param : numpy.ndarray
+            Coefficients of the regression for covariance matrix.
+            The shape is equals the shape of the covariance matrix.
+        """
+        if parameters is None:
+            parameters = self.dbs[0].parameters.keys()
+        mu, sigma, covar_shape = self._data_for_regression(self.dbs, slice_id)
+        P = np.array(list(map(lambda x: [x.parameters[p]**i for i in range(1, n_poly+1) for p in parameters],self.dbs)))
+        P = np.append(np.array([[1]*len(self.dbs)]).T, P, axis = 1)
+        mu_param = self._fit_regression(P, mu) 
+        res_sigma = self._fit_regression(P, sigma)
+        
+        sigma_param = []
+        for res in res_sigma:
+            k=0
+            sigma_elem = np.empty(covar_shape)
+            for i in range(covar_shape[0]):
+                for j in range(i,covar_shape[0]):
+                    sigma_elem[i,j] = res[k]
+                    k+=1
+                for j in range(i):
+                    sigma_elem[i,j] = sigma_elem[j,i]
+            sigma_param.append(sigma_elem)
+            
+        return mu_param, np.array(sigma_param)
+
+    def _calculate_regression(self, x_param, P):
+        """
+        Calculate x_param * P.
+
+        Function for checking the results of the regression algorithm.
+
+        Parameters
+        ----------
+        x_param : array-like
+            Parameters of the regression.
+        P : array-like
+            The vector of the coefficients.
+        
+        Returns
+        -------
+        out : float
+            The result of the summing.
+        """
+        x_calc = 0
+        for i in range(len(x_param)):
+            x_calc = x_calc + P[i]*x_param[i]
+        return x_calc

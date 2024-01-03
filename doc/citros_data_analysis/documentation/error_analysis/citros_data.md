@@ -103,145 +103,6 @@ For example, for mean calculations difference is the follows:
 
 
     
-## Method `to_pandas` {#citros_data_analysis.error_analysis.citros_data.CitrosData.to_pandas}
-
-
-
-
-```python
-def to_pandas()
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Concatenate **data** and **addData** attributes and return the result table as a pandas.DataFrame.
-
-#### Returns
-
-Name|Type|Description
---|--|--
-|**```df```**|**pandas.DataFrame**|Concatenated table.
-
-</details>
-
-
-    
-## Method `set_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.set_parameter}
-
-
-
-
-```python
-def set_parameter(
-    key=None,
-    value=None,
-    item=None
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Set parameter value to a CitrosData object.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```key```**|**str**|Label of the parameter.
-|**```value```**|**int** or **float**|Parameter value.
-|**```item```**|**dict**|Dictionary with parameters.
-
-</details>
-
-
-    
-## Method `drop_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_parameter}
-
-
-
-
-```python
-def drop_parameter(
-    key=None
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Delete parameter labeled **key** and associated value.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```key```**|**str**|Label of the parameter to remove.
-
-</details>
-
-
-    
-## Method `add_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.add_addData}
-
-
-
-
-```python
-def add_addData(
-    column,
-    column_label
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Add column to 'addData' attribute.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```column```**|`array-like object`|Column to add.
-|**```column_label```**|**str**|Label of the new column in 'addData'.
-
-</details>
-
-
-    
-## Method `drop_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_addData}
-
-
-
-
-```python
-def drop_addData(
-    column_label
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Delete column from 'addData' attribute.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```column_label```**|**str**|Label of the column to delete .
-
-</details>
-
-
-    
 ## Method `bin_data` {#citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data}
 
 
@@ -818,5 +679,144 @@ Plot correlation plot for the index = 5:
 slice_id = 5,
 slice_val = 0.2632
 ```
+
+</details>
+
+
+    
+## Method `to_pandas` {#citros_data_analysis.error_analysis.citros_data.CitrosData.to_pandas}
+
+
+
+
+```python
+def to_pandas()
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Concatenate **data** and **addData** attributes and return the result table as a pandas.DataFrame.
+
+#### Returns
+
+Name|Type|Description
+--|--|--
+|**```df```**|**pandas.DataFrame**|Concatenated table.
+
+</details>
+
+
+    
+## Method `set_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.set_parameter}
+
+
+
+
+```python
+def set_parameter(
+    key=None,
+    value=None,
+    item=None
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Set parameter value to a CitrosData object.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```key```**|**str**|Label of the parameter.
+|**```value```**|**int** or **float**|Parameter value.
+|**```item```**|**dict**|Dictionary with parameters.
+
+</details>
+
+
+    
+## Method `drop_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_parameter}
+
+
+
+
+```python
+def drop_parameter(
+    key=None
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Delete parameter labeled **key** and associated value.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```key```**|**str**|Label of the parameter to remove.
+
+</details>
+
+
+    
+## Method `add_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.add_addData}
+
+
+
+
+```python
+def add_addData(
+    column,
+    column_label
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Add column to 'addData' attribute.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```column```**|`array-like object`|Column to add.
+|**```column_label```**|**str**|Label of the new column in 'addData'.
+
+</details>
+
+
+    
+## Method `drop_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_addData}
+
+
+
+
+```python
+def drop_addData(
+    column_label
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Delete column from 'addData' attribute.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```column_label```**|**str**|Label of the column to delete .
 
 </details>

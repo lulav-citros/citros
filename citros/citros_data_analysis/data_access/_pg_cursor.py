@@ -71,14 +71,14 @@ class _PgCursor(CitrosDB_base):
         self._order_by_allowed = ["asc", "ASC", "Asc", "desc", "DESC", "Desc"]
 
     def _set_simulation(self, simulation):
-        '''
+        """
         Set simulation name.
 
         Parameters
         ----------
         simulation : str
             Name of the simulation.
-        '''
+        """
         if simulation is None:
             self._simulation = None
         elif isinstance(simulation, str):
@@ -88,14 +88,14 @@ class _PgCursor(CitrosDB_base):
             print("simulation is not set, 'simulation' must be a str")
 
     def _set_batch(self, batch):
-        '''
+        """
         Set batch name.
 
         Parameters
         ----------
         batch : str
             Name of the batch.
-        '''
+        """
         if batch is None:
             self._batch_name = None
         elif isinstance(batch, str):

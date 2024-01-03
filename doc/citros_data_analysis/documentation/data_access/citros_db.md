@@ -748,284 +748,6 @@ For time >= 20:
 
 
     
-## Method `info` {#citros_data_analysis.data_access.citros_db.CitrosDB.info}
-
-
-
-
-```python
-def info()
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Return information about the batch, based on the configurations set by topic(), rid(), sid() and time() methods.
-
-The output is a dictionary, that contains:
-```python
-'size': size of the selected data,
-'sid_count': number of sids,
-'sid_list': list of the sids,
-'topic_count': number of topics,
-'topic_list': list of topics,
-'message_count': number of messages
-```
-If specific sid is set, also appends dictionary 'sids', with the following structure:
-```python
-'sids': {
-  <sid, int>: {
-    'topics': {
-      <topic_name, str>: {
-        'message_count': number of messages,
-        'start_time': time when simulation started,
-        'end_time': time when simulation ended,
-        'duration': duration of the simulation process,
-        'frequency': frequency of the simulation process (in Hz)}}}}
-```
-If topic is specified, appends dictionary 'topics':
-```python
-'topics': {
-  <topic_name, str>: {
-    'type': type,
-    'data_structure': structure of the data,
-    'message_count': number of messages}}
-```
-If the topic has multiple types with the same data structure, they are presented in 
-'type' as a list. If the types have different data structures, they are grouped by 
-their data structure types and numbered as "type_group_0", "type_group_1", and so on:
-```python
-'topics': {
-  <topic_name, str>: {
-    "type_group_0": {
-      'type': type,
-      'data_structure': structure of the data,
-      'message_count': number of messages},
-    "type_group_1": {
-      'type': type,
-      'data_structure': structure of the data,
-      'message_count': number of messages}}}
-```
-
-#### Returns
-
-Name|Type|Description
---|--|--
-|**```out```**|**[CitrosDict](citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Information about the batch.
-
-</details>
-<details>
-  <summary>Examples</summary>
-
-Display information about the batch 'dynamics' of the simulation 'mechanics':
-
-```python
->>> citros = da.CitrosDB()
->>> citros.simulation('mechanics').batch('dynamics').info().print()
-{
- 'size': '27 kB',
- 'sid_count': 3,
- 'sid_list': [1, 2, 3],
- 'topic_count': 4,
- 'topic_list': ['A', 'B', 'C', 'D'],
- 'message_count': 100
-}
-```
-
-
-Display information about topic 'C' of the batch 'dynamics':
-
-```python
->>> citros.simulation('mechanics').batch('dynamics').topic('C').info().print()
-{
- 'size': '6576 bytes',
- 'sid_count': 3,
- 'sid_list': [1, 2, 3],
- 'topic_count': 1,
- 'topic_list': ['C'],
- 'message_count': 24,
- 'topics': {
-   'C': {
-     'type': 'c',
-     'data_structure': {
-       'data': {
-         'x': {
-           'x_1': 'int', 
-           'x_2': 'float',
-           'x_3': 'float'
-         },
-         'note': 'list',
-         'time': 'float',
-         'height': 'float'
-       }
-     },
-     'message_count': 24
-   }
- }
-}
-```
-
-
-Display information about simulation run 1 and 2 of the batch 'dynamics':
-
-```python
->>> citros.simulation('mechanics').batch('dynamics').sid([1,2]).info().print()
-{
- 'size': '20 kB',
- 'sid_count': 2,
- 'sid_list': [1, 2],
- 'topic_count': 4,
- 'topic_list': ['A', 'B', 'C', 'D'],
- 'message_count': 76,
- 'sids': {
-   1: {
-     'topics': {
-       'A': {
-          'message_count': 4,
-          'start_time': 2000000000,
-          'end_time': 17000000000,
-          'duration': 15000000000,
-          'frequency': 0.267
-       },
-       'B': {
-          'message_count': 9,
-...
-          'duration': 150000000,
-          'frequency': 60.0
-       }
-     }
-   }
- }
-}
-```
-
-
-Display information about simulation run 2 of the topic 'C' of the batch 'dynamics':
-
-```python
->>> citros.simulation('mechanics').batch('dynamics').topic('C').sid(2).info().print()
-{
- 'size': '2192 bytes',
- 'sid_count': 1,
- 'sid_list': [2],
- 'topic_count': 1,
- 'topic_list': ['C'],
- 'message_count': 8,
- 'sids': {
-   2: {
-     'topics': {
-       'C': {
-         'message_count': 8,
-         'start_time': 7000000170,
-         'end_time': 19000000800,
-         'duration': 12000000630,
-         'frequency': 0.667
-       }
-     }
-   }
- },
- 'topics': {
-   'C': {
-     'type': 'c',
-     'data_structure': {
-       'data': {
-         'x': {
-           'x_1': 'int', 
-           'x_2': 'float',
-           'x_3': 'float'
-         },
-         'note': 'list',
-         'time': 'float',
-         'height': 'float'
-         }
-       },
-     'message_count': 8
-   }
- }
-}
-```
-
-</details>
-
-
-    
-## Method `get_data_structure` {#citros_data_analysis.data_access.citros_db.CitrosDB.get_data_structure}
-
-
-
-
-```python
-def get_data_structure(
-    topic=None
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Display table with topic names, types and corresponding them data structures of the json-data columns for the specific batch.
-
-Batch must be set during initialization of CitrosDB object or by **batch()** method.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```topic```**|**list** or **list** of **str**, optional|List of the topics to show data structure for.<br />    Have higher priority, than those defined by **topic()** and **set_filter()** methods <br />    and will override them.<br />    If not specified, shows data structure for all topics.
-#### See Also
-
-**[CitrosDB.simulation()](#citros_data_analysis.data_access.citros_db.CitrosDB.simulation "citros_data_analysis.data_access.citros_db.CitrosDB.simulation")**, **[CitrosDB.batch()](#citros_data_analysis.data_access.citros_db.CitrosDB.batch "citros_data_analysis.data_access.citros_db.CitrosDB.batch")**
-
-
-</details>
-<details>
-  <summary>Examples</summary>
-
-Print structure of the json-data column for topics 'A' and 'C' of the batch 'kinematics' of the simulation 'mechanics':
-
-```python
->>> citros = da.CitrosDB(simulation = 'mechanics')
->>> citros.batch('kinematics').topic(['A', 'C']).get_data_structure()
-```
-
-
-or
-
-```python
->>> citros.batch('kinematics').get_data_structure(['A', 'C'])
-+-------+------+-----------------+
-| topic | type | data            |
-+-------+------+-----------------+
-|     A |    a | {               |
-|       |      |   x: {          |
-|       |      |     x_1: float, |
-|       |      |     x_2: float, |
-|       |      |     x_3: float  |
-|       |      |   },            |
-|       |      |   note: list,   |
-|       |      |   time: float,  |
-|       |      |   height: float |
-|       |      | }               |
-+-------+------+-----------------+
-|     C |    c | {               |
-|       |      |   x: {          |
-|       |      |     x_1: float, |
-|       |      |     x_2: float, |
-|       |      |     x_3: float  |
-|       |      |   },            |
-|       |      |   note: list,   |
-|       |      |   time: float,  |
-|       |      |   height: float |
-|       |      | }               |
-+-------+------+-----------------+
-```
-
-</details>
-
-
-    
 ## Method `set_filter` {#citros_data_analysis.data_access.citros_db.CitrosDB.set_filter}
 
 
@@ -1328,6 +1050,284 @@ and select every second row of the result:
 ```python
 >>> citros = da.CitrosDB()
 >>> df = citros.simulation('pendulum').batch('coords').topic('A').move_avg(5,2).data()
+```
+
+</details>
+
+
+    
+## Method `info` {#citros_data_analysis.data_access.citros_db.CitrosDB.info}
+
+
+
+
+```python
+def info()
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Return information about the batch, based on the configurations set by topic(), rid(), sid() and time() methods.
+
+The output is a dictionary, that contains:
+```python
+'size': size of the selected data,
+'sid_count': number of sids,
+'sid_list': list of the sids,
+'topic_count': number of topics,
+'topic_list': list of topics,
+'message_count': number of messages
+```
+If specific sid is set, also appends dictionary 'sids', with the following structure:
+```python
+'sids': {
+  <sid, int>: {
+    'topics': {
+      <topic_name, str>: {
+        'message_count': number of messages,
+        'start_time': time when simulation started,
+        'end_time': time when simulation ended,
+        'duration': duration of the simulation process,
+        'frequency': frequency of the simulation process (in Hz)}}}}
+```
+If topic is specified, appends dictionary 'topics':
+```python
+'topics': {
+  <topic_name, str>: {
+    'type': type,
+    'data_structure': structure of the data,
+    'message_count': number of messages}}
+```
+If the topic has multiple types with the same data structure, they are presented in 
+'type' as a list. If the types have different data structures, they are grouped by 
+their data structure types and numbered as "type_group_0", "type_group_1", and so on:
+```python
+'topics': {
+  <topic_name, str>: {
+    "type_group_0": {
+      'type': type,
+      'data_structure': structure of the data,
+      'message_count': number of messages},
+    "type_group_1": {
+      'type': type,
+      'data_structure': structure of the data,
+      'message_count': number of messages}}}
+```
+
+#### Returns
+
+Name|Type|Description
+--|--|--
+|**```out```**|**[CitrosDict](citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Information about the batch.
+
+</details>
+<details>
+  <summary>Examples</summary>
+
+Display information about the batch 'dynamics' of the simulation 'mechanics':
+
+```python
+>>> citros = da.CitrosDB()
+>>> citros.simulation('mechanics').batch('dynamics').info().print()
+{
+ 'size': '27 kB',
+ 'sid_count': 3,
+ 'sid_list': [1, 2, 3],
+ 'topic_count': 4,
+ 'topic_list': ['A', 'B', 'C', 'D'],
+ 'message_count': 100
+}
+```
+
+
+Display information about topic 'C' of the batch 'dynamics':
+
+```python
+>>> citros.simulation('mechanics').batch('dynamics').topic('C').info().print()
+{
+ 'size': '6576 bytes',
+ 'sid_count': 3,
+ 'sid_list': [1, 2, 3],
+ 'topic_count': 1,
+ 'topic_list': ['C'],
+ 'message_count': 24,
+ 'topics': {
+   'C': {
+     'type': 'c',
+     'data_structure': {
+       'data': {
+         'x': {
+           'x_1': 'int', 
+           'x_2': 'float',
+           'x_3': 'float'
+         },
+         'note': 'list',
+         'time': 'float',
+         'height': 'float'
+       }
+     },
+     'message_count': 24
+   }
+ }
+}
+```
+
+
+Display information about simulation run 1 and 2 of the batch 'dynamics':
+
+```python
+>>> citros.simulation('mechanics').batch('dynamics').sid([1,2]).info().print()
+{
+ 'size': '20 kB',
+ 'sid_count': 2,
+ 'sid_list': [1, 2],
+ 'topic_count': 4,
+ 'topic_list': ['A', 'B', 'C', 'D'],
+ 'message_count': 76,
+ 'sids': {
+   1: {
+     'topics': {
+       'A': {
+          'message_count': 4,
+          'start_time': 2000000000,
+          'end_time': 17000000000,
+          'duration': 15000000000,
+          'frequency': 0.267
+       },
+       'B': {
+          'message_count': 9,
+...
+          'duration': 150000000,
+          'frequency': 60.0
+       }
+     }
+   }
+ }
+}
+```
+
+
+Display information about simulation run 2 of the topic 'C' of the batch 'dynamics':
+
+```python
+>>> citros.simulation('mechanics').batch('dynamics').topic('C').sid(2).info().print()
+{
+ 'size': '2192 bytes',
+ 'sid_count': 1,
+ 'sid_list': [2],
+ 'topic_count': 1,
+ 'topic_list': ['C'],
+ 'message_count': 8,
+ 'sids': {
+   2: {
+     'topics': {
+       'C': {
+         'message_count': 8,
+         'start_time': 7000000170,
+         'end_time': 19000000800,
+         'duration': 12000000630,
+         'frequency': 0.667
+       }
+     }
+   }
+ },
+ 'topics': {
+   'C': {
+     'type': 'c',
+     'data_structure': {
+       'data': {
+         'x': {
+           'x_1': 'int', 
+           'x_2': 'float',
+           'x_3': 'float'
+         },
+         'note': 'list',
+         'time': 'float',
+         'height': 'float'
+         }
+       },
+     'message_count': 8
+   }
+ }
+}
+```
+
+</details>
+
+
+    
+## Method `get_data_structure` {#citros_data_analysis.data_access.citros_db.CitrosDB.get_data_structure}
+
+
+
+
+```python
+def get_data_structure(
+    topic=None
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Display table with topic names, types and corresponding them data structures of the json-data columns for the specific batch.
+
+Batch must be set during initialization of CitrosDB object or by **batch()** method.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```topic```**|**list** or **list** of **str**, optional|List of the topics to show data structure for.<br />    Have higher priority, than those defined by **topic()** and **set_filter()** methods <br />    and will override them.<br />    If not specified, shows data structure for all topics.
+#### See Also
+
+**[CitrosDB.simulation()](#citros_data_analysis.data_access.citros_db.CitrosDB.simulation "citros_data_analysis.data_access.citros_db.CitrosDB.simulation")**, **[CitrosDB.batch()](#citros_data_analysis.data_access.citros_db.CitrosDB.batch "citros_data_analysis.data_access.citros_db.CitrosDB.batch")**
+
+
+</details>
+<details>
+  <summary>Examples</summary>
+
+Print structure of the json-data column for topics 'A' and 'C' of the batch 'kinematics' of the simulation 'mechanics':
+
+```python
+>>> citros = da.CitrosDB(simulation = 'mechanics')
+>>> citros.batch('kinematics').topic(['A', 'C']).get_data_structure()
+```
+
+
+or
+
+```python
+>>> citros.batch('kinematics').get_data_structure(['A', 'C'])
++-------+------+-----------------+
+| topic | type | data            |
++-------+------+-----------------+
+|     A |    a | {               |
+|       |      |   x: {          |
+|       |      |     x_1: float, |
+|       |      |     x_2: float, |
+|       |      |     x_3: float  |
+|       |      |   },            |
+|       |      |   note: list,   |
+|       |      |   time: float,  |
+|       |      |   height: float |
+|       |      | }               |
++-------+------+-----------------+
+|     C |    c | {               |
+|       |      |   x: {          |
+|       |      |     x_1: float, |
+|       |      |     x_2: float, |
+|       |      |     x_3: float  |
+|       |      |   },            |
+|       |      |   note: list,   |
+|       |      |   time: float,  |
+|       |      |   height: float |
+|       |      | }               |
++-------+------+-----------------+
 ```
 
 </details>

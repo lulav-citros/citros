@@ -10,7 +10,7 @@ class _Plotter:
 
     def plot_graph(self, df, x_label, y_label,  ax, legend, title, set_x_label, set_y_label, remove_nan,
                    inf_vals,*args, **kwargs):
-        '''
+        """
         Plot graph '`y_label` vs. `x_label`' for each sid, where `x_label` and `y_label`
         are the labels of columns of the pandas.DataFrame `df`.
 
@@ -53,7 +53,7 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         
-        '''
+        """
         return_flag = False
         if ax is None:
             return_flag = True
@@ -106,7 +106,7 @@ class _Plotter:
         
     def plot_3dgraph(self, df, x_label, y_label, z_label, ax, scale, legend, title, set_x_label, set_y_label, set_z_label, 
                      remove_nan, inf_vals, *args, **kwargs):
-        '''
+        """
         Plot 3D graph '`z_label` vs. `x_label` and `y_label`' for each sid, where `x_label`, `y_label` and `z_label`
         are the labels of columns of the pandas.DataFrame `df`.
 
@@ -153,7 +153,7 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         
-        '''
+        """
         return_flag = False
         if ax is None:
             return_flag = True
@@ -214,7 +214,7 @@ class _Plotter:
             return None
         
     def multiple_y_plot(self, df, x_label, y_labels,  fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, *args, **kwargs):
-        '''
+        """
         Plot a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels 
         specified in the `y_labels` parameter.
 
@@ -259,7 +259,7 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         
-        '''
+        """
         if isinstance(y_labels, str):
             y_labels = [y_labels]
         if fig is None:
@@ -345,7 +345,7 @@ class _Plotter:
         
     def multiplot(self, df, labels, scale, fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, label_all_xaxis, 
                   label_all_yaxis, num, *args, **kwargs):
-        '''
+        """
         Plot a matrix of N x N graphs, each displaying either the histogram with values distribution (for graphs on the diogonal) or
         the relationship between variables listed in `labels`, with N being the length of `labels` list.
 
@@ -396,7 +396,7 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
 
-        '''
+        """
         if isinstance(labels, str):
             labels = [labels]
         N = len(labels)
@@ -519,7 +519,7 @@ class _Plotter:
         
     def plot_sigma_ellipse(self, df, x_label, y_label, ax, n_std, plot_origin, bounding_error, inf_vals, 
                            legend, title, set_x_label, set_y_label, scale, return_ellipse_param):
-        '''
+        """
         Plot sigma ellipses for the set of data.
 
         Parameters
@@ -576,7 +576,7 @@ class _Plotter:
             If bounding_error set True:
           - bounding_error : float
               Radius of the error circle.
-        '''
+        """
         if ax is None:
             return_flag = True
             fig, ax = plt.subplots(nrows = 1, ncols = 1, figsize=(6, 6))
@@ -672,7 +672,7 @@ class _Plotter:
             return None
         
     def time_plot(self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs):
-        '''
+        """
         Plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
 
         Parameters
@@ -700,7 +700,7 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-        '''
+        """
         # plot the required simulations against time
         if sids is None or sids == []:
             sids = list(set(var_df.index))
@@ -731,7 +731,7 @@ class _Plotter:
         ax.set_title(title_text)
 
     def xy_plot(self, xy_df, ax, var_x_name, var_y_name, sids, x_label, y_label, title_text, legend, *args, **kwargs):
-        '''
+        """
         Plot `var_y_name` vs. `var_x_name` for each of the sids.
 
         Parameters
@@ -763,7 +763,7 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-        '''
+        """
         for s in sids:
             ax.plot(xy_df[var_x_name].loc[s], xy_df[var_y_name].loc[s], label = s, *args, **kwargs)
         if legend:
