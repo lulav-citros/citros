@@ -174,16 +174,8 @@ class _PgCursor(CitrosDB_base):
         """
         Make connection to Postgres database to execute PostgreSQL commands.
         """
-        # _PgCursor.pg_connection = psycopg2.connect(
-        #     host=self._host,
-        #     user=self._user,
-        #     password=self._password,
-        #     database=self._database,
-        #     options="-c search_path=" + self._schema,
-        #     port=self._port,
-        # )
-        _PgCursor.pg_connection = CitrosDB_base().connect()
-        if self._debug:
+        _PgCursor.pg_connection = self.connect()
+        if self._debug and _PgCursor.pg_connection is not None:
             _PgCursor.n_pg_connections += 1
 
     def _registr_dec2float(self):
@@ -202,7 +194,6 @@ class _PgCursor(CitrosDB_base):
         _PgCursor._connection_parameters["user"] = self.db_user
         _PgCursor._connection_parameters["password"] = self.db_password
         _PgCursor._connection_parameters["database"] = self.db_name
-        # _PgCursor._connection_parameters["options"] = "-c search_path=" + self._schema
         _PgCursor._connection_parameters["port"] = self.db_port
 
     def _if_connection_parameters_changed(self):
@@ -211,10 +202,14 @@ class _PgCursor(CitrosDB_base):
             "user": self.db_user,
             "password": self.db_password,
             "database": self.db_name,
-            # "options": "-c search_path=" + self._schema,
             "port": self.db_port,
         }
         return new_connection != _PgCursor._connection_parameters
+    
+    def _get_connection(self):
+        """
+        Return connection if it is set 
+        """
 
     def _execute_query(self, query, param_execute=None, check_batch=True):
         """
@@ -317,7 +312,7 @@ class _PgCursor(CitrosDB_base):
         if hasattr(self, "error_flag"):
             return CitrosDict({})
 
-        filter_by = self._summorize_constraints()
+        filter_by = self._summarize_constraints()
         general_info, error_occurred, error_name = self._get_general_info(filter_by)
         result = general_info
         if error_name is None and not error_occurred:
@@ -327,7 +322,7 @@ class _PgCursor(CitrosDB_base):
             if self._topic is not None:
                 topic_info = self._get_topic_info(filter_by)
                 result = CitrosDict({**result, "topics": topic_info})
-        return result, error_name
+        return result
 
     def _get_general_info(self, filter_by):
         """
@@ -967,7 +962,7 @@ class _PgCursor(CitrosDB_base):
         Check and prepare `order_by` argument for set_order() method.
 
         Check if the `order_by` dictionary and its keys have the right types, changes dictionary values to lowercase and
-        ckeck if they are matches the words 'asc' and 'desc'.
+        check if they are matches the words 'asc' and 'desc'.
 
         Parameters
         ----------
@@ -980,8 +975,7 @@ class _PgCursor(CitrosDB_base):
         result : dict
             `order_by` with checked types and changed to lowercase values.
         error_flag : bool
-            True if `order_by` has problems with types or the values does not maches 'asc' or 'desc'.
-
+            True if `order_by` has problems with types or the values does not matches 'asc' or 'desc'.
         """
         result = {}
         error_flag = False
@@ -1018,9 +1012,9 @@ class _PgCursor(CitrosDB_base):
                     result[k] = "asc"
         return result, error_flag
 
-    def _summorize_constraints(self):
+    def _summarize_constraints(self):
         """
-        Summorize all constraints, applied by `topic`, `sid`, `rid`, `time`, `filter_by` methods
+        Summarize all constraints, applied by `topic`, `sid`, `rid`, `time`, `filter_by` methods
 
         Returns
         -------
@@ -1067,8 +1061,6 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Table with selected data.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if isinstance(additional_columns, str):
             additional_columns = [additional_columns]
@@ -1078,19 +1070,17 @@ class _PgCursor(CitrosDB_base):
             additional_columns.append("sid")
 
         if hasattr(self, "error_flag"):
-            return None, None
+            return None
 
-        filter_by = self._summorize_constraints()
+        filter_by = self._summarize_constraints()
 
         if "topic" not in filter_by.keys():
             print("topic is not specified")
-            return None, None
+            return None
         elif len(filter_by["topic"]) > 1:
             print("too many topics to query data, please provide one topic")
-            return None, None
+            return None
 
-        # if data_names is None:
-        #     data_names = []
         if isinstance(data_names, str):
             data_names = [data_names]
 
@@ -1105,7 +1095,7 @@ class _PgCursor(CitrosDB_base):
             # order_by = None
             order_by = {"sid": "asc", "rid": "asc"}
 
-        df, error_name = self._get_data(
+        df = self._get_data(
             data_names,
             additional_columns=additional_columns,
             filter_by=filter_by,
@@ -1114,7 +1104,7 @@ class _PgCursor(CitrosDB_base):
             n_avg=self._n_avg,
             n_skip=self._n_skip,
         )
-        return df, error_name
+        return df
 
     def _is_batch_in_database(self, tablename):
         """
@@ -1353,32 +1343,37 @@ class _PgCursor(CitrosDB_base):
                 query_order = " ORDER BY " + ", ".join(query_order_el)
         return query_order, param_sql_order, param_execute_order
 
-    def _get_batch_size(self, mode="all"):
+    def _get_batch_sizes(self):
         """
-        Return sizes of the all tables in the current schema.
+        Return sizes of the batches according to simulation() and batch() settings.
 
         Returns
         -------
         result : list of tuples
             Each tuple contains name of the table, table size and total size with indexes.
-        error : str
-            Error name if error occurred or None
         """
-        var = {"schema": self._simulation}
-        if mode == "current":
+        var = {}
+        if self._simulation is None:
+            schema_condition = "schemaname NOT IN ('pg_catalog', 'information_schema')"
+        else:
+            schema_condition = "schemaname = %(schema)s"
+            var = {"schema": self._simulation}
+
+        if self._batch_name is not None:
             tablename_condition = " AND tablename = %(tablename)s"
             var["tablename"] = self._batch_name
-        elif mode == "all":
+        else:
             tablename_condition = ""
         query = sql.SQL(
             "SELECT tablename, \
                         pg_size_pretty(pg_relation_size(schemaname||'.'||tablename)) as size, \
                         pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as total_size \
-                        from pg_tables where schemaname = %(schema)s"
+                        from pg_tables where "
+            + schema_condition
             + tablename_condition
         )
         result = self._execute_query(query, var, check_batch=False)
-        return result["res"], result["error"]
+        return result["res"]
 
     def _download_data_structure(self, filter_by=None, out_format="dict"):
         """
@@ -1398,8 +1393,6 @@ class _PgCursor(CitrosDB_base):
         -------
         result : list of tuples
             Each tuple contains topic and type names and structure of the corresponding data.
-        error : str
-            Error name if error occurred or None
         """
         if filter_by is None:
             filter_by = {}
@@ -1437,9 +1430,9 @@ class _PgCursor(CitrosDB_base):
             result = []
             for j in range(len(q_result)):
                 result.append((q_result[j][0], q_result[j][1], data_structure_list[j]))
-            return result, error_name
+            return result
         else:
-            return q_result, error_name
+            return q_result
 
     def _topic_info_query(self, filter_by=None, out_format="dict"):
         """
@@ -1519,13 +1512,8 @@ class _PgCursor(CitrosDB_base):
             Have higher priority, than those defined by `topic()` and `set_filter()` methods
             and will override them.
             If not specified, shows data structure for all topics.
-
-        Returns
-        -------
-        error_name : str or None
-            Name of the error if it occurred during postgres query or None
         """
-        filter_by = self._summorize_constraints()
+        filter_by = self._summarize_constraints()
 
         if topic is not None:
             if isinstance(topic, list):
@@ -1535,12 +1523,12 @@ class _PgCursor(CitrosDB_base):
             else:
                 print("`topic` must be a list of str")
 
-        structure, error_name = self._download_data_structure(
+        structure = self._download_data_structure(
             filter_by=filter_by, out_format="str"
         )
 
-        if error_name is not None:
-            return error_name
+        if structure is None:
+            return
 
         topic_dict = {}
         for item in structure:
@@ -1569,7 +1557,6 @@ class _PgCursor(CitrosDB_base):
         table.hrules = ALL
         table.add_rows(result_list)
         print(table)
-        return None
 
     def _sid_info_query(self, group_by=None, filter_by=None):
         """
@@ -1674,7 +1661,7 @@ class _PgCursor(CitrosDB_base):
         list or list of tuples
             Each tuple contains unique combinations of the values for `column_names`.
         """
-        filter_by_default = self._summorize_constraints()
+        filter_by_default = self._summarize_constraints()
 
         if filter_by is None:
             filter_by = filter_by_default
@@ -1701,15 +1688,14 @@ class _PgCursor(CitrosDB_base):
         ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
-        error_name = query_result["error"]
         if data is not None:
             if len(column_names) == 1:
                 result = [item[0] for item in data]
             else:
                 result = data
-            return result, error_name
+            return result
         else:
-            return [], error_name
+            return []
 
     def _general_info_query(self, filter_by: dict = None) -> list:
         param_sql = []
@@ -1779,18 +1765,14 @@ class _PgCursor(CitrosDB_base):
 
         Returns
         -------
-        query_result : tuple
-            Contains:
-            value: int, float, str or None
-                Minimum or maximum value of the column `column_name`.
-            sid : int
-                Corresponding to the minimum/maximum value's sid. Returns only if `return_index` is set to True.
-            rid : int
-                Corresponding to the minimum/maximum value's rid. Returns only if `return_index` is set to True.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
+        value: int, float, str or None
+            Minimum or maximum value of the column `column_name`.
+        sid : int
+            Corresponding to the minimum/maximum value's sid. Returns only if `return_index` is set to True.
+        rid : int
+            Corresponding to the minimum/maximum value's rid. Returns only if `return_index` is set to True.
         """
-        filter_by_default = self._summorize_constraints()
+        filter_by_default = self._summarize_constraints()
 
         if filter_by is None:
             filter_by = filter_by_default
@@ -1799,13 +1781,13 @@ class _PgCursor(CitrosDB_base):
 
         if not isinstance(column_name, str):
             print("Error: `column_name` must be a str")
-            return (None), None
+            return None
         if mode not in ["MIN", "MAX"]:
             print('mode is not supported, should be "MIN" or "MAX"')
             if return_index:
-                return (None, None, None), None
+                return None, None, None
             else:
-                return (None), None
+                return None
 
         all_additional_columns = self._all_additional_columns
         param_sql = []
@@ -1857,28 +1839,27 @@ class _PgCursor(CitrosDB_base):
             ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         result = query_result["res"]
-        error_name = query_result["error"]
 
         if isinstance(result, list):
             if len(result) == 0:
                 result = None
         if result is not None:
             if not return_index:
-                return (result[0][0]), error_name
+                return result[0][0]
             elif return_index and len(result) == 1:
-                return (result[0]), error_name
+                return result[0]
             else:
                 sid_list = []
                 rid_list = []
                 for item in result:
                     sid_list.append(item[1])
                     rid_list.append(item[2])
-                return (result[0][0], sid_list, rid_list), error_name
+                return result[0][0], sid_list, rid_list
         else:
             if return_index:
-                return (None, None, None), error_name
+                return None, None, None
             else:
-                return (None), error_name
+                return None
 
     def _get_counts(
         self,
@@ -1909,15 +1890,13 @@ class _PgCursor(CitrosDB_base):
         -------
         list of tuples or None
             Number of rows in `column_name`.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if group_by is None:
             group_by = []
         elif isinstance(group_by, str):
             group_by = [group_by]
 
-        filter_by_default = self._summorize_constraints()
+        filter_by_default = self._summarize_constraints()
         if filter_by is None:
             filter_by = filter_by_default
         else:
@@ -1927,7 +1906,7 @@ class _PgCursor(CitrosDB_base):
             query_column = "*"
         elif not isinstance(column_name, str):
             print("Error: column_name must be a str")
-            return None, None
+            return None
         else:
             query_column = ""
 
@@ -1980,7 +1959,7 @@ class _PgCursor(CitrosDB_base):
             ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
 
-        return query_result["res"], query_result["error"]
+        return query_result["res"]
 
     def _get_unique_counts(
         self,
@@ -2011,15 +1990,13 @@ class _PgCursor(CitrosDB_base):
         -------
         list of tuples or None
             Counts of the unique values in `column_name`.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if group_by is None:
             group_by = []
         elif isinstance(group_by, str):
             group_by = [group_by]
 
-        filter_by_default = self._summorize_constraints()
+        filter_by_default = self._summarize_constraints()
         if filter_by is None:
             filter_by = filter_by_default
         else:
@@ -2029,7 +2006,7 @@ class _PgCursor(CitrosDB_base):
             query_column = "*"
         elif not isinstance(column_name, str):
             print("Error: `column_name` must be a str")
-            return None, None
+            return None
         else:
             query_column = ""
 
@@ -2113,7 +2090,7 @@ class _PgCursor(CitrosDB_base):
                     + query_group_col
                 ).format(*param_sql, table_name=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
-        return query_result["res"], query_result["error"]
+        return query_result["res"]
 
     def _get_data(
         self,
@@ -2165,8 +2142,6 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Data from the database.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if data_query is None:
             data_query = ["data"]
@@ -2182,13 +2157,13 @@ class _PgCursor(CitrosDB_base):
 
         if not isinstance(additional_columns, list):
             print("Error: `additional_columns` must be a list")
-            return None, None
+            return None
         if not isinstance(data_query, list):
             print("Error: `data_query` must be a list")
-            return None, None
+            return None
 
         if method == "":
-            df, error_name = self._get_data_all(
+            df = self._get_data_all(
                 data_query=data_query,
                 additional_columns=additional_columns,
                 filter_by=filter_by,
@@ -2196,7 +2171,7 @@ class _PgCursor(CitrosDB_base):
             )
 
         elif method == "skip":
-            df, error_name = self._skip_rows(
+            df = self._skip_rows(
                 data_query=data_query,
                 additional_columns=additional_columns,
                 filter_by=filter_by,
@@ -2205,7 +2180,7 @@ class _PgCursor(CitrosDB_base):
             )
 
         elif method == "move_avg":
-            df, error_name = self._moving_average(
+            df = self._moving_average(
                 data_query=data_query,
                 additional_columns=additional_columns,
                 filter_by=filter_by,
@@ -2215,7 +2190,7 @@ class _PgCursor(CitrosDB_base):
             )
 
         elif method == "avg":
-            df, error_name = self._average(
+            df = self._average(
                 data_query=data_query,
                 additional_columns=additional_columns,
                 filter_by=filter_by,
@@ -2227,7 +2202,7 @@ class _PgCursor(CitrosDB_base):
                 raise NameError('method "{}" does not exist'.format(method))
             else:
                 print('method "{}" does not exist'.format(method))
-                return None, None
+                return None
         if df is not None:
             if divide_by_columns:
                 df["data"] = df["data"].apply(
@@ -2239,9 +2214,9 @@ class _PgCursor(CitrosDB_base):
 
                 df = pd.concat([df.drop(columns="data"), normalized_data], axis=1)
 
-            return df.fillna(np.nan), error_name
+            return df.fillna(np.nan)
         else:
-            return None, error_name
+            return None
 
     def _get_data_all(
         self, data_query=None, additional_columns=None, filter_by=None, order_by=None
@@ -2269,8 +2244,6 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Data from the database.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if data_query is None:
             data_query = []
@@ -2329,13 +2302,12 @@ class _PgCursor(CitrosDB_base):
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
-        error_name = query_result["error"]
         if data is not None:
             colnames = column_order + data_query
             df = pd.DataFrame(data, columns=colnames)
-            return df, error_name
+            return df
         else:
-            return None, error_name
+            return None
 
     def _skip_rows(
         self,
@@ -2371,11 +2343,7 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Data from the database.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
-        # if data_query is None:
-        #     data_query = []
         if additional_columns is None:
             additional_columns = []
         if filter_by is None:
@@ -2384,13 +2352,13 @@ class _PgCursor(CitrosDB_base):
             order_by = {}
         if n_skip <= 0:
             print("`n_skip` must be > 0")
-            return None, None
+            return None
         if not isinstance(n_skip, int):
             try:
                 n_skip = int(n_skip)
             except Exception:
                 print("`n_skip` must be int")
-                return None, None
+                return None
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -2473,13 +2441,12 @@ class _PgCursor(CitrosDB_base):
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
-        error_name = query_result["error"]
         if data is not None:
             colnames = column_order + data_query
             df = pd.DataFrame(data, columns=colnames)
-            return df, error_name
+            return df
         else:
-            return None, error_name
+            return None
 
     def _average(
         self,
@@ -2515,11 +2482,7 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Data from the database.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
-        # if data_query is None:
-        #     data_query = []
         if additional_columns is None:
             additional_columns = []
         if filter_by is None:
@@ -2528,13 +2491,13 @@ class _PgCursor(CitrosDB_base):
             order_by = {}
         if n_avg <= 0:
             print("`n_avg` must be > 0")
-            return None, None
+            return None
         if not isinstance(n_avg, int):
             try:
                 n_avg = int(n_avg)
             except Exception:
                 print("n_avg must be int")
-                return None, None
+                return None
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -2741,13 +2704,12 @@ class _PgCursor(CitrosDB_base):
             ).format(*param_sql, table=sql.Identifier(self._simulation, self._batch_name))
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
-        error_name = query_result["error"]
         if data is not None:
             colnames = column_order + data_query_main
             df = pd.DataFrame(data, columns=colnames)
-            return df, error_name
+            return df
         else:
-            return None, error_name
+            return None
 
     def _moving_average(
         self,
@@ -2787,8 +2749,6 @@ class _PgCursor(CitrosDB_base):
         -------
         pandas.DataFrame
             Data from the database.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
         """
         if additional_columns is None:
             additional_columns = []
@@ -2798,22 +2758,22 @@ class _PgCursor(CitrosDB_base):
             order_by = {}
         if n_skip <= 0:
             print("`n_skip` must be > 0")
-            return None, None
+            return None
         if not isinstance(n_skip, int):
             try:
                 n_skip = int(n_skip)
             except Exception:
                 print("n_skip must be int")
-                return None, None
+                return None
         if n_avg <= 0:
             print("`n_avg` must be > 0")
-            return None, None
+            return None
         if not isinstance(n_avg, int):
             try:
                 n_avg = int(n_avg)
             except Exception:
                 print("n_avg must be int")
-                return None, None
+                return None
         param_sql = []
         param_execute = []
         all_additional_columns = self._all_additional_columns
@@ -3020,165 +2980,21 @@ class _PgCursor(CitrosDB_base):
 
         query_result = self._execute_query(query, param_execute)
         data = query_result["res"]
-        error_name = query_result["error"]
         if data is not None:
             colnames = column_order + data_query_main
             df = pd.DataFrame(data, columns=colnames)
-            return df, error_name
+            return df
         else:
-            return None, error_name
-
-    def _get_sid_tables(
-        self,
-        data_query,
-        topic,
-        additional_columns,
-        filter_by,
-        order_by,
-        method,
-        n_avg,
-        n_skip,
-    ):
-        """
-        Return dict of tables, each of the tables corresponds to exact value of sid.
-
-        Parameters
-        ----------
-        data_query : list, optional
-            Labels of the data to download from the json-format column "data".
-            If blank list, then all columns are are downloaded.
-        topic : str or list of str
-            Name of the topic.
-            Have higher priority than defined by `topic()`.
-            May be overrided by `filter_by` argument.
-        additional_columns : list, optional
-            Columns to download outside the json "data".
-            If blank list, then all columns are are downloaded.
-        filter_by : dict, optional
-            Constraints to apply on columns: {key_1: value_1, key_2: value_2, ...}.<br />
-            key_n - must match labels of the columns, <br />
-            value_n  - in the case of equality: list of exact values<br />
-                       in the case of inequality: dict with ">", ">=", "<" or "<=".<br />
-            Conditions, passed here, have higher priority over those defined by `topic()`, `rid()`, `sid()`, `time()` and `set_filter()` and will override them.
-        order_by : str or list of str or dict, optional
-            If `order_by` is a single string or a list of strings, it represents the column label(s) by which the result is sorted in ascending order.
-            For more control, use a dictionary with column labels as keys and values ('asc' for ascending, 'desc' for descending) to define the sorting order.
-            Conditions, passed here, have higher priority over those defined by `set_order()` and will override them.
-        method : {'', 'avg', 'move_avg', 'skip'}, optional
-            Method of sampling:
-            'avg' - average - average ``n_avg`` rows;
-            'move_avg' - moving average - average ``n_avg`` rows and return every ``n_skip``-th row;
-            'skip' - skipping ``n_skip`` rows;
-            '' - no sampling.
-            If not specified, no sampling is applied
-        n_avg : int
-            Used only if ``method`` is 'move_avg' or 'avg'.
-            Number of rows for averaging.
-        n_skip : int
-            Used only if ``method`` is 'move_avg' or 'skip'.
-            Number of rows to skip in a result output.
-            For example, if skip = 2, only every second row will be returned.
-
-        Returns
-        -------
-        dict of pandas.DataFrames
-            dict with tables, key is a value of sid.
-        error_name : str
-            Error name if it occurred during querying to postgres database or None
-        """
-        if additional_columns is None:
-            additional_columns = []
-
-        topic_type_error = False
-        if topic is None:
-            if isinstance(self._topic, list):
-                topic = self._topic.copy()
-            else:
-                topic = self._topic
-        if topic is not None:
-            if isinstance(topic, list):
-                filter_by_topic = {"topic": topic}
-            elif isinstance(topic, str):
-                filter_by_topic = {"topic": [topic]}
-            else:
-                topic_type_error = True
-                filter_by_topic = {}
-        else:
-            filter_by_topic = {}
-
-        filter_by_default = self._summorize_constraints()
-
-        if filter_by is None:
-            filter_by = {}
-
-        filter_by_default = {**filter_by_default, **filter_by_topic}
-        filter_by = {**filter_by_default, **filter_by}
-
-        if "topic" not in filter_by.keys():
-            if topic_type_error:
-                print("Error: `topic` must be a str")
-                return None, None
-            else:
-                print("Error: `topic` is not defined")
-                return None, None
-
-        if order_by is None:
-            order_by = {}
-        elif isinstance(order_by, str):
-            order_by = {order_by: "asc"}
-        elif isinstance(order_by, list):
-            order_by = {a: "asc" for a in order_by}
-        if hasattr(self, "_order_by"):
-            order_by = {**self._order_by, **order_by}
-        if len(order_by) == 0:
-            order_by = {"sid": "asc", "rid": "asc"}
-
-        if len(additional_columns) != 0 and "sid" not in additional_columns:
-            additional_columns.append("sid")
-
-        if method is None:
-            if hasattr(self, "_method"):
-                method = self._method
-                n_avg = self._n_avg
-                n_skip = self._n_skip
-            else:
-                method = ""
-
-        if isinstance(data_query, str):
-            data_query = [data_query]
-
-        result_table, error_name = self._get_data(
-            data_query=data_query,
-            additional_columns=additional_columns,
-            filter_by=filter_by,
-            order_by=order_by,
-            method=method,
-            n_avg=n_avg,
-            n_skip=n_skip,
-        )
-        if result_table is not None:
-            sid_list = list(set(result_table["sid"]))
-            tables = {}
-            for s in sid_list:
-                flag = result_table["sid"] == s
-                tables[s] = result_table[flag].reset_index(drop=True)
-            return tables, error_name
-        else:
-            return {}, error_name
+            return None
 
     def data_for_time_plot(
         self, topic_name, var_name, time_step, sids, remove_nan, inf_vals
     ):
         """
-        Plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
+        Query data for time plot.
 
         Parameters
         ----------
-        ax : matplotlib.axes.Axes
-            Figure axis to plot on.
-        *args : Any
-            Additional arguments to style lines, set color, etc,
-            see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         topic_name : str
             Input topic name. If specified, will override value that was set by `topic()` method.
         var_name : str
@@ -3187,13 +3003,7 @@ class _PgCursor(CitrosDB_base):
             Time step, `Time` = `time_step` * rid.
         sids : list
             List of the sids. If specified, will override values that were set by `sid()` method.
-            If not specified, data for all sids is used.
-        y_label : str
-            Label to set to y-axis. Default `var_name`.
-        title_text : str
-            Title of the figure. Default '`var_y_name` vs. Time'.
-        legend : bool
-            If True, show the legend with sids.
+            If not specified, data for all sids is queried.
         remove_nan : bool, default True
             If True, NaN values will be removed before plotting.
         inf_vals : None or float, default 1e308
@@ -3204,6 +3014,11 @@ class _PgCursor(CitrosDB_base):
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
+
+        Returns
+        -------
+        df : pandas.DataFrame
+            Data to plot.
         """
         if topic_name is None:
             if self._topic is not None:
@@ -3215,23 +3030,15 @@ class _PgCursor(CitrosDB_base):
                 print(
                     '"topic" is not specified, please provide it by topic() method or as an argument'
                 )
-                return None, None, None
+                return None
         else:
             topic_var = topic_name
-
-        if sids is None or sids == []:
-            if hasattr(self, "_sid"):
-                sids = self._sid
-            else:
-                sids = None
-        elif isinstance(sids, int):
-            sids = [sids]
 
         if var_name is None:
             print(
                 'please provide "var_name" - name of the variable to plot along y-axis'
             )
-            return None, None, None
+            return None
 
         if var_name not in ["sid", "rid", "time", "topic"]:
             data_columns = var_name
@@ -3239,23 +3046,22 @@ class _PgCursor(CitrosDB_base):
             data_columns = ["data"]
 
         # extract the variable dataframe from the topic struct, and sort it by sid (simulation-id) and rid (ros-id)
-        df, error_name = (
+        df = (
             self.topic(topic_var)
             .sid(sids)
             .set_order({"sid": "asc", "rid": "asc"})
             ._data(data_columns)
         )
-        if error_name is not None or df is None:
-            return None, None, error_name
+        if df is None:
+            return None
         if len(df) == 0:
             print("there is no data matching the given criteria")
-            return None, None
+            return None
         if len(df[df[var_name].notna()]) == 0:
             print(f"there is no data for the column '{var_name}'")
-            return None, None, error_name
+            return None
 
         if remove_nan:
-            # var_df = df[df[var_name].notna()].set_index(['rid','sid']).unstack()
             flag = df[var_name].notna()
         else:
             flag = pd.Series(data=[True] * len(df))
@@ -3269,21 +3075,16 @@ class _PgCursor(CitrosDB_base):
             var_df = df[flag].set_index("sid")
         var_df["Time"] = var_df["rid"] * time_step
 
-        return var_df, sids, error_name
+        return var_df
 
     def data_for_xy_plot(
         self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals
     ):
         """
-        Plot `var_y_name` vs. `var_x_name` for each of the sids.
+        Query data for xy plot.
 
         Parameters
         ----------
-        ax : matplotlib.axes.Axes
-            Figure axis to plot on.
-        *args : Any
-            Additional arguments to style lines, set color, etc,
-            see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         topic_name : str
             Input topic name. If specified, will override value that was set by `topic()` method.
         var_x_name : str
@@ -3292,15 +3093,7 @@ class _PgCursor(CitrosDB_base):
             Name of the variable to plot along y-axis.
         sids : int or list of int, optional
             List of the sids. If specified, will override values that were set by `sid()` method.
-            If not specified, data for all sids is used.
-        x_label : str, optional
-            Label to set to x-axis. Default `var_x_name`.
-        y_label : str, optional
-            Label to set to y-axis. Default `var_y_name`.
-        title_text : str, optional
-            Title of the figure. Default '`var_y_name` vs. `var_x_name`'.
-        legend : bool
-            If True, show the legend with sids.
+            If not specified, data for all sids is queried.
         remove_nan : bool, default True
             If True, NaN values will be removed before plotting.
         inf_vals : None or float, default 1e308
@@ -3311,6 +3104,11 @@ class _PgCursor(CitrosDB_base):
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
+
+        Returns
+        -------
+        df : pandas.DataFrame
+            Data to plot.
         """
         if topic_name is None:
             if self._topic is not None:
@@ -3322,7 +3120,7 @@ class _PgCursor(CitrosDB_base):
                 print(
                     '"topic" is not specified, please provide it by topic() method or as an argument'
                 )
-                return None, None, None
+                return None
         else:
             topic_var = topic_name
 
@@ -3330,20 +3128,12 @@ class _PgCursor(CitrosDB_base):
             print(
                 'please provide "var_x_name" - name of the variable to plot along x-axis'
             )
-            return None, None, None
+            return None
         if var_y_name is None:
             print(
                 'please provide "var_y_name" - name of the variable to plot along y-axis'
             )
-            return None, None, None
-
-        if sids is None or sids == []:
-            if hasattr(self, "_sid"):
-                sids = self._sid
-            else:
-                sids = None
-        elif isinstance(sids, int):
-            sids = [sids]
+            return None
 
         data_columns = []
 
@@ -3355,26 +3145,25 @@ class _PgCursor(CitrosDB_base):
             data_columns.append("data")
 
         # extract the variables dataframe from the topic struct, and sort it by sid (simulation-id) and rid (ros-id)
-        df, error_name = (
+        df = (
             self.topic(topic_var)
             .sid(sids)
             .set_order({"sid": "asc", "rid": "asc"})
             ._data(data_columns)
         )
-        if error_name is not None or df is None:
-            return None, None, error_name
+        if df is None:
+            return None
         if len(df) == 0:
             print("there is no data matching the given criteria")
-            return None, None, error_name
+            return None
         if len(df[df[var_x_name].notna()]) == 0:
             print(f"there is no data for the column '{var_x_name}'")
-            return None, None, error_name
+            return None
         if len(df[df[var_y_name].notna()]) == 0:
             print(f"there is no data for the column '{var_y_name}'")
-            return None, None, error_name
+            return None
 
         if remove_nan:
-            # xy_df = df[df[var_x_name].notna() & df[var_y_name].notna()].set_index(['rid','sid']).unstack()
             flag = df[var_x_name].notna() & df[var_y_name].notna()
         else:
             flag = pd.Series(data=[True] * len(df))
@@ -3405,5 +3194,4 @@ class _PgCursor(CitrosDB_base):
             if len(bad_sids) != 0:
                 print("sids " + str(bad_sids) + " do not exist")
                 sids = [s for s in sids if s not in bad_sids]
-        # ax.plot(xy_df[var_x_name][sids], xy_df[var_y_name][sids], *args, **kwargs)
-        return xy_df, sids, error_name
+        return xy_df

@@ -46,9 +46,22 @@ def epilog(url="https://docs.citros.io"):
 
 
 def main():
+    description_path = "citros.md"
+
     # main parser -----------------------------------------
     parser = argparse.ArgumentParser(
-        description=PANNEL,
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
         epilog=epilog(),
         formatter_class=RichHelpFormatter,
         # add_help=False

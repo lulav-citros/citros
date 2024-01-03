@@ -1,13 +1,12 @@
 import os
 
-
 def get_version():
     """
     Return version of the citros_data_analysis package.
 
     Examples
     --------
-    >>> from citros_data_analysis import data_access as da
+    >>> from citros.citros_data_analysis import data_access as da
     >>> print(da.get_version())
     v0.1.1
     """
