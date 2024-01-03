@@ -356,7 +356,7 @@ The table contains the following fields: Run name, Versions, message, status, co
 
 ### Execute Notebook
 After you've run a batch run on CITROS, your data is stored on CITROS's servers.
-you can access the data using Python [citros data analysis package](https://pypi.org/project/citros-data-analysis/) either from the Python [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb) or from a local kernel Python environment.
+you can access the data using citros data analysis either from the Python [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb) or from a local kernel Python environment.
 
 :::note
 

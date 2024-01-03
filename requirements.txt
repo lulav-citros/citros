@@ -22,11 +22,9 @@ opentelemetry-exporter-otlp-proto-grpc
 pydantic==1.10.12
 python-on-whales
 importlib-resources
-citros-data-analysis
 path
 rich==13.7.0
 rich-argparse==1.4.0
-citros-data-analysis==0.9.1
 fastapi
 fastapi-utils
 uvicorn
