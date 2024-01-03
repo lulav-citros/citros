@@ -76,7 +76,8 @@ def citros(args, argv):
             Choice("data", name="📊 Data: for data managment "),
             Choice("report", name="📝 Report: generation and management"),
             Choice("service", name="🔖 Service: CITROS API service functions"),
-            # Separator(),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -92,6 +93,8 @@ def citros(args, argv):
         init(args, argv)
     elif action == "service":
         service(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     elif action is None:
         exit_citros_cli()
     else:
@@ -343,6 +346,8 @@ def data(args, argv):
             Choice("list", name="*️⃣  List: reports list"),
             Choice("db", name="📂 DB: section"),
             Choice("service", name="🗳  Service: section"),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -358,7 +363,9 @@ def data(args, argv):
     elif action == "db":
         data_db(args, argv)
     elif action == "service":
-        data_service(args, argv)
+        service(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     else:
         print("[red]Error: unknown action")
     return
@@ -406,8 +413,9 @@ def data_tree(args, argv):
             Choice("info", name="Info"),
             Choice("load", name="Load"),
             Choice("unload", name="Unload"),
-            Choice("delete", name="Delete")
-            # Separator(),
+            Choice("delete", name="Delete"),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -424,6 +432,8 @@ def data_tree(args, argv):
         data_unload(args, argv)
     elif action == "delete":
         data_delete(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     else:
         print("[red]Error: unknown action")
 
@@ -640,19 +650,6 @@ def data_delete(args, argv):
 
 
 def data_db(args, argv):
-    # print(
-    #     Panel(
-    #         Markdown(
-    #             open(
-    #                 importlib_resources.files(f"data.doc.cli").joinpath("data/db.md"),
-    #                 "r",
-    #             ).read()
-    #         ),
-    #         title="citros report",
-    #         subtitle=f"[{citros_version}]",
-    #     )
-    # )
-    # action
     action = inquirer.select(
         raise_keyboard_interrupt=False,
         mandatory=False,
@@ -667,7 +664,8 @@ def data_db(args, argv):
             Choice("logs", name="📝 Logs: show logs of DB instance"),
             Choice("status", name="❓ Status: Show weather the serivce is up or not"),
             Choice("stop", name="⏹  Stop: stops the citros db instance if running."),
-            # Separator(),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -688,6 +686,8 @@ def data_db(args, argv):
         data_db_status(args, argv)
     elif action == "stop":
         data_db_stop(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     else:
         print("[red]Error: unknown action")
 
@@ -895,7 +895,8 @@ def service(args, argv):
             Choice("start", name="▶  Start: starts CITROS API serivce."),
             Choice("stop", name="⏹  Stop: Stops the CITROS API service."),
             Choice("status", name="❓ Status: Show CITROS API status."),
-            # Separator(),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -910,6 +911,8 @@ def service(args, argv):
         service_stop(args, argv)
     elif action == "status":
         service_status(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     else:
         print("[red]Error: unknown action")
 
@@ -990,7 +993,8 @@ def report(args, argv):
             Choice("list", name="*️⃣  List: reports list "),
             Choice("generate", name="⚡ Generate: new report"),
             Choice("validate", name="❓ Validate: report integrity"),
-            # Separator(),
+            Separator(),
+            Choice("exit", name="EXIT"),
         ],
         default="",
         border=True,
@@ -1005,6 +1009,8 @@ def report(args, argv):
         report_generate(args, argv)
     elif action == "validate":
         report_validate(args, argv)
+    elif action == "exit":
+        exit_citros_cli()
     else:
         print("[red]Error: unknown action")
 
@@ -1220,6 +1226,9 @@ def choose_batch(
             simulation = simulation_path.removesuffix("/").split("/")[-1]
             simulations.append(simulation)
         # print(f"simulations: {simulations}")
+        if simulations == []:
+            print("[yellow]Warning: No simulations found. Please create a simulation.")
+            exit_citros_cli()
         chosen_simulation = inquirer.select(
             raise_keyboard_interrupt=False,
             mandatory=False,
