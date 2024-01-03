@@ -1,3 +1,5 @@
+# TODO VOVA - REVIEW
+
 # CLI Installation
 
 The following document will guide you through CITROS CLI installation.
@@ -73,7 +75,7 @@ If you are developing the citros_cli package itself, than the best practice is t
 | --- | --- | --- |
 | `CITROS_DOMAIN` | The main domain, defaults to `citros.io` | all packages |
 | `CITROS_DIR` | Used by the citros cluster, do not use. | citros |
-| `CITROS_SIM_RUN_DIR` | The directory under `.citros/runs` in which all simulation data will be saved (see [runs](../citros_structure.md#directory-runs)). This can be handy, if your code needs to know this location in order to access some of the files, e.g. parameter setups. | citros |
+| `CITROS_SIM_RUN_DIR` | The directory under `.citros/runs` in which all simulation data will be saved (see [runs](../advanced_guides/citros_structure.md#directory-runs)). This can be handy, if your code needs to know this location in order to access some of the files, e.g. parameter setups. | citros |
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

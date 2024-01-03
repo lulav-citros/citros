@@ -242,7 +242,7 @@ Lastly choose *"simulation_cannon_analytic"*:
 
 :::note
 
-This command will run the simulation on your machine, and save all the results under `.citros/data/[simulation_name]/[batch_name]/[date]` folder.<br /> The content of the [folder](/docs/cli/citros_structure#directory-runs) will contain: 
+This command will run the simulation on your machine, and save all the results under `.citros/data/[simulation_name]/[batch_name]/[date]` folder.<br /> The content of the [folder](../docs/advanced_guides/citros_structure#directory-runs) will contain: 
 - recorded bags
 - logs from the simulation and citros itself
 - metadata about the run
@@ -254,14 +254,14 @@ This command will run the simulation on your machine, and save all the results u
 ### Concept Overview
 
 To fully understand what's going on, we need to familiarize ourselves with three concepts that are core to the way CITROS works:
-- ## **[simulation](/docs/cli/citros_structure#directory-simulations)** 
+- ## **[simulation](../docs/advanced_guides/citros_structure##directory-simulations)** 
     The simulation object is defining what you want to run and how. It is a set of the launch file (the what) and the parameter setup (the how) as well as the resources needed for it to run and after how much time it should be killed. 
 
     Defaults simulation files defined by a ROS 2 launch file. You may have as many launch files as you want in your project, as long as there is at least one. Each simulation will correspond to a launch file in your project. When you run a CITROS simulation, if you don't specify the name of the simulation (using the `-s` flag), a command-line menu will be presented, in which you can use the up and down arrows to choose the simulation you want. The simulation names will be of the form `simulation_<name of launch_file>`. In the case of the Cannon project, we have two launch files - `cannon_analytic.launch.py` and `cannon_numeric.launch.py`, and as you can see in the output above, we are prompted to choose between them. 
 
-    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](/docs/cli/citros_structure#directory-simulations) directory. You may use this file to configure the way your simulation runs. 
+    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](../docs/advanced_guides/citros_structure##directory-simulations) directory. You may use this file to configure the way your simulation runs. 
 
-    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/data`](/docs/cli/citros_structure#directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
+    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/data`](../docs/advanced_guides/citros_structure##directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
 
 - ## **batch** 
 
@@ -282,7 +282,7 @@ Now that you understand what's going on, choose one of the simulations presented
 
 We just ran a simulation with all the default configurations, which is admittedly not that exciting. Let's see how we can turn things up a notch by setting up dynamic parameter evaluation for our simulation, thereby allowing each run within the same batch to have different parameter values.
 
-The [`.citros/parameter_setups`](/docs/cli/citros_structure#directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
+The [`.citros/parameter_setups`](../docs/advanced_guides/citros_structure##directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
 
 The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior.
 
@@ -556,7 +556,7 @@ To view your generated report go to .citros/reports/[report_name]
 
 :::note
 
-The content of the [Reports folder](/docs/cli/citros_structure#directory-reports) will contain 
+The content of the [Reports folder](../docs/advanced_guides/citros_structure##directory-reports) will contain 
 - output of the python notebook
 - Report info
 - Generated pdf report

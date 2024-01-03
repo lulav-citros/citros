@@ -34,7 +34,6 @@ uvicorn
 docker
 genpy==2022.1
 mcap_ros2_support==0.5.0
-psycopg2-binary==2.9.6
 numpy
 python-decouple==3.8
 PyYAML==6.0.1
