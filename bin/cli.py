@@ -20,6 +20,7 @@ from .parsers import (
     parser_run,
     parser_init,
     parser_data,
+    parser_service,
     parser_report,
     parser_launch,
     parser_parameter,
@@ -45,9 +46,22 @@ def epilog(url="https://docs.citros.io"):
 
 
 def main():
+    description_path = "citros.md"
+
     # main parser -----------------------------------------
     parser = argparse.ArgumentParser(
-        description=PANNEL,
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
         epilog=epilog(),
         formatter_class=RichHelpFormatter,
         # add_help=False
@@ -90,6 +104,10 @@ def main():
         epilog(),  # TODO: fill with correct doc URL
     )
     parser_report(
+        subparsers,
+        epilog(),  # TODO: fill with correct doc URL
+    )
+    parser_service(
         subparsers,
         epilog(),  # TODO: fill with correct doc URL
     )

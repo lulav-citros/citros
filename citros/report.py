@@ -11,7 +11,6 @@ from nbconvert import HTMLExporter, PDFExporter
 from nbconvert.preprocessors import ExecutePreprocessor
 from nbconvert.preprocessors import CellExecutionError
 from rich import inspect
-from traitlets.config import Config
 from weasyprint import HTML
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
@@ -99,7 +98,7 @@ class Report:
         self.output = output
         self.reports_dir = citros.root_citros / "reports" / name
         if output is not None:
-            self.reports_dir = Path(output) / "reports" / name
+            self.reports_dir = Path(output)  # / "reports" / name
 
         # get version
         if not version:  # no version specified
@@ -112,6 +111,10 @@ class Report:
 
         self.folder = self.reports_dir / self.version
 
+        # event = {
+        #     "type": "ERROR",
+        #     "message": "Report not found",
+        # }
         self.state = {
             "notebooks": notebooks,
             "data": [
@@ -122,6 +125,7 @@ class Report:
                 }
             ],
             "status": "START",
+            "events": [],
             "name": name,
             "message": message,
             "progress": 0,
@@ -217,16 +221,19 @@ class Report:
     def proccess(self, progress):
         self.state["progress"] = progress
 
-    def end(self):
+    def end(self, status="END"):
         self.log.debug(f"{self.__class__.__name__}.end()")
         self.proccess(100)
-        self["status"] = "END"
+        self["status"] = status
         self["finished_at"] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+    def event(self, event, message):
+        self.state["events"].append({"type": event, "message": message})
 
     ###################
     ##### public ######
     ###################
-    def execute(self, notebook_paths, output_folder):
+    def execute(self, notebook_paths, output_folder, timout=600):
         """
         This function executes jupiter notebooks provided
         Args:
@@ -257,13 +264,12 @@ class Report:
                 raise NoNotebookFoundException
 
             # import os
-            os.environ["REPORT_ID"] = "CITROS"
-            os.environ["BATCH_ID"] = "BATCH_ID"
+            os.environ["REPORT_NANE"] = "CITROS"
+            os.environ["REPORT_VERSION"] = "REPORT_VERSION"
+            os.environ["BATCH_SIMULATION"] = "BATCH_SIMULATION"
+            os.environ["BATCH_NAME"] = "BATCH_NAME"
+            os.environ["BATCH_VERSION"] = "BATCH_VERSION"
 
-            # os.environ["CITROS_REPO"] = "CITROS"
-            # os.environ["CITROS_SIMULATION"] = "CITROS"
-            # os.environ["bid"] = "CITROS"
-            # os.environ["CITROS_SIMULATION_RUN_ID"] = "CITROS"
             os.environ["PG_HOST"] = "localhost"
             os.environ["PG_PORT"] = "5454"
             os.environ["PG_DATABASE"] = "citros"
@@ -271,8 +277,10 @@ class Report:
             os.environ["PG_USER"] = "citros"
             os.environ["PG_PASSWORD"] = "password"
 
+            os.environ["CITROS_ROOT"] = self.reports_dir
+
             execute_preprocessor = ExecutePreprocessor(
-                timeout=600, kernel_name="python3"
+                timeout=timout, kernel_name="python3"
             )
             try:
                 execute_preprocessor.preprocess(

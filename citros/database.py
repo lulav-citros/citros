@@ -93,10 +93,10 @@ class CitrosDB:
             raise Exception("Failed to render sql template")
         # cursor.execute(f'CREATE DATABASE "{organization_name}";')
         try:
-            print(rendered_sql)
+            self.log.debug(rendered_sql)
             cursor.execute(rendered_sql)
         except psycopg2.DatabaseError as e:
-            print(f"Database already exist ... log: {e}")
+            self.log.error(f"Database already exist ... log: {e}")
 
         connection.close()
 
@@ -190,7 +190,7 @@ class CitrosDB:
         try:
             cursor.execute(rendered_sql)
         except Exception as ex:
-            print(ex)
+            self.log.error(ex)
             return
 
     def drop_table(self, connection, schema_name, table_name):
@@ -215,10 +215,11 @@ class CitrosDB:
             # Render the template with the provided context
             rendered_sql = template.render(context)
 
+        self.log.debug(f"rendered_sql: {rendered_sql}")
         # TODO: query check if table exists. if not, create it.
         try:
             cursor.execute(rendered_sql)
             connection.commit()
-            print(rendered_sql)
+            self.log.debug(rendered_sql)
         except Exception as ex:
-            print(ex)
+            self.log.error(ex)
