@@ -2,6 +2,13 @@
 
 
 
+## v0.2.11 (2024-01-03)
+
+### Fix
+
+* fix(cli): Update CLI description and add exit option ([`aa544d1`](https://github.com/lulav-citros/citros/commit/aa544d139f80b8904cf21820c4bee239c3743f0c))
+
+
 ## v0.2.10 (2024-01-02)
 
 ### Fix
