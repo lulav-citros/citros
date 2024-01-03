@@ -302,9 +302,19 @@ class Citros(CitrosObj):
 
         self.log.debug(f"copying {source_folder} to {self.root_citros}")
 
-        shutil.copytree(source_folder, self.root_citros, dirs_exist_ok=True)
+        import os
 
-        self.log.debug(f"Done copying default citros files.")
+        for root, dirs, files in os.walk(source_folder):
+            relative_path = os.path.relpath(root, source_folder)
+            destination_folder = os.path.join(self.root_citros, relative_path)
+            os.makedirs(destination_folder, exist_ok=True)
+            for file in files:
+                source_file = os.path.join(root, file)
+                destination_file = os.path.join(destination_folder, file)
+                if not os.path.exists(destination_file):
+                    shutil.copy2(source_file, destination_file)
+
+        self.log.debug(f"Done copying default Citros files.")
 
     ###################
     ##### public ######

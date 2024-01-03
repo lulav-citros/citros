@@ -215,6 +215,7 @@ class CitrosDB:
             # Render the template with the provided context
             rendered_sql = template.render(context)
 
+        self.log.debug(f"rendered_sql: {rendered_sql}")
         # TODO: query check if table exists. if not, create it.
         try:
             cursor.execute(rendered_sql)

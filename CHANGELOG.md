@@ -2,6 +2,101 @@
 
 
 
+## v0.2.14 (2024-01-03)
+
+### Fix
+
+* fix(init): ovveride defualts ([`6e28072`](https://github.com/lulav-citros/citros/commit/6e28072dc6cb2a415f73cedb89f6ab1a316b6ae9))
+
+### Unknown
+
+* Fix( typo): in data management choice ([`d05b000`](https://github.com/lulav-citros/citros/commit/d05b000befdc42dd1f747d168a05e56ee6a00cb7))
+
+
+## v0.2.13 (2024-01-03)
+
+### Fix
+
+* fix(tree): Add data tree parser to CLI ([`a9076c8`](https://github.com/lulav-citros/citros/commit/a9076c81fd9aa81608b317e308c893a671801271))
+
+### Unknown
+
+* Documentation (#7)
+
+* add cli documentation
+
+* add tutorials tab
+
+* Add data analysis
+
+* Add data analysis versioning
+
+* update home page
+
+* gitignore
+
+* remove node_modules
+
+* update git ignore
+
+* git ignore update
+
+* remove docusaurus folder
+
+* remove data analysis versions
+
+* test
+
+* test2
+
+* test3
+
+* test4
+
+* test5
+
+* test6
+
+* test7
+
+* test 8
+
+* Delete unused image files and data analysis version file
+
+* Update folder path for GitHub Pages deployment
+
+* Update directory name in workflow file
+
+* vova
+
+* Add permissions and concurrency to build-and-deploy job
+
+* Update copyright year to 2024
+
+* Update copyright in docusaurus.config.js
+
+* Fix copyright typo
+
+* Update copyright in docusaurus.config.js
+
+* update home url
+
+* Documentation update
+intro tutorial update
+
+* Update structure
+
+* merge
+
+undefined
+
+* Update structure
+
+---------
+
+Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.github.com&gt; ([`102a3f0`](https://github.com/lulav-citros/citros/commit/102a3f0e2c8b36e56ee65ff0d432683ec82f7e77))
+
+
 ## v0.2.12 (2024-01-03)
 
 ### Fix
