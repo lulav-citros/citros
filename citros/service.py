@@ -33,7 +33,7 @@ async def get_batch(simulation, batch_name):
 
 
 def load_batch_run(simulation: str, batch_name: str, message=""):
-    # TODO[critical] call to hot reload
+    # TODO[critical] work that will load the data to DB
     pass
 
 

@@ -75,7 +75,7 @@ class ParameterSetup(CitrosObj):
         self.data.update(default_parameter_setup)
         self._save()
 
-        # TODO: when addeing a parameter to a package/node, add/append it to the parameter setups that use it.
+        # TODO[critical]: when addeing a parameter to a package/node, add/append it to the parameter setups that use it.
 
     def _evaluate(self, context=None):
         """
@@ -260,7 +260,6 @@ class ParameterSetup(CitrosObj):
         for package_name, citros_config in config["packages"].items():
             self.log.debug(f"Saving config for [{package_name}]")
 
-            # TODO: add other method to get the package path
             path_to_package = None
             try:
                 # get the path to the package install directory - the project must be sourced for it to work
