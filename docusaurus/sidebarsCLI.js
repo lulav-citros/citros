@@ -4,7 +4,7 @@ module.exports = {
     {
       type: 'doc',
       label: 'Introduction',
-      id: 'cli/cli_overview',
+      id: 'general/overview',
     },
     {
       type: 'category',
@@ -12,12 +12,12 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          id: 'cli/cli_quickstart',
+          id: 'general/quickstart',
           label: 'Quick Start',
         },
         {
           type: 'doc',
-          id: 'cli/cli_install',
+          id: 'general/install',
           label: 'Installation',
         },
       ],
@@ -34,12 +34,12 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          id: 'cli/commands/init',
+          id: 'commands/init',
           label: 'Init',
         },
         {
           type: 'doc',
-          id: 'cli/commands/launch',
+          id: 'commands/launch',
           label: 'Launch',
         },
         {
@@ -47,17 +47,17 @@ module.exports = {
           label: 'Data',
           link: {
             type: 'doc',
-            id: 'cli/commands/data',
+            id: 'commands/data',
           },
           items: [
             {
               type: 'doc',
-              id: 'cli/commands/data/list',
+              id: 'commands/data/list',
               label: 'List',
             },
             {
               type: 'doc',
-              id: 'cli/commands/data/tree',
+              id: 'commands/data/tree',
               label: 'Tree',
             },
             {
@@ -65,14 +65,14 @@ module.exports = {
               label: 'DB',
               link: {
                 type: 'doc',
-                id: 'cli/commands/data/db',
+                id: 'commands/data/db',
               },
-              items: ["cli/commands/data/db/clean",
-                "cli/commands/data/db/create",
-                "cli/commands/data/db/init",
-                "cli/commands/data/db/logs",
-                "cli/commands/data/db/status",
-                "cli/commands/data/db/stop",]
+              items: ["commands/data/db/clean",
+                "commands/data/db/create",
+                "commands/data/db/init",
+                "commands/data/db/logs",
+                "commands/data/db/status",
+                "commands/data/db/stop",]
             },
           ]
         },
@@ -81,12 +81,12 @@ module.exports = {
           label: 'Service',
           link: {
             type: 'doc',
-            id: 'cli/commands/service',
+            id: 'commands/service',
           },
           items: [
-            "cli/commands/service/status",
-            "cli/commands/service/start",
-            "cli/commands/service/stop",
+            "commands/service/status",
+            "commands/service/start",
+            "commands/service/stop",
           ]
         },
         {
@@ -94,7 +94,7 @@ module.exports = {
           label: 'Parameter',
           link: {
             type: 'doc',
-            id: 'cli/commands/parameter',
+            id: 'commands/parameter',
           },
           items: [
             {
@@ -103,10 +103,10 @@ module.exports = {
               label: 'Setup',
               link: {
                 type: 'doc',
-                id: 'cli/commands/parameter/setup',
+                id: 'commands/parameter/setup',
               },
-              items: ["cli/commands/parameter/setup/list",
-                "cli/commands/parameter/setup/new",]
+              items: ["commands/parameter/setup/list",
+                "commands/parameter/setup/new",]
             },
           ]
         },
@@ -116,12 +116,12 @@ module.exports = {
           label: 'Report',
           link: {
             type: 'doc',
-            id: 'cli/commands/report',
+            id: 'commands/report',
           },
           items: [
-            "cli/commands/report/generate",
-            "cli/commands/report/list",
-            "cli/commands/report/validate",
+            "commands/report/generate",
+            "commands/report/list",
+            "commands/report/validate",
           ]
         },
 
@@ -130,16 +130,14 @@ module.exports = {
           label: 'Simulation',
           link: {
             type: 'doc',
-            id: 'cli/commands/simulation',
+            id: 'commands/simulation',
           },
           items: [
-            "cli/commands/simulation/list",
-            "cli/commands/simulation/run",
+            "commands/simulation/list",
+            "commands/simulation/run",
           ]
         },
       ]
-
-
 
     },
 
@@ -150,7 +148,7 @@ module.exports = {
         {
           type: 'doc',
           label: 'Adding Functions to Parameter Setup',
-          id: 'cli/config_params',
+          id: 'guides/config_params',
         },
         {
           type: 'doc',
@@ -183,7 +181,7 @@ module.exports = {
         {
           type: 'doc',
           label: 'Advanced Installation',
-          id: 'advanced_guides/cli_install_advanced',
+          id: 'advanced_guides/install_advanced',
         },
       ],
 
@@ -196,7 +194,7 @@ module.exports = {
         {
           type: 'doc',
           label: 'TBD',
-          id: 'advanced_guides/cli_install_advanced',
+          id: 'advanced_guides/install_advanced',
         },
 
       ],

@@ -62,7 +62,7 @@ This is a list of all the ROS 2 parameters that can be control by the user wish:
 | e | stoping condition value | controller |
 | dt | time interval | controller |
 
-[citros_cli](/docs/cli/config_params) provides more information about how to change the parameters by the user.
+[citros_cli](../../docs/guides/config_params) provides more information about how to change the parameters by the user.
 
 The launch files:  
  `dynamics_controller.launch.py` launch the dynamics with the controller and `dynamics.launch.py` launch only the dynamics.  

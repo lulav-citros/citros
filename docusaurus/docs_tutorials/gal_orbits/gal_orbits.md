@@ -148,7 +148,7 @@ Function *my_func.py:return_next_value* returns the next listed in `args` value 
 def return_next_value(arr, citros_context):
     return arr[citros_context['run_id']]
 ```
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](https://citros.io/doc/docs_cli/structure/citros_structure/#directory-parameter_setups) and [Adding Functions to Parameter Setup](https://citros.io/doc/docs_cli/configuration/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](https://citros.io/doc/docs_cli/structure/citros_structure/#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 ### Simulation Setup
 
