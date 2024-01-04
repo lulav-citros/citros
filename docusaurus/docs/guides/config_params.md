@@ -101,19 +101,28 @@ Reference it in your parameter_setup.json as:
 
 #### Function with CITROS Context
 
-Sometimes you may want to access some information that is part of the CITROS context. For example, you may want to write a user-defined function that uses the run index of the simulation being run. In such a case, you could write a function with a parameter named `citros_context` (which must appear last in the parameter list):
+Sometimes you may want to access some information that is part of the CITROS context. For example, you may want to write a user-defined function that uses the run index of the simulation being run. In such a case, you could write a function with a parameter named `context` (which must appear last in the parameter list):
 
-    def func_with_context(num, citros_context):
-        return num + float(citros_context['run_id'])
+    def func_with_context(num, context):
+        return num + float(context['run_id'])
 
-`citros_context` is a dictionary with key/value pairs describing the current CITROS context. Currently the only key is `run_id`, but more may be added in the future. Then, you would call it from your `parameter_setup.json` file:
+`context` is a dictionary with key/value pairs describing the current Citros context. Currently the only key is `sid` and `simulation` that holds that name of the simulation, but more may be added in the future. Then, you would call it from your `parameter_setup.json` file:
 
     "init_speed": {
         "function": "my_func.py:func_with_context",
         "args": [50.0]
     }
 
-Notice that the argument for `citros_context` is added automatically for you - the `args` list only contains the argument for the first parameter (`num`).
+Notice that the argument for `context` is added automatically for you - the `args` list only contains the argument for the first parameter (`num`).
+
+
+```json 
+# example context
+context = {
+    "sid": 0,
+    "simulation": "cannon_analytic"
+}
+```
 
 </details>
 
@@ -170,7 +179,7 @@ and choose `simulation_cannon_analytic`, the simulation will be run 10 times, an
 - **Import Handling** - Always perform imports inside the function. This ensures the function has all the necessary dependencies when called.
 - **Return Types** - The function should return native Python types or numpy scalars. Avoid returning non-scalar numpy values.
 - **Function Path** - Only the file name where the function is defined is needed (including the `.py` suffix). Avoid including directory paths.
-- **CITROS context** - if you're using the `citros_context` parameter in your user-defined function, make sure to add it *last* in the function's parameter list.
+- **Citros context** - if you're using the `context` parameter in your user-defined function, make sure to add it *last* in the function's parameter list.
 
 ### Numpy functions
 

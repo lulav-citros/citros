@@ -27,7 +27,7 @@ The following document will guide you through CITROS CLI installation.
 1. Clone the repo:
     
 ```shell 
-    $ git clone git@citros.io:lulav/citros_cli.git
+    $ git clone git@github.com:lulav/citros_cli.git
 ```
 2.  Within the cloned `citros_cli` folder, Install the package to a global bin folder:
 
@@ -45,7 +45,7 @@ If you are developing the citros_cli package itself, than the best practice is t
 1. Clone the repo:
 
 ```shell 
-    $ git clone git@citros.io:lulav/citros_cli.git
+    $ git clone git@github.com:lulav/citros_cli.git
 ```
 
 2. Within the cloned `citros_cli` folder, Install the package to a global bin folder:
@@ -59,7 +59,7 @@ If you are developing the citros_cli package itself, than the best practice is t
 
 ```shell 
     $ mkdir utils && cd utils
-    $ git clone git@citros.io:lulav/citros_cli.git
+    $ git clone git@github.com:lulav/citros_cli.git
     $ cd ..
     $ python3 -m pip install -e utils/citros_cli
   ```
