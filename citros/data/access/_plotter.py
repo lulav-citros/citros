@@ -4,8 +4,8 @@ from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..analysis import CitrosData, CitrosDataArray, CitrosStat
-
+# from ..analysis import CitrosData
+from citros.data.analysis import CitrosData
 # from citros import CitrosData, CitrosDataArray, CitrosStat
 
 from itertools import cycle

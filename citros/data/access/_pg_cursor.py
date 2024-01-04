@@ -2984,7 +2984,7 @@ class _PgCursor(CitrosDB_base):
         else:
             return None
 
-    def data_for_time_plot(
+    def _data_for_time_plot(
         self, topic_name, var_name, time_step, sids, remove_nan, inf_vals
     ):
         """
@@ -3074,7 +3074,7 @@ class _PgCursor(CitrosDB_base):
 
         return var_df
 
-    def data_for_xy_plot(
+    def _data_for_xy_plot(
         self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals
     ):
         """

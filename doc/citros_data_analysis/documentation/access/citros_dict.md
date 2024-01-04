@@ -15,7 +15,7 @@ description: 'Documentation'
 
 
     
-## Class `CitrosDict` {#citros_data_analysis.data_access.citros_dict.CitrosDict}
+## Class `CitrosDict` {#access.citros_dict.CitrosDict}
 
 
 
@@ -46,7 +46,7 @@ CitrosDict is a dictionary-like object, that allows to print the content as a js
 
 
     
-## Method `to_json` {#citros_data_analysis.data_access.citros_dict.CitrosDict.to_json}
+## Method `to_json` {#access.citros_dict.CitrosDict.to_json}
 
 
 
@@ -74,12 +74,13 @@ Name|Type|Description
 Make a CitrosDict object, convert it to json string and print it:
 
 ```python
->>> d = da.CitrosDict({'package': 'data_analysis', 'module': 'data_access', 'object': 'CitrosDict', 'style': 'json'})
+>>> from citros import CitrosDict
+>>> d = CitrosDict({'package': 'data_analysis', 'object': 'CitrosDict', 'method': 'to_json', 'style': 'json'})
 >>> print(d.to_json())
 {
-  "package": "data_analysis",
-  "module": "data_access",
+  "package": "citros",
   "object": "CitrosDict",
+  'method': 'to_json',
   "style": "json"
 }
 ```
@@ -88,7 +89,7 @@ Make a CitrosDict object, convert it to json string and print it:
 
 
     
-## Method `print` {#citros_data_analysis.data_access.citros_dict.CitrosDict.print}
+## Method `print` {#access.citros_dict.CitrosDict.print}
 
 
 
@@ -111,12 +112,13 @@ Print content of the CitrosDict object in a 'json'-style.
 Make a CitrosDict object and print it in json-style:
 
 ```python
->>> d = da.CitrosDict({'package': 'data_analysis', 'module': 'data_access', 'object': 'CitrosDict', 'style': 'json'})
+>>> from citros import CitrosDict
+>>> d = CitrosDict({'package': 'citros', 'object': 'CitrosDict', 'method': 'print', 'style': 'json'})
 >>> d.print()
 {
- 'package': 'data_analysis',
- 'module': 'data_access',
+ 'package': 'citros',
  'object': 'CitrosDict',
+ 'method': 'print',
  'style': 'json'
 }
 ```

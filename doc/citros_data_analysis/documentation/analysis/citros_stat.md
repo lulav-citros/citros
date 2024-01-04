@@ -15,7 +15,7 @@ description: 'Documentation'
 
 
     
-## Class `CitrosStat` {#citros_data_analysis.error_analysis.citros_stat.CitrosStat}
+## Class `CitrosStat` {#analysis.citros_stat.CitrosStat}
 
 
 
@@ -62,7 +62,7 @@ Name|Type|Description
 
 
     
-## Method `to_pandas` {#citros_data_analysis.error_analysis.citros_stat.CitrosStat.to_pandas}
+## Method `to_pandas` {#analysis.citros_stat.CitrosStat.to_pandas}
 
 
 
@@ -87,7 +87,7 @@ Name|Type|Description
 
 
     
-## Method `plot` {#citros_data_analysis.error_analysis.citros_stat.CitrosStat.plot}
+## Method `plot` {#analysis.citros_stat.CitrosStat.plot}
 
 
 

@@ -15,7 +15,7 @@ description: 'Documentation'
 
 
     
-## Class `CitrosDataArray` {#citros_data_analysis.error_analysis.citros_data_array.CitrosDataArray}
+## Class `CitrosDataArray` {#analysis.citros_data_array.CitrosDataArray}
 
 
 
@@ -50,7 +50,7 @@ Name|Type|Description
 
 
     
-## Method `add_db` {#citros_data_analysis.error_analysis.citros_data_array.CitrosDataArray.add_db}
+## Method `add_db` {#analysis.citros_data_array.CitrosDataArray.add_db}
 
 
 
@@ -71,13 +71,13 @@ Add one CitrosData object to CitrosDataArray.
 
 Name|Type|Description
 --|--|--
-|**```db```**|**[CitrosData](citros_data.md#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")**|CitrosData object to add to storage.
+|**```db```**|**[CitrosData](citros_data.md#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")**|CitrosData object to add to storage.
 
 </details>
 
 
     
-## Method `add_dbs` {#citros_data_analysis.error_analysis.citros_data_array.CitrosDataArray.add_dbs}
+## Method `add_dbs` {#analysis.citros_data_array.CitrosDataArray.add_dbs}
 
 
 
@@ -104,7 +104,7 @@ Name|Type|Description
 
 
     
-## Method `drop_db` {#citros_data_analysis.error_analysis.citros_data_array.CitrosDataArray.drop_db}
+## Method `drop_db` {#analysis.citros_data_array.CitrosDataArray.drop_db}
 
 
 
@@ -128,13 +128,13 @@ if **value** is a CitrosData object, then removes it if it exists in CitrosDataA
 
 Name|Type|Description
 --|--|--
-|**```value```**|**int** or **[CitrosData](citros_data.md#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")**|Object or index of object to remove.
+|**```value```**|**int** or **citros_data_analysis.error_analysis.citros_data.CitrosData**|Object or index of object to remove.
 
 </details>
 
 
     
-## Method `get_prediction` {#citros_data_analysis.error_analysis.citros_data_array.CitrosDataArray.get_prediction}
+## Method `get_prediction` {#analysis.citros_data_array.CitrosDataArray.get_prediction}
 
 
 
@@ -197,15 +197,18 @@ Name|Type|Description
 Create CitrosDataArray object:
 
 ```python
->>> db_array = analysis.CitrosDataArray()
+>>> from citros import CitrosDataArray, CitrosData
+>>> db_array = CitrosDataArray()
 ```
 
 
-Let's assume that for the topic 'A' there are simulations for the four different values of the some parameter 't', 
-that is written in json-data column 'data.t'. To get list of the 'data.t' parameters get_unique_values() 
-method may be used:
+Let's assume that for the topic 'A' from the batch 'star' of the simulation 'simulation_galaxy' we have simulations 
+for the four different values of the some parameter 't', that is written in json-data column 'data.t'. 
+To get list of the 'data.t' parameters get_unique_values() method may be used:
 
 ```python
+>>> from citros import CitrosDB
+>>> citros = CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
 >>> list_t = citros.topic('A').get_unique_values('data.t')
 >>> print(list_t)
 [-1.5, 0, 2.5, 4]
@@ -224,10 +227,10 @@ correspondence between different simulations and pass the result to CitrosDataAr
 ...                .data(['data.x.x_1', 'data.time', 'data.t'])
 ...
 ...     #create CitrosData object and set 'data.t' as a parameter.
-...     dataset = analysis.CitrosData(df,  
-...                                  data_label=['data.x.x_1'],
-...                                  units = 'm', 
-...                                  parameter_label = ['data.t'])
+...     dataset = CitrosData(df,  
+...                         data_label=['data.x.x_1'],
+...                         units = 'm', 
+...                         parameter_label = ['data.t'])
 ...
 ...     #scale over 'data.time'
 ...     db_sc = dataset.scale_data(n_points = 100, 

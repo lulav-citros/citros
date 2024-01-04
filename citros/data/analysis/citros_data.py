@@ -325,7 +325,8 @@ class CitrosData:
         --------
         Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        >>> citros = da.CitrosDB()
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB()
         >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
         >>> print(df)
             sid rid time    topic   type    data.x.x_1  data.time
@@ -335,7 +336,7 @@ class CitrosData:
 
         Construct CitrosData object with one data-column 'data.x.x_1':
 
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 
         Divide 'data.time' values in 50 bins and assign indexes to these intervals. For each simulation group 
         'data.x.x_1' values according to the binning and calculate mean of the each group:
@@ -522,7 +523,8 @@ class CitrosData:
         --------
         Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        >>> citros = da.CitrosDB()
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB()
         >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
         >>> print(df)
             sid rid time    topic   type    data.x.x_1  data.time
@@ -532,7 +534,7 @@ class CitrosData:
 
         Construct CitrosData object with one data-column 'data.x.x_1':
 
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 
         Scale 'data.time' to [0, 1] interval, define a new range of 50 points uniformly distributed from 0 to 1, 
         and interpolate data points over this new interval:
@@ -622,7 +624,7 @@ class CitrosData:
 
         Returns
         -------
-        Statistics : pandas.DataFrame or citros_data_analysis.error_analysis.citros_stat.CitrosStat
+        Statistics : pandas.DataFrame or analysis.citros_stat.CitrosStat
             Collected statistics.
             If `return_format` is 'pandas', then returns pandas.DataFrame with the following columns:
             - (1) the independent variable column, its label matches `x_label` attribute; 
@@ -640,12 +642,10 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
-        to query data from the batch 'star' of the simulation 'simulation_galaxy':
+        Import and create CitrosDB object to query data from the batch 'star' of the simulation 'simulation_galaxy':
         
-        >>> from citros.citros_data_analysis import data_access as da
-        >>> from citros.citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
 
         Let's consider a json-data part of the topic 'coords' has the following structure:
 
@@ -669,9 +669,9 @@ class CitrosData:
 
         and define data labels for the CitrosData object as follows:
 
-        >>> dataset = analysis.CitrosData(df,
-        ...                               data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
-        ...                               units = 'm')
+        >>> dataset = CitrosData(df,
+        ...                      data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
+        ...                      units = 'm')
 
         or query 'data.x' as a one column:
 
@@ -685,9 +685,9 @@ class CitrosData:
 
         and correspondingly set data_label:
 
-        >>> dataset = analysis.CitrosData(df,
-        ...                               data_label = 'data.x',
-        ...                               units = 'm')
+        >>> dataset = CitrosData(df,
+        ...                      data_label = 'data.x',
+        ...                      units = 'm')
 
         To analyze data of multiple simulations it is necessary to establish a correspondence between the values of the data 
         from these different simulations. One approach is to select an independent variable, define a scale that is common 
@@ -959,12 +959,10 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
-        to query data from the batch 'star_types' of the simulation 'simulation_stars':
+        Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros.citros_data_analysis import data_access as da
-        >>> from citros.citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
         
         Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time'
         from the topic 'A':
@@ -973,7 +971,7 @@ class CitrosData:
 
         Construct CitrosData object with 3 data-columns from 'data.x':
 
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x'], units = 'm')
 
         Use method scale_data() or bin_data() to get correspondence between different simulation:
 
@@ -1067,12 +1065,10 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object 
-        to query data from the batch 'star_types' of the simulation 'simulation_stars':
+        Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros.citros_data_analysis import data_access as da
-        >>> from citros.citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
 
         For topic 'B' query json-data column 'data.x.x_1', 'data.x.x_2' and 'data.time':
 
@@ -1080,7 +1076,7 @@ class CitrosData:
 
         Construct CitrosData object with 2 data-columns 'data.x.x_1', 'data.x.x_2':
         
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
 
         Use method scale_data() or bin_data() to get correspondence between different simulation
         and assign indexes to 'data.time' axis:

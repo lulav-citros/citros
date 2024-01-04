@@ -24,11 +24,11 @@ If there are infinite values in the data, they are stored as $\pm 10^{308}$.
 
 ## Data Overview
 
-To get the overview about the exact batch, say 'dynamics' from the simulation 'simulation_galactic_rotation', the function [**info()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.info) is used:
+To get the overview about the exact batch, say 'dynamics' from the simulation 'simulation_galactic_rotation', the function [**info()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.info) is used:
 
 ```python
->>> from citros.citros_data_analysis import data_access as da
->>> citros = da.CitrosDB()
+>>> from citros import CitrosDB
+>>> citros = CitrosDB()
 >>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info()
 ```
 It returns dictionary, that contains:
@@ -39,12 +39,12 @@ It returns dictionary, that contains:
 * 'topic_list': list of topics
 * 'message_count': number of messages
 
-The result is a [**CitrosDict**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict) object, that inherits behavior of an ordinary python dictionary, but has some additional methods.
+The result is a [**CitrosDict**](../documentation/access/citros_dict.md#access.citros_dict.CitrosDict) object, that inherits behavior of an ordinary python dictionary, but has some additional methods.
 
 <details>
   <summary>more about CitrosDict:</summary>
 
-[**CitrosDict**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict) object can be converted to json string by the method [**to_json()**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict.to_json):
+[**CitrosDict**](../documentation/access/citros_dict.md#access.citros_dict.CitrosDict) object can be converted to json string by the method [**to_json()**](../documentation/access/citros_dict.md#access.citros_dict.CitrosDict.to_json):
 
 ```python
 >>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info().to_json()
@@ -68,7 +68,7 @@ The result is a [**CitrosDict**](../documentation/data_access/citros_dict.md#cit
   "message_count": 2000
 }
 ```
-or printed by the method [**print()**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict.print):
+or printed by the method [**print()**](../documentation/access/citros_dict.md#access.citros_dict.CitrosDict.print):
 
 ```python
 >>> citros.simulation('simulation_galactic_rotation').batch('dynamics').info().print()
@@ -97,7 +97,7 @@ current batch name: dynamics
 ```
 :::
 
-If specific sid is set, [**citros.info()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.info) also appends dictionary 'sids', with the following structure:
+If specific sid is set, [**citros.info()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.info) also appends dictionary 'sids', with the following structure:
 * 'sids':
     * <sid, int>:
         * 'topics': 
@@ -155,7 +155,7 @@ To get information about data with sid = 1 or 2 and print it:
 }
 ```
 
-To set the specific topic, method [**topic()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) is used.
+To set the specific topic, method [**topic()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.topic) is used.
 This way, dictionary 'topics' is appended:
     
 * 'topics':
@@ -205,7 +205,7 @@ If the topic has multiple types with the same data structure, they are presented
         * "type_group_1":
            ...
 
-The specific piece of information may be achieved by the keywords of the [**CitrosDict**](../documentation/data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict), obtained by [**info()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.info) method.
+The specific piece of information may be achieved by the keywords of the [**CitrosDict**](../documentation/access/citros_dict.md#access.citros_dict.CitrosDict), obtained by [**info()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.info) method.
 
 <details>
   <summary>Examples</summary>
@@ -275,7 +275,7 @@ total number of messages in topic "A": 474
 
 ## Data Structure
 
-[**get_data_structure()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_data_structure) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object may be used to display json-data structure of the exact batch for the specific topics, set by [**topic**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic) or listed in `topic`:
+[**get_data_structure()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.get_data_structure) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object may be used to display json-data structure of the exact batch for the specific topics, set by [**topic**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.topic) or listed in `topic`:
 
 ```python
 >>> citros.batch('dynamics').topic(['A', 'C']).get_data_structure()

@@ -7,11 +7,11 @@ description: 'Visualizing data with plots'
 ---
 # Plot Data
 
-Let's import **data_access** package and create **CitrosDB** object, setting simulation and batch names:
+Let's import and create **CitrosDB** object, setting simulation and batch names:
 
 ```python
->>> from citros.citros_data_analysis import data_access as da
->>> citros = da.CitrosDB(simulation = 'simulation_name', batch = 'batch_name')
+>>> from citros import CitrosDB
+>>> citros = CitrosDB(simulation = 'simulation_name', batch = 'batch_name')
 ```
 
 Let's make query that select 'data.x.x_1' and 'data.x.x_2' from the json-data column of the topic 'B' with sids equals 1,2 or 3, where 10 <= rid <= 200, 0ns <= time < 200ns. Let's also apply moving average sampling, that averages over 5 messages and select each second row of the result and save the output in variable named **df**:
@@ -68,7 +68,7 @@ It is also possible to query and plot all at once by a single command:
 
 ## plot_graph()
 
-[**plot_graph(df, x_label, y_label, \*args, ax = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.plot_graph) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object makes separate graphs '`y_label` vs. `x_label`' for each sid, where `x_label` and `y_label` are the labels of columns of the table `df`. Some other additional arguments may be passed to customize the plot, see documentation for [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html).
+[**plot_graph(df, x_label, y_label, \*args, ax = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.plot_graph) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object makes separate graphs '`y_label` vs. `x_label`' for each sid, where `x_label` and `y_label` are the labels of columns of the table `df`. Some other additional arguments may be passed to customize the plot, see documentation for [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html).
 
 To plot simple graph 'data.x.x_2' vs 'rid':
 
@@ -83,7 +83,7 @@ To plot simple graph 'data.x.x_2' vs 'rid':
 
 ## plot_3dgraph()
 
-[**plot_3dgraph(df, x_label, y_label, z_label, \*args, ax = None, scale = True, legend = True, title = None, set_x_label = None, set_y_label = None, set_z_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.plot_3dgraph) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) plots 3D graph '`z_label` vs. `x_label` and `y_label`' for each sid, where `x_label`, `y_label` and `z_label` are the labels of columns of the pandas.DataFrame `df`. Parameter `scale` is used to specify whether the axis range should be the same for all three axes.
+[**plot_3dgraph(df, x_label, y_label, z_label, \*args, ax = None, scale = True, legend = True, title = None, set_x_label = None, set_y_label = None, set_z_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.plot_3dgraph) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) plots 3D graph '`z_label` vs. `x_label` and `y_label`' for each sid, where `x_label`, `y_label` and `z_label` are the labels of columns of the pandas.DataFrame `df`. Parameter `scale` is used to specify whether the axis range should be the same for all three axes.
 
 Let's query for 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns of the topic 'B' and two sids:
 
@@ -122,7 +122,7 @@ from mpl_toolkits import mplot3d
 
 ## multiple_y_plot()
 
-[**multiple_y_plot(df, x_label, y_labels, \*args, fig = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.multiple_y_plot) plots a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels specified in the `y_labels` parameter.
+[**multiple_y_plot(df, x_label, y_labels, \*args, fig = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.multiple_y_plot) plots a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels specified in the `y_labels` parameter.
 
 Let's query 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' and plot them versus 'data.time':
 
@@ -140,7 +140,7 @@ Let's query 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' and plot them versus 'da
 
 ## multiplot()
 
-[**multiplot(df, labels, \*args, scale = True, fig = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, label_all_xaxis = False, label_all_yaxis = False, \*\*kwargs)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.multiplot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object plots a matrix of N x N graphs, each displaying either the histogram with values distribution (for graphs on the diagonal) or
+[**multiplot(df, labels, \*args, scale = True, fig = None, legend = True, title = None, set_x_label = None, set_y_label = None, remove_nan = True, inf_vals = 1e308, label_all_xaxis = False, label_all_yaxis = False, \*\*kwargs)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.multiplot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object plots a matrix of N x N graphs, each displaying either the histogram with values distribution (for graphs on the diagonal) or
 the relationship between variables listed in `labels`, with N being the length of `labels` list. For non-diagonal graphs, colors are assigned to points according to sids.
 
 ```python
@@ -156,7 +156,7 @@ the relationship between variables listed in `labels`, with N being the length o
 
 ## plot_sigma_ellipse()
 
-[**plot_sigma_ellipse(df, x_label, y_label, ax = None, n_std = 3, plot_origin = True, bounding_error = False, inf_vals = 1e308, legend = True, title = None, set_x_label = None, set_y_label = None, scale = False), return_ellipse_param = False**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.plot_sigma_ellipse) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object plots covariance ellipses for the `x_label` vs. `y_label` columns of the pandas [**DataFrame**](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) `df`. 
+[**plot_sigma_ellipse(df, x_label, y_label, ax = None, n_std = 3, plot_origin = True, bounding_error = False, inf_vals = 1e308, legend = True, title = None, set_x_label = None, set_y_label = None, scale = False), return_ellipse_param = False**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.plot_sigma_ellipse) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object plots covariance ellipses for the `x_label` vs. `y_label` columns of the pandas [**DataFrame**](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) `df`. 
 
 ```python
 >>> df = citros.topic('A').data(['data.x.x_1', 'data.x.x_2'])
@@ -205,10 +205,10 @@ If the number of error ellipses is more then 1, the output is the list of dict.
 
 ## time_plot()
 
-[**time_plot(ax, \*args, topic_name = None, var_name = None, time_step = 1.0, sids = None, y_label = None, title_text = None, legend = True,  remove_nan = True, inf_vals = 1e308, \*\*kwarg)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.time_plot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object query column `var_name` of the topic `topic_name` and plots `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid. It is possible to specify sids by passing them as a list to `sid`. If `sid` is not specified, data for all sids is used. 
+[**time_plot(ax, \*args, topic_name = None, var_name = None, time_step = 1.0, sids = None, y_label = None, title_text = None, legend = True,  remove_nan = True, inf_vals = 1e308, \*\*kwarg)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.time_plot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object query column `var_name` of the topic `topic_name` and plots `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid. It is possible to specify sids by passing them as a list to `sid`. If `sid` is not specified, data for all sids is used. 
 
 :::note
-Such methods as [**topic()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic), [**rid()**](query_data.md#rid-constraints), [**sid()**](query_data.md#sid-constraints), [**time()**](query_data.md#time-constraints) and [**set_filter()**](query_data.md#json-data-constraints) may be used to put constraints on data before plotting (see [constraints combination](query_data.md#constraints-combination)).
+Such methods as [**topic()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.topic), [**rid()**](query_data.md#rid-constraints), [**sid()**](query_data.md#sid-constraints), [**time()**](query_data.md#time-constraints) and [**set_filter()**](query_data.md#json-data-constraints) may be used to put constraints on data before plotting (see [constraints combination](query_data.md#constraints-combination)).
 :::
 
 ```python
@@ -229,10 +229,10 @@ import matplotlib.pyplot as plt
 
 ## xy_plot()
 
-[**xy_plot(ax, \*args, topic_name = None, var_x_name = None, var_y_name = None, sids = None, x_label = None, y_label = None, title_text = None, legend = True, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.xy_plot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object query columns `var_x_name` and `var_y_name` of the topic `topic_name` and plots `var_y_name` vs. `var_x_name` for each of the sids. It is possible to specify sids by passing them as a list to `sid`. If `sid` is not specified, data for all sids is used.
+[**xy_plot(ax, \*args, topic_name = None, var_x_name = None, var_y_name = None, sids = None, x_label = None, y_label = None, title_text = None, legend = True, remove_nan = True, inf_vals = 1e308, \*\*kwargs)**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.xy_plot) method of the [**CitrosDB**](getting_started.md#connection-to-the-database) object query columns `var_x_name` and `var_y_name` of the topic `topic_name` and plots `var_y_name` vs. `var_x_name` for each of the sids. It is possible to specify sids by passing them as a list to `sid`. If `sid` is not specified, data for all sids is used.
 
 :::note
-Such methods as [**topic()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.topic), [**rid()**](query_data.md#rid-constraints), [**sid()**](query_data.md#sid-constraints), [**time()**](query_data.md#time-constraints) and [**set_filter()**](query_data.md#json-data-constraints) may be used to put constraints on data before plotting (see [constraints combination](query_data.md#constraints-combination)).
+Such methods as [**topic()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.topic), [**rid()**](query_data.md#rid-constraints), [**sid()**](query_data.md#sid-constraints), [**time()**](query_data.md#time-constraints) and [**set_filter()**](query_data.md#json-data-constraints) may be used to put constraints on data before plotting (see [constraints combination](query_data.md#constraints-combination)).
 :::
 
 ```python

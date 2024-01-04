@@ -14,16 +14,16 @@ description: 'Simulations and Batches'
 Simulation name can be set when the [**CitrosDB**](getting_started.md#connection-to-the-database) object is created:
 
 ```python
->>> from citros.citros_data_analysis import data_access as da
->>> citros = da.CitrosDB(simulation = 'simulation_name')
+>>> from citros import CitrosDB
+>>> citros = CitrosDB(simulation = 'simulation_name')
 ```
 
-or by the method [**simulation()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.simulation), like in the following example:
+or by the method [**simulation()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.simulation), like in the following example:
 ```python
 >>> citros.simulation('simulation_name').batch('batch_name').data()
 ```
 
-If the simulation is specified during the creation of the [**CitrosDB**](getting_started.md#connection-to-the-database) object, the simulation name will be saved and used in all subsequent queries. The [**simulation()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.simulation) method does not save the simulation name. This option can be beneficial if you plan to work with batches from different simulations and want to explicitly specify which one you are using each time. However, it is possible to set the simulation name for an existing [**CitrosDB**](getting_started.md#connection-to-the-database) object by passing the parameter `inplace` = True. Observe the differences between using the [**simulation()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.simulation) method with and without the `inplace` = True parameter:
+If the simulation is specified during the creation of the [**CitrosDB**](getting_started.md#connection-to-the-database) object, the simulation name will be saved and used in all subsequent queries. The [**simulation()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.simulation) method does not save the simulation name. This option can be beneficial if you plan to work with batches from different simulations and want to explicitly specify which one you are using each time. However, it is possible to set the simulation name for an existing [**CitrosDB**](getting_started.md#connection-to-the-database) object by passing the parameter `inplace` = True. Observe the differences between using the [**simulation()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.simulation) method with and without the `inplace` = True parameter:
 
 ```python
 >>> citros.simulation('simulation_name')
@@ -41,29 +41,29 @@ simulation name: None
 simulation name: simulation_name
 ```
 
-Method [**get_simulation_name**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_simulation_name) returns the name of the set simulation.
+Method [**get_simulation_name**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.get_simulation_name) returns the name of the set simulation.
 
 ## Setting Batch
 
 The batch is set either when [**CitrosDB**](getting_started.md#connection-to-the-database) object is created by passing a batch name by `batch` argument:
 
 ```python
->>> citros = da.CitrosDB(batch = 'batch_name')
+>>> citros = CitrosDB(batch = 'batch_name')
 ```
 
-or later, for example before [querying data](query_data.md#query-data), by method [**batch()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.batch):
+or later, for example before [querying data](query_data.md#query-data), by method [**batch()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.batch):
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB()
 >>> citros.simulation('simulation_name').batch('batch_name').data()
 ```
 
 The difference between these two approaches is the same as in [Setting Simulation](#setting-simulation):
 
 - In the first case, the [**CitrosDB**](getting_started.md#connection-to-the-database) object saves the `batch` name, so you do not need to specify it each time you access the batch.
-- In the second option, the batch name is not saved; the method [**batch()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.batch) simply returns a new [**CitrosDB**](getting_started.md#connection-to-the-database) object with the `batch` parameter set, that can be used further in a chain of methods, for example, to query data, as shown in the example above. The batch name can still be set to the existing [**CitrosDB**](getting_started.md#connection-to-the-database) object if the parameter `inplace` = True is used. Without the `inplace` parameter, the batch name will not be saved to the current CitrosDB object, enhancing readability by always making clear which batch you are currently using and ensuring that previous settings do not affect your future work:
+- In the second option, the batch name is not saved; the method [**batch()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.batch) simply returns a new [**CitrosDB**](getting_started.md#connection-to-the-database) object with the `batch` parameter set, that can be used further in a chain of methods, for example, to query data, as shown in the example above. The batch name can still be set to the existing [**CitrosDB**](getting_started.md#connection-to-the-database) object if the parameter `inplace` = True is used. Without the `inplace` parameter, the batch name will not be saved to the current CitrosDB object, enhancing readability by always making clear which batch you are currently using and ensuring that previous settings do not affect your future work:
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB()
 >>> citros.batch('batch_name').data()
 >>> #some steps...
 >>> print(f"current batch name: {citros.get_batch_name()}")
@@ -80,14 +80,14 @@ However, if you prefer to work with just one batch and don't want to specify it 
 current batch name: batch_name
 ```
 
-The method [**get_batch_name()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_batch_name) returns the name of the batch.
+The method [**get_batch_name()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.get_batch_name) returns the name of the batch.
 
 ## Batch Sizes
 
-To list sizes of the all batches uploaded to the database the method [**get_batch_sizes()**](../documentation/data_access/citros_db.md#citros_data_analysis.data_access.citros_db.CitrosDB.get_batch_sizes) is used:
+To list sizes of the all batches uploaded to the database the method [**get_batch_sizes()**](../documentation/access/citros_db.md#access.citros_db.CitrosDB.get_batch_sizes) is used:
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB()
 >>> citros.get_batch_sizes()
 ```
 +---------------------------+--------+------------+
@@ -101,7 +101,7 @@ To list sizes of the all batches uploaded to the database the method [**get_batc
 To show information about the batches of the certain simulation, specify the simulation name. For example, if two batches - 'galaxies' and 'quasars' - belongs to the simulation named 'simulation_deep_space', their sizes can be shown in the following way:
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB()
 >>> citros.simulation('simulation_deep_space').get_batch_sizes()
 ```
 +---------------------------+--------+------------+
@@ -114,7 +114,7 @@ To show information about the batches of the certain simulation, specify the sim
 And if we also specify the name of the batch, only information about it will be displayed:
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB()
 >>> citros.simulation('simulation').batch('galaxies').get_batch_sizes()
 ```
 +---------------------------+--------+------------+

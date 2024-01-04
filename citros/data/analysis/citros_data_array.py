@@ -38,7 +38,7 @@ class CitrosDataArray:
 
         Parameters
         ----------
-        db : citros_data_analysis.error_analysis.citros_data.CitrosData
+        db : analysis.citros_data.CitrosData
             CitrosData object to add to storage.
         """
         if isinstance(db, CitrosData):
@@ -67,7 +67,7 @@ class CitrosDataArray:
 
         Parameters
         ----------
-        value : int or citros_data_analysis.error_analysis.citros_data.CitrosData
+        value : int or analysis.citros_data.CitrosData
             Object or index of object to remove.
         """
         if isinstance(value, int):
@@ -139,15 +139,15 @@ class CitrosDataArray:
         --------
         Create CitrosDataArray object:
 
-        >>> from citros.citros_data_analysis import error_analysis as analysis
-        >>> db_array = analysis.CitrosDataArray()
+        >>> from citros import CitrosDataArray, CitrosData
+        >>> db_array = CitrosDataArray()
 
         Let's assume that for the topic 'A' from the batch 'star' of the simulation 'simulation_galaxy' we have simulations 
         for the four different values of the some parameter 't', that is written in json-data column 'data.t'. 
         To get list of the 'data.t' parameters get_unique_values() method may be used:
 
-        >>> from citros.citros_data_analysis import data_access as da
-        >>> citros = da.CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
+        >>> from citros import CitrosDB
+        >>> citros = CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
         >>> list_t = citros.topic('A').get_unique_values('data.t')
         >>> print(list_t)
         [-1.5, 0, 2.5, 4]
@@ -163,10 +163,10 @@ class CitrosDataArray:
         ...                .data(['data.x.x_1', 'data.time', 'data.t'])
         ...
         ...     #create CitrosData object and set 'data.t' as a parameter.
-        ...     dataset = analysis.CitrosData(df,  
-        ...                                  data_label=['data.x.x_1'],
-        ...                                  units = 'm', 
-        ...                                  parameter_label = ['data.t'])
+        ...     dataset = CitrosData(df,  
+        ...                         data_label=['data.x.x_1'],
+        ...                         units = 'm', 
+        ...                         parameter_label = ['data.t'])
         ...
         ...     #scale over 'data.time'
         ...     db_sc = dataset.scale_data(n_points = 100, 
