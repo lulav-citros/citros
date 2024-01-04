@@ -1,0 +1,9 @@
+[styles]
+info = dim cyan
+warning = magenta
+danger = bold red
+
+
+# https://rich.readthedocs.io/en/stable/style.html#customizing-defaults
+# python -m rich.theme
+# python -m rich.default_styles

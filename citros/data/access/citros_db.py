@@ -1,10 +1,13 @@
 from __future__ import annotations
+
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
-from prettytable import PrettyTable, ALL
-from typing import Union, Optional, Any
 import matplotlib.figure
+
+from typing import Union, Optional
+from prettytable import PrettyTable
+
 from ._pg_cursor import _PgCursor
 from ._plotter import _Plotter
 from .citros_dict import CitrosDict
@@ -42,18 +45,35 @@ class CitrosDB(_PgCursor):
         The information is recorded to the _stat.Stat() object.
     """
 
-    def __init__(self, simulation = None, batch = None, sid = None, host = None, port = None, database = None, 
-                   user = None, password = None, debug = False):
-        
-        super().__init__(host = host, port = port, user = user, password = password, database = database, 
-                simulation = simulation, batch = batch, debug = debug)
+    def __init__(
+        self,
+        simulation=None,
+        batch=None,
+        sid=None,
+        host=None,
+        port=None,
+        database=None,
+        user=None,
+        password=None,
+        debug=False,
+    ):
+        super().__init__(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            database=database,
+            simulation=simulation,
+            batch=batch,
+            debug=debug,
+        )
 
         if sid is None:
             self._set_sid(os.getenv("CITROS_SIMULATION_RUN_ID"))
         else:
             self._set_sid(sid)
 
-        self._topic = None        
+        self._topic = None
 
     def _copy(self):
         """
@@ -63,31 +83,33 @@ class CitrosDB(_PgCursor):
         -------
         CitrosDB
         """
-        ci = CitrosDB(simulation = self._simulation,
-                      batch = self._batch_name,                  
-                      sid = self._sid,
-                      host = self.db_host,
-                      port = self.db_port,
-                      database  = self.db_name,
-                      user = self.db_user, 
-                      password = self.db_password,
-                      debug = self._debug)
-        
+        ci = CitrosDB(
+            simulation=self._simulation,
+            batch=self._batch_name,
+            sid=self._sid,
+            host=self.db_host,
+            port=self.db_port,
+            database=self.db_name,
+            user=self.db_user,
+            password=self.db_password,
+            debug=self._debug,
+        )
+
         if self._sid is None:
-            if hasattr(self, '_sid_val'):
+            if hasattr(self, "_sid_val"):
                 ci._sid_val = self._sid_val.copy()
-        if hasattr(self, 'error_flag'):
+        if hasattr(self, "error_flag"):
             ci._error_flag = self._error_flag
-        if hasattr(self, '_rid_val'):
+        if hasattr(self, "_rid_val"):
             ci._rid_val = self._rid_val.copy()
-        if hasattr(self, '_time_val'):
+        if hasattr(self, "_time_val"):
             ci._time_val = self._time_val.copy()
-        if hasattr(self, '_filter_by'):
+        if hasattr(self, "_filter_by"):
             ci._filter_by = self._filter_by
-        if hasattr(self, '_order_by'):
+        if hasattr(self, "_order_by"):
             ci._order_by = self._order_by
-        
-        if hasattr(self, '_test_mode'):
+
+        if hasattr(self, "_test_mode"):
             ci._test_mode = self._test_mode
 
         if isinstance(self._topic, list):
@@ -96,15 +118,15 @@ class CitrosDB(_PgCursor):
             ci._topic = [self._topic]
         else:
             ci._topic = None
-        
-        if hasattr(self, '_method'):
+
+        if hasattr(self, "_method"):
             ci._method = self._method
-        if hasattr(self, '_n_avg'):
+        if hasattr(self, "_n_avg"):
             ci._n_avg = self._n_avg
-        if hasattr(self, '_n_skip'):
+        if hasattr(self, "_n_skip"):
             ci._n_skip = self._n_skip
         return ci
-    
+
     def _is_simulation_set(self):
         """
         Check if the simulation is set.
@@ -132,14 +154,14 @@ class CitrosDB(_PgCursor):
             return False
         else:
             return True
-        
+
     def _is_batch_available(self):
         """
         Check if the batch is set and in the database.
         """
-        if hasattr(self, '_test_mode'):
+        if hasattr(self, "_test_mode"):
             return True
-        
+
         # check if the batch name is set.
         if (not self._is_simulation_set()) or (not self._is_batch_set()):
             return False
@@ -149,9 +171,11 @@ class CitrosDB(_PgCursor):
                 # table is loaded
                 return True
             else:
-                print(f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database.")
+                print(
+                    f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database."
+                )
                 return False
-    
+
     def get_connection(self):
         """
         Return connection to the PostgreSQL database.
@@ -202,7 +226,7 @@ class CitrosDB(_PgCursor):
         simulation : str
             Name of the simulation.
         inplace : bool, default False
-            If True, set simulation name to the current CitrosDB object, otherwise returns new CitrosDB 
+            If True, set simulation name to the current CitrosDB object, otherwise returns new CitrosDB
             object with set simulation.
 
         Returns
@@ -247,7 +271,7 @@ class CitrosDB(_PgCursor):
             ci = self._copy()
             ci._set_simulation(simulation)
             return ci
-    
+
     def get_simulation(self):
         """
         Get information about the current simulation if the simulation is set.
@@ -266,8 +290,8 @@ class CitrosDB(_PgCursor):
         >>> citros.get_simulation()
         {'name': 'simulation_cannon_analytic'}
         """
-        return CitrosDict({'name': self._simulation})
-        
+        return CitrosDict({"name": self._simulation})
+
     def get_simulation_name(self):
         """
         Get the simulation name if the simulation is set.
@@ -324,7 +348,7 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB()
         >>> citros.batch('test', inplace = True)
         >>> df = citros.simulation('simulation_cannon_analytic').topic('A').data()
-        """            
+        """
         if inplace:
             self._set_batch(batch)
             return None
@@ -352,7 +376,7 @@ class CitrosDB(_PgCursor):
         'galaxies'
         """
         return self._batch_name
-    
+
     def get_batch_sizes(self):
         """
         Return sizes of the batches according to simulation() and batch() settings.
@@ -396,7 +420,7 @@ class CitrosDB(_PgCursor):
         +-----------+-------------+------------+
         """
         table_to_display = self._get_batch_sizes()
-        table = PrettyTable(field_names=['batch', 'size', 'total size'], align='l')
+        table = PrettyTable(field_names=["batch", "size", "total size"], align="l")
         if table_to_display is not None:
             table.add_rows(table_to_display)
         print(table)
@@ -439,10 +463,16 @@ class CitrosDB(_PgCursor):
         3
         """
         ci = self._copy()
-        _PgCursor.topic(ci, topic_name = topic_name)
+        _PgCursor.topic(ci, topic_name=topic_name)
         return ci
-        
-    def sid(self, value: Optional[Union[int, list]] = None, start: int = 0, end: int = None, count: int = None) -> CitrosDB:
+
+    def sid(
+        self,
+        value: Optional[Union[int, list]] = None,
+        start: int = 0,
+        end: int = None,
+        count: int = None,
+    ) -> CitrosDB:
         """
         Set constraints on sid.
 
@@ -482,23 +512,29 @@ class CitrosDB(_PgCursor):
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid([1,2]).data()
 
         Get data from batch 'robotics' for for topic 'A' where sid is in the range of 3 <= sid <= 8 :
-        
+
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid(start = 3, end = 8).data()
 
         or the same with `count`:
-        
+
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid(start = 3, count = 6).data()
 
         For sid >= 7:
-        
+
         >>> df = citros.simulation('robot').batch('robotics').topic('A').sid(start = 7).data()
         """
         ci = self._copy()
-        _PgCursor.sid(ci, value = value, start = start, end = end, count = count)
+        _PgCursor.sid(ci, value=value, start=start, end=end, count=count)
         return ci
-        
-    def rid(self, value: Optional[Union[int, list]] = None, start: int = 0, end: int = None, count: int = None) -> CitrosDB:
+
+    def rid(
+        self,
+        value: Optional[Union[int, list]] = None,
+        start: int = 0,
+        end: int = None,
+        count: int = None,
+    ) -> CitrosDB:
         """
         Set constraints on rid.
 
@@ -536,20 +572,20 @@ class CitrosDB(_PgCursor):
         >>> df = citros.batch('aero').topic('A').rid([10, 20]).data()
 
         Get data from batch 'aero' for topic 'A' where rid is in the range of 0 <= rid <= 9 :
-        
+
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('plane_test').batch('aero').topic('A').rid(start = 0, end = 9).data()
 
         or the same with `count`:
-        
+
         >>> df = citros.simulation('plane_test').batch('aero').topic('A').rid(start = 0, count = 10).data()
 
         For rid >= 5:
-        
+
         >>> df = citros.simulation('plane_test').batch('aero').topic('A').rid(start = 5).data()
         """
         ci = self._copy()
-        _PgCursor.rid(ci, value = value, start = start, end = end, count = count)
+        _PgCursor.rid(ci, value=value, start=start, end=end, count=count)
         return ci
 
     def time(self, start: int = 0, end: int = None, duration: int = None) -> CitrosDB:
@@ -588,15 +624,15 @@ class CitrosDB(_PgCursor):
         >>> df = citros.simulation('radar').batch('kinematics').topic('A').time(start = 10, end = 20).data()
 
         To set time range 'first 10ns starting from 10th nanosecond', that means 10ns <= time < 20ns:
-        
+
         >>> df = citros.simulation('radar').batch('kinematics').topic('A').time(start = 10, duration = 10).data()
 
         For time >= 20:
-        
+
         >>> df = citros.simulation('radar').batch('kinematics').topic('A').time(start = 20).data()
         """
         ci = self._copy()
-        _PgCursor.time(ci, start = start, end = end, duration = duration)
+        _PgCursor.time(ci, start=start, end=end, duration=duration)
         return ci
     
     def set_filter(self, filter_by: dict = None) -> CitrosDB:
@@ -846,8 +882,8 @@ class CitrosDB(_PgCursor):
             'data_structure': structure of the data,
             'message_count': number of messages}}
         ```
-        If the topic has multiple types with the same data structure, they are presented in 
-        'type' as a list. If the types have different data structures, they are grouped by 
+        If the topic has multiple types with the same data structure, they are presented in
+        'type' as a list. If the types have different data structures, they are grouped by
         their data structure types and numbered as "type_group_0", "type_group_1", and so on:
         ```python
         'topics': {
@@ -899,7 +935,7 @@ class CitrosDB(_PgCursor):
              'data_structure': {
                'data': {
                  'x': {
-                   'x_1': 'int', 
+                   'x_1': 'int',
                    'x_2': 'float',
                    'x_3': 'float'
                  },
@@ -973,7 +1009,7 @@ class CitrosDB(_PgCursor):
              'data_structure': {
                'data': {
                  'x': {
-                   'x_1': 'int', 
+                   'x_1': 'int',
                    'x_2': 'float',
                    'x_3': 'float'
                  },
@@ -991,7 +1027,7 @@ class CitrosDB(_PgCursor):
             return CitrosDict({})
         result = _PgCursor._pg_info(self)
         return result
-    
+
     def get_data_structure(self, topic: str = None):
         """
         Display table with topic names, types and corresponding them data structures of the json-data columns for the specific batch.
@@ -1002,7 +1038,7 @@ class CitrosDB(_PgCursor):
         ----------
         topic : list or list of str, optional
             List of the topics to show data structure for.
-            Have higher priority, than those defined by `topic()` and `set_filter()` methods 
+            Have higher priority, than those defined by `topic()` and `set_filter()` methods
             and will override them.
             If not specified, shows data structure for all topics.
 
@@ -1017,9 +1053,9 @@ class CitrosDB(_PgCursor):
         >>> from citros.citros_data_analysis import data_access as da
         >>> citros = da.CitrosDB(simulation = 'mechanics')
         >>> citros.batch('kinematics').topic(['A', 'C']).get_data_structure()
-        
+
         or
-        
+
         >>> citros.batch('kinematics').get_data_structure(['A', 'C'])
         +-------+------+-----------------+
         | topic | type | data            |
@@ -1133,10 +1169,14 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        result = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
+        result = _PgCursor._data(
+            self, data_names=data_names, additional_columns=additional_columns
+        )
         return result
-    
-    def data_dict(self, data_names: list = None, additional_columns: list = None) -> pd.DataFrame:
+
+    def data_dict(
+        self, data_names: list = None, additional_columns: list = None
+    ) -> pd.DataFrame:
         """
         Return a dict where a dict key is a simulation run id (sid), and a dict value is a pandas.DataFrame related to that sid.
 
@@ -1205,19 +1245,23 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return {}
-        result_table = _PgCursor._data(self, data_names = data_names, additional_columns = additional_columns)
-        
+        result_table = _PgCursor._data(
+            self, data_names=data_names, additional_columns=additional_columns
+        )
+
         if result_table is not None:
-            sid_list = list(set(result_table['sid']))
+            sid_list = list(set(result_table["sid"]))
             tables = {}
             for s in sid_list:
-                flag = result_table['sid'] == s
-                tables[s] = result_table[flag].reset_index(drop = True)
+                flag = result_table["sid"] == s
+                tables[s] = result_table[flag].reset_index(drop=True)
             return tables
         else:
             return {}
-    
-    def get_min_value(self, column_name: str, filter_by: dict = None, return_index: bool = False):
+
+    def get_min_value(
+        self, column_name: str, filter_by: dict = None, return_index: bool = False
+    ):
         """
         Return minimum value of the column `column_name`.
 
@@ -1278,11 +1322,18 @@ class CitrosDB(_PgCursor):
         if not self._is_batch_available():
             return None, None, None if return_index else None
 
-        result = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
-                                           return_index = return_index, mode = 'MIN')
+        result = _PgCursor._get_min_max_value(
+            self,
+            column_name=column_name,
+            filter_by=filter_by,
+            return_index=return_index,
+            mode="MIN",
+        )
         return result
-    
-    def get_max_value(self, column_name: str, filter_by: dict = None, return_index: bool = False):
+
+    def get_max_value(
+        self, column_name: str, filter_by: dict = None, return_index: bool = False
+    ):
         """
         Return maximum value of the column `column_name`.
 
@@ -1341,12 +1392,22 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None, None, None if return_index else None
-        result = _PgCursor._get_min_max_value(self, column_name = column_name, filter_by = filter_by, 
-                                           return_index = return_index, mode = 'MAX')
+        result = _PgCursor._get_min_max_value(
+            self,
+            column_name=column_name,
+            filter_by=filter_by,
+            return_index=return_index,
+            mode="MAX",
+        )
         return result
 
-    def get_counts(self, column_name: str = None, group_by: Optional[Union[str, list]] = None, filter_by: dict = None, 
-                   nan_exclude: bool = False) -> list:
+    def get_counts(
+        self,
+        column_name: str = None,
+        group_by: Optional[Union[str, list]] = None,
+        filter_by: dict = None,
+        nan_exclude: bool = False,
+    ) -> list:
         """
         Return number of the rows in the column `column_name`.
 
@@ -1422,12 +1483,22 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        result = _PgCursor._get_counts(self, column_name = column_name, group_by = group_by, filter_by= filter_by, 
-                                                       nan_exclude = nan_exclude)
+        result = _PgCursor._get_counts(
+            self,
+            column_name=column_name,
+            group_by=group_by,
+            filter_by=filter_by,
+            nan_exclude=nan_exclude,
+        )
         return result
 
-    def get_unique_counts(self, column_name: str = None, group_by: list = None, filter_by: dict = None, 
-                          nan_exclude: bool = False) -> list:
+    def get_unique_counts(
+        self,
+        column_name: str = None,
+        group_by: list = None,
+        filter_by: dict = None,
+        nan_exclude: bool = False,
+    ) -> list:
         """
         Return number of the unique values in the column `column_name`.
 
@@ -1491,11 +1562,18 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        result = _PgCursor._get_unique_counts(self, column_name = column_name, group_by = group_by, filter_by = filter_by, 
-                        nan_exclude = nan_exclude)
+        result = _PgCursor._get_unique_counts(
+            self,
+            column_name=column_name,
+            group_by=group_by,
+            filter_by=filter_by,
+            nan_exclude=nan_exclude,
+        )
         return result
 
-    def get_unique_values(self, column_names: Optional[Union[str, list]], filter_by: dict = None) -> list:
+    def get_unique_values(
+        self, column_names: Optional[Union[str, list]], filter_by: dict = None
+    ) -> list:
         """
         Return unique values of the columns `column_names`.
 
@@ -1538,14 +1616,26 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        result = _PgCursor._get_unique_values(self, column_names = column_names, filter_by = filter_by)
+        result = _PgCursor._get_unique_values(
+            self, column_names=column_names, filter_by=filter_by
+        )
         return result
-    
-    # Plots
-    
-    def time_plot(self, ax: plt.Axes, *args, topic_name: Optional[str] = None, var_name: Optional[str] = None, 
-                  time_step: Optional[float] = 1.0, sids: list = None, y_label: Optional[str] = None, title_text: Optional[str] = None, 
-                  legend: bool = True, remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
+
+    def time_plot(
+        self,
+        ax: plt.Axes,
+        *args,
+        topic_name: Optional[str] = None,
+        var_name: Optional[str] = None,
+        time_step: Optional[float] = 1.0,
+        sids: list = None,
+        y_label: Optional[str] = None,
+        title_text: Optional[str] = None,
+        legend: bool = True,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        **kwargs,
+    ):
         """
         Query data and make plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
 
@@ -1617,7 +1707,7 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        
+
         if sids is None or sids == []:
             if hasattr(self, "_sid"):
                 sids = self._sid
@@ -1626,17 +1716,33 @@ class CitrosDB(_PgCursor):
         elif isinstance(sids, int):
             sids = [sids]
 
-        var_df = _PgCursor.data_for_time_plot(self, topic_name, var_name, time_step, sids, remove_nan, inf_vals)
+        var_df = _PgCursor.data_for_time_plot(
+            self, topic_name, var_name, time_step, sids, remove_nan, inf_vals
+        )
         if var_df is None:
             return
-    
-        plotter = _Plotter()
-        plotter.time_plot(var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs)
 
-    def xy_plot(self, ax: plt.Axes, *args, topic_name: Optional[str] = None, var_x_name: Optional[str] = None, 
-                var_y_name: Optional[str] = None, sids: Optional[Union[int, list]] = None, x_label: Optional[str] = None, 
-                y_label: Optional[str] = None, title_text: Optional[str] = None, legend: bool = True, remove_nan: bool = True, 
-                inf_vals: Optional[float] = 1e308, **kwargs):
+        plotter = _Plotter()
+        plotter.time_plot(
+            var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs
+        )
+
+    def xy_plot(
+        self,
+        ax: plt.Axes,
+        *args,
+        topic_name: Optional[str] = None,
+        var_x_name: Optional[str] = None,
+        var_y_name: Optional[str] = None,
+        sids: Optional[Union[int, list]] = None,
+        x_label: Optional[str] = None,
+        y_label: Optional[str] = None,
+        title_text: Optional[str] = None,
+        legend: bool = True,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        **kwargs,
+    ):
         """
         Query data and make plot `var_y_name` vs. `var_x_name` for each of the sids.
 
@@ -1708,7 +1814,7 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        
+
         if sids is None or sids == []:
             if hasattr(self, "_sid"):
                 sids = self._sid
@@ -1716,16 +1822,42 @@ class CitrosDB(_PgCursor):
                 sids = None
         elif isinstance(sids, int):
             sids = [sids]
-        xy_df = _PgCursor.data_for_xy_plot(self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals)
+        xy_df = _PgCursor.data_for_xy_plot(
+            self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals
+        )
         if xy_df is None:
             return
-        
+
         plotter = _Plotter()
-        plotter.xy_plot(xy_df, ax,  var_x_name, var_y_name, sids, x_label, y_label, title_text, legend, *args, **kwargs)
-    
-    def plot_graph(self, df: pd.DataFrame, x_label: str, y_label: str, *args, ax: Optional[plt.Axes] = None, legend: bool = True, 
-                   title: Optional[str] = None, set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, 
-                   remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
+        plotter.xy_plot(
+            xy_df,
+            ax,
+            var_x_name,
+            var_y_name,
+            sids,
+            x_label,
+            y_label,
+            title_text,
+            legend,
+            *args,
+            **kwargs,
+        )
+
+    def plot_graph(
+        self,
+        df: pd.DataFrame,
+        x_label: str,
+        y_label: str,
+        *args,
+        ax: Optional[plt.Axes] = None,
+        legend: bool = True,
+        title: Optional[str] = None,
+        set_x_label: Optional[str] = None,
+        set_y_label: Optional[str] = None,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        **kwargs,
+    ):
         """
         Plot graph '`y_label` vs. `x_label`' for each sid, where `x_label` and `y_label`
         are the labels of columns of the pandas.DataFrame `df`.
@@ -1739,7 +1871,7 @@ class CitrosDB(_PgCursor):
         y_label : str
             Label of the column to plot along y-axis.
         *args : Any
-            Additional arguments to style lines, set color, etc, 
+            Additional arguments to style lines, set color, etc,
             see **[matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)**.
         ax : matplotlib.axes.Axes
             Figure axis to plot on. If not specified, the new pair of fig, ax will be created.
@@ -1791,7 +1923,7 @@ class CitrosDB(_PgCursor):
         >>> citros.plot_graph(df, 'data.x.x_1', 'data.x.x_2', ax = ax, title = 'Example plot')
 
         ![plot_graph_1](../../img_documentation/plot_graph_1.png "plot_graph_1")
-        
+
         If `ax` parameter is not passed, `plot_graph()` generates a pair of (matplotlib.figure.Figure, matplotlib.axes.Axes) objects and
         returns them. Let's plot the previous image without passing `ax` argument, and also let's plot with a dotted line:
 
@@ -1801,13 +1933,39 @@ class CitrosDB(_PgCursor):
         ![plot_graph_2](../../img_documentation/plot_graph_2.png "plot_graph_2")
         """
         plotter = _Plotter()
-        return plotter.plot_graph(df, x_label, y_label, ax, legend, title , set_x_label, set_y_label, 
-                                  remove_nan, inf_vals,  *args, **kwargs)
+        return plotter.plot_graph(
+            df,
+            x_label,
+            y_label,
+            ax,
+            legend,
+            title,
+            set_x_label,
+            set_y_label,
+            remove_nan,
+            inf_vals,
+            *args,
+            **kwargs,
+        )
 
-    def plot_3dgraph(self, df: pd.DataFrame, x_label: str, y_label: str, z_label: str, *args, ax: Optional[plt.Axes] = None, 
-                     scale: bool = True, legend: bool = True, title: Optional[str] = None, 
-                     set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, set_z_label: Optional[str] = None, 
-                     remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
+    def plot_3dgraph(
+        self,
+        df: pd.DataFrame,
+        x_label: str,
+        y_label: str,
+        z_label: str,
+        *args,
+        ax: Optional[plt.Axes] = None,
+        scale: bool = True,
+        legend: bool = True,
+        title: Optional[str] = None,
+        set_x_label: Optional[str] = None,
+        set_y_label: Optional[str] = None,
+        set_z_label: Optional[str] = None,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        **kwargs,
+    ):
         """
         Plot 3D graph '`z_label` vs. `x_label` and `y_label`' for each sid, where `x_label`, `y_label` and `z_label`
         are the labels of columns of the pandas.DataFrame `df`.
@@ -1821,7 +1979,7 @@ class CitrosDB(_PgCursor):
         y_label : str
             Label of the column to plot along y-axis.
         *args : Any
-            Additional arguments to style lines, set color, etc, 
+            Additional arguments to style lines, set color, etc,
             see **[matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)**.
         ax : matplotlib.axes.Axes
             Figure axis to plot on. If not specified, the new pair of fig, ax will be created.
@@ -1854,7 +2012,7 @@ class CitrosDB(_PgCursor):
         ----------------
         kwargs : dict, optional
             Other keyword arguments, see **[matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)**.
-        
+
         See Also
         --------
         CitrosDB.plot_graph, CitrosDB.multiple_y_plot, CitrosDB.multiplot, CitrosDB.plot_sigma_ellipse
@@ -1881,14 +2039,41 @@ class CitrosDB(_PgCursor):
         ![plot_3dgraph_1](../../img_documentation/plot_3dgraph_1.png "plot_3dgraph_1")
         """
         plotter = _Plotter()
-        return plotter.plot_3dgraph(df, x_label, y_label, z_label, ax, scale, legend, title, 
-                                    set_x_label, set_y_label, set_z_label, remove_nan, inf_vals, *args, **kwargs)
+        return plotter.plot_3dgraph(
+            df,
+            x_label,
+            y_label,
+            z_label,
+            ax,
+            scale,
+            legend,
+            title,
+            set_x_label,
+            set_y_label,
+            set_z_label,
+            remove_nan,
+            inf_vals,
+            *args,
+            **kwargs,
+        )
 
-    def multiple_y_plot(self, df: pd.DataFrame, x_label: str, y_labels: str, *args, fig: Optional[matplotlib.figure.Figure] = None, 
-                        legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, 
-                        set_y_label: Optional[str] = None, remove_nan: bool = True, inf_vals: Optional[float] = 1e308, **kwargs):
+    def multiple_y_plot(
+        self,
+        df: pd.DataFrame,
+        x_label: str,
+        y_labels: str,
+        *args,
+        fig: Optional[matplotlib.figure.Figure] = None,
+        legend: bool = True,
+        title: Optional[str] = None,
+        set_x_label: Optional[str] = None,
+        set_y_label: Optional[str] = None,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        **kwargs,
+    ):
         """
-        Plot a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels 
+        Plot a series of vertically arranged graphs 'y vs. `x_label`', with the y-axis labels
         specified in the `y_labels` parameter.
 
         Different colors correspond to different sids.
@@ -1902,7 +2087,7 @@ class CitrosDB(_PgCursor):
         y_labels : list of str
             Labels of the columns to plot along y-axis.
         *args : Any
-            Additional arguments to style lines, set color, etc, 
+            Additional arguments to style lines, set color, etc,
             see **[matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)**.
         fig : matplotlib.figure.Figure, optional
             If None, a new Figure will be created.
@@ -1958,12 +2143,39 @@ class CitrosDB(_PgCursor):
         ![multiple_y_plot_2](../../img_documentation/multiple_y_plot_2.png "multiple_y_plot_2")
         """
         plotter = _Plotter()
-        return plotter.multiple_y_plot(df, x_label, y_labels,  fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, *args, **kwargs)
+        return plotter.multiple_y_plot(
+            df,
+            x_label,
+            y_labels,
+            fig,
+            legend,
+            title,
+            set_x_label,
+            set_y_label,
+            remove_nan,
+            inf_vals,
+            *args,
+            **kwargs,
+        )
 
-    def multiplot(self, df: pd.DataFrame, labels: list, *args, scale: bool = True, fig: Optional[matplotlib.figure.Figure] = None, 
-                  legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, set_y_label: Optional[str] = None, 
-                  remove_nan: bool = True, inf_vals: Optional[float] = 1e308, label_all_xaxis: bool = False, 
-                  label_all_yaxis: bool = False, num: int = 5, **kwargs):
+    def multiplot(
+        self,
+        df: pd.DataFrame,
+        labels: list,
+        *args,
+        scale: bool = True,
+        fig: Optional[matplotlib.figure.Figure] = None,
+        legend: bool = True,
+        title: Optional[str] = None,
+        set_x_label: Optional[str] = None,
+        set_y_label: Optional[str] = None,
+        remove_nan: bool = True,
+        inf_vals: Optional[float] = 1e308,
+        label_all_xaxis: bool = False,
+        label_all_yaxis: bool = False,
+        num: int = 5,
+        **kwargs,
+    ):
         """
         Plot a matrix of N x N graphs, each displaying either the histogram with values distribution (for graphs on the diogonal) or
         the relationship between variables listed in `labels`, with N being the length of `labels` list.
@@ -1977,7 +2189,7 @@ class CitrosDB(_PgCursor):
         labels : list of str
             Labels of the columns to plot.
         *args : Any
-            Additional arguments to style lines, set color, etc, 
+            Additional arguments to style lines, set color, etc,
             see **[matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)**.
         scale : bool, default True
             Specify whether the axis range should be the same for x and y axes.
@@ -2002,7 +2214,7 @@ class CitrosDB(_PgCursor):
             If True, y labels are set to the y-axes of the all graphs, otherwise only to the graphs in the first column.
         num : int, default 5
             Number of bins in the histogram on the diagonal.
-            
+
         Returns
         -------
         fig : matplotlib.figure.Figure
@@ -2027,8 +2239,8 @@ class CitrosDB(_PgCursor):
         >>> citros = da.CitrosDB()
         >>> df = citros.simulation('robots').batch('testing_robotics').topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3'])
 
-        Plot nine graphs: histograms for three graphs on the diagonal, that represent 
-        distribution of the 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' values, and six graphs that show 
+        Plot nine graphs: histograms for three graphs on the diagonal, that represent
+        distribution of the 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' values, and six graphs that show
         correlation between them; plot by dots and scale x and y axes ranges to one interval for each graph:
 
         >>> fig, ax = citros.multiplot(df, ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'], '.' , scale = True)
@@ -2037,13 +2249,41 @@ class CitrosDB(_PgCursor):
         ![multiplot](../../img_documentation/multiplot.png "multiplot")
         """
         plotter = _Plotter()
-        return plotter.multiplot(df, labels, scale, fig, legend, title, set_x_label, set_y_label, remove_nan, inf_vals, label_all_xaxis, 
-                  label_all_yaxis, num, *args, **kwargs)
+        return plotter.multiplot(
+            df,
+            labels,
+            scale,
+            fig,
+            legend,
+            title,
+            set_x_label,
+            set_y_label,
+            remove_nan,
+            inf_vals,
+            label_all_xaxis,
+            label_all_yaxis,
+            num,
+            *args,
+            **kwargs,
+        )
 
-    def plot_sigma_ellipse(self, df: pd.DataFrame, x_label: str, y_label: str, ax: plt.Axes = None, n_std: int = 3, 
-                           plot_origin: bool = True, bounding_error: bool = False, inf_vals: Optional[float] = 1e308, 
-                           legend: bool = True, title: Optional[str] = None, set_x_label: Optional[str] = None, 
-                           set_y_label: Optional[str] = None, scale: bool = False, return_ellipse_param: bool = False):
+    def plot_sigma_ellipse(
+        self,
+        df: pd.DataFrame,
+        x_label: str,
+        y_label: str,
+        ax: plt.Axes = None,
+        n_std: int = 3,
+        plot_origin: bool = True,
+        bounding_error: bool = False,
+        inf_vals: Optional[float] = 1e308,
+        legend: bool = True,
+        title: Optional[str] = None,
+        set_x_label: Optional[str] = None,
+        set_y_label: Optional[str] = None,
+        scale: bool = False,
+        return_ellipse_param: bool = False,
+    ):
         """
         Plot sigma ellipses for the set of data.
 
@@ -2113,7 +2353,7 @@ class CitrosDB(_PgCursor):
         >>> df['X1'] = df['data.x.x_1'] - df['data.x.x_1'].mean()
         >>> df['X2'] = df['data.x.x_2'] - df['data.x.x_2'].mean()
 
-        Let's plot 'X1' vs. 'X2', 3-$\sigma$ ellipse, origin point that has coordinates (0, 0) 
+        Let's plot 'X1' vs. 'X2', 3-$\sigma$ ellipse, origin point that has coordinates (0, 0)
         and set the same range for x and y axis:
 
         >>> fig, ax = citros.plot_sigma_ellipse(df, x_label = 'X1', y_label = 'X2',
@@ -2122,7 +2362,7 @@ class CitrosDB(_PgCursor):
         ![plot_sigma_ellipse_1](../../img_documentation/plot_sigma_ellipse_1.png "plot_sigma_ellipse_1")
 
         If we set `return_ellipse_param` = `True`, the parameters of the error ellipse will be returned:
-        >>> fig, ax, param = citros.plot_sigma_ellipse(df, x_label = 'X1', y_label = 'X2', n_std = 3, 
+        >>> fig, ax, param = citros.plot_sigma_ellipse(df, x_label = 'X1', y_label = 'X2', n_std = 3,
         ...                                            plot_origin=True, scale = True, return_ellipse_param = True)
         >>> print(param)
         {'x': 0,
@@ -2134,13 +2374,27 @@ class CitrosDB(_PgCursor):
         Plot the same but for 1-, 2- and 3-$\sigma$ ellipses, add bounding error circle (that indicates the maximum distance
         between the ellipse points and the origin), set custom labels and title to the plot:
 
-        >>> fig, ax = citros.plot_sigma_ellipse(df, x_label = 'X1', y_label = 'X2', 
-        ...                                     n_std = [1,2,3], plot_origin=True, bounding_error=True, 
-        ...                                     set_x_label='x, [m]', set_y_label = 'y, [m]', 
+        >>> fig, ax = citros.plot_sigma_ellipse(df, x_label = 'X1', y_label = 'X2',
+        ...                                     n_std = [1,2,3], plot_origin=True, bounding_error=True,
+        ...                                     set_x_label='x, [m]', set_y_label = 'y, [m]',
         ...                                     title = 'Coordinates')
 
         ![plot_sigma_ellipse_2](../../img_documentation/plot_sigma_ellipse_2.png "plot_sigma_ellipse_2")
         """
         plotter = _Plotter()
-        return plotter.plot_sigma_ellipse(df, x_label, y_label, ax, n_std, plot_origin, bounding_error, inf_vals, 
-                           legend, title, set_x_label, set_y_label, scale, return_ellipse_param)
+        return plotter.plot_sigma_ellipse(
+            df,
+            x_label,
+            y_label,
+            ax,
+            n_std,
+            plot_origin,
+            bounding_error,
+            inf_vals,
+            legend,
+            title,
+            set_x_label,
+            set_y_label,
+            scale,
+            return_ellipse_param,
+        )

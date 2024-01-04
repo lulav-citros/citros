@@ -186,7 +186,6 @@ class CitrosDB:
             # Render the template with the provided context
             rendered_sql = template.render(context)
 
-        # TODO: query check if table exists. if not, create it.
         try:
             cursor.execute(rendered_sql)
         except Exception as ex:
@@ -215,7 +214,8 @@ class CitrosDB:
             # Render the template with the provided context
             rendered_sql = template.render(context)
 
-        # TODO: query check if table exists. if not, create it.
+        self.log.debug(f"rendered_sql: {rendered_sql}")
+
         try:
             cursor.execute(rendered_sql)
             connection.commit()

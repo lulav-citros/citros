@@ -745,7 +745,7 @@ def data_db_create(args, argv):
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
     )
-    # TODO: check container status...
+    # TODO: check container status instead of sleep.
     sleep(3)
     data_db_init(args, argv)
     print(
@@ -956,7 +956,7 @@ Listening on: [green]{str(root)}""",
         return
 
 
-# TODO: implement
+# TODO[important]: implement
 def service_stop(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
@@ -1133,7 +1133,7 @@ def report_generate(args, argv):
         notebooks = args.notebooks
 
     if not hasattr(args, "sign"):
-        sign = False  # TODO: change to True
+        sign = False  # TODO: change to True and sign!
     else:
         sign = args.sign
 
@@ -1280,7 +1280,7 @@ def choose_batch(
             mandatory=False,
             keybindings=keybindings,
             message="Select Version:",
-            choices=version_list,
+            choices=sorted(version_list, reverse=True),
             default="",
             border=True,
         ).execute()
