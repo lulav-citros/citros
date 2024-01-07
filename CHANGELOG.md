@@ -2,6 +2,23 @@
 
 
 
+## v0.2.16 (2024-01-07)
+
+### Fix
+
+* fix(bug): Merge pull request #24 from lulav-citros/dev
+
+Dev ([`9ba1963`](https://github.com/lulav-citros/citros/commit/9ba1963b102b26189eb26587e5227ecc720b9a54))
+
+### Unknown
+
+* Update CitrosDB import ([`0c91f61`](https://github.com/lulav-citros/citros/commit/0c91f616439315c3bd729bb48769659a1a01ae4b))
+
+* Add scipy to requirements.txt ([`dec9127`](https://github.com/lulav-citros/citros/commit/dec9127057ec9f80abe2e18cc7639b4abc642970))
+
+* Update CITROS CLI documentation ([`1d8e231`](https://github.com/lulav-citros/citros/commit/1d8e231973214544bf22c25bf6f829fe92a22469))
+
+
 ## v0.2.15 (2024-01-03)
 
 ### Fix
