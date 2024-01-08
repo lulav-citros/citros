@@ -100,20 +100,14 @@ Get connection to the database and query first 5 rows of the batch "batch_1" fro
 >>> citros = CitrosDB()
 >>> curs = citros.get_connection().cursor()
 >>> curs.execute('SELECT * FROM "simulation_cannon_numeric"."batch_1" LIMIT 5')
->>> curs.fetchall()
-[(1,
-  0,
-  0,
-  0,
-  '/config',
-  '.citros/data/simulation_cannon_numeric/batch_1/20240102121732/0/config/cannon_analytic.yaml',
-  {'analytic_dynamics': {'ros__parameters': {'dt': 0.01,
-     'init_angle': 30.0,
-     'init_speed': 50.0}}},
-  datetime.datetime(2024, 1, 2, 12, 23, 44, 804131, tzinfo=datetime.timezone.utc)),
- (2,
- ...
-]
+>>> D = curs.fetchall()
+>>> print(D)
+[(1, 0, 0, 0, '/config', '.citros/data/... ]
+  
+The result of the curs.fetchall() is a list, which can easily be converted into a pandas DataFrame if needed:
+  
+>>> import pandas as pd
+>>> df = pd.DataFrame(D)
 ```
 
 </details>

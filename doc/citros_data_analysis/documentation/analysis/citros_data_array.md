@@ -128,7 +128,7 @@ if **value** is a CitrosData object, then removes it if it exists in CitrosDataA
 
 Name|Type|Description
 --|--|--
-|**```value```**|**int** or **citros_data_analysis.error_analysis.citros_data.CitrosData**|Object or index of object to remove.
+|**```value```**|**int** or **[CitrosData](citros_data.md#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")**|Object or index of object to remove.
 
 </details>
 
@@ -150,7 +150,6 @@ def get_prediction(
     hidden_layer_sizes=(10,),
     alpha=1e-16,
     fig=None,
-    show_fig=False,
     return_fig=False,
     **kwargs
 )
@@ -175,7 +174,6 @@ Name|Type|Description
 |**```hidden_layer_sizes```**|`array-like` of `shape(n_layers - 2,)`, default=**(10,)**|Only used if **method** = 'neural_net'.<br />    The ith element represents the number of neurons in the ith hidden layer.
 |**```alpha```**|**float**, default `1e-16`|Only used if **method** = 'gmm'.<br />    Value of the covariance element of parameters.
 |**```fig```**|**matplotlib.figure.Figure**, optional|figure to plot on. If None, then the new one is created.
-|**```show_fig```**|**bool**, default **True**|If the figure will be shown.
 |**```return_fig```**|**bool**, default **False**|If True, the figure and ax (or list of ax) will be returned.
 #### Other Parameters
 
@@ -234,8 +232,7 @@ correspondence between different simulations and pass the result to CitrosDataAr
 ...
 ...     #scale over 'data.time'
 ...     db_sc = dataset.scale_data(n_points = 100, 
-...                                param_label = 'data.time', 
-...                                show_fig = False)
+...                                param_label = 'data.time')
 ...
 ...     #store in CitrosDataArray by add_db() method
 ...     db_array.add_db(db_sc)
@@ -247,8 +244,7 @@ Get the prediction with 'poly' method:
 ```python
 >>> result = db_array.get_prediction(parameters = {'data.t': 1},
 ...                                  method = 'poly', 
-...                                  n_poly = 2,
-...                                  show_fig = True)
+...                                  n_poly = 2)
 >>> print(result)
     data.time   data.x.x_1
 0       0.000000        1.155301

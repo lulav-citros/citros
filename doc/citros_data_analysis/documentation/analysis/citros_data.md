@@ -493,7 +493,6 @@ is a data dimension:
 ```python
 def show_statistics(
     fig=None,
-    show_fig=True,
     return_fig=False,
     n_std=3,
     fig_title='Statistics',
@@ -515,7 +514,6 @@ Collect statistics for CitrosData object and plot it.
 Name|Type|Description
 --|--|--
 |**```fig```**|**matplotlib.figure.Figure**|figure to plot on. If None, the new one will be created.
-|**```show_fig```**|**bool**|If the figure should be shown, True by default.
 |**```return_fig```**|**bool**|If the figure parameters fig, ax should be returned; <br />    fig is matplotlib.figure.Figure and ax is matplotlib.axes.Axes
 |**```n_std```**|**int**, default **3**|Error interval to display in standard deviations.
 |**```fig_title```**|**str**, default `'Statistics'`|Title of the figure.
@@ -565,8 +563,7 @@ Use method scale_data() or bin_data() to get correspondence between different si
 
 ```python
 >>> db_sc = dataset.scale_data(n_points = 150, 
-                               param_label = 'data.time', 
-                               show_fig = False)
+                               param_label = 'data.time')
 ```
 
 
