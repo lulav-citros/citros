@@ -102,7 +102,8 @@ Even when some points of the individual simulations may exceed the limits, but t
 ```python
 # --- adjust to your data --- #
 
-# Set batch and topic names.
+# Set simulation, batch and topic names:
+simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 
@@ -160,7 +161,8 @@ Whether the standard deviation values do not exceed the limits.
 ```python
 # --- adjust to your data --- #
 
-# Set batch and topic names.
+# Set simulation, batch and topic names:
+simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 
@@ -229,7 +231,8 @@ print(table.head(5)) #method head(n) shows first n rows of the DataFrame table
 ```python
 # --- adjust to your data --- #
 
-# Set batch and topic names.
+# Set simulation, batch and topic names:
+simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 
@@ -287,7 +290,8 @@ Test whether the norm of each simulation do not exceed the given limit
 ```python
 # --- adjust to your data --- #
 
-# Set batch and topic names.
+# Set simulation, batch and topic names:
+simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 
@@ -347,7 +351,8 @@ Set several tests at once.
 ```python
 # --- adjust to your data --- #
 
-# Set batch and topic names.
+# Set simulation, batch and topic names:
+simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 

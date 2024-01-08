@@ -27,8 +27,7 @@ Function [**show_correlation()**](../documentation/analysis/citros_data.md#analy
 
 >>> dataset = CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
 >>> db_sc = dataset.scale_data(n_points = 50,
-                               param_label = 'data.time', 
-                               show_fig = False)
+                               param_label = 'data.time')
 ```
 </details>
 
@@ -109,8 +108,7 @@ dataset_B = CitrosData(df, data_label=['data.x'], units = 'm')
 
 #scale data
 db_sc_B = dataset.scale_data(n_points = 20, 
-                             param_label = 'data.time', 
-                             show_fig = False)
+                             param_label = 'data.time')
                              
 db_sc.show_correlation(db2 = db_sc_B,
                        x_col = 'data.x.x_2',

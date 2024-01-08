@@ -1068,6 +1068,8 @@ class _PgCursor(CitrosDB_base):
             additional_columns = []
         if len(additional_columns) != 0 and "sid" not in additional_columns:
             additional_columns.append("sid")
+        # if len(additional_columns) != 0 and "rid" not in additional_columns:
+        #     additional_columns.append("rid")
 
         if hasattr(self, "error_flag"):
             return None
@@ -1083,6 +1085,18 @@ class _PgCursor(CitrosDB_base):
 
         if isinstance(data_names, str):
             data_names = [data_names]
+
+        if isinstance(data_names, list):
+            data_names = list(set(data_names))
+
+        data_names_remove = []
+        if data_names is not None and data_names != []:
+            for item in data_names:
+                if item in self._all_additional_columns:
+                    if len(additional_columns) == 0 or (item in additional_columns):
+                        data_names_remove.append(item)
+        for item in data_names_remove:
+            data_names.remove(item)
 
         if not hasattr(self, "_method"):
             self._method = ""
@@ -2143,7 +2157,7 @@ class _PgCursor(CitrosDB_base):
         pandas.DataFrame
             Data from the database.
         """
-        if data_query is None:
+        if data_query is None or data_query == []:
             data_query = ["data"]
             divide_by_columns = True
         else:
@@ -3176,19 +3190,4 @@ class _PgCursor(CitrosDB_base):
         else:
             xy_df = df[flag].set_index("sid")
 
-        if sids is None or sids == []:
-            # sids = list(xy_df.columns.levels[1])
-            sids = list(set(xy_df.index))
-        else:
-            if isinstance(sids, int):
-                sids = [sids]
-            # all_sids = list(xy_df.columns.levels[1])
-            all_sids = list(set(xy_df.index))
-            bad_sids = []
-            for s in sids:
-                if s not in all_sids:
-                    bad_sids.append(s)
-            if len(bad_sids) != 0:
-                print("sids " + str(bad_sids) + " do not exist")
-                sids = [s for s in sids if s not in bad_sids]
         return xy_df

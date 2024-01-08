@@ -344,11 +344,12 @@ Make your own query to the PostgreSQL database:
 from citros import CitrosDB
 
 # --- adjust to your data --- #
-my_sql_query = 'SELECT ...'
+my_sql_query = 'SELECT * from "my_simulation"."my_batch" LIMIT 5'
 # --------------------------- #
 
 citros = CitrosDB()
 curs = citros.get_connection().cursor()
 curs.execute(my_sql_query)
 D = curs.fetchall()
+print(D)
 ```

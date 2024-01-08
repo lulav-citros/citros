@@ -1,4 +1,5 @@
 from citros.data.analysis import CitrosData
+from citros.data.access import CitrosDict
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -358,7 +359,7 @@ class Validation:
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Std boundary test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=n_std,
             std_color=std_color,
@@ -545,7 +546,7 @@ class Validation:
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Mean test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=None,
             std_color="b",
@@ -972,7 +973,7 @@ class Validation:
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Sid test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=None,
             std_color="b",

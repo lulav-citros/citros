@@ -31,7 +31,7 @@ simulation_name = 'my_simulation'
 batch_name = 'my_batch'
 topic_name = 'my_topic'
 
-# Data is queried from the first index:
+# Data column:
 data_label = 'data.data[0]'
 
 # Set method of index assignment as 'scale' or 'bin':
@@ -321,10 +321,10 @@ for s, m in M.items():
                         data_label = data_label,
                         parameters = {'M': m})
     if method == 'bin':
-        db = dataset.bin_data(n_bins = 50, param_label = independent_var_label, show_fig = False)
+        db = dataset.bin_data(n_bins = 50, param_label = independent_var_label)
     # or
     elif method == 'scale':
-        db = dataset.scale_data(n_points = 50, param_label = independent_var_label, show_fig = False)
+        db = dataset.scale_data(n_points = 50, param_label = independent_var_label)
     else:
         print('please define method of index assignment: "scale" or "bin"')
 
@@ -336,18 +336,15 @@ for s, m in M.items():
 if predict_method == 'poly':
     result = db_array.get_prediction(parameters = {'M': M0},
                                     method = 'poly', 
-                                    n_poly = 2,
-                                    show_fig = True)
+                                    n_poly = 2)
 elif predict_method == 'neural_net':
     result = db_array.get_prediction(parameters = {'M': M0}, 
                                      method = 'neural_net',
                                      activation='tanh', max_iter = 200, solver='lbfgs',
-                                     hidden_layer_sizes = (8,), random_state = 9,
-                                     show_fig = True)
+                                     hidden_layer_sizes = (8,), random_state = 9)
 elif predict_method == 'gmm':
     result = db_array.get_prediction(parameters = {'M': M0}, 
-                                     method = 'gmm',
-                                     show_fig = True)
+                                     method = 'gmm')
 else:
     print('define prediction method as "neural_net", "poly" or "gmm"')
     result = None

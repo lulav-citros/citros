@@ -83,7 +83,7 @@ class CitrosDataArray:
 
     def get_prediction(self, parameters: dict, method: str = 'poly', n_poly: int = 2, activation: str = 'relu', 
                        max_iter: int = 500, solver: str = 'lbfgs', hidden_layer_sizes: ArrayLike = (10,), 
-                       alpha: float = 1e-16, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = False, 
+                       alpha: float = 1e-16, fig: Optional[matplotlib.figure.Figure] = None, 
                        return_fig: bool = False, **kwargs):
         """
         Show the predictions based on the results of the regression solution, neural net or gaussian mixture model.
@@ -116,8 +116,6 @@ class CitrosDataArray:
             Value of the covariance element of parameters.
         fig : matplotlib.figure.Figure, optional
             figure to plot on. If None, then the new one is created.
-        show_fig : bool, default True
-            If the figure will be shown.
         return_fig : bool, default False
             If True, the figure and ax (or list of ax) will be returned.
 
@@ -170,8 +168,7 @@ class CitrosDataArray:
         ...
         ...     #scale over 'data.time'
         ...     db_sc = dataset.scale_data(n_points = 100, 
-        ...                                param_label = 'data.time', 
-        ...                                show_fig = False)
+        ...                                param_label = 'data.time')
         ...
         ...     #store in CitrosDataArray by add_db() method
         ...     db_array.add_db(db_sc)
@@ -180,8 +177,7 @@ class CitrosDataArray:
 
         >>> result = db_array.get_prediction(parameters = {'data.t': 1},
         ...                                  method = 'poly', 
-        ...                                  n_poly = 2,
-        ...                                  show_fig = True)
+        ...                                  n_poly = 2)
         >>> print(result)
             data.time	data.x.x_1
         0	0.000000	1.155301
@@ -191,6 +187,8 @@ class CitrosDataArray:
         """
         slice_id_list = self.dbs[0].data.index.get_level_values(0).to_list()
         
+        show_fig = True
+
         if not isinstance(method, list):
             method = [method]
 
@@ -258,8 +256,6 @@ class CitrosDataArray:
             fig.suptitle('Prediction plot')
             fig.legend(handles, labels, bbox_to_anchor=(1.0, 0.94),loc ='upper left')
             fig.tight_layout()
-        if show_fig:
-            fig.show()
 
         if len(predicted_tables) == 1:
             predicted_tables = predicted_tables[0]

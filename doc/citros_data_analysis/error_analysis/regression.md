@@ -43,8 +43,7 @@ for t in list_t:
 
     #scale over 'data.time'
     db_sc = dataset.scale_data(n_points = 100, 
-                               param_label = 'data.time', 
-                               show_fig = False)
+                               param_label = 'data.time')
 
     #store in CitrosDataArray by add_db() method
     db_array.add_db(db_sc)
@@ -100,8 +99,7 @@ The first method is a polynomial regression, with the highest polynomial order d
 ```python
 >>> result = db_array.get_prediction(parameters = {'data.t': 1},
                                      method = 'poly', 
-                                     n_poly = 2,
-                                     show_fig = True)
+                                     n_poly = 2)
 ```
 <details>
     <summary>Show the figure:</summary>
@@ -129,8 +127,7 @@ The second method is 'neural_net', which is based on the [`sklearn.neural_networ
 >>> result = db_array.get_prediction(parameters = {'data.t':1}, 
                                      method = 'neural_net',
                                      activation='tanh', max_iter = 200, solver='lbfgs',
-                                     hidden_layer_sizes = (8,), random_state = 9,
-                                     show_fig = True)
+                                     hidden_layer_sizes = (8,), random_state = 9)
 ```
 <details>
     <summary>Show the figure:</summary>
@@ -143,8 +140,7 @@ The second method is 'neural_net', which is based on the [`sklearn.neural_networ
 The last method is a gaussian mixture model:
 ```python
 >>> result = db_array.get_prediction(parameters = {'data.t':1}, 
-                                     method = 'gmm',
-                                     show_fig = True)
+                                     method = 'gmm')
 ```
 <details>
     <summary>Show the result:</summary>
@@ -160,8 +156,7 @@ To compare the results of these methods, list their names as `method`:
 >>> result_list = db_array.get_prediction(parameters = {'data.t':1}, 
                                           method = ['neural_net', 'poly', 'gmm'],
                                           n_poly = 2, 
-                                          activation='tanh', solver='lbfgs', hidden_layer_sizes = (8,), random_state = 9,  
-                                          show_fig = True)
+                                          activation='tanh', solver='lbfgs', hidden_layer_sizes = (8,), random_state = 9)
 ```
 <details>
     <summary>The resulting plot:</summary>

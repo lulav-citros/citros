@@ -188,5 +188,6 @@ topic_name = 'my_topic'
 
 citros = CitrosDB()
 n_by_sid = citros.simulation(simulation_name).batch(batch_name).topic(topic_name).get_counts(group_by='sid')
-print(n_by_sid)
+for item in n_by_sid:
+    print(f'sid = {item[0]}, n = {item[1]}')
 ```

@@ -443,7 +443,6 @@ class CitrosData:
             fig.supxlabel(param_label)
             fig.supylabel('counts')
             fig.tight_layout()
-            fig.show()
 
         return (new_indexes, bins_dict, bins, flag_x)
     
@@ -608,7 +607,6 @@ class CitrosData:
                 fig.supylabel(new_db.data.columns[i]+', [' + self.units+']')
                 fig.suptitle(new_db.type)
                 fig.tight_layout()
-                fig.show()
         return new_db
 
     # Statistics
@@ -833,7 +831,7 @@ class CitrosData:
         ax.grid(True)
         return ax
 
-    def _plot_statistics(self, statistics, fig = None, fig_title = None, show_fig = True, return_fig = False, n_std = 3, 
+    def _plot_statistics(self, statistics, fig = None, fig_title = None, return_fig = False, n_std = 3, 
                          std_color = 'r', connect_nan_std = True, std_area = False, std_lines = True):
         """
         Plot data vs. `x_label` figure for a N multidimensional data on N axis.
@@ -846,8 +844,6 @@ class CitrosData:
             figure to plot on. If None, then the new one is created.
         fig_title : str
             Title of the figure.
-        show_fig : bool, default True
-            If the figure should be shown, True by default.
         return_fig : bool, default False
             If True, return fig and list of ax.
         n_std : int, default 3
@@ -869,9 +865,6 @@ class CitrosData:
         ax : list of matplotlib.axes.Axes
             if `return_fig` set to True
         """
-        if (not show_fig) and (not return_fig):
-            return
- 
         if isinstance(statistics, CitrosStat):
             statistics = statistics.to_pandas()
 
@@ -912,12 +905,10 @@ class CitrosData:
         fig.legend(handles, labels, bbox_to_anchor=(1.0, 0.94),loc ='upper left')
         fig.tight_layout()
 
-        if show_fig:
-            fig.show()
         if return_fig:
             return fig, ax
     
-    def show_statistics(self, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = True, return_fig: bool = False, 
+    def show_statistics(self, fig: Optional[matplotlib.figure.Figure] = None, return_fig: bool = False, 
                         n_std: int = 3, fig_title: str = 'Statistics', std_color: str = 'r', connect_nan_std: bool = True, 
                         std_area: bool = False, std_lines: bool = True):
         """
@@ -927,8 +918,6 @@ class CitrosData:
         ----------
         fig : matplotlib.figure.Figure
             figure to plot on. If None, the new one will be created.
-        show_fig : bool
-            If the figure should be shown, True by default.
         return_fig : bool
             If the figure parameters fig, ax should be returned; 
             fig is matplotlib.figure.Figure and ax is matplotlib.axes.Axes
@@ -976,8 +965,7 @@ class CitrosData:
         Use method scale_data() or bin_data() to get correspondence between different simulation:
 
         >>> db_sc = dataset.scale_data(n_points = 150, 
-                                       param_label = 'data.time', 
-                                       show_fig = False)
+                                       param_label = 'data.time')
         
         Show statistics plot:
 
@@ -989,7 +977,7 @@ class CitrosData:
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
         statistics = self.get_statistics(return_format = 'pandas')
-        return self._plot_statistics(statistics, fig = fig, fig_title = fig_title, show_fig = show_fig, return_fig = return_fig, 
+        return self._plot_statistics(statistics, fig = fig, fig_title = fig_title, return_fig = return_fig, 
                                      n_std = n_std, std_color = std_color, connect_nan_std = connect_nan_std, std_area = std_area, 
                                      std_lines = std_lines)
 
