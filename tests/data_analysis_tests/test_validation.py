@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from citros import CitrosDB, Validation
+from decouple import config
 '''
 tests for error_analysis module
 
@@ -13,8 +14,17 @@ in terminal in this folder
 '''
 table_name = 'test_table'
 
-citros = CitrosDB(simulation = 'public',
-                  batch = table_name)
+if config('TEST_ENV') == 'local':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name)
+elif config('TEST_ENV') == 'github':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name,
+                      host=config('POSTGRES_HOST'),
+                      user=config('POSTGRES_USER'),
+                      password=config('POSTGRES_PASSWORD'),
+                      database=config('POSTGRES_DB'),
+                      port = config('POSTGRES_PORT'))
 
 def test_std_bound_test():
     df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x', 'data.x.x_1','data.x.x_2','data.x.x_3','data.time'])

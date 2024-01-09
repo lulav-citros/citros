@@ -18,12 +18,23 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: password
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    #set env variables for populating and testing database
+    env:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      TEST_ENV: local
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
@@ -35,8 +46,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest
           if [ -f tests/data_analysis_tests/requirements_test.txt ]; then pip install -r tests/data_analysis_tests/requirements_test.txt; fi
-          python -m build
-          python -m pip install .
 
       - name: Populate PostgreSQL database
         # Runs a script that creates a PostgreSQL table and populates

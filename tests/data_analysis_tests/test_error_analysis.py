@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from citros import CitrosDB, CitrosData, CitrosDataArray
+from decouple import config
 '''
 tests for error_analysis module
 
@@ -16,8 +17,17 @@ in terminal in this folder
 #connect to a database
 table_name = 'test_table'
 
-citros = CitrosDB(simulation = 'public',
-                  batch = table_name)
+if config('TEST_ENV') == 'local':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name)
+elif config('TEST_ENV') == 'github':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name,
+                      host=config('POSTGRES_HOST'),
+                      user=config('POSTGRES_USER'),
+                      password=config('POSTGRES_PASSWORD'),
+                      database=config('POSTGRES_DB'),
+                      port = config('POSTGRES_PORT'))
 
 citros_D = CitrosData()
 

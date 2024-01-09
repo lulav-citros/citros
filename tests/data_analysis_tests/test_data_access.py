@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 from citros import CitrosDB
+from decouple import config
 
 '''
 tests for lulav data access module
@@ -15,8 +16,17 @@ in terminal in this folder
 #connect to a database
 table_name = 'test_table'
 
-citros = CitrosDB(simulation = 'public',
-                  batch = table_name)
+if config('TEST_ENV') == 'local':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name)
+elif config('TEST_ENV') == 'github':
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name,
+                      host=config('POSTGRES_HOST'),
+                      user=config('POSTGRES_USER'),
+                      password=config('POSTGRES_PASSWORD'),
+                      database=config('POSTGRES_DB'),
+                      port = config('POSTGRES_PORT'))
 
 def test_topic():
     assert citros.topic('B')._topic == ['B'], 'topic(): topic was set wrong'
@@ -176,7 +186,17 @@ def test_is_batch_set():
     assert citros._is_batch_set() is True, 'is_batch_set(): wrong result when the batch was passed during creation'
 
 def test_is_batch_in_database():
-    citros1 = CitrosDB(simulation = 'public')
+    if config('TEST_ENV') == 'local':
+        citros1 = CitrosDB(simulation = 'public',
+                      batch = table_name)
+    elif config('TEST_ENV') == 'github':
+        citros1 = CitrosDB(simulation = 'public',
+                        batch = table_name,
+                        host=config('POSTGRES_HOST'),
+                        user=config('POSTGRES_USER'),
+                        password=config('POSTGRES_PASSWORD'),
+                        database=config('POSTGRES_DB'),
+                        port = config('POSTGRES_PORT'))
     assert citros1._is_batch_in_database('11-22-33') is False, 'is_batch_set(): wrong when the batch does not exist'
     assert citros1._is_batch_in_database(table_name) is True, 'is_batch_set(): wrong when the batch exists'
 
