@@ -1,8 +1,5 @@
 import numpy as np
-import pandas as pd
-from matplotlib.testing.decorators import image_comparison
 import matplotlib.pyplot as plt
-from decouple import config
 
 from citros import CitrosDB, Validation
 '''
