@@ -34,7 +34,7 @@ jobs:
       POSTGRES_DB: postgres
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      TEST_ENV: local
+      TEST_ENV: github
 
     steps:
       # Downloads a copy of the code in your repository before running CI tests
