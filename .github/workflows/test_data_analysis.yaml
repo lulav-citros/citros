@@ -40,7 +40,7 @@ jobs:
         # Runs a script that creates a PostgreSQL table and populates
         # the table with data.
         working-directory: ./tests/data_analysis_tests
-        run: echo | python table_creation.py
+        run: echo | python create_table.py
       - name: Test with pytest
         # Run tests
         working-directory: ./tests/data_analysis_tests
