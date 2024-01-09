@@ -71,14 +71,14 @@ class _PgCursor(CitrosDB_base):
         self._order_by_allowed = ["asc", "ASC", "Asc", "desc", "DESC", "Desc"]
 
     def _set_simulation(self, simulation):
-        '''
+        """
         Set simulation name.
 
         Parameters
         ----------
         simulation : str
             Name of the simulation.
-        '''
+        """
         if simulation is None:
             self._simulation = None
         elif isinstance(simulation, str):
@@ -88,14 +88,14 @@ class _PgCursor(CitrosDB_base):
             print("simulation is not set, 'simulation' must be a str")
 
     def _set_batch(self, batch):
-        '''
+        """
         Set batch name.
 
         Parameters
         ----------
         batch : str
             Name of the batch.
-        '''
+        """
         if batch is None:
             self._batch_name = None
         elif isinstance(batch, str):
@@ -175,6 +175,8 @@ class _PgCursor(CitrosDB_base):
         Make connection to Postgres database to execute PostgreSQL commands.
         """
         _PgCursor.pg_connection = self.connect()
+        if _PgCursor.pg_connection is None:
+            print("Could not connect to the database")
         if self._debug and _PgCursor.pg_connection is not None:
             _PgCursor.n_pg_connections += 1
 
@@ -237,7 +239,10 @@ class _PgCursor(CitrosDB_base):
                 return {"res": None, "error": None}
         if _PgCursor.pg_connection is None:
             self._make_connection_postgres()
-            self._change_connection_parameters()
+            if _PgCursor.pg_connection is None:
+                return {"res": None, "error": None}
+            else:
+                self._change_connection_parameters()
         else:
             if self._if_connection_parameters_changed():
                 try:
@@ -246,7 +251,10 @@ class _PgCursor(CitrosDB_base):
                     # connection is already closed
                     pass
                 self._make_connection_postgres()
-                self._change_connection_parameters()
+                if _PgCursor.pg_connection is None:
+                    return {"res": None, "error": None}
+                else:
+                    self._change_connection_parameters()
 
         for j in range(2):
             try:
@@ -261,11 +269,10 @@ class _PgCursor(CitrosDB_base):
             except psycopg2.InterfaceError as e:
                 if j == 0:
                     self._make_connection_postgres()
+                    if _PgCursor.pg_connection is None:
+                        return {"res": None, "error": None}
                 else:
-                    if self._debug:
-                        raise e
-                    else:
-                        print("Error:", e)
+                    print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.InFailedSqlTransaction,
@@ -274,28 +281,21 @@ class _PgCursor(CitrosDB_base):
                 if j == 0:
                     _PgCursor.pg_connection.close()
                     self._make_connection_postgres()
+                    if _PgCursor.pg_connection is None:
+                        return {"res": None, "error": None}
                 else:
-                    if self._debug:
-                        raise e
-                    else:
-                        print("Error:", e)
+                    print("Error:", e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.UndefinedColumn,
                 psycopg2.errors.UndefinedFunction,
             ) as e:
-                if self._debug:
-                    raise e
-                else:
-                    print("Error:", e.args[0].split("\n")[0])
+                print("Error:", e.args[0].split("\n")[0])
                 return {"res": None, "error": type(e).__name__}
             except psycopg2.errors.UndefinedTable as e:
                 return {"res": None, "error": type(e).__name__}
             except Exception as e:
-                if self._debug:
-                    raise e
-                else:
-                    print("Error:", e)
+                print("Error:", e)
                 return {"res": None, "error": type(e).__name__}
 
     def _calculate_pg_calls(self, method):
@@ -1068,6 +1068,8 @@ class _PgCursor(CitrosDB_base):
             additional_columns = []
         if len(additional_columns) != 0 and "sid" not in additional_columns:
             additional_columns.append("sid")
+        # if len(additional_columns) != 0 and "rid" not in additional_columns:
+        #     additional_columns.append("rid")
 
         if hasattr(self, "error_flag"):
             return None
@@ -1083,6 +1085,18 @@ class _PgCursor(CitrosDB_base):
 
         if isinstance(data_names, str):
             data_names = [data_names]
+
+        if isinstance(data_names, list):
+            data_names = list(set(data_names))
+
+        data_names_remove = []
+        if data_names is not None and data_names != []:
+            for item in data_names:
+                if item in self._all_additional_columns:
+                    if len(additional_columns) == 0 or (item in additional_columns):
+                        data_names_remove.append(item)
+        for item in data_names_remove:
+            data_names.remove(item)
 
         if not hasattr(self, "_method"):
             self._method = ""
@@ -2143,7 +2157,7 @@ class _PgCursor(CitrosDB_base):
         pandas.DataFrame
             Data from the database.
         """
-        if data_query is None:
+        if data_query is None or data_query == []:
             data_query = ["data"]
             divide_by_columns = True
         else:
@@ -2198,11 +2212,8 @@ class _PgCursor(CitrosDB_base):
                 n_avg=n_avg,
             )
         else:
-            if self._debug:
-                raise NameError('method "{}" does not exist'.format(method))
-            else:
-                print('method "{}" does not exist'.format(method))
-                return None
+            print('method "{}" does not exist'.format(method))
+            return None
         if df is not None:
             if divide_by_columns:
                 df["data"] = df["data"].apply(
@@ -2987,7 +2998,7 @@ class _PgCursor(CitrosDB_base):
         else:
             return None
 
-    def data_for_time_plot(
+    def _data_for_time_plot(
         self, topic_name, var_name, time_step, sids, remove_nan, inf_vals
     ):
         """
@@ -3077,7 +3088,7 @@ class _PgCursor(CitrosDB_base):
 
         return var_df
 
-    def data_for_xy_plot(
+    def _data_for_xy_plot(
         self, topic_name, var_x_name, var_y_name, sids, remove_nan, inf_vals
     ):
         """
@@ -3179,19 +3190,4 @@ class _PgCursor(CitrosDB_base):
         else:
             xy_df = df[flag].set_index("sid")
 
-        if sids is None or sids == []:
-            # sids = list(xy_df.columns.levels[1])
-            sids = list(set(xy_df.index))
-        else:
-            if isinstance(sids, int):
-                sids = [sids]
-            # all_sids = list(xy_df.columns.levels[1])
-            all_sids = list(set(xy_df.index))
-            bad_sids = []
-            for s in sids:
-                if s not in all_sids:
-                    bad_sids.append(s)
-            if len(bad_sids) != 0:
-                print("sids " + str(bad_sids) + " do not exist")
-                sids = [s for s in sids if s not in bad_sids]
         return xy_df

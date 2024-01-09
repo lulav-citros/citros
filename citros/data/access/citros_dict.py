@@ -22,12 +22,13 @@ class CitrosDict(dict):
         --------
         Make a CitrosDict object, convert it to json string and print it:
 
-        >>> d = da.CitrosDict({'package': 'data_analysis', 'module': 'data_access', 'object': 'CitrosDict', 'style': 'json'})
+        >>> from citros import CitrosDict
+        >>> d = CitrosDict({'package': 'data_analysis', 'object': 'CitrosDict', 'method': 'to_json', 'style': 'json'})
         >>> print(d.to_json())
         {
-          "package": "data_analysis",
-          "module": "data_access",
+          "package": "citros",
           "object": "CitrosDict",
+          'method': 'to_json',
           "style": "json"
         }
         """
@@ -42,12 +43,13 @@ class CitrosDict(dict):
         --------
         Make a CitrosDict object and print it in json-style:
 
-        >>> d = da.CitrosDict({'package': 'data_analysis', 'module': 'data_access', 'object': 'CitrosDict', 'style': 'json'})
+        >>> from citros import CitrosDict
+        >>> d = CitrosDict({'package': 'citros', 'object': 'CitrosDict', 'method': 'print', 'style': 'json'})
         >>> d.print()
         {
-         'package': 'data_analysis',
-         'module': 'data_access',
+         'package': 'citros',
          'object': 'CitrosDict',
+         'method': 'print',
          'style': 'json'
         }
         """

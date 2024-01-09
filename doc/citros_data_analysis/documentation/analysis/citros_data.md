@@ -15,7 +15,7 @@ description: 'Documentation'
 
 
     
-## Class `CitrosData` {#citros_data_analysis.error_analysis.citros_data.CitrosData}
+## Class `CitrosData` {#analysis.citros_data.CitrosData}
 
 
 
@@ -103,146 +103,7 @@ For example, for mean calculations difference is the follows:
 
 
     
-## Method `to_pandas` {#citros_data_analysis.error_analysis.citros_data.CitrosData.to_pandas}
-
-
-
-
-```python
-def to_pandas()
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Concatenate **data** and **addData** attributes and return the result table as a pandas.DataFrame.
-
-#### Returns
-
-Name|Type|Description
---|--|--
-|**```df```**|**pandas.DataFrame**|Concatenated table.
-
-</details>
-
-
-    
-## Method `set_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.set_parameter}
-
-
-
-
-```python
-def set_parameter(
-    key=None,
-    value=None,
-    item=None
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Set parameter value to a CitrosData object.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```key```**|**str**|Label of the parameter.
-|**```value```**|**int** or **float**|Parameter value.
-|**```item```**|**dict**|Dictionary with parameters.
-
-</details>
-
-
-    
-## Method `drop_parameter` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_parameter}
-
-
-
-
-```python
-def drop_parameter(
-    key=None
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Delete parameter labeled **key** and associated value.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```key```**|**str**|Label of the parameter to remove.
-
-</details>
-
-
-    
-## Method `add_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.add_addData}
-
-
-
-
-```python
-def add_addData(
-    column,
-    column_label
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Add column to 'addData' attribute.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```column```**|`array-like object`|Column to add.
-|**```column_label```**|**str**|Label of the new column in 'addData'.
-
-</details>
-
-
-    
-## Method `drop_addData` {#citros_data_analysis.error_analysis.citros_data.CitrosData.drop_addData}
-
-
-
-
-```python
-def drop_addData(
-    column_label
-)
-```
-
-
-<details>
-  <summary>Description</summary>
-
-Delete column from 'addData' attribute.
-
-#### Parameters
-
-Name|Type|Description
---|--|--
-|**```column_label```**|**str**|Label of the column to delete .
-
-</details>
-
-
-    
-## Method `bin_data` {#citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data}
+## Method `bin_data` {#analysis.citros_data.CitrosData.bin_data}
 
 
 
@@ -284,24 +145,30 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```out```**|**[CitrosData](#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")**|New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.
+|**```out```**|**[CitrosData](#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")**|New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Query some data from the topic 'A'
+Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
 ```python
->>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
+>>> from citros import CitrosDB, CitrosData
+>>> citros = CitrosDB()
+>>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
 >>> print(df)
+    sid rid time    topic   type    data.x.x_1  data.time
+0   0   0   17...   coords  Array   0.0         0.0
+1   0   1   17...   coords  Array   0.005       0.1
+...
 ```
 
 
 Construct CitrosData object with one data-column 'data.x.x_1':
 
 ```python
->>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
+>>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 ```
 
 
@@ -342,7 +209,7 @@ data.time_id  sid
 
 
     
-## Method `scale_data` {#citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data}
+## Method `scale_data` {#analysis.citros_data.CitrosData.scale_data}
 
 
 
@@ -382,24 +249,30 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```out```**|**[CitrosData](#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")**|CitrosData object with multi-level indexing: the first level stores ids of the points of the new scale, the second one - 'sid'.<br />    Values of the new scale are stored in 'addData' attribute.
+|**```out```**|**[CitrosData](#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")**|CitrosData object with multi-level indexing: the first level stores ids of the points of the new scale, the second one - 'sid'.<br />    Values of the new scale are stored in 'addData' attribute.
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Query some data from the topic 'A'
+Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
 ```python
->>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
+>>> from citros import CitrosDB, CitrosData
+>>> citros = CitrosDB()
+>>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
 >>> print(df)
+    sid rid time    topic   type    data.x.x_1  data.time
+0   0   0   17...   coords  Array   0.0         0.0
+1   0   1   17...   coords  Array   0.005       0.1
+...
 ```
 
 
 Construct CitrosData object with one data-column 'data.x.x_1':
 
 ```python
->>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
+>>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 ```
 
 
@@ -440,7 +313,7 @@ data.time_id  sid
 
 
     
-## Method `get_statistics` {#citros_data_analysis.error_analysis.citros_data.CitrosData.get_statistics}
+## Method `get_statistics` {#analysis.citros_data.CitrosData.get_statistics}
 
 
 
@@ -466,26 +339,25 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```Statistics```**|**pandas.DataFrame** or **[CitrosStat](citros_stat.md#citros_data_analysis.error_analysis.citros_stat.CitrosStat "citros_data_analysis.error_analysis.citros_stat.CitrosStat")**|Collected statistics.<br />    If **return_format** is 'pandas', then returns pandas.DataFrame with the following columns:<br />      &#8226; (1) the independent variable column, its label matches **x_label** attribute; <br />      &#8226; (2) column with mean values;<br />      &#8226; (3) column with the covariance matrixes; <br />      &#8226; (4) column with the square roots of the diagonal elements of the covariance matrix: ( sqrt(s1), sqrt(s2), sqrt(s3) ), <br />    where s1,s2,s3 - diagonal of the covariance matrix. <br />    <br />    If **return_format** is 'citrosStat', then returns CitrosStat object with 'x', 'mean', 'covar_matrix' and 'sigma' attributes,<br />    that corresponds to (1)-(4) items, but in the form of pandas.DataFrames.
+|**```Statistics```**|**pandas.DataFrame** or **[CitrosStat](citros_stat.md#analysis.citros_stat.CitrosStat "analysis.citros_stat.CitrosStat")**|Collected statistics.<br />    If **return_format** is 'pandas', then returns pandas.DataFrame with the following columns:<br />      &#8226; (1) the independent variable column, its label matches **x_label** attribute; <br />      &#8226; (2) column with mean values;<br />      &#8226; (3) column with the covariance matrixes; <br />      &#8226; (4) column with the square roots of the diagonal elements of the covariance matrix: ( sqrt(s1), sqrt(s2), sqrt(s3) ), <br />    where s1,s2,s3 - diagonal of the covariance matrix. <br />    <br />    If **return_format** is 'citrosStat', then returns CitrosStat object with 'x', 'mean', 'covar_matrix' and 'sigma' attributes,<br />    that corresponds to (1)-(4) items, but in the form of pandas.DataFrames.
 #### See Also
 
-**[CitrosData.bin_data()](#citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data "citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data")**, **[CitrosData.scale_data()](#citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data "citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data")**, **[CitrosData.show_statistics()](#citros_data_analysis.error_analysis.citros_data.CitrosData.show_statistics "citros_data_analysis.error_analysis.citros_data.CitrosData.show_statistics")**
+**[CitrosData.bin_data()](#analysis.citros_data.CitrosData.bin_data "analysis.citros_data.CitrosData.bin_data")**, **[CitrosData.scale_data()](#analysis.citros_data.CitrosData.scale_data "analysis.citros_data.CitrosData.scale_data")**, **[CitrosData.show_statistics()](#analysis.citros_data.CitrosData.show_statistics "analysis.citros_data.CitrosData.show_statistics")**
 
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+Import and create CitrosDB object to query data from the batch 'star' of the simulation 'simulation_galaxy':
 
 ```python
->>> from citros_data_analysis import data_access as da
->>> from citros_data_analysis import error_analysis as analysis
->>> citros = da.CitrosDB()
+>>> from citros import CitrosDB, CitrosData
+>>> citros = CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
 ```
 
 
-Let's consider a data of the topic 'A', json-data part of which has the following structure:
+Let's consider a json-data part of the topic 'coords' has the following structure:
 
 ```python
 data
@@ -498,12 +370,12 @@ Let's query data and pass it to CitrosData object to perform analysis.
 It is possible to query all columns separately:
 
 ```python
->>> df = citros.topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
+>>> df = citros.topic('coords').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
 >>> print(df)
    sid   rid   time       topic   type   data.x.x_1   data.x.x_2   data.x.x_3   data.time
-0  1     0     312751159  A       a      0.000        0.080        154.47       10.0
-1  1     1     407264008  A       a      0.008        0.080        130.97       17.9
-2  1     2     951279608  A       a      0.016        0.078        117.66       20.3
+0  1     0     312751159  coords  Array  0.000        0.080        154.47       10.0
+1  1     1     407264008  coords  Array  0.008        0.080        130.97       17.9
+2  1     2     951279608  coords  Array  0.016        0.078        117.66       20.3
 ...
 ```
 
@@ -511,21 +383,21 @@ It is possible to query all columns separately:
 and define data labels for the CitrosData object as follows:
 
 ```python
->>> dataset = analysis.CitrosData(df,
-...                               data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
-...                               units = 'm')
+>>> dataset = CitrosData(df,
+...                      data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
+...                      units = 'm')
 ```
 
 
 or query 'data.x' as a one column:
 
 ```python
->>> df = citros.topic('A').data(['data.x', 'data.time'])
+>>> df = citros.topic('coords').data(['data.x', 'data.time'])
 >>> print(df)
    sid   rid   time       topic   type   data.x                                       data.time
-0  1     0     312751159  A       a      {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
-1  1     1     407264008  A       a      {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
-2  1     2     951279608  A       a      {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
+0  1     0     312751159  coords  Array  {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
+1  1     1     407264008  coords  Array  {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
+2  1     2     951279608  coords  Array  {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
 ...
 ```
 
@@ -533,9 +405,9 @@ or query 'data.x' as a one column:
 and correspondingly set data_label:
 
 ```python
->>> dataset = analysis.CitrosData(df,
-...                               data_label = 'data.x',
-...                               units = 'm')
+>>> dataset = CitrosData(df,
+...                      data_label = 'data.x',
+...                      units = 'm')
 ```
 
 
@@ -613,7 +485,7 @@ is a data dimension:
 
 
     
-## Method `show_statistics` {#citros_data_analysis.error_analysis.citros_data.CitrosData.show_statistics}
+## Method `show_statistics` {#analysis.citros_data.CitrosData.show_statistics}
 
 
 
@@ -621,7 +493,6 @@ is a data dimension:
 ```python
 def show_statistics(
     fig=None,
-    show_fig=True,
     return_fig=False,
     n_std=3,
     fig_title='Statistics',
@@ -643,7 +514,6 @@ Collect statistics for CitrosData object and plot it.
 Name|Type|Description
 --|--|--
 |**```fig```**|**matplotlib.figure.Figure**|figure to plot on. If None, the new one will be created.
-|**```show_fig```**|**bool**|If the figure should be shown, True by default.
 |**```return_fig```**|**bool**|If the figure parameters fig, ax should be returned; <br />    fig is matplotlib.figure.Figure and ax is matplotlib.axes.Axes
 |**```n_std```**|**int**, default **3**|Error interval to display in standard deviations.
 |**```fig_title```**|**str**, default `'Statistics'`|Title of the figure.
@@ -659,23 +529,23 @@ Name|Type|Description
 |**```ax```**|**numpy.ndarray** of **matplotlib.axes.Axes**|if **return_fig** set to True
 #### See Also
 
-**[CitrosData.get_statistics()](#citros_data_analysis.error_analysis.citros_data.CitrosData.get_statistics "citros_data_analysis.error_analysis.citros_data.CitrosData.get_statistics")**, **[CitrosData.bin_data()](#citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data "citros_data_analysis.error_analysis.citros_data.CitrosData.bin_data")**, **[CitrosData.scale_data()](#citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data "citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data")**
+**[CitrosData.get_statistics()](#analysis.citros_data.CitrosData.get_statistics "analysis.citros_data.CitrosData.get_statistics")**, **[CitrosData.bin_data()](#analysis.citros_data.CitrosData.bin_data "analysis.citros_data.CitrosData.bin_data")**, **[CitrosData.scale_data()](#analysis.citros_data.CitrosData.scale_data "analysis.citros_data.CitrosData.scale_data")**
 
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
 
 ```python
->>> from citros_data_analysis import data_access as da
->>> from citros_data_analysis import error_analysis as analysis
->>> citros = da.CitrosDB()
+>>> from citros import CitrosDB, CitrosData
+>>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
 ```
 
 
-Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time':
+Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time'
+from the topic 'A':
 
 ```python
 >>> df = citros.topic('A').data(['data.x', 'data.time'])
@@ -685,7 +555,7 @@ Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and dat
 Construct CitrosData object with 3 data-columns from 'data.x':
 
 ```python
->>> dataset = analysis.CitrosData(df, data_label=['data.x'], units = 'm')
+>>> dataset = CitrosData(df, data_label=['data.x'], units = 'm')
 ```
 
 
@@ -693,8 +563,7 @@ Use method scale_data() or bin_data() to get correspondence between different si
 
 ```python
 >>> db_sc = dataset.scale_data(n_points = 150, 
-                               param_label = 'data.time', 
-                               show_fig = False)
+                               param_label = 'data.time')
 ```
 
 
@@ -708,7 +577,7 @@ Show statistics plot:
 
 
     
-## Method `show_correlation` {#citros_data_analysis.error_analysis.citros_data.CitrosData.show_correlation}
+## Method `show_correlation` {#analysis.citros_data.CitrosData.show_correlation}
 
 
 
@@ -745,7 +614,7 @@ is supposed to be plotted along x-axis and the data from **db2** is supposed to 
 
 Name|Type|Description
 --|--|--
-|**```db2```**|**[CitrosData](#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")**|Additional CitrosData object.
+|**```db2```**|**[CitrosData](#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")**|Additional CitrosData object.
 |**```x_col```**|`int >=0` or **str**, optional|      &#8226; If **int** - index of column to plot along x axis, >=0.<br />      &#8226; If **str** - label of the column to plot along y axis<br />      &#8226; If data is multidimensional, must be specified, otherwise data is supposed to be 1-dimensional.
 |**```y_col```**|`int >=0`  or **str**, optional|      &#8226; If **int** - index of column to plot along y axis, >=0.<br />      &#8226; If **str** - label of the column to plot along y axis<br />      &#8226; If data is multidimensional, must be specified, otherwise data is supposed to be 1-dimensional.
 |**```slice_id```**|**int**|id of the slice.
@@ -774,12 +643,11 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
 
 ```python
->>> from citros_data_analysis import data_access as da
->>> from citros_data_analysis import error_analysis as analysis
->>> citros = da.CitrosDB()
+>>> from citros import CitrosDB, CitrosData
+>>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
 ```
 
 
@@ -793,7 +661,7 @@ For topic 'B' query json-data column 'data.x.x_1', 'data.x.x_2' and 'data.time':
 Construct CitrosData object with 2 data-columns 'data.x.x_1', 'data.x.x_2':
 
 ```python
->>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
+>>> dataset = CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
 ```
 
 
@@ -818,5 +686,144 @@ Plot correlation plot for the index = 5:
 slice_id = 5,
 slice_val = 0.2632
 ```
+
+</details>
+
+
+    
+## Method `to_pandas` {#analysis.citros_data.CitrosData.to_pandas}
+
+
+
+
+```python
+def to_pandas()
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Concatenate **data** and **addData** attributes and return the result table as a pandas.DataFrame.
+
+#### Returns
+
+Name|Type|Description
+--|--|--
+|**```df```**|**pandas.DataFrame**|Concatenated table.
+
+</details>
+
+
+    
+## Method `set_parameter` {#analysis.citros_data.CitrosData.set_parameter}
+
+
+
+
+```python
+def set_parameter(
+    key=None,
+    value=None,
+    item=None
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Set parameter value to a CitrosData object.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```key```**|**str**|Label of the parameter.
+|**```value```**|**int** or **float**|Parameter value.
+|**```item```**|**dict**|Dictionary with parameters.
+
+</details>
+
+
+    
+## Method `drop_parameter` {#analysis.citros_data.CitrosData.drop_parameter}
+
+
+
+
+```python
+def drop_parameter(
+    key=None
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Delete parameter labeled **key** and associated value.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```key```**|**str**|Label of the parameter to remove.
+
+</details>
+
+
+    
+## Method `add_addData` {#analysis.citros_data.CitrosData.add_addData}
+
+
+
+
+```python
+def add_addData(
+    column,
+    column_label
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Add column to 'addData' attribute.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```column```**|`array-like object`|Column to add.
+|**```column_label```**|**str**|Label of the new column in 'addData'.
+
+</details>
+
+
+    
+## Method `drop_addData` {#analysis.citros_data.CitrosData.drop_addData}
+
+
+
+
+```python
+def drop_addData(
+    column_label
+)
+```
+
+
+<details>
+  <summary>Description</summary>
+
+Delete column from 'addData' attribute.
+
+#### Parameters
+
+Name|Type|Description
+--|--|--
+|**```column_label```**|**str**|Label of the column to delete .
 
 </details>

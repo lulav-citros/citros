@@ -29,7 +29,6 @@ from .report import Report, NoNotebookFoundException
 from .data import (
     CitrosDB,
     CitrosDict,
-    get_version,
     CitrosData,
     CitrosDataArray,
     CitrosStat,
@@ -64,7 +63,6 @@ __all__ = [
     # data
     CitrosDB,
     CitrosDict,
-    get_version,
     CitrosData,
     CitrosDataArray,
     CitrosStat,

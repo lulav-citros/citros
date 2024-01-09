@@ -1,8 +1,6 @@
-# from citros_data_analysis.error_analysis.citros_data import CitrosData
-from ..analysis import CitrosData
+from citros.data.analysis import CitrosData
+from citros.data.access import CitrosDict
 
-# from citros_data_analysis.data_access import citros_db as da
-from ..access import CitrosDB, CitrosDict, get_version
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -42,21 +40,21 @@ class Validation:
     ----------
     df : pandas.DataFrame or None
         Data table to perform validation tests on.
-    db : citros_data_analysis.error_analysis.citros_data.CitrosData or None
+    db : analysis.citros_data.CitrosData or None
         CitrosData object after binning or scaling.
-    stat : citros_data_analysis.error_analysis.citros_stat.CitrosStat or None
+    stat : analysis.citros_stat.CitrosStat or None
         CitrosStat object that stores mean, standard deviation and covariance matrix as attributes.
 
     Examples
     --------
-    Import validation and data_analysis packages:
+    Import Validation and CitrosDB:
 
-    >>> import data_analysis as da
-    >>> import validation as va
+    >>> from citros import CitrosDB, Validation
 
-    For topic 'A' from json-data column download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
+    From the batch 'albedo' of the simulation 'planetary_nebula' from the json-data column of the topic 'A' 
+    download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
 
-    >>> citros = CitrosDB()
+    >>> citros = CitrosDB(simulation = 'planetary_nebula', batch = 'albedo')
     >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
     >>> print(df)
         sid   rid   time        topic   type   data.x.x_1   data.time
@@ -68,8 +66,8 @@ class Validation:
     `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals,
     set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
-    >>> V = va.Validation(df, data_label = ['data.x.x_1'], param_label = 'data.time',
-    ...                   method = 'bin', num = 50, units = 'm')
+    >>> V = Validation(df, data_label = ['data.x.x_1'], param_label = 'data.time',
+    ...                method = 'bin', num = 50, units = 'm')
 
     For topic 'A' download 3-dimensional json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
     and column with time 'data.time'.
@@ -84,8 +82,8 @@ class Validation:
     `method` defines the method of data preparation and index assignment: method = 'scale' - scales parameter `param_label` for each of the 'sid' to [0, 1] interval
     and interpolate data on the new scale.
 
-    >>> V = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-    ...                   method = 'scale', num = 50, units = 'm')
+    >>> V = Validation(df, data_label = 'data.x', param_label = 'data.time',
+    ...                method = 'scale', num = 50, units = 'm')
     """
 
     def __init__(
@@ -147,9 +145,9 @@ class Validation:
 
         See Also
         --------
-        citros_data_analysis.error_analysis.error_analysis.CitrosData.bin_data :
+        analysis.citros_data.CitrosData.bin_data :
             Bin values of column `param_label` in `num` intervals, group data according to the binning and calculate mean values of each group.
-        citros_data_analysis.error_analysis.citros_data.CitrosData.scale_data :
+        analysis.citros_data.CitrosData.scale_data :
             Scale parameter `param_label` for each of the 'sid' and interpolate data on the new scale.
         """
         if df is not None:
@@ -252,7 +250,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with validation test results.
         table : pandas.DataFrame
             Table with test results for each of the standard deviation boundary point, indicating whether it passes or fails the test.
@@ -277,21 +275,21 @@ class Validation:
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
-        >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-        ...                   method = 'bin', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+        ...                method = 'bin', num = 50, units = 'm')
 
         Test whether 3-sigma standard deviation boundary is within interval [-0.3, 0.3] (treat nan values of the
         standard deviation, if they exist, as passing the test):
@@ -349,8 +347,8 @@ class Validation:
         and interpolate data on the new scale.
         
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
-        >>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+        ...                 method = 'scale', num = 50, units = 'm')
 
         Set different limits on 3-dimensional vector: [-0.5, 0.5] for the first element, [-1.5, 1.5] for the second,
         [-20, 10] for the third:
@@ -361,7 +359,7 @@ class Validation:
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Std boundary test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=n_std,
             std_color=std_color,
@@ -464,7 +462,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with validation test results.
         table : pandas.DataFrame
             Table with test results for each of the mean point, indicating whether it passes or fails the test.
@@ -473,21 +471,21 @@ class Validation:
         
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
-        >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-        ...                   method = 'bin', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+        ...                method = 'bin', num = 50, units = 'm')
 
         Test whether mean values are is within the  interval [-10, 10]:
 
@@ -536,19 +534,19 @@ class Validation:
         and interpolate data on the new scale.
         
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
-        >>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+        ...                 method = 'scale', num = 50, units = 'm')
 
         Set different limits on 3-dimensional vector: [-0.5, 0.5] for the first element, [-1.5, 1.5] for the second,
         [-20, 10] for the third:
         
-        >>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]], n_std = 3)
+        >>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]])
         mean_test: passed
         """
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Mean test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=None,
             std_color="b",
@@ -652,7 +650,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with validation test results.
         table : pandas.DataFrame
             Table with test results for each of the standard deviation point, indicating whether it passes or fails the test.
@@ -677,21 +675,21 @@ class Validation:
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
         ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
-        >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-        ...                   method = 'bin', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+        ...                method = 'bin', num = 50, units = 'm')
 
         Test whether 3-sigma standard deviation is within interval [-0.3, 0.3] (treat nan values of the
         standard deviation, if they exist, as passing the test):
@@ -731,8 +729,8 @@ class Validation:
         and interpolate data on the new scale.
         
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
-        >>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+        ...                 method = 'scale', num = 50, units = 'm')
 
         Set different limits on 3-dimensional vector: 1.5 for the first element, 1.5 for the second,
         30 for the third:
@@ -848,115 +846,6 @@ class Validation:
 
         return log, result, fig
 
-    def _get_mean_std_log(self, init_param, result):
-        """
-        Write log for std and mean bound tests.
-
-        Parameters
-        ----------
-        init_param : dict
-            Initial parameters to write in the log.
-        result : pandas.DataFrame
-            Table with results of the test.
-
-        Returns
-        -------
-        log: citros_data_analysis.data_access.citros_dict.CitrosDict
-            Dictionary with information for each column: 'passed' (True or False), 'pass_rate', 'failed' (indexes and x values of the
-            points that fail the test).
-        """
-        log = CitrosDict()
-
-        # init parameters
-        log["test_param"] = CitrosDict(init_param)
-
-        # calculate pass rate (how many points pass)
-        try:
-            pass_rate = CitrosDict(
-                (
-                    result[self.db.data.columns].apply(pd.Series.value_counts).loc[True]
-                    / len(result)
-                )
-                .fillna(0)
-                .apply(round, ndigits=3)
-            )
-        except KeyError:
-            # in case all points failed test and there is no True values
-            pass_rate = CitrosDict()
-            for col in self.db.data.columns:
-                pass_rate[col] = 0.0
-
-        for col in self.db.data.columns:
-            log[col] = CitrosDict()
-            log[col]["passed"] = True if result[col].all() else False
-            log[col]["pass_rate"] = pass_rate[col]
-            log[col]["failed"] = CitrosDict(
-                result[self.db.x_label]
-                .loc[result.index[result[col] == False]]
-                .to_dict()
-            )
-            # log[col]['table'] = result[[col]]
-
-        return log
-
-    def _plot_bounds(self, result, lower_limit, upper_limit, fig):
-        """
-        Add bound lines on the plot.
-
-        Parameters
-        ----------
-        result : pandas.DataFrame
-            Table with results of the test.
-        lower_limit : numpy.ndarray
-            Lower limit(s).
-        upper_limit : numpy.ndarray
-            Upper limit(s).
-        fig : matplotlib.figure.Figure
-            Figure to plot bound lines on.
-        """
-        axes = fig.axes
-        for i, ax in enumerate(axes):
-            if isinstance(lower_limit, np.ndarray) and len(lower_limit.shape) != 0:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [lower_limit[i], lower_limit[i]],
-                    "r",
-                )
-            elif isinstance(lower_limit, pd.DataFrame) and len(lower_limit.shape) != 0:
-                ax.plot(result[self.db.x_label], lower_limit, "r")
-            else:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [lower_limit, lower_limit],
-                    "r",
-                )
-
-            if isinstance(upper_limit, np.ndarray) and len(upper_limit.shape) != 0:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [upper_limit[i], upper_limit[i]],
-                    "r",
-                )
-            elif isinstance(upper_limit, pd.DataFrame) and len(upper_limit.shape) != 0:
-                ax.plot(result[self.db.x_label], upper_limit, "r")
-            else:
-                ax.plot(
-                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
-                    [upper_limit, upper_limit],
-                    "r",
-                )
-
-        line = Line2D([0], [0], label="test bounds", color="r")
-        handles, labels = axes[-1].get_legend_handles_labels()
-        fig.legend(
-            handles + [line],
-            labels + ["test bounds"],
-            bbox_to_anchor=(1.0, 0.94),
-            loc="upper left",
-        )
-        fig.legends.pop(0)
-        fig.tight_layout()
-
     def sid_test(self, limits: Union[float, list] = 1.0, nan_passed: bool = True):
         """
         Test whether all simulations are within the given limits.
@@ -1000,7 +889,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with validation test results.
         table : pandas.DataFrame
             Table with test results for each point of the simulations, indicating whether it passes or fails the test.
@@ -1009,21 +898,21 @@ class Validation:
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+        labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals, 
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
         
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\\
                                   .data(['data.x.x_1','data.x.x_2','data.time'])
-        >>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-        ...                   method = 'bin', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+        ...                method = 'bin', num = 50, units = 'm')
 
         Test whether all simulations are is within the interval [-10, 10]:
 
@@ -1072,8 +961,8 @@ class Validation:
         and interpolate data on the new scale.
         
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
-        >>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+        ...                 method = 'scale', num = 50, units = 'm')
 
         Set different limits on 3-dimensional vector: [-0.5, 0.5] for the first element, [-1.5, 1.5] for the second one, an
         [-20, 10] for the third vector element:
@@ -1084,7 +973,7 @@ class Validation:
         fig, ax = self.db._plot_statistics(
             self.stat,
             fig_title="Sid test",
-            show_fig=False,
+            # show_fig=False,
             return_fig=True,
             n_std=None,
             std_color="b",
@@ -1233,7 +1122,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with validation test results.
         table : pandas.DataFrame
             Table with test results for each simulation, indicating whether it passes or fails the test.
@@ -1242,20 +1131,20 @@ class Validation:
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        For topic 'A' download 1 columns of the simulated data labeled 'data.x.x_1' and column with time 'data.time'.
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 1 columns of the simulated data 
+        labeled 'data.x.x_1' and column with time 'data.time'.
         Set 'data.time' as independent variable and 'data.x.x_1' as a dependent one.
         `method` defines the method of data preparation and index assignment: method = 'bin' - bins values of column `param_label` in `num` intervals,
         set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
-        >>> V = va.Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
-        ...                   method = 'bin', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
+        ...                method = 'bin', num = 50, units = 'm')
 
         Test whether L2 norm for each of the simulation does not exceed 1:
 
@@ -1291,8 +1180,8 @@ class Validation:
         and interpolate data on the new scale.
 
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
-        >>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time',
+        ...                method = 'scale', num = 50, units = 'm')
 
         Set different limits on Linf norm for each of the element of the 3-dimensional vector: 1.0 for the first element,
         0.1 for the second one, and 0.5 for the third vector element:
@@ -1406,31 +1295,6 @@ class Validation:
         fig.tight_layout()
 
         return log, result, fig
-
-    def _get_norm(self, norm_type="L2"):
-        """
-        Calculates norm.
-
-        Parameters
-        ----------
-        norm_type : {'L2', 'Linf'}, default 'L2'
-            Norm type.
-        """
-        if norm_type == "L2":
-            norm = (
-                self.db.data.apply(lambda x: x**2)
-                .groupby("sid")
-                .sum()
-                .apply(lambda x: np.sqrt(x))
-            )
-        elif norm_type == "Linf":
-            norm = (abs(self.db.data)).groupby("sid").max()
-        else:
-            print(
-                "error: can not recognize the norm type, the allowed types are 'L2' and 'Linf'"
-            )
-            norm = None
-        return norm
 
     def set_tests(
         self,
@@ -1565,7 +1429,7 @@ class Validation:
 
         Returns
         -------
-        log : citros_data_analysis.data_access.citros_dict.CitrosDict
+        log : access.citros_dict.CitrosDict
             Dictionary with the test results.
         tables : dict
             Dictionary with test methods as keys and pandas.DataFrame table with results of the test as values.
@@ -1574,19 +1438,19 @@ class Validation:
 
         See Also
         --------
-        Validation.std_bound_test, Validation.mean_test, Validation.sid_test, Validation.norm_test
+        Validation.std_bound_test, Validation.mean_test, Validation.std_test, Validation.sid_test, Validation.norm_test
 
         Examples
         --------
-        Import validation and data_analysis packages:
+        Import Validation and CitrosDB:
 
-        >>> import data_analysis as da
-        >>> import validation as va
+        >>> from citros import CitrosDB, Validation
 
-        From topic 'A' download 3-dimensional json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
+        From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 3-dimensional 
+        json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
         and column with time 'data.time'.
 
-        >>> citros = CitrosDB()
+        >>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
         >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
         >>> print(df['data.x'])
         0          {'x_1': 0.0, 'x_2': 0.08, 'x_3': 0.047}
@@ -1598,8 +1462,8 @@ class Validation:
         `method` defines the method of data preparation and index assignment: method = 'scale' - scales parameter `param_label` for each of the 'sid' to [0, 1] interval
         and interpolate data on the new scale.
 
-        >>> V = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-        ...                   method = 'scale', num = 50, units = 'm')
+        >>> V = Validation(df, data_label = 'data.x', param_label = 'data.time',
+        ...                method = 'scale', num = 50, units = 'm')
 
         Test whether 3 standard deviation boundary is within [-0.3, 0.3] interval (treat nan values of the
         standard deviation, if they are presented, as passed the test) and L2 norm of the each simulation is less than 12.5:
@@ -1711,8 +1575,142 @@ class Validation:
                     norm_type=norm_tests[method], **test_method[method]
                 )
 
-        return logs, tables, figures
+        return logs, tables, figures    
+    
+    def _get_norm(self, norm_type="L2"):
+        """
+        Calculates norm.
 
+        Parameters
+        ----------
+        norm_type : {'L2', 'Linf'}, default 'L2'
+            Norm type.
+        """
+        if norm_type == "L2":
+            norm = (
+                self.db.data.apply(lambda x: x**2)
+                .groupby("sid")
+                .sum()
+                .apply(lambda x: np.sqrt(x))
+            )
+        elif norm_type == "Linf":
+            norm = (abs(self.db.data)).groupby("sid").max()
+        else:
+            print(
+                "error: can not recognize the norm type, the allowed types are 'L2' and 'Linf'"
+            )
+            norm = None
+        return norm
+
+    def _get_mean_std_log(self, init_param, result):
+        """
+        Write log for std and mean bound tests.
+
+        Parameters
+        ----------
+        init_param : dict
+            Initial parameters to write in the log.
+        result : pandas.DataFrame
+            Table with results of the test.
+
+        Returns
+        -------
+        log : access.citros_dict.CitrosDict
+            Dictionary with information for each column: 'passed' (True or False), 'pass_rate', 'failed' (indexes and x values of the
+            points that fail the test).
+        """
+        log = CitrosDict()
+
+        # init parameters
+        log["test_param"] = CitrosDict(init_param)
+
+        # calculate pass rate (how many points pass)
+        try:
+            pass_rate = CitrosDict(
+                (
+                    result[self.db.data.columns].apply(pd.Series.value_counts).loc[True]
+                    / len(result)
+                )
+                .fillna(0)
+                .apply(round, ndigits=3)
+            )
+        except KeyError:
+            # in case all points failed test and there is no True values
+            pass_rate = CitrosDict()
+            for col in self.db.data.columns:
+                pass_rate[col] = 0.0
+
+        for col in self.db.data.columns:
+            log[col] = CitrosDict()
+            log[col]["passed"] = True if result[col].all() else False
+            log[col]["pass_rate"] = pass_rate[col]
+            log[col]["failed"] = CitrosDict(
+                result[self.db.x_label]
+                .loc[result.index[result[col] == False]]
+                .to_dict()
+            )
+            # log[col]['table'] = result[[col]]
+
+        return log
+
+    def _plot_bounds(self, result, lower_limit, upper_limit, fig):
+        """
+        Add bound lines on the plot.
+
+        Parameters
+        ----------
+        result : pandas.DataFrame
+            Table with results of the test.
+        lower_limit : numpy.ndarray
+            Lower limit(s).
+        upper_limit : numpy.ndarray
+            Upper limit(s).
+        fig : matplotlib.figure.Figure
+            Figure to plot bound lines on.
+        """
+        axes = fig.axes
+        for i, ax in enumerate(axes):
+            if isinstance(lower_limit, np.ndarray) and len(lower_limit.shape) != 0:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [lower_limit[i], lower_limit[i]],
+                    "r",
+                )
+            elif isinstance(lower_limit, pd.DataFrame) and len(lower_limit.shape) != 0:
+                ax.plot(result[self.db.x_label], lower_limit, "r")
+            else:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [lower_limit, lower_limit],
+                    "r",
+                )
+
+            if isinstance(upper_limit, np.ndarray) and len(upper_limit.shape) != 0:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [upper_limit[i], upper_limit[i]],
+                    "r",
+                )
+            elif isinstance(upper_limit, pd.DataFrame) and len(upper_limit.shape) != 0:
+                ax.plot(result[self.db.x_label], upper_limit, "r")
+            else:
+                ax.plot(
+                    [min(result[self.db.x_label]), max(result[self.db.x_label])],
+                    [upper_limit, upper_limit],
+                    "r",
+                )
+
+        line = Line2D([0], [0], label="test bounds", color="r")
+        handles, labels = axes[-1].get_legend_handles_labels()
+        fig.legend(
+            handles + [line],
+            labels + ["test bounds"],
+            bbox_to_anchor=(1.0, 0.94),
+            loc="upper left",
+        )
+        fig.legends.pop(0)
+        fig.tight_layout()
+ 
     def _get_limit_values(self, limits, data_length):
         """
         Get lower and upper limits from `limits`.

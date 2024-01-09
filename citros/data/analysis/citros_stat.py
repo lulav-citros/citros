@@ -56,7 +56,7 @@ class CitrosStat:
     
     def plot(self, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = True, return_fig: bool = False, 
              n_std: int = 3, fig_title: str = 'Statistics', std_color: str = 'r'):
-        '''
+        """
         Plot mean values and standard deviations.
 
         Parameters
@@ -81,7 +81,7 @@ class CitrosStat:
             if `return_fig` set to True
         ax : list of matplotlib.axes.Axes
             if `return_fig` set to True
-        '''
+        """
         if (not show_fig) and (not return_fig):
             return
 

@@ -4,8 +4,8 @@ from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..analysis import CitrosData, CitrosDataArray, CitrosStat
-
+# from ..analysis import CitrosData
+from citros.data.analysis import CitrosData
 # from citros import CitrosData, CitrosDataArray, CitrosStat
 
 from itertools import cycle
@@ -69,7 +69,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         return_flag = False
         if ax is None:
@@ -100,7 +99,7 @@ class _Plotter:
             df_copy.sort_values(by=["sid", "rid"], axis=0, inplace=True)
         except:
             pass
-        df_copy.set_index("sid", inplace=True)
+        df_copy.set_index("sid", inplace=True, drop=False)
         sid_list = list(set(df_copy.index))
         for s in sid_list:
             ax.plot(
@@ -194,7 +193,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         return_flag = False
         if ax is None:
@@ -227,7 +225,7 @@ class _Plotter:
             df_copy.sort_values(by=["sid", "rid"], axis=0, inplace=True)
         except:
             pass
-        df_copy.set_index("sid", inplace=True)
+        df_copy.set_index("sid", inplace=True, drop=False)
         sid_list = list(set(df_copy.index))
         for s in sid_list:
             ax.plot(
@@ -325,7 +323,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         if isinstance(y_labels, str):
             y_labels = [y_labels]
@@ -401,7 +398,7 @@ class _Plotter:
                 F = df_copy[[x_label, y_label, "sid"]].loc[flag]
             else:
                 F = df_copy[[x_label, "sid"]].loc[flag]
-            F.set_index("sid", inplace=True)
+            F.set_index("sid", inplace=True, drop=False)
             sid_list = list(set(F.index))
             for s in sid_list:
                 ax[i].plot(
@@ -491,7 +488,7 @@ class _Plotter:
         label_all_yaxis : bool, default False
             If True, y labels are set to the y-axes of the all graphs, otherwise only to the graphs in the first column.
         num : int, default 5
-            Number of bins in the histogram on the diogonal.
+            Number of bins in the histogram on the diagonal.
 
         Returns
         -------
@@ -587,7 +584,10 @@ class _Plotter:
                     flag = df_copy[x_label].notna()
                     if inf_vals is not None:
                         flag = flag & ((abs(df_copy[x_label]) - inf_vals) < 0)
-                    F = df_copy[[x_label, "sid"]].loc[flag].set_index("sid")
+                    if x_label != "sid":
+                        F = df_copy[[x_label, "sid"]].loc[flag].set_index("sid", drop=False)
+                    else:
+                        F = df_copy[["sid"]].loc[flag].set_index("sid", drop=False)
                     sid_list = list(set(F.index))
                     for s in sid_list:
                         axes[i][j].hist(
@@ -610,7 +610,8 @@ class _Plotter:
                         F = df_copy[[x_label, y_label, "sid"]].loc[flag]
                     else:
                         F = df_copy[[x_label, "sid"]].loc[flag]
-                    F.set_index("sid", inplace=True)
+                    F = F.loc[:, ~F.columns.duplicated()]
+                    F.set_index("sid", inplace=True, drop=False)
                     sid_list = list(set(F.index))
                     for s in sid_list:
                         axes[i][j].plot(
@@ -850,7 +851,7 @@ class _Plotter:
             return None
 
     def time_plot(
-        self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs
+        self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs,
     ):
         """
         Plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
@@ -959,6 +960,20 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         """
+        if sids is None or sids == []:
+            sids = list(set(xy_df.index))
+        else:
+            if isinstance(sids, int):
+                sids = [sids]
+            all_sids = list(set(xy_df.index))
+            bad_sids = []
+            for s in sids:
+                if s not in all_sids:
+                    bad_sids.append(s)
+            if len(bad_sids) != 0:
+                print("sids " + str(bad_sids) + " do not exist")
+                sids = [s for s in sids if s not in bad_sids]
+
         for s in sids:
             ax.plot(
                 xy_df[var_x_name].loc[s],
