@@ -488,7 +488,7 @@ class _Plotter:
         label_all_yaxis : bool, default False
             If True, y labels are set to the y-axes of the all graphs, otherwise only to the graphs in the first column.
         num : int, default 5
-            Number of bins in the histogram on the diogonal.
+            Number of bins in the histogram on the diagonal.
 
         Returns
         -------
