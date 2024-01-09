@@ -210,6 +210,8 @@ class CitrosDataArray:
         if show_fig or return_fig or fig is not None:
             if fig is None:
                 fig, ax = plt.subplots(nrows = N_ax, ncols = 1,figsize=(6, 6))
+                if not isinstance(ax, list):
+                    ax = [ax]
             else:
                 ax = []
                 for i in range(1,N_ax+1):
@@ -217,13 +219,9 @@ class CitrosDataArray:
             for i in range(len(self.dbs)):
                 filter_db = stat_df['mean_'+str(i)].notna()
                 lab = ', '.join([p + ' = ' + str(self.dbs[i].parameters[p]) for p in parameters.keys()])
-                try:
-                    for n in range(N_ax):
-                        ax[n].plot(x_df[filter_db], stat_df['mean_'+str(i)][filter_db].apply(lambda x: x[n]), '-', linewidth = 0.9, label = lab)
-                        ax[n].grid(True)
-                except:
-                    ax.plot(x_df[filter_db], stat_df['mean_'+str(i)][filter_db], '-', linewidth = 0.7, label = lab)
-                    ax.grid(True)
+                for n in range(N_ax):
+                    ax[n].plot(x_df[filter_db], stat_df['mean_'+str(i)][filter_db].apply(lambda x: x[n]), '-', linewidth = 0.9, label = lab)
+                    ax[n].grid(True)
 
             lab_new = ', '.join([k + ' = ' + str(v) for k, v in parameters.items()])
 
@@ -238,21 +236,13 @@ class CitrosDataArray:
 
             if show_fig or return_fig:
                 color = next(color_list)
-                try:
-                    for n in range(N_ax):
-                        ax[n].plot(x_df, mu_calculated[:,n],'-', color = color, linewidth = 2, label = lab_new+',\n' + method_step)
-                        ax[n].set_ylabel(self.dbs[0].data.columns[n]+', [' + self.dbs[0].units+']')
-                except:
-                    ax.plot(x_df, mu_calculated,'-', linewidth = 2, color = color, label = lab_new+',\n' + method_step)
-                    ax.set_ylabel(self.dbs[0].data.columns[0]+', [' + self.dbs[0].units+']')
+                for n in range(N_ax):
+                    ax[n].plot(x_df, mu_calculated[:,n],'-', color = color, linewidth = 2, label = lab_new+',\n' + method_step)
+                    ax[n].set_ylabel(self.dbs[0].data.columns[n]+', [' + self.dbs[0].units+']')
 
         if show_fig or return_fig or fig is not None:
-            try:
-                handles, labels = ax[-1].get_legend_handles_labels()
-            except:
-                handles, labels = ax.get_legend_handles_labels()
+            handles, labels = ax[-1].get_legend_handles_labels()
             fig.supxlabel(self.dbs[0].x_label)
-            # fig.supylabel(self.dbs[0].type+', [' + self.dbs[i].units+']')
             fig.suptitle('Prediction plot')
             fig.legend(handles, labels, bbox_to_anchor=(1.0, 0.94),loc ='upper left')
             fig.tight_layout()
@@ -260,7 +250,10 @@ class CitrosDataArray:
         if len(predicted_tables) == 1:
             predicted_tables = predicted_tables[0]
         if return_fig:
-            return  predicted_tables, fig, ax
+            if len(ax) == 1:
+                return predicted_tables, fig, ax[0]
+            else:
+                return predicted_tables, fig, ax
         else:
             return predicted_tables
     

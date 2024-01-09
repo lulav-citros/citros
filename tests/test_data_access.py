@@ -1,8 +1,5 @@
-import os
-import sys
 import matplotlib.pyplot as plt
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from citros import CitrosDB
 
 '''
@@ -584,7 +581,7 @@ def test_multiplot_nan():
     fig, axes = citros.multiplot(df, ['data.y.y_1','data.y.y_2','data.y.y_3'], 'o-', scale =False)
     n_lines = [0, 3, 3, 3, 0, 3, 3, 3, 0]
     n_patches = [3, 0, 0, 0, 3, 0, 0, 0, 3]
-    for ax, n in zip(fig.axes, zip(n_lines, n_patches)):
+    for ax, n in zip(axes.flatten(), zip(n_lines, n_patches)):
         assert len(ax.get_lines()) == n[0], 'multiplot: number of lines is wrong'
         assert len(ax.patches) == n[1], 'multiplot: number of patches is wrong'
 
