@@ -44,7 +44,7 @@ To query all data for the topic 'B':
 >>> citros.topic('B').data()
 ```
 <details>
-  <summary>Show the output:</summary>
+  <summary>Show the result:</summary>
 
 A pandas DataFrame.
 
@@ -64,7 +64,7 @@ If the whole json-data column is desired as a json-object:
 >>> citros.topic('B').data('data')
 ```
 <details>
-  <summary>The output table:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|time	|topic	|type	|data
 |--|--|--|--|--|--|--|
@@ -80,7 +80,7 @@ If only some of the json objects are needed, for example data.x.x_1 and data.tim
 >>> citros.topic('B').data(['data.x.x_1', 'data.time'])
 ```
 <details>
-  <summary>The result:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|time|topic	|type	|data.x.x_1	|data.time
 |--|--|--|--|--|--|--|--|
@@ -96,7 +96,7 @@ If there are json-arrays in the data and the values with the exact index is need
 >>> citros.topic('B').data('data.note[0]')
 ```
 <details>
-  <summary>The query result:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.note[0]
 |--|--|--|--|--|--|--|
@@ -112,7 +112,7 @@ By default columns `sid` (simulation run id), `rid`, `time`, `topic` and `type` 
 >>> citros.topic('B').data('data.note[0]', additional_columns = ['rid', 'topic'])
 ```
 <details>
-  <summary>The query result:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid| topic	|data.note[0]
 |--|--|--|--|--
@@ -131,7 +131,7 @@ Since the output is a pandas [**DataFrame**](https://pandas.pydata.org/docs/refe
 >>> print(df)
 ```
 <details>
-  <summary>The output:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|time|topic	|type	|data.x.x_1	|Time
 |--|--|--|--|--|--|--|--|
@@ -151,7 +151,7 @@ To query json-data column 'data.x.x_1' of the topic 'B' with sid = 1 or 3:
 >>> citros.topic('B').sid([1,3]).data('data.x.x_1')
 ```
 <details>
-  <summary>The output table</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid| time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -169,7 +169,7 @@ To query json-data column 'data.x.x_1' of the topic 'B' for sid 3, 4, 5:
 >>> citros.topic('B').sid(start = 3, end = 5).data('data.x.x_1')
 ```
 <details>
-  <summary>The output table</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid| time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -189,7 +189,7 @@ Similar to the application of [**sid()**](#sid-constraints) method, the list of 
 >>> citros.topic('B').rid([6, 7]).data('data.x.x_1')
 ```
 <details>
-  <summary>The output table:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -209,7 +209,7 @@ rid is always >= 0, so the default `start` = 0 means no constraints. To set the 
 >>> citros.topic('B').rid(end = 15).data('data.x.x_1')
 ```
 <details>
-  <summary>The output table:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -225,7 +225,7 @@ To set 10 <= rid <= 15:
 >>> citros.topic('B').rid(start = 10, end = 15).data('data.x.x_1')
 ```
 <details>
-  <summary>The result of the code above:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -252,7 +252,7 @@ For example, for querying json-data column 'data.x.x_1' of the topic 'B' with ti
 >>> citros.topic('B').time(end = 100).data('data.x.x_1')
 ```
 <details>
-  <summary>Show the output:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -268,7 +268,7 @@ Lower limit is set by the `start` argument. To set 50ns <= time <= 100ns:
 >>> citros.topic('B').time(start = 50, end = 100).data('data.x.x_1')
 ```
 <details>
-  <summary>Result:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1
 |--|--|--|--|--|--|--|
@@ -326,7 +326,7 @@ If one of the sampling method ([**skip()**](#skip), [**avg()**](#average), [**mo
 >>> citros.topic('B').set_filter({'data.note[2][0]':[55, 56]}).data(['data.x.x_1', 'data.note[2][0]'])
 ```
 <details>
-  <summary>The output:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1	|data.note[2][0]
 |--|--|--|--|--|--|--|--
@@ -353,7 +353,7 @@ If one of the sampling method ([**skip()**](#skip), [**avg()**](#average), [**mo
           .data(['data.x.x_1', 'data.x.x_2'])
 ```
 <details>
-  <summary>Show the output:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid| time	|topic	|type	|data.x.x_1	|data.x.x_2
 |--|--|--|--|--|--|--|--
@@ -383,7 +383,7 @@ To query only each 5th message of the topic 'B':
           .data(['data.x.x_1', 'data.x.x_2'])
 ```
 <details>
-  <summary>Show table:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1	|data.x.x_2
 |--|--|--|--|--|--|--|--
@@ -404,7 +404,7 @@ To average each 5 messages of the topic 'B':
           .data(['data.x.x_1', 'data.x.x_2'])
 ```
 <details>
-  <summary>The output:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time	|topic	|type	|data.x.x_1	|data.x.x_2
 |--|--|--|--|--|--|--|--
@@ -426,7 +426,7 @@ To use moving average to average each 5 messages and query every second row of t
           .data(['data.x.x_1', 'data.x.x_2'])
 ```
 <details>
-  <summary>The output table:</summary>
+  <summary>Show the result:</summary>
 
 ||sid	|rid|	time|	topic	|type|	data.x.x_1	|data.x.x_2
 |--|--|--|--|--|--|--|--
@@ -481,7 +481,7 @@ For example, let's query json-data columns 'data.x.x_2', 'data.time' for topic '
 >>> print(dfs[1])
 ```
 <details>
-  <summary>Show the output:</summary>
+  <summary>Show the result:</summary>
 
 ```text
 sid values are: [1, 2]

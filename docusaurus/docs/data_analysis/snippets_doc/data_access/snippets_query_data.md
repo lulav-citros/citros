@@ -147,7 +147,7 @@ print(df.head(5))
 ```
 ## Query Array Data
 
-#### Retrieve One Column
+### Retrieve One Column
 Let's consider a table for topic 'my_topic' from the batch 'my_batch', created by simulation 'my_simulation', where each row under the 'data' column holds a dictionary (json-object) and within this dictionary, the key 'data' maps to a array of values, as shown:
 
 
@@ -178,7 +178,7 @@ df = citros.simulation(simulation_name).batch(batch_name).topic(topic_name).data
 #print first 5 rows of the obtained pandas.DataFrame
 print(df.head(5))
 ```
-#### Retrieve Several Columns
+### Retrieve Several Columns
 Let's consider a table for topic 'my_topic' from the batch 'my_batch', created by simulation 'my_simulation', where each row under the 'data' column holds a dictionary and within this dictionary, the key 'val' maps to a list of values, as shown:
 
 
@@ -209,7 +209,7 @@ df = citros.simulation(simulation_name).batch(batch_name).topic(topic_name).data
 #print first 5 rows of the obtained pandas.DataFrame
 print(df.head(5))
 ```
-#### Divide Array By Columns
+### Divide Array By Columns
 Suppose for topic 'my_topic' from the batch 'my_batch', created by simulation 'my_simulation' every row in the 'data' column contains a dictionary and within this dictionary, the 'data' key corresponds to a list that has a length of 3, as illustrated below:
 
 |data              |
