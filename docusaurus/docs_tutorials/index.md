@@ -206,7 +206,7 @@ Choose the `Run` action:
 ┌────────────────────────────────────────────────────────┐
 │  🍋 Init: initialize .citros in current directory      │
 │❯ 🔥 Run: new simulation                                │
-│  📊 Data: for data managment                           │
+│  📊 Data: for data management                          │
 │  📝 Report: generation and management                  │
 │  🔖 Service: CITROS API service functions              │
 │  ---------------                                       │
@@ -334,22 +334,32 @@ $ citros
 
 Choose the `Data` action:
 
+
 ```sh
 ? Select Action: 
-Init: initialize .citros in current directory 
-Run: new simulation                  
-❯ Data: for data management                                            
-Report: generation and management                                            
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│  🔥 Run: new simulation                                │
+│❯ 📊 Data: for data management                          │
+│  📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose `List` to view all simulations
 
 ```sh
-❯ List: list all runs
-simulation_cannon_analytic
-simulation_cannon_numeric   
+┌────────────────────────────────────────────────────────┐
+│  🌲 Tree: tree view of data                            │
+│❯ *️⃣ List: reports list                                 │
+│  📂 DB: section                                        │
+│  🗳 Service: section                                   │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
-
 Table of all the simulations will be shown as output. <br />
 The table contains the following fields: Run name, Versions, message, status, completions, path
 
@@ -502,26 +512,35 @@ $ citros
 Choose the `Report` action:
 
 ```sh
-? Select Action:                  
-Init: initialize .citros in current directory 
-Run: new simulation                  
-Data: for data management                                            
-❯ Report: generation and management                              
+? Select Action: 
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│  🔥 Run: new simulation                                │
+│  📊 Data: for data management                          │
+│❯ 📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose `Generate` to generate a report
 
 ```sh
-List: reports list
-❯ Generate: new report
-Validate: report integrity 
+┌────────────────────────────────────────────────────────┐
+│  *️⃣ List: reports list                                 │
+│❯ ⚡ Generate: new report                                │
+│  ❓ Validate: report integrity                         │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose the simulation source for the report
 
 ```sh
-simulation_cannon_analytic 
-❯ simulation_cannon_numeric
+❯ simulation_cannon_analytic 
+simulation_cannon_numeric
 ```
 
 Select a batch from you batch list

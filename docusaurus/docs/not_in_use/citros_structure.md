@@ -44,7 +44,7 @@ The file `default_param_setup.json` will not be overwritten during CITROS `init`
     
 The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior. Take, for instance, a static parameter value like 42. Instead of hard-coding it, you could use a *function object* to derive a value from a normal distribution centered at 42. The introduction of function objects broadens your horizons, enabling you to use any numpy function or even craft user-defined functions for meticulous computational adjustments. A prime example is when parameter values are intricate, making them cumbersome to hard-code; in such scenarios, you can devise a function to fetch them from a file. In essence, this newfound flexibility paves the way for limitless computational and manipulative possibilities for your parameters.
     
-To learn how to add functions to parameter setups, please refer to the [Adding functions to parameter setup] (../configuration/config_params.md) section.
+To learn how to add functions to parameter setups, please refer to the [Adding functions to parameter setup](../guides/config_params.md) section.
 
 </details>
 
