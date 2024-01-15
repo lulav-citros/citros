@@ -17,10 +17,7 @@ in terminal in this folder
 #connect to a database
 table_name = 'test_table'
 
-if config('TEST_ENV') == 'local':
-    citros = CitrosDB(simulation = 'public',
-                      batch = table_name)
-elif config('TEST_ENV') == 'github':
+if config('TEST_ENV', None) == 'github':
     citros = CitrosDB(simulation = 'public',
                       batch = table_name,
                       host=config('POSTGRES_HOST'),
@@ -28,6 +25,9 @@ elif config('TEST_ENV') == 'github':
                       password=config('POSTGRES_PASSWORD'),
                       database=config('POSTGRES_DB'),
                       port = config('POSTGRES_PORT'))
+else:
+    citros = CitrosDB(simulation = 'public',
+                        batch = table_name)
 
 citros_D = CitrosData()
 

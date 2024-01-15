@@ -29,7 +29,7 @@ class CitrosDataArray:
     def __init__(self, dbs = None, log = None):
 
         if log is None:
-            self.log = _get_logger()
+            self.log = _get_logger(__name__)
         if isinstance(dbs, list):
             self.dbs = dbs
         elif isinstance(dbs, CitrosData):

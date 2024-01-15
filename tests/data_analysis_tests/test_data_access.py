@@ -16,10 +16,7 @@ in terminal in this folder
 #connect to a database
 table_name = 'test_table'
 
-if config('TEST_ENV') == 'local':
-    citros = CitrosDB(simulation = 'public',
-                      batch = table_name)
-elif config('TEST_ENV') == 'github':
+if config('TEST_ENV', None) == 'github':
     citros = CitrosDB(simulation = 'public',
                       batch = table_name,
                       host=config('POSTGRES_HOST'),
@@ -27,6 +24,9 @@ elif config('TEST_ENV') == 'github':
                       password=config('POSTGRES_PASSWORD'),
                       database=config('POSTGRES_DB'),
                       port = config('POSTGRES_PORT'))
+else:
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name)
 
 def test_topic():
     assert citros.topic('B')._topic == ['B'], 'topic(): topic was set wrong'
@@ -186,10 +186,7 @@ def test_is_batch_set():
     assert citros._is_batch_set() is True, 'is_batch_set(): wrong result when the batch was passed during creation'
 
 def test_is_batch_in_database():
-    if config('TEST_ENV') == 'local':
-        citros1 = CitrosDB(simulation = 'public',
-                      batch = table_name)
-    elif config('TEST_ENV') == 'github':
+    if config('TEST_ENV', None) == 'github':
         citros1 = CitrosDB(simulation = 'public',
                         batch = table_name,
                         host=config('POSTGRES_HOST'),
@@ -197,6 +194,9 @@ def test_is_batch_in_database():
                         password=config('POSTGRES_PASSWORD'),
                         database=config('POSTGRES_DB'),
                         port = config('POSTGRES_PORT'))
+    else:
+        citros1 = CitrosDB(simulation = 'public',
+                      batch = table_name)
     assert citros1._is_batch_in_database('11-22-33') is False, 'is_batch_set(): wrong when the batch does not exist'
     assert citros1._is_batch_in_database(table_name) is True, 'is_batch_set(): wrong when the batch exists'
 

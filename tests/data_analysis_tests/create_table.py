@@ -11,11 +11,16 @@ from decouple import config
 
 psycopg2.extensions.register_adapter(dict, psycopg2.extras.Json)
 
-
-
 table_name = "test_table"
 
-if config('TEST_ENV') == 'local':
+if config('TEST_ENV', None) == 'github':
+    connection = psycopg2.connect(host=config('POSTGRES_HOST'),
+                              user=config('POSTGRES_USER'),
+                              password=config('POSTGRES_PASSWORD'),
+                              database=config('POSTGRES_DB'),
+                              options="-c search_path=" +'public', 
+                              port = config('POSTGRES_PORT'))
+else:
     from citros.database import CitrosDB as CitrosDB_base
     citros_base = CitrosDB_base()
     connection = psycopg2.connect(host=citros_base.db_host,
@@ -24,14 +29,6 @@ if config('TEST_ENV') == 'local':
                             database=citros_base.db_name,
                             options="-c search_path=" +'public', 
                             port = citros_base.db_port)
-
-elif config('TEST_ENV') == 'github':
-    connection = psycopg2.connect(host=config('POSTGRES_HOST'),
-                              user=config('POSTGRES_USER'),
-                              password=config('POSTGRES_PASSWORD'),
-                              database=config('POSTGRES_DB'),
-                              options="-c search_path=" +'public', 
-                              port = config('POSTGRES_PORT'))
     
 
 cursor = connection.cursor()

@@ -14,10 +14,7 @@ in terminal in this folder
 '''
 table_name = 'test_table'
 
-if config('TEST_ENV') == 'local':
-    citros = CitrosDB(simulation = 'public',
-                      batch = table_name)
-elif config('TEST_ENV') == 'github':
+if config('TEST_ENV', None) == 'github':
     citros = CitrosDB(simulation = 'public',
                       batch = table_name,
                       host=config('POSTGRES_HOST'),
@@ -25,6 +22,9 @@ elif config('TEST_ENV') == 'github':
                       password=config('POSTGRES_PASSWORD'),
                       database=config('POSTGRES_DB'),
                       port = config('POSTGRES_PORT'))
+else:
+    citros = CitrosDB(simulation = 'public',
+                      batch = table_name)
 
 def test_std_bound_test():
     df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x', 'data.x.x_1','data.x.x_2','data.x.x_3','data.time'])

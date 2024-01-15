@@ -91,7 +91,7 @@ class CitrosData:
                  log = None):
         
         if log is None:
-            self.log = _get_logger()
+            self.log = _get_logger(__name__)
 
         if parameters is None:
             parameters = {}

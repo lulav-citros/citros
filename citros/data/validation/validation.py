@@ -101,7 +101,7 @@ class Validation:
         log = None,
     ):
         if log is None:
-            self.log = _get_logger()
+            self.log = _get_logger(__name__)
 
         self._set_data_table(
             df,
