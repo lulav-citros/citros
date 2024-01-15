@@ -2,7 +2,7 @@ import logging
 
 def _get_logger(logger_name):
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARN)
 
     # Create a handler that writes log messages to the console
     if not logger.hasHandlers():

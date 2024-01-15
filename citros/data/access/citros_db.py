@@ -105,7 +105,7 @@ class CitrosDB(_PgCursor):
             if hasattr(self, "_sid_val"):
                 ci._sid_val = self._sid_val.copy()
         if hasattr(self, "_error_flag"):
-            ci._error_flag = self._error_flag
+            ci._error_flag = self._error_flag.copy()
         if hasattr(self, "_rid_val"):
             ci._rid_val = self._rid_val.copy()
         if hasattr(self, "_time_val"):

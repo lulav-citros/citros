@@ -384,7 +384,6 @@ class _Plotter:
         for i, y_label in enumerate(y_labels):
             if remove_nan:
                 flag = df_copy[y_label].notna() & df_copy[x_label].notna()
-                # F = df_copy[[x_label, y_label, 'sid']].loc[df_copy[y_label].notna() & df_copy[x_label].notna()]
             else:
                 flag = pd.Series(data=[True] * len(df_copy))
             if inf_vals is not None:
