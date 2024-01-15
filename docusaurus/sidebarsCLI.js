@@ -193,10 +193,99 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          label: 'TBD',
-          id: 'advanced_guides/install_advanced',
+          id: "data_analysis/index",
         },
-
+        {
+          type: 'category',
+          label: 'Snippets',
+          items: [
+            {
+              type: 'category',
+              label: 'Data Access',
+              items: ["data_analysis/snippets_doc/data_access/snippets_batch_content",
+                      "data_analysis/snippets_doc/data_access/snippets_query_data", 
+                      "data_analysis/snippets_doc/data_access/snippets_plotting"],
+            },
+            "data_analysis/snippets_doc/snippets_error_analysis", 
+            "data_analysis/snippets_doc/snippets_validation"
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Data Access',
+          items: [
+            {
+              type: 'doc',
+              id: "data_analysis/data_access/index",
+            },
+            {
+              type: 'category',
+              label: 'Examples',
+              items: ["data_analysis/data_access/getting_started",
+                      "data_analysis/data_access/batch_overview",
+                      "data_analysis/data_access/batch_content", 
+                      "data_analysis/data_access/query_data",
+                      "data_analysis/data_access/plot_data"],
+            },
+            {
+              type: 'category',
+              label: 'Documentation',
+              items: ['data_analysis/documentation/access/citros_db', 
+                      'data_analysis/documentation/access/citros_dict']
+            },
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Error Analysis',
+          items: [
+            {
+              type: 'doc',
+              id: "data_analysis/error_analysis/index",
+            },
+            {
+              type: 'category',
+              label: 'Examples',
+              items: ['data_analysis/error_analysis/getting_started_query_data', 
+                      'data_analysis/error_analysis/statistics', 
+                      'data_analysis/error_analysis/correlation', 
+                      'data_analysis/error_analysis/regression'],
+            },
+            {
+              type: 'category',
+              label: 'Documentation',
+              items: ['data_analysis/documentation/analysis/citros_data', 
+                      'data_analysis/documentation/analysis/citros_data_array', 
+                      'data_analysis/documentation/analysis/citros_stat'],
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Validation',
+          items: [
+            {
+              type: 'doc',
+              id: "data_analysis/validation/index",
+            },
+            {
+              type: 'category',
+              label: 'Examples',
+              items: ['data_analysis/validation/getting_started',
+                      'data_analysis/validation/standard_deviation_boundary_test', 
+                      'data_analysis/validation/mean_value_test',
+                      'data_analysis/validation/standard_deviation_test', 
+                      'data_analysis/validation/norm_test', 
+                      'data_analysis/validation/testing_each_simulation', 
+                      'data_analysis/validation/set_multiple_tests'],
+            },
+            {
+              type: 'category',
+              label: 'Documentation',
+              items: ['data_analysis/documentation/validation/validation'],
+            },
+          ],
+        },
       ],
     }
     // {
