@@ -8,7 +8,7 @@ import numpy as np
 from termcolor import colored
 from matplotlib.ticker import MaxNLocator
 from typing import Union
-
+from citros.data.access._utils import _get_logger
 
 class Validation:
     """
@@ -35,6 +35,8 @@ class Validation:
     inf_vals : None or float, default 1e308
         If specified, all values from `data_label` column that exceed the provided value in absolute terms
         will be treated as NaN values. If this functionality is not required, set inf_vals = None.
+    log : log : logging.Logger, default None
+        Logger to record log. If None, then the new logger is created.
 
     Attributes
     ----------
@@ -96,7 +98,11 @@ class Validation:
         units="",
         omit_nan_rows=True,
         inf_vals=1e308,
+        log = None,
     ):
+        if log is None:
+            self.log = _get_logger()
+
         self._set_data_table(
             df,
             data_label,
@@ -154,7 +160,7 @@ class Validation:
             if isinstance(df, pd.DataFrame):
                 self.df = df.copy()
                 if data_label is None:
-                    print("error: 'data_label' must be a label of the 'df' column")
+                    self.log.error("`data_label` must be a label of the 'df' column")
                     self.db = None
                     self.stat = None
                     return
@@ -167,7 +173,7 @@ class Validation:
                         inf_vals=inf_vals,
                     )
                     if param_label is None:
-                        print("error: 'param_label' must be a label of the 'df' column")
+                        self.log.error("`param_label` must be a label of the 'df' column")
                         self.db = None
                         self.stat = None
                         return
@@ -181,13 +187,13 @@ class Validation:
                                 n_points=num, param_label=param_label, show_fig=False
                             )
                         else:
-                            print("error: 'method' must be 'scale' or 'bin")
+                            self.log.error("`method` must be 'scale' or 'bin")
                             self.db = None
                             self.stat = None
                             return
                         self.stat = self.db.get_statistics(return_format="citrosStat")
             else:
-                print("error: 'df' must be a pandas DataFrame")
+                self.log.error("`df` must be a pandas DataFrame")
                 self.df = None
                 self.db = None
                 self.stat = None
@@ -1596,9 +1602,7 @@ class Validation:
         elif norm_type == "Linf":
             norm = (abs(self.db.data)).groupby("sid").max()
         else:
-            print(
-                "error: can not recognize the norm type, the allowed types are 'L2' and 'Linf'"
-            )
+            self.log.error("Can not recognize the norm type, the allowed types are 'L2' and 'Linf'")
             norm = None
         return norm
 
@@ -1737,7 +1741,7 @@ class Validation:
                     lower_limit = -limits[0]
                     upper_limit = limits[0]
                 except TypeError:
-                    print("error: could not resolve the limits")
+                    self.log.error("Could not resolve the limits")
                     return None, None
 
             elif len(limits) == 2 and not any(
@@ -1749,9 +1753,7 @@ class Validation:
 
             else:
                 if len(limits) != data_length:
-                    print(
-                        "error: 'limits' length does not match the number of data columns."
-                    )
+                    self.log.error("`limits` length does not match the number of data columns.")
                     return None, None
                 else:
                     # [(0.1, 0.2), (0.1, 0.2)]  [0.1, (0.1, 0.2)]  [0.1, 0.2, 0.3]  [(0.1, 0.2), 0.1, (10, 100)]  [(0.1, 0.2), (0.1, 0.2), (10, 100)]
@@ -1801,9 +1803,7 @@ class Validation:
                 norm_limit = limits[0]
             else:
                 if len(limits) != data_length:
-                    print(
-                        "error: 'limits' length does not match the number of data columns."
-                    )
+                    self.log.error("`limits` length does not match the number of data columns.")
                     return None
                 else:
                     # [0.1, 0.2, 0.3]

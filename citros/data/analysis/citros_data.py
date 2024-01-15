@@ -10,6 +10,7 @@ from typing import Union, Optional
 import matplotlib.figure
 from .citros_stat import CitrosStat
 import warnings
+from citros.data.access._utils import _get_logger
 
 class CitrosData:
     """
@@ -45,6 +46,8 @@ class CitrosData:
     inf_vals : None or float, default 1e308
         If specified, all values from `data_label` column that exceed the provided value in absolute terms 
         will be treated as NaN values. If this functionality is not required, set inf_vals = None.
+    log : log : logging.Logger, default None
+        Logger to record log. If None, then the new logger is created.
 
     Notes
     -----
@@ -84,7 +87,11 @@ class CitrosData:
     """
 
     def __init__(self, db = None, type_name = '', units = '', data_label = 'data', 
-                 parameters = None, parameter_label ='', sid_label = 'sid', omit_nan_rows = None, inf_vals = 1e308):
+                 parameters = None, parameter_label ='', sid_label = 'sid', omit_nan_rows = None, inf_vals = 1e308,
+                 log = None):
+        
+        if log is None:
+            self.log = _get_logger()
 
         if parameters is None:
             parameters = {}
@@ -99,6 +106,7 @@ class CitrosData:
             self.parameters = parameters
             self.sid_label = sid_label
             self.inf_vals = inf_vals
+
             if omit_nan_rows is None:
                 self.omit_nan_rows = True
             else:
@@ -211,7 +219,7 @@ class CitrosData:
             elif isinstance(data_label, list):
                 data_label = data_label.copy()
             else:
-                print('error: data_label must be str or list of str')
+                self.log.error('`data_label` must be str or list of str')
             if omit_nan_rows is None:
                 self.omit_nan_rows = True
             else:
@@ -219,7 +227,7 @@ class CitrosData:
             self.inf_vals = inf_vals
             for item in data_label:
                 if item not in db.columns:
-                    print(f"error: The column '{item}' does not exist")
+                    self.log.error(f"The column '{item}' does not exist")
                     return
             self._set_data(db[data_label])
             drop_column += data_label
@@ -408,7 +416,7 @@ class CitrosData:
         try :
             h_list = list(set(db[param_label]))
         except KeyError:
-            print('There is no column labeled "'+param_label+'"')
+            self.log.error('There is no column labeled "'+param_label+'"')
             return (None,)*3
         if min_lim is None:
             min_lim = min(h_list)
@@ -741,7 +749,7 @@ class CitrosData:
         [2.60583167e+00 2.93335333e+00 4.85077763e+03]]
         """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
@@ -766,7 +774,7 @@ class CitrosData:
         elif return_format == 'pandas':
             return statistics
         else:
-            print('error: there is no return_format {return_format}, try "citrosStat" or "pandas"')
+            self.log.error('There is no return_format {return_format}, try "citrosStat" or "pandas"')
         
     def _plot_1Dstatistics(self, statistics, filter_st, ax = None, n_std = 3, num_data = 0, ylabel = None, std_color = 'r', 
                            std_area = False, std_lines = True, line_style_custom = '-'):
@@ -972,7 +980,7 @@ class CitrosData:
         >>> db_sc.show_statistics()
         """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
@@ -1084,46 +1092,46 @@ class CitrosData:
         slice_val = 0.2632
         """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
         if isinstance(x_col, str):
             if x_col not in self.data.columns:
-                print(f"Column '{x_col}' does not exist")
+                self.log.error(f"Column '{x_col}' does not exist")
                 return None
         elif isinstance(x_col, int):
             if x_col > (len(self.data.columns)-1):
-                print(f"'x_col' must be <= {len(self.data.columns)-1}")
+                self.log.error(f"'x_col' must be <= {len(self.data.columns)-1}")
                 return None
         else:
-            print(f"'x_col' must be str or int")
+            self.log.error(f"'x_col' must be str or int")
             return None
         
         if db2 is None:
             if isinstance(y_col, str):
                 if y_col not in self.data.columns:
-                    print(f"Column '{y_col} does not exist'")
+                    self.log.error(f"Column '{y_col} does not exist'")
                     return None
             elif isinstance(x_col, int):
                 if y_col > (len(self.data.columns)-1):
-                    print(f"'y_col' must be <= {len(self.data.columns)-1}")
+                    self.log.error(f"'y_col' must be <= {len(self.data.columns)-1}")
                     return None
             else:
-                print(f"'y_col' must be str or int")
+                self.log.error(f"'y_col' must be str or int")
                 return None
         
         else:
             if isinstance(y_col, str):
                 if y_col not in db2.data.columns:
-                    print(f"Column '{y_col} does not exist'")
+                    self.log.error(f"Column '{y_col} does not exist'")
                     return None
             elif isinstance(x_col, int):
                 if y_col > (len(db2.data.columns)-1):
-                    print(f"'y_col' must be <= {len(db2.data.columns)-1}")
+                    self.log.error(f"'y_col' must be <= {len(db2.data.columns)-1}")
                     return None
             else:
-                print(f"'y_col' must be str or int")
+                self.log.error(f"'y_col' must be str or int")
                 return None
 
         if slice_id is None:
@@ -1133,7 +1141,7 @@ class CitrosData:
                 else:
                     slice_id = self._get_id_by_val(slice_val, (x_col,))
             else:
-                print('either `slice_id` or `slice_val` must be specified')
+                self.log.error('Either `slice_id` or `slice_val` must be specified')
                 return
         if db2 is None:
             try:
@@ -1157,10 +1165,10 @@ class CitrosData:
                     y = self.data.iloc[:,y_col].xs(slice_id, level = self.xid_label)
                     y_filter = self.filter.iloc[:, y_col].xs(slice_id, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
                 return
 
         else:
@@ -1177,10 +1185,10 @@ class CitrosData:
                     x = self.data.iloc[:,x_col].xs(slice_id, level = self.xid_label)
                     x_filter = self.filter.iloc[:, x_col].xs(slice_id, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
                 return
             try:
                 y_units = db2.units
@@ -1199,10 +1207,10 @@ class CitrosData:
                     y = db2.data[db2.filter.iloc[:, y_col]].iloc[:,y_col].xs(slice_id_2, level = self.xid_label)
                     y_filter = db2.filter.iloc[:, y_col].xs(slice_id_2, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db2` has only {0} column{1}'.format(db2.data.shape[1], np.where(db2.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db2` has only {0} column{1}'.format(db2.data.shape[1], np.where(db2.data.shape[1] == 1,'','s')))
                 return
 
         result = pd.concat([x,y], axis = 1)
@@ -1233,12 +1241,12 @@ class CitrosData:
         slice_val = self._get_val_by_id(slice_id)
         if db2 is None:
             if display_id:
-                print('slice_id = {0},\nslice_val = {1}'.format(slice_id, slice_val))
+                self.log.error('slice_id = {0},\nslice_val = {1}'.format(slice_id, slice_val))
             title_slice_id = str(slice_id)
         else:
             slice_val_2 = db2._get_val_by_id(slice_id_2)
             if display_id:
-                print('slice_id = {0},\nslice_val = {1},\nslice_id_2 = {2},\nslice_val_2 = {3}'.format(slice_id, slice_val, slice_id_2, slice_val_2))
+                self.log.error('slice_id = {0},\nslice_val = {1},\nslice_id_2 = {2},\nslice_val_2 = {3}'.format(slice_id, slice_val, slice_id_2, slice_val_2))
             if slice_id == slice_id_2:
                 title_slice_id = str(slice_id)
             else:
@@ -1360,9 +1368,9 @@ class CitrosData:
                         ax.plot(0,0,'k+',mew=10,ms=2, label='origin')
                     ax.plot(ellipse_par[3], ellipse_par[4],'r+',mew=10, ms=2, label='mean')
                 except np.linalg.LinAlgError:
-                    print('can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses')
+                    self.log.error('can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses')
             else:
-                print('the number of points is not enough to plot confidence ellipses')
+                self.log.error('the number of points is not enough to plot confidence ellipses')
         
             ax.set_xlabel(axis_labels[0])
             ax.set_ylabel(axis_labels[1])
@@ -1378,7 +1386,7 @@ class CitrosData:
                 ax.legend(bbox_to_anchor=(1.1, 0.9),bbox_transform=fig.transFigure)
 
         else:
-            print('there is no data to plot')
+            self.log.error('There is no data to plot')
         if return_ellipse_param:
             if len(ellipse_param) == 1:
                 ellipse_param = ellipse_param[0]
@@ -1577,13 +1585,13 @@ class CitrosData:
         """
         if key is not None and value is not None:
             if key in self.parameters.keys():
-                print('key "{}" already exists, its value will be set to {}'.format(key, value))
+                self.log.error('key "{}" already exists, its value will be set to {}'.format(key, value))
             self.parameters[key] = value
         if item is not None:
             if isinstance(item, dict):
                 for k, v in item.items():
                     if k in self.parameters.keys():
-                        print('key "{}" already exists, its value will be set to {}'.format(k, v))
+                        self.log.error('key "{}" already exists, its value will be set to {}'.format(k, v))
                     self.parameters[k] = v
         
     def drop_parameter(self, key: Optional[str] = None):
@@ -1598,7 +1606,7 @@ class CitrosData:
         if key in self.parameters:
             self.parameters.pop(key)
         else:
-            print('key "{}" does not exists'.format(key))
+            self.log.error('key "{}" does not exists'.format(key))
 
     def add_addData(self, column: ArrayLike, column_label: str):
         """

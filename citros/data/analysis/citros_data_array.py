@@ -10,6 +10,7 @@ from numpy.typing import ArrayLike
 from typing import Optional
 import matplotlib.figure
 from .citros_data import CitrosData
+from citros.data.access._utils import _get_logger
 
 class CitrosDataArray:
     """
@@ -19,12 +20,16 @@ class CitrosDataArray:
     ----------
     dbs : list
         list of CitrosData objects
+    log : log : logging.Logger, default None
+        Logger to record log. If None, then the new logger is created.
     """
 
     _debug_flag = False
 
-    def __init__(self, dbs = None):
+    def __init__(self, dbs = None, log = None):
 
+        if log is None:
+            self.log = _get_logger()
         if isinstance(dbs, list):
             self.dbs = dbs
         elif isinstance(dbs, CitrosData):
@@ -44,7 +49,7 @@ class CitrosDataArray:
         if isinstance(db, CitrosData):
             self.dbs.append(db)
         else:
-            print('expected CitrosData object, but {} was given'.format(type(db)))
+            self.log.error('expected CitrosData object, but {} was given'.format(type(db)))
     
     def add_dbs(self, dbs: list):
         """
@@ -74,12 +79,12 @@ class CitrosDataArray:
             try:
                 self.dbs.pop(value)
             except IndexError:
-                print('index is out of range')
+                self.log.error('index is out of range')
         elif isinstance(value, CitrosData):
             try:
                 self.dbs.remove(value)
             except ValueError:
-                print('object is not in CitrosDataArray')
+                self.log.error('object is not in CitrosDataArray')
 
     def get_prediction(self, parameters: dict, method: str = 'poly', n_poly: int = 2, activation: str = 'relu', 
                        max_iter: int = 500, solver: str = 'lbfgs', hidden_layer_sizes: ArrayLike = (10,), 
@@ -368,7 +373,7 @@ class CitrosDataArray:
                     # mu_calculated.append([None]*N_ax if N_ax > 1 else None)
                     mu_calculated.append(np.array([np.nan]*N_ax))
         else:
-            print('there is no method called "{}". Try "poly", "neural_net" or "gmm".')
+            self.log.error('there is no method called "{}". Try "poly", "neural_net" or "gmm".')
         return np.array(mu_calculated)
     
     def _data_for_regression(self, slice_id):

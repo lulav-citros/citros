@@ -89,7 +89,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -215,7 +215,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -343,7 +343,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -377,9 +377,7 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != len(y_labels):
-                    print(
-                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None")
             else:
                 set_y_label = y_labels
 
@@ -523,7 +521,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -557,9 +555,7 @@ class _Plotter:
                 set_x_label = [set_x_label]
             elif isinstance(set_x_label, list):
                 if len(set_x_label) != N:
-                    print(
-                        f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None")
             else:
                 set_x_label = labels
 
@@ -570,9 +566,7 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != N:
-                    print(
-                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None")
             else:
                 set_y_label = labels
 
@@ -752,7 +746,7 @@ class _Plotter:
         x = df[flag][x_label].to_numpy(dtype=float)
         y = df[flag][y_label].to_numpy(dtype=float)
         if len(x) == 0:
-            print("there is no data to plot")
+            self.log.error("there is no data to plot")
             return
         if not isinstance(n_std, (list, np.ndarray)):
             n_std = [n_std]
@@ -789,12 +783,10 @@ class _Plotter:
                 )
 
             except np.linalg.LinAlgError:
-                print(
-                    "can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses"
-                )
+                self.log.error("can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses")
         else:
             bounding_error = False
-            print("the number of points is not enough to plot confidence ellipses")
+            self.log.warn("the number of points is not enough to plot confidence ellipses")
 
         # plot center
         if plot_origin:
@@ -894,7 +886,7 @@ class _Plotter:
                 if s not in all_sids:
                     bad_sids.append(s)
             if len(bad_sids) != 0:
-                print("sids " + str(bad_sids) + " do not exist")
+                self.log.warn("sids " + str(bad_sids) + " do not exist")
                 sids = [s for s in sids if s not in bad_sids]
         for s in sids:
             ax.plot(
@@ -971,7 +963,7 @@ class _Plotter:
                 if s not in all_sids:
                     bad_sids.append(s)
             if len(bad_sids) != 0:
-                print("sids " + str(bad_sids) + " do not exist")
+                self.log.warn("sids " + str(bad_sids) + " do not exist")
                 sids = [s for s in sids if s not in bad_sids]
 
         for s in sids:

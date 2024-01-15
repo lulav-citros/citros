@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import inspect
 import psycopg2
+from ._utils import _get_logger
 
 from citros.database import CitrosDB as CitrosDB_base
 
@@ -25,7 +26,7 @@ class _PgCursor(CitrosDB_base):
     }
     pg_connection = None
 
-    # the following parameters are collected for all objects created with debug = True parameter CitrosDB(debug = True):
+    # the following parameters are collected for all objects created with debug_connect = True parameter CitrosDB(debug_connect = True):
     # number of connections to postgres database
     n_pg_connections = 0
     # number of queries to postgres database
@@ -42,7 +43,8 @@ class _PgCursor(CitrosDB_base):
         database=None,
         simulation = None,
         batch = None,
-        debug = False
+        debug_connect = False,
+        log = None,
     ):
         init_args = {}
         if host is not None:
@@ -55,6 +57,11 @@ class _PgCursor(CitrosDB_base):
             init_args['db_password'] = password
         if database is not None:
             init_args['db_name'] = database
+
+        if log is None:
+            init_args['log'] = _get_logger(__name__)
+        else:
+            init_args['log'] = log
         super().__init__(**init_args)
 
         if simulation is None:
@@ -66,7 +73,7 @@ class _PgCursor(CitrosDB_base):
         self._registr_dec2float()
         self.if_close_connection = True
 
-        self._debug = debug
+        self._debug_connect = debug_connect
         self._all_additional_columns = ["sid", "rid", "time", "topic", "type"]
         self._order_by_allowed = ["asc", "ASC", "Asc", "desc", "DESC", "Desc"]
 
@@ -85,7 +92,7 @@ class _PgCursor(CitrosDB_base):
             self._simulation = simulation
         else:
             self._simulation = None
-            print("simulation is not set, 'simulation' must be a str")
+            self.log.warn("Simulation is not set, 'simulation' must be a str")
 
     def _set_batch(self, batch):
         """
@@ -102,7 +109,7 @@ class _PgCursor(CitrosDB_base):
             self._batch_name = batch
         else:
             self._batch = None
-            print("batch is not set, 'batch' must be a str")
+            self.log.warn("Batch is not set, 'batch' must be a str")
 
     def _set_sid(self, value):
         """
@@ -120,7 +127,7 @@ class _PgCursor(CitrosDB_base):
                         try:
                             self._sid.append(int(v))
                         except:
-                            print("sid must be int or list of ints")
+                            self.log.error("sid must be int or list of ints")
                             self._sid = None
                             break
                 else:
@@ -131,7 +138,7 @@ class _PgCursor(CitrosDB_base):
                 try:
                     self._sid = [int(value)]
                 except:
-                    print("sid must be int or list of ints")
+                    self.log.error("sid must be int or list of ints")
                     self._sid = None
         else:
             self._sid = None
@@ -152,9 +159,7 @@ class _PgCursor(CitrosDB_base):
                         try:
                             self._sid.append(int(v))
                         except:
-                            print(
-                                f"sid: provide int value for int or list of ints can not convert to int sid = {v};"
-                            )
+                            self.log.error(f"rid(): can not convert to int rid = {v}, provide int value or list of ints")
                             self._sid = None
                             break
                 else:
@@ -165,7 +170,8 @@ class _PgCursor(CitrosDB_base):
                 try:
                     self._sid = [int(value)]
                 except:
-                    print("sid must be int or list of ints")
+                    self.log.error("rid(): rid must be int or list of ints")
+                    # print("rid(): rid must be int or list of ints")
                     self._sid = None
         else:
             self._sid = None
@@ -176,8 +182,8 @@ class _PgCursor(CitrosDB_base):
         """
         _PgCursor.pg_connection = self.connect()
         if _PgCursor.pg_connection is None:
-            print("Could not connect to the database")
-        if self._debug and _PgCursor.pg_connection is not None:
+            self.log.error("Could not connect to the database")
+        if self._debug_connect and _PgCursor.pg_connection is not None:
             _PgCursor.n_pg_connections += 1
 
     def _registr_dec2float(self):
@@ -235,7 +241,7 @@ class _PgCursor(CitrosDB_base):
             param_execute = None
         if check_batch:
             if self._batch_name is None:
-                print("Error: please provide batch by citros.batch()")
+                self.log.error("please provide batch by citros.batch()")
                 return {"res": None, "error": None}
         if _PgCursor.pg_connection is None:
             self._make_connection_postgres()
@@ -260,7 +266,7 @@ class _PgCursor(CitrosDB_base):
             try:
                 with _PgCursor.pg_connection.cursor() as curs:
                     curs.execute(query, param_execute)
-                    if self._debug:
+                    if self._debug_connect:
                         _PgCursor.n_pg_queries += 1
                         self._calculate_pg_calls(inspect.stack()[1][3])
                     result = curs.fetchall()
@@ -272,7 +278,7 @@ class _PgCursor(CitrosDB_base):
                     if _PgCursor.pg_connection is None:
                         return {"res": None, "error": None}
                 else:
-                    print("Error:", e)
+                    self.log.error(e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.InFailedSqlTransaction,
@@ -284,18 +290,18 @@ class _PgCursor(CitrosDB_base):
                     if _PgCursor.pg_connection is None:
                         return {"res": None, "error": None}
                 else:
-                    print("Error:", e)
+                    self.log.error(e)
                     return {"res": None, "error": type(e).__name__}
             except (
                 psycopg2.errors.UndefinedColumn,
                 psycopg2.errors.UndefinedFunction,
             ) as e:
-                print("Error:", e.args[0].split("\n")[0])
+                self.log.error(e.args[0].split("\n")[0])
                 return {"res": None, "error": type(e).__name__}
             except psycopg2.errors.UndefinedTable as e:
                 return {"res": None, "error": type(e).__name__}
             except Exception as e:
-                print("Error:", e)
+                self.log.error(e)
                 return {"res": None, "error": type(e).__name__}
 
     def _calculate_pg_calls(self, method):
@@ -533,16 +539,14 @@ class _PgCursor(CitrosDB_base):
         elif isinstance(topic_name, list):
             for s in topic_name:
                 if not isinstance(s, str):
-                    print(
-                        'topic(): "{s}" is not str; please provide `topic_name` as str or a list of str'
-                    )
+                    self.log.error('topic(): "{s}" is not str; please provide `topic_name` as str or a list of str')
                     self._error_flag = True
                     return
             self._topic = topic_name.copy()
         elif isinstance(topic_name, np.ndarray):
             self._topic = list(topic_name)
         else:
-            print("topic(): `topic_name` must be str or list of str")
+            self.log.error("topic(): `topic_name` must be str or list of str")
             self._error_flag = True
         return
 
@@ -577,7 +581,7 @@ class _PgCursor(CitrosDB_base):
                 try:
                     self._sid = [int(value)]
                 except:
-                    print("sid(): sid `value` must be an int or a list of ints")
+                    self.log.error("sid(): sid `value` must be an int or a list of ints")
                     self._error_flag = True
                     return
         else:
@@ -590,11 +594,11 @@ class _PgCursor(CitrosDB_base):
                         try:
                             start = int(start)
                         except:
-                            print("sid(): sid `start` must be int")
+                            self.log.error("sid(): sid `start` must be int")
                             self._error_flag = True
                             return
                     if start < 0:
-                        print("sid(): sid `start` must be >= 0")
+                        self.log.error("sid(): sid `start` must be >= 0")
                         self._error_flag = True
                         return
                     constr[">="] = start
@@ -603,15 +607,15 @@ class _PgCursor(CitrosDB_base):
                         try:
                             end = int(end)
                         except:
-                            print("sid(): sid `end` must be int")
+                            self.log.error("sid(): sid `end` must be int")
                             self._error_flag = True
                             return
                     if end < 0:
-                        print("sid(): sid `end` must be >= 0")
+                        self.log.error("sid(): sid `end` must be >= 0")
                         self._error_flag = True
                         return
                     if start > end:
-                        print("sid(): sid `start` must be < `end`")
+                        self.log.error("sid(): sid `start` must be < `end`")
                         self._error_flag = True
                         return
                     constr["<="] = end
@@ -621,11 +625,11 @@ class _PgCursor(CitrosDB_base):
                             try:
                                 count = int(count)
                             except:
-                                print("sid(): sid `count` must be int")
+                                self.log.error("sid(): sid `count` must be int")
                                 self._error_flag = True
                                 return
                         if count < 0:
-                            print("sid(): sid `count` must be >= 0")
+                            self.log.error("sid(): sid `count` must be >= 0")
                             self._error_flag = True
                             return
                         constr["<"] = start + count
@@ -665,9 +669,7 @@ class _PgCursor(CitrosDB_base):
                         try:
                             good_rid.append(int(v))
                         except:
-                            print(
-                                "rid, provided by `value` argument, must be int or list of ints"
-                            )
+                            self.log.error("rid(): rid, provided by `value` argument, must be int or list of ints")
                             self._error_flag = True
                             break
                     self._rid_val = {"rid": good_rid}
@@ -675,9 +677,8 @@ class _PgCursor(CitrosDB_base):
                 try:
                     self._rid_val = {"rid": [int(value)]}
                 except:
-                    print(
-                        "rid, provided by `value` argument, must be int or list of ints"
-                    )
+                    self.log.error("rid(): rid, provided by `value` argument, must be int or list of ints")
+                    self._error_flag = True
                     return
         else:
             if start == 0 and end is None and count is None:
@@ -689,11 +690,11 @@ class _PgCursor(CitrosDB_base):
                         try:
                             start = int(start)
                         except:
-                            print("rid(): rid `start` must be int")
+                            self.log.error("rid(): rid `start` must be int")
                             self._error_flag = True
                             return
                     if start < 0:
-                        print("rid(): rid `start` must be >= 0")
+                        self.log.error("rid(): rid `start` must be >= 0")
                         self._error_flag = True
                         return
                     constr[">="] = start
@@ -702,15 +703,15 @@ class _PgCursor(CitrosDB_base):
                         try:
                             end = int(end)
                         except:
-                            print("rid(): rid `end` must be int")
+                            self.log.error("rid(): rid `end` must be int")
                             self._error_flag = True
                             return
                     if end < 0:
-                        print("rid(): rid `end` must be >= 0")
+                        self.log.error("rid(): rid `end` must be >= 0")
                         self._error_flag = True
                         return
                     if start > end:
-                        print("rid(): rid `start` must be < `end`")
+                        self.log.error("rid(): rid `start` must be < `end`")
                         self._error_flag = True
                         return
                     constr["<="] = end
@@ -720,11 +721,11 @@ class _PgCursor(CitrosDB_base):
                             try:
                                 count = int(count)
                             except:
-                                print("rid(): rid `count` must be int")
+                                self.log.error("rid(): rid `count` must be int")
                                 self._error_flag = True
                                 return
                         if count < 0:
-                            print("rid(): rid `count` must be >= 0")
+                            self.log.error("rid(): rid `count` must be >= 0")
                             self._error_flag = True
                             return
                         constr["<"] = start + count
@@ -754,11 +755,11 @@ class _PgCursor(CitrosDB_base):
                     try:
                         start = int(start)
                     except:
-                        print("time(): time `start` must be int")
+                        self.log.error("time(): time `start` must be int")
                         self._error_flag = True
                         return
                 if start < 0:
-                    print("time(): time `start` must be >= 0")
+                    self.log.error("time(): time `start` must be >= 0")
                     self._error_flag = True
                     return
                 constr[">="] = start
@@ -768,15 +769,15 @@ class _PgCursor(CitrosDB_base):
                     try:
                         end = int(end)
                     except:
-                        print("time(): time `end` must be int")
+                        self.log.error("time(): time `end` must be int")
                         self._error_flag = True
                         return
                 if end < 0:
-                    print("time(): time `end` must be >= 0")
+                    self.log.error("time(): time `end` must be >= 0")
                     self._error_flag = True
                     return
                 if start > end:
-                    print("time(): time `start` must be < ``end``")
+                    self.log.error("time(): time `start` must be < ``end``")
                     self._error_flag = True
                     return
                 constr["<="] = end
@@ -789,7 +790,7 @@ class _PgCursor(CitrosDB_base):
                             self._error_flag = True
                             return
                     if duration < 0:
-                        print("time(): time `duration` must be >= 0")
+                        self.log.error("time(): time `duration` must be >= 0")
                         self._error_flag = True
                         return
                     constr["<"] = start + duration
@@ -815,7 +816,7 @@ class _PgCursor(CitrosDB_base):
         """
         if filter_by is not None:
             if not isinstance(filter_by, dict):
-                print("set_filter(): argument must be a dictionary")
+                self.log.error("set_filter(): argument must be a dictionary")
                 self._error_flag = True
                 return
             if "topic" in filter_by.keys():
@@ -843,9 +844,7 @@ class _PgCursor(CitrosDB_base):
         """
         if order_by is not None:
             if not isinstance(order_by, (dict, list, str)):
-                print(
-                    "set_order(): argument must be a string, list of strings or a dictionary"
-                )
+                self.log.error("set_order(): argument must be a string, list of strings or a dictionary")
                 self._error_flag = True
                 return
             else:
@@ -868,17 +867,17 @@ class _PgCursor(CitrosDB_base):
             Control number of the messages to skip.
         """
         if hasattr(self, "method"):
-            print("only one sampling function may be applied")
+            self.log.error("only one sampling function may be applied")
             self._error_flag = True
             return
         if n_skip is None:
             return
         if not isinstance(n_skip, int):
-            print("skip(): n_skip value must be int")
+            self.log.error("skip(): n_skip value must be int")
             self._error_flag = True
             return
         if n_skip <= 0:
-            print("skip(): n_skip value must be > 0")
+            self.log.error("skip(): n_skip value must be > 0")
             self._error_flag = True
             return
         self._method = "skip"
@@ -898,17 +897,17 @@ class _PgCursor(CitrosDB_base):
             Number of messages to average.
         """
         if hasattr(self, "method"):
-            print("only one sampling function may be applied")
+            self.log.error("only one sampling function may be applied")
             self._error_flag = True
             return
         if n_avg is None:
             return
         if not isinstance(n_avg, int):
-            print("avg(): n_avg value must be int")
+            self.log.error("avg(): n_avg value must be int")
             self._error_flag = True
             return
         if n_avg <= 0:
-            print("avg(): n_avg value must be > 0")
+            self.log.error("avg(): n_avg value must be > 0")
             self._error_flag = True
             return
         self._method = "avg"
@@ -931,25 +930,25 @@ class _PgCursor(CitrosDB_base):
             For example, if `skip` = 3, the 1th, the 4th, the 7th ... messages will be selected
         """
         if hasattr(self, "method"):
-            print("only one sampling function may be applied")
+            self.log.error("only one sampling function may be applied")
             self._error_flag = True
             return
         if n_avg is None:
             return
         if not isinstance(n_avg, int):
-            print("move_avg(): n_avg value must be int")
+            self.log.error("move_avg(): n_avg value must be int")
             self._error_flag = True
             return
         if n_avg <= 0:
-            print("move_avg(): n_avg value must be > 0")
+            self.log.error("move_avg(): n_avg value must be > 0")
             self._error_flag = True
             return
         if not isinstance(n_skip, int):
-            print("move_avg(): n_skip value must be int")
+            self.log.error("move_avg(): n_skip value must be int")
             self._error_flag = True
             return
         if n_skip <= 0:
-            print("move_avg(): n_skip value must be > 0")
+            self.log.error("move_avg(): n_skip value must be > 0")
             self._error_flag = True
             return
 
@@ -982,9 +981,7 @@ class _PgCursor(CitrosDB_base):
         if isinstance(order_by, dict):
             for k, v in order_by.items():
                 if not isinstance(k, str):
-                    print(
-                        "set_order(): dictionary keyword (column label) must be a str"
-                    )
+                    self.log.error("set_order(): dictionary keyword (column label) must be a str")
                     error_flag = True
                     return result, error_flag
                 if isinstance(v, str):
@@ -992,12 +989,10 @@ class _PgCursor(CitrosDB_base):
                         result[k] = v.lower()
                     else:
                         error_flag = True
-                        print(
-                            'set_order(): dictionary value must be a str "asc" or "desc"'
-                        )
+                        self.log.error('set_order(): dictionary value must be a str "asc" or "desc"')
                         return result, error_flag
                 else:
-                    print('set_order(): dictionary value must be a str "asc" or "desc"')
+                    self.log.error('set_order(): dictionary value must be a str "asc" or "desc"')
                     error_flag = True
                     return result, error_flag
         elif isinstance(order_by, str):
@@ -1005,7 +1000,7 @@ class _PgCursor(CitrosDB_base):
         elif isinstance(order_by, list):
             for k in order_by:
                 if not isinstance(k, str):
-                    print("set_order(): list must contain str (column labels)")
+                    self.log.error("set_order(): list must contain str (column labels)")
                     error_flag = True
                     return result, error_flag
                 else:
@@ -1068,19 +1063,18 @@ class _PgCursor(CitrosDB_base):
             additional_columns = []
         if len(additional_columns) != 0 and "sid" not in additional_columns:
             additional_columns.append("sid")
-        # if len(additional_columns) != 0 and "rid" not in additional_columns:
-        #     additional_columns.append("rid")
 
-        if hasattr(self, "error_flag"):
+        if hasattr(self, "_error_flag"):
+            print()
             return None
 
         filter_by = self._summarize_constraints()
 
         if "topic" not in filter_by.keys():
-            print("topic is not specified")
+            self.log.error("topic is not specified, provide topic by topic() method")
             return None
         elif len(filter_by["topic"]) > 1:
-            print("too many topics to query data, please provide one topic")
+            self.log.error("too many topics to query data, please provide one topic")
             return None
 
         if isinstance(data_names, str):
@@ -1137,6 +1131,8 @@ class _PgCursor(CitrosDB_base):
         table_result = self._execute_query(
             query, {"schema": self._simulation}, check_batch=False
         )["res"]
+        if table_result is None:
+            return None
         tables = [t[0] for t in table_result]
         if tablename not in tables:
             return False
@@ -1535,7 +1531,8 @@ class _PgCursor(CitrosDB_base):
             elif isinstance(topic, str):
                 filter_by["topic"] = [topic]
             else:
-                print("`topic` must be a list of str")
+                self.log.debug("`topic` must be a list of str")
+                # print("`topic` must be a list of str")
 
         structure = self._download_data_structure(
             filter_by=filter_by, out_format="str"
@@ -1794,10 +1791,10 @@ class _PgCursor(CitrosDB_base):
             filter_by = {**filter_by_default, **filter_by}
 
         if not isinstance(column_name, str):
-            print("Error: `column_name` must be a str")
+            self.log.error("`column_name` must be a str")
             return None
         if mode not in ["MIN", "MAX"]:
-            print('mode is not supported, should be "MIN" or "MAX"')
+            self.log.debug('mode is not supported, should be "MIN" or "MAX"')
             if return_index:
                 return None, None, None
             else:
@@ -1919,7 +1916,7 @@ class _PgCursor(CitrosDB_base):
         if column_name is None or column_name == "" or column_name == "*":
             query_column = "*"
         elif not isinstance(column_name, str):
-            print("Error: column_name must be a str")
+            self.log.error("`column_name` must be a str")
             return None
         else:
             query_column = ""
@@ -2019,7 +2016,7 @@ class _PgCursor(CitrosDB_base):
         if column_name is None or column_name == "" or column_name == "*":
             query_column = "*"
         elif not isinstance(column_name, str):
-            print("Error: `column_name` must be a str")
+            self.log.error("`column_name` must be a str")
             return None
         else:
             query_column = ""
@@ -2170,10 +2167,10 @@ class _PgCursor(CitrosDB_base):
             order_by = {}
 
         if not isinstance(additional_columns, list):
-            print("Error: `additional_columns` must be a list")
+            self.log.error("`additional_columns` must be a list")
             return None
         if not isinstance(data_query, list):
-            print("Error: `data_query` must be a list")
+            self.log.error("`data_query` must be a list")
             return None
 
         if method == "":
@@ -2212,7 +2209,8 @@ class _PgCursor(CitrosDB_base):
                 n_avg=n_avg,
             )
         else:
-            print('method "{}" does not exist'.format(method))
+            self.log.debug(f'method "{method}" does not exist')
+            # print(f'method "{method}" does not exist')
             return None
         if df is not None:
             if divide_by_columns:
@@ -2329,7 +2327,7 @@ class _PgCursor(CitrosDB_base):
         n_skip=1,
     ):
         """
-        Pick every n-th row from the databes.
+        Pick every n-th row from the database.
 
         Parameters
         ----------
@@ -2362,13 +2360,13 @@ class _PgCursor(CitrosDB_base):
         if order_by is None:
             order_by = {}
         if n_skip <= 0:
-            print("`n_skip` must be > 0")
+            self.log.error("`n_skip` must be > 0")
             return None
         if not isinstance(n_skip, int):
             try:
                 n_skip = int(n_skip)
             except Exception:
-                print("`n_skip` must be int")
+                self.log.error("`n_skip` must be int")
                 return None
         param_sql = []
         param_execute = []
@@ -2501,13 +2499,13 @@ class _PgCursor(CitrosDB_base):
         if order_by is None:
             order_by = {}
         if n_avg <= 0:
-            print("`n_avg` must be > 0")
+            self.log.error("`n_avg` must be > 0")
             return None
         if not isinstance(n_avg, int):
             try:
                 n_avg = int(n_avg)
             except Exception:
-                print("n_avg must be int")
+                self.log.error("`n_avg` must be int")
                 return None
         param_sql = []
         param_execute = []
@@ -2768,22 +2766,22 @@ class _PgCursor(CitrosDB_base):
         if order_by is None:
             order_by = {}
         if n_skip <= 0:
-            print("`n_skip` must be > 0")
+            self.log.error("`n_skip` must be > 0")
             return None
         if not isinstance(n_skip, int):
             try:
                 n_skip = int(n_skip)
             except Exception:
-                print("n_skip must be int")
+                self.log.error("`n_skip` must be int")
                 return None
         if n_avg <= 0:
-            print("`n_avg` must be > 0")
+            self.log.error("`n_avg` must be > 0")
             return None
         if not isinstance(n_avg, int):
             try:
                 n_avg = int(n_avg)
             except Exception:
-                print("n_avg must be int")
+                self.log.error("`n_avg` must be int")
                 return None
         param_sql = []
         param_execute = []
@@ -3034,21 +3032,17 @@ class _PgCursor(CitrosDB_base):
         if topic_name is None:
             if self._topic is not None:
                 if len(self._topic) > 1:
-                    print("please provide one topic instead of list of the topics")
+                    self.log.error("please provide one topic instead of list of the topics")
                 else:
                     topic_var = self._topic[0]
             else:
-                print(
-                    '"topic" is not specified, please provide it by topic() method or as an argument'
-                )
+                self.log.error('"topic" is not specified, please provide it by topic() method or as an argument')
                 return None
         else:
             topic_var = topic_name
 
         if var_name is None:
-            print(
-                'please provide "var_name" - name of the variable to plot along y-axis'
-            )
+            self.log.error('please provide "var_name" - name of the variable to plot along y-axis')
             return None
 
         if var_name not in ["sid", "rid", "time", "topic"]:
@@ -3066,10 +3060,10 @@ class _PgCursor(CitrosDB_base):
         if df is None:
             return None
         if len(df) == 0:
-            print("there is no data matching the given criteria")
+            self.log.warn("there is no data matching the given criteria")
             return None
         if len(df[df[var_name].notna()]) == 0:
-            print(f"there is no data for the column '{var_name}'")
+            self.log.warn(f"there is no data for the column '{var_name}'")
             return None
 
         if remove_nan:
@@ -3124,26 +3118,20 @@ class _PgCursor(CitrosDB_base):
         if topic_name is None:
             if self._topic is not None:
                 if len(self._topic) > 1:
-                    print("please provide one topic instead of list of the topics")
+                    self.log.error("please provide one topic instead of list of the topics")
                 else:
                     topic_var = self._topic[0]
             else:
-                print(
-                    '"topic" is not specified, please provide it by topic() method or as an argument'
-                )
+                self.log.error('"topic" is not specified, please provide it by topic() method or as an argument')
                 return None
         else:
             topic_var = topic_name
 
         if var_x_name is None:
-            print(
-                'please provide "var_x_name" - name of the variable to plot along x-axis'
-            )
+            self.log.error('please provide "var_x_name" - name of the variable to plot along x-axis')
             return None
         if var_y_name is None:
-            print(
-                'please provide "var_y_name" - name of the variable to plot along y-axis'
-            )
+            self.log.error('please provide "var_y_name" - name of the variable to plot along y-axis')
             return None
 
         data_columns = []
@@ -3165,13 +3153,13 @@ class _PgCursor(CitrosDB_base):
         if df is None:
             return None
         if len(df) == 0:
-            print("there is no data matching the given criteria")
+            self.log.warn("there is no data matching the given criteria")
             return None
         if len(df[df[var_x_name].notna()]) == 0:
-            print(f"there is no data for the column '{var_x_name}'")
+            self.log.warn(f"there is no data for the column '{var_x_name}'")
             return None
         if len(df[df[var_y_name].notna()]) == 0:
-            print(f"there is no data for the column '{var_y_name}'")
+            self.log.warn(f"there is no data for the column '{var_y_name}'")
             return None
 
         if remove_nan:

@@ -39,10 +39,12 @@ class CitrosDB(_PgCursor):
     password : str, optional
         Password.
         Default is citros.database.CitrosDB.db_password.
-    debug : bool, default False
-        If `True`, the number of connections and queries which were done by all CitrosDB objects with `debug` set `True` 
+    debug_connect : bool, default False
+        If `True`, the number of connections and queries which were done by all CitrosDB objects with `debug_connect` set `True` 
         existing in the current session is recorded.
         The information is recorded to the _stat.Stat() object.
+    log : logging.Logger, default None
+        Logger to record log. If None, then the new logger is created.
     """
 
     def __init__(
@@ -55,8 +57,10 @@ class CitrosDB(_PgCursor):
         database=None,
         user=None,
         password=None,
-        debug=False,
+        debug_connect=False,
+        log = None,
     ):
+        
         super().__init__(
             host=host,
             port=port,
@@ -65,7 +69,8 @@ class CitrosDB(_PgCursor):
             database=database,
             simulation=simulation,
             batch=batch,
-            debug=debug,
+            debug_connect=debug_connect,
+            log = log,
         )
 
         if sid is None:
@@ -92,13 +97,14 @@ class CitrosDB(_PgCursor):
             database=self.db_name,
             user=self.db_user,
             password=self.db_password,
-            debug=self._debug,
+            debug_connect=self._debug_connect,
+            log = self.log,
         )
 
         if self._sid is None:
             if hasattr(self, "_sid_val"):
                 ci._sid_val = self._sid_val.copy()
-        if hasattr(self, "error_flag"):
+        if hasattr(self, "_error_flag"):
             ci._error_flag = self._error_flag
         if hasattr(self, "_rid_val"):
             ci._rid_val = self._rid_val.copy()
@@ -136,7 +142,7 @@ class CitrosDB(_PgCursor):
         bool : True if the simulation is set and exists, otherwise False.
         """
         if self._simulation is None:
-            print("Error: please provide simulation by simulation() method")
+            self.log.error("Please provide simulation by simulation() method")
             return False
         else:
             return True
@@ -150,7 +156,7 @@ class CitrosDB(_PgCursor):
         bool : True if the batch name is set and exists, otherwise False.
         """
         if self._batch_name is None:
-            print("Error: please provide batch name by batch() method")
+            self.log.error("Please provide batch name by batch() method")
             return False
         else:
             return True
@@ -166,14 +172,14 @@ class CitrosDB(_PgCursor):
         if (not self._is_simulation_set()) or (not self._is_batch_set()):
             return False
         else:
-            # batch_obj = Batch()
-            if self._is_batch_in_database(self._batch_name):
+            batch_status = self._is_batch_in_database(self._batch_name)
+            if batch_status:
                 # table is loaded
                 return True
+            elif batch_status is None:
+                return False
             else:
-                print(
-                    f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database."
-                )
+                self.log.error(f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database.")
                 return False
 
     def get_connection(self):
@@ -205,7 +211,7 @@ class CitrosDB(_PgCursor):
         >>> df = pd.DataFrame(D)
         """
         connection = self.connect()
-        if self._debug and connection is not None:
+        if self._debug_connect and connection is not None:
             _PgCursor.n_pg_connections += 1
         return connection
 
