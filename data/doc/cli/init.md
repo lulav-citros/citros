@@ -20,4 +20,3 @@ $ citros init
 initializing CITROS at "/path/to/ros2/project". 
 ```
 
-</details>
