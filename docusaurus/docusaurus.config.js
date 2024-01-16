@@ -48,7 +48,7 @@ const config = {
       ({
         docs: {
           path: "docs",
-          sidebarPath: require.resolve("./sidebarsCLI.js"),
+          sidebarPath: require.resolve("./sidebars.js"),
           remarkPlugins: [math],
           rehypePlugins: [katex],
         },
@@ -155,7 +155,7 @@ const config = {
           // {
           //   type: "docsVersionDropdown",
           //   position: "right",
-          //   docsPluginId: "docs_cli",
+          //   docsPluginId: "docs",
           //   // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
           //   // dropdownActiveClassDisabled: true,
           // },
