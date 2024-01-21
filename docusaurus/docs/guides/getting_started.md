@@ -77,16 +77,6 @@ To clone the repository:
 ## Initialization
 ```bash
 $ citros init
-Checking internet connection...
-Checking ssh...
-Updating Citros...
-Waiting for repo to be ready...
-Citros repo successfully cloned from remote.
-Creating and checking out a new local branch `main` that will track the remote branch.
-Default branch of remote 'origin' set to: main
-Citros successfully synched with local project.
-You may review your changes via `citros status` and commit them via `citros commit`.
-Initialized Citros repository.
 ```
 As you can see, a lot more is happening when you initialize your repository while being logged in. We will not delve into all the details behind the scenes, but as always, feel free to roam through the [CLI Documentation](https://citros.io/doc/docs_cli) for further details.
 
@@ -317,3 +307,4 @@ So now, after we uploaded the data, we can execute the notebook
 4. Press `Run All` button
 
 5. Scroll down the notebook to see the results.
+

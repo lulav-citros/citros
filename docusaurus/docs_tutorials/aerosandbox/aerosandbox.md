@@ -35,7 +35,7 @@ You can find more information about this useful aerodynamics library on [Aerosan
 git clone git@github.com:citros-garden/aerosandbox_cessna.git
 ```
 
-2. Open the repository in the [VScode Dev Container](https://citros.io/doc/docs_tutorials/getting_started/#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
 
 ## Workspace Overview
 
