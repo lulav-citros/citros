@@ -147,13 +147,12 @@ module.exports = {
       items: [
         {
           type: 'doc',
-          label: 'Adding Functions to Parameter Setup',
-          id: 'guides/config_params',
+          id: 'guides/getting_started',
         },
         {
           type: 'doc',
-          id: 'guides/getting_started',
-          label: 'Installation',
+          label: 'Adding Functions to Parameter Setup',
+          id: 'guides/config_params',
         },
         {
           type: 'doc',
