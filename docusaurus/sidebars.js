@@ -159,6 +159,11 @@ module.exports = {
           id: 'guides/dockerfile_overview',
           label: 'Installation',
         },
+        {
+          type: 'doc',
+          id: 'guides/foxglove_visual',
+          label: 'Foxglove',
+        },
       ],
 
     },

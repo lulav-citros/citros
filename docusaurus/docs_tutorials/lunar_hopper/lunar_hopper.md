@@ -31,7 +31,7 @@ The Lunar Hopper project is a lunar exploration planning project aimed at solvin
 git clone git@github.com:citros-garden/lunar_hopper.git
 ```
 
-2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](https://citros.io/doc/docs_tutorials/getting_started/#open-project-in-vscode-dev-container).
 
 ## Workspace Overview
 
@@ -117,7 +117,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 
 All the results will be saved under `.citros/data/simulation_lunar_hopper` folder.
 
-To plot the local run results you can use [Foxglove](https://citros.io/doc/docs_tutorials/#visualization-with-Foxglove).
+To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 Use ```layout_states.json``` for states plots:
 

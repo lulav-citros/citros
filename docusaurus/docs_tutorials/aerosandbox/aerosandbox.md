@@ -93,13 +93,13 @@ def func_with_context(num, citros_context):
 
 This function will set the ```h_0``` parameter in range from 1000 to 1000+1000*n, where n = number of runs.
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](https://citros.io/doc/docs_cli/structure/citros_structure/#directory-parameter_setups) and [Adding Functions to Parameter Setup](https://citros.io/doc/docs_cli/configuration/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 This parameters can be found in ```.citros/simulations/simulation_aerosandbox_cessna.json```. <br/>
 The default setup is 180 seconds timeout, 4 CPU, 4 GPU and 4096 MB of Memory.
 
-Look in [Directory simulations page](https://citros.io/doc/docs_cli/structure/citros_structure#directory-simulations) for more information.
+Look in [Directory simulations page](../../docs/advanced_guides/citros_structure#directory-simulations) for more information.
 
 ## Running the Scenario Using CITROS
 
@@ -110,7 +110,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 
 All the results will be saved under `.citros/data/simulation_aerosandbox_cessna` folder.
 
-To plot the local run results you can use [Foxglove](https://citros.io/doc/docs_tutorials/#visualization-with-Foxglove).
+To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 ![gif](img/gif0.gif "Foxglove example")
 
