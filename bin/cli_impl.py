@@ -696,9 +696,9 @@ def _init_db(verbose, debug):
     """
     initializing the DB
     """
-    from citros import CitrosDB
+    from citros import CitrosDB_old
 
-    citrosDB = CitrosDB(
+    citrosDB = CitrosDB_old(
         config.POSTGRES_USERNAME,
         config.POSTGRES_PASSWORD,
         config.CITROS_DATA_HOST,

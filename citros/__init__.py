@@ -35,6 +35,8 @@ from .data import (
     Validation,
 )
 
+from .database import CitrosDB as CitrosDB_old
+
 __all__ = [
     # citros
     "Citros",
