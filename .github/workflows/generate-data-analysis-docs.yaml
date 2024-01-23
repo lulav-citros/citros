@@ -1,12 +1,12 @@
 name: testing
-on: 
+on:
   workflow_call:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Installations
