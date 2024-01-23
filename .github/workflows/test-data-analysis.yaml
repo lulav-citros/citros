@@ -1,8 +1,6 @@
-name: testing
+name: testing-data-analysis
 on:
-  push:
   pull_request:
-    types: [opened]
 
 jobs:
   # Label of the container job
