@@ -1,4 +1,4 @@
-name: testing
+name: testing-data-analysis
 on:
   pull_request:
 
