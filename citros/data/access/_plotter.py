@@ -4,8 +4,8 @@ from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..analysis import CitrosData, CitrosDataArray, CitrosStat
-
+# from ..analysis import CitrosData
+from citros.data.analysis import CitrosData
 # from citros import CitrosData, CitrosDataArray, CitrosStat
 
 from itertools import cycle
@@ -69,7 +69,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         return_flag = False
         if ax is None:
@@ -90,7 +89,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -100,7 +99,7 @@ class _Plotter:
             df_copy.sort_values(by=["sid", "rid"], axis=0, inplace=True)
         except:
             pass
-        df_copy.set_index("sid", inplace=True)
+        df_copy.set_index("sid", inplace=True, drop=False)
         sid_list = list(set(df_copy.index))
         for s in sid_list:
             ax.plot(
@@ -194,7 +193,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         return_flag = False
         if ax is None:
@@ -217,7 +215,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -227,7 +225,7 @@ class _Plotter:
             df_copy.sort_values(by=["sid", "rid"], axis=0, inplace=True)
         except:
             pass
-        df_copy.set_index("sid", inplace=True)
+        df_copy.set_index("sid", inplace=True, drop=False)
         sid_list = list(set(df_copy.index))
         for s in sid_list:
             ax.plot(
@@ -325,7 +323,6 @@ class _Plotter:
         ----------------
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
-
         """
         if isinstance(y_labels, str):
             y_labels = [y_labels]
@@ -346,7 +343,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -380,16 +377,13 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != len(y_labels):
-                    print(
-                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None")
             else:
                 set_y_label = y_labels
 
         for i, y_label in enumerate(y_labels):
             if remove_nan:
                 flag = df_copy[y_label].notna() & df_copy[x_label].notna()
-                # F = df_copy[[x_label, y_label, 'sid']].loc[df_copy[y_label].notna() & df_copy[x_label].notna()]
             else:
                 flag = pd.Series(data=[True] * len(df_copy))
             if inf_vals is not None:
@@ -401,7 +395,7 @@ class _Plotter:
                 F = df_copy[[x_label, y_label, "sid"]].loc[flag]
             else:
                 F = df_copy[[x_label, "sid"]].loc[flag]
-            F.set_index("sid", inplace=True)
+            F.set_index("sid", inplace=True, drop=False)
             sid_list = list(set(F.index))
             for s in sid_list:
                 ax[i].plot(
@@ -491,7 +485,7 @@ class _Plotter:
         label_all_yaxis : bool, default False
             If True, y labels are set to the y-axes of the all graphs, otherwise only to the graphs in the first column.
         num : int, default 5
-            Number of bins in the histogram on the diogonal.
+            Number of bins in the histogram on the diagonal.
 
         Returns
         -------
@@ -526,7 +520,7 @@ class _Plotter:
         for col in ["sid", "rid"]:
             if col not in df.columns:
                 missing_col = True
-                print(f'column "{col}" must be in the DataFrame `df`')
+                self.log.error(f'column "{col}" must be in the DataFrame `df`')
         if missing_col:
             return None
 
@@ -560,9 +554,7 @@ class _Plotter:
                 set_x_label = [set_x_label]
             elif isinstance(set_x_label, list):
                 if len(set_x_label) != N:
-                    print(
-                        f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None")
             else:
                 set_x_label = labels
 
@@ -573,9 +565,7 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != N:
-                    print(
-                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None"
-                    )
+                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None")
             else:
                 set_y_label = labels
 
@@ -587,7 +577,10 @@ class _Plotter:
                     flag = df_copy[x_label].notna()
                     if inf_vals is not None:
                         flag = flag & ((abs(df_copy[x_label]) - inf_vals) < 0)
-                    F = df_copy[[x_label, "sid"]].loc[flag].set_index("sid")
+                    if x_label != "sid":
+                        F = df_copy[[x_label, "sid"]].loc[flag].set_index("sid", drop=False)
+                    else:
+                        F = df_copy[["sid"]].loc[flag].set_index("sid", drop=False)
                     sid_list = list(set(F.index))
                     for s in sid_list:
                         axes[i][j].hist(
@@ -610,7 +603,8 @@ class _Plotter:
                         F = df_copy[[x_label, y_label, "sid"]].loc[flag]
                     else:
                         F = df_copy[[x_label, "sid"]].loc[flag]
-                    F.set_index("sid", inplace=True)
+                    F = F.loc[:, ~F.columns.duplicated()]
+                    F.set_index("sid", inplace=True, drop=False)
                     sid_list = list(set(F.index))
                     for s in sid_list:
                         axes[i][j].plot(
@@ -751,7 +745,7 @@ class _Plotter:
         x = df[flag][x_label].to_numpy(dtype=float)
         y = df[flag][y_label].to_numpy(dtype=float)
         if len(x) == 0:
-            print("there is no data to plot")
+            self.log.error("there is no data to plot")
             return
         if not isinstance(n_std, (list, np.ndarray)):
             n_std = [n_std]
@@ -788,12 +782,10 @@ class _Plotter:
                 )
 
             except np.linalg.LinAlgError:
-                print(
-                    "can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses"
-                )
+                self.log.error("can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses")
         else:
             bounding_error = False
-            print("the number of points is not enough to plot confidence ellipses")
+            self.log.warn("the number of points is not enough to plot confidence ellipses")
 
         # plot center
         if plot_origin:
@@ -850,7 +842,7 @@ class _Plotter:
             return None
 
     def time_plot(
-        self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs
+        self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs,
     ):
         """
         Plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
@@ -893,7 +885,7 @@ class _Plotter:
                 if s not in all_sids:
                     bad_sids.append(s)
             if len(bad_sids) != 0:
-                print("sids " + str(bad_sids) + " do not exist")
+                self.log.warn("sids " + str(bad_sids) + " do not exist")
                 sids = [s for s in sids if s not in bad_sids]
         for s in sids:
             ax.plot(
@@ -959,6 +951,20 @@ class _Plotter:
         **kwargs
             Other keyword arguments, see [matplotlib.axes.Axes.plot](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html)
         """
+        if sids is None or sids == []:
+            sids = list(set(xy_df.index))
+        else:
+            if isinstance(sids, int):
+                sids = [sids]
+            all_sids = list(set(xy_df.index))
+            bad_sids = []
+            for s in sids:
+                if s not in all_sids:
+                    bad_sids.append(s)
+            if len(bad_sids) != 0:
+                self.log.warn("sids " + str(bad_sids) + " do not exist")
+                sids = [s for s in sids if s not in bad_sids]
+
         for s in sids:
             ax.plot(
                 xy_df[var_x_name].loc[s],

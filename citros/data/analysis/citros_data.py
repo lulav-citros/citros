@@ -10,9 +10,10 @@ from typing import Union, Optional
 import matplotlib.figure
 from .citros_stat import CitrosStat
 import warnings
+from citros.data.access._utils import _get_logger
 
 class CitrosData:
-    '''
+    """
     Create CitrosData object, that allows to bin and interpolate data.
 
     CitrosData object has two main attributes: 'data' - the vector of depending variables, 
@@ -45,6 +46,8 @@ class CitrosData:
     inf_vals : None or float, default 1e308
         If specified, all values from `data_label` column that exceed the provided value in absolute terms 
         will be treated as NaN values. If this functionality is not required, set inf_vals = None.
+    log : log : logging.Logger, default None
+        Logger to record log. If None, then the new logger is created.
 
     Notes
     -----
@@ -81,10 +84,14 @@ class CitrosData:
     | 3.5 | 6 | 6.5 |      | 2.5 | 5 | 6 |
     +-----+---+-----+      +-----+---+---+
     ```
-    '''
+    """
 
     def __init__(self, db = None, type_name = '', units = '', data_label = 'data', 
-                 parameters = None, parameter_label ='', sid_label = 'sid', omit_nan_rows = None, inf_vals = 1e308):
+                 parameters = None, parameter_label ='', sid_label = 'sid', omit_nan_rows = None, inf_vals = 1e308,
+                 log = None):
+        
+        if log is None:
+            self.log = _get_logger(__name__)
 
         if parameters is None:
             parameters = {}
@@ -99,6 +106,7 @@ class CitrosData:
             self.parameters = parameters
             self.sid_label = sid_label
             self.inf_vals = inf_vals
+
             if omit_nan_rows is None:
                 self.omit_nan_rows = True
             else:
@@ -139,11 +147,6 @@ class CitrosData:
             
             self.parameters = parameters.copy()
             self.sid_label = sid_label
-
-            # if isinstance(data_label, str):
-            #     data_label = [data_label]
-            # elif isinstance(data_label, list):
-            #     data_label = data_label.copy()
             
         if isinstance(db, CitrosData):
             if type_name == '':
@@ -216,7 +219,7 @@ class CitrosData:
             elif isinstance(data_label, list):
                 data_label = data_label.copy()
             else:
-                print('error: data_label must be str or list of str')
+                self.log.error('`data_label` must be str or list of str')
             if omit_nan_rows is None:
                 self.omit_nan_rows = True
             else:
@@ -224,7 +227,7 @@ class CitrosData:
             self.inf_vals = inf_vals
             for item in data_label:
                 if item not in db.columns:
-                    print(f"error: The column '{item}' does not exist")
+                    self.log.error(f"The column '{item}' does not exist")
                     return
             self._set_data(db[data_label])
             drop_column += data_label
@@ -233,14 +236,14 @@ class CitrosData:
         self._set_index_level_names()
 
     def _set_data(self, dataset):
-        '''
+        """
         Set 'data' attribute of the CitrosData object
 
         Parameters
         ----------
         dataset : Series or DataFrame
             May contains dicts or lists in rows or their combination (dict of lists, list of dicts, etc)
-        '''
+        """
         k = []
         self._resolve_data(dataset, k)
         self.data = pd.concat(k, axis = 1).fillna(np.nan)
@@ -257,7 +260,7 @@ class CitrosData:
             self.filter= pd.DataFrame(columns = self.data.columns, index = self.data.index, data = {col: self.filter.all(axis = 1) for col in self.data.columns})
         
     def _resolve_data(self, dataset, k):
-        '''
+        """
         Recursively turns all dictionaries and lists to columns.
 
         Parameters
@@ -266,7 +269,7 @@ class CitrosData:
             Input data
         k : list
             Output list of pandas.Series
-        '''
+        """
         if isinstance(dataset, pd.Series):
             if isinstance(dataset.iloc[0], (list, np.ndarray)):
                 dataset_item = dataset.apply(lambda x: x[n] for n in range(len(dataset.iloc[0])))
@@ -291,96 +294,90 @@ class CitrosData:
             self.xid_label = None
             self.x_label = None
     
-    def to_pandas(self):
-        '''
-        Concatenate `data` and `addData` attributes and return the result table as a pandas.DataFrame.
+    # Correspondence Between Simulations
+    
+    def bin_data(self, n_bins: int = 10, param_label: str = 'rid', min_lim: Optional[float] = None, max_lim: Optional[float] = None, 
+                 show_fig: bool = False):
+        """
+        Bin values of column `param_label` in `n_bins` intervals, group data according to the binning and 
+        calculate mean data values of each group.
 
+        In order to establish a correspondence between the values of the data from different simulations, 
+        an independent variable `param_label` is selected and used to assign indexes. `param_label` values are divided into 
+        `n_bins` ranges, assigning index to each interval, and then for each simulation the averages of the data values 
+        is calculated in each bin.
+        'addData' and 'data' attributes of the new CitrosData object have two levels of indexes, 
+        with id values from binning as the first level and 'sid' as the second one.
+
+        Parameters
+        ----------
+        n_bins : int, default 10
+            Number of bins.
+        param_label : str, default 'rid'
+            Label of column on the basis of which the indices will be calculated.
+        min_lim : float
+            The minimum value of the range for binning, `min_lim` < `max_lim`.
+            If None then the minimum value of the entire range is selected.
+        max_lim : float
+            The maximum value of the range for binning, `min_lim` < `max_lim`.
+            If None then the maximum value of the entire range is selected.
+        show_fig : bool, default False
+            If the histogram that represents the distribution of the values in `param_label` should be shown.
+        
         Returns
         -------
-        df : pandas.DataFrame
-            Concatenated table.
-        '''
-        return pd.concat([self.data, self.addData], axis = 1)
+        out : CitrosData
+            New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.
 
-    def set_parameter(self, key: Optional[str] = None, value: Optional[Union[int, float]] = None, item: Optional[dict] = None):
-        '''
-        Set parameter value to a CitrosData object.
+        Examples
+        --------
+        Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        Parameters
-        ----------
-        key : str
-            Label of the parameter.
-        value : int or float
-            Parameter value.
-        item : dict
-            Dictionary with parameters.
-        '''
-        if key is not None and value is not None:
-            if key in self.parameters.keys():
-                print('key "{}" already exists, its value will be set to {}'.format(key, value))
-            self.parameters[key] = value
-        if item is not None:
-            if isinstance(item, dict):
-                for k, v in item.items():
-                    if k in self.parameters.keys():
-                        print('key "{}" already exists, its value will be set to {}'.format(k, v))
-                    self.parameters[k] = v
-        
-    def drop_parameter(self, key: Optional[str] = None):
-        '''
-        Delete parameter labeled `key` and associated value.
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB()
+        >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
+        >>> print(df)
+            sid rid time    topic   type    data.x.x_1  data.time
+        0   0   0   17...   coords  Array   0.0         0.0
+        1   0   1   17...   coords  Array   0.005       0.1
+        ...
 
-        Parameters
-        ----------
-        key : str
-            Label of the parameter to remove.
-        '''
-        if key in self.parameters:
-            self.parameters.pop(key)
-        else:
-            print('key "{}" does not exists'.format(key))
+        Construct CitrosData object with one data-column 'data.x.x_1':
 
-    def add_addData(self, column: ArrayLike, column_label: str):
-        '''
-        Add column to 'addData' attribute.
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 
-        Parameters
-        ----------
-        column : array-like object
-            Column to add.
-        column_label : str
-            Label of the new column in 'addData'.
-        '''
-        self.addData[column_label] = column
+        Divide 'data.time' values in 50 bins and assign indexes to these intervals. For each simulation group 
+        'data.x.x_1' values according to the binning and calculate mean of the each group:
 
-    def drop_addData(self, column_label: str):
-        '''
-        Delete column from 'addData' attribute.
+        >>> db = dataset.bin_data(n_bins = 50, param_label = 'data.time')
 
-        Parameters
-        ----------
-        column_label : str
-            Label of the column to delete .
-        '''
-        self.addData.drop(columns = column_label, inplace = True)
+        The result is a CitrosData object with two levels of indexes:
+
+        >>> print(db.data)
+                            data.x.x_1
+        data.time_id  sid            
+        0             1     0.00000
+                      2     -0.04460
+                      3     -0.07900
+        1             1     0.01600
+        ...
+
+        >>> print(db.addData)
+                            data.time
+        data.time_id  sid           
+        0             1     8.458
+                      2     8.458
+                      3     8.458
+        1             1     24.774
+        ...
+        """
+
+        new_indexes, bins_dict, bins, flag_x = self._get_index(n_bins, param_label, min_lim = min_lim, max_lim = max_lim, show_fig = show_fig)
+        new_db = self._group_data(new_indexes, bins_dict, flag_x)
+        return new_db
     
-    def _set_index_levels(self, index_levels):
-        '''
-        Set indexes to database.
-
-        Parameters
-        ----------
-        index_levels : list of str
-            Labels of columns in 'addData' to assign as indexes.
-        '''
-        self.data.set_index([self.addData[p] for p in index_levels], inplace = True)
-        self.addData.set_index(index_levels, inplace = True)
-        # self.filter = self.data.notna().all(axis = 1)
-        self.filter = self.data.notna()
-        pass
-
     def _get_index(self, n_bins, param_label, min_lim = None, max_lim = None, show_fig = False):
-        '''
+        """
         Bin values of column `param_label` in `n_bins` intervals and find indexes for the values according to these intervals.
         
         The range for binning is specified with the `min_lim` and `max_lim` parameters.
@@ -410,7 +407,7 @@ class CitrosData:
             Indexes of the bins and corresponding to them values of the bins centers.
         bins : numpy.ndarray
             Edges of the bins.
-        '''
+        """
         if self.inf_vals is not None and self.inf_vals not in ['None', 'none']:
             flag_x = self.addData[param_label].notna() & ((self.addData[param_label].abs() - self.inf_vals) < 0)
         else:
@@ -419,7 +416,7 @@ class CitrosData:
         try :
             h_list = list(set(db[param_label]))
         except KeyError:
-            print('There is no column labeled "'+param_label+'"')
+            self.log.error('There is no column labeled "'+param_label+'"')
             return (None,)*3
         if min_lim is None:
             min_lim = min(h_list)
@@ -453,112 +450,12 @@ class CitrosData:
             ax2.set_xlabel(param_label+'_id')
             fig.supxlabel(param_label)
             fig.supylabel('counts')
-            # fig.suptitle('Binned data')
             fig.tight_layout()
-            fig.show()
 
         return (new_indexes, bins_dict, bins, flag_x)
     
-    def _get_mu(self, X, ret_nonan = False):
-        '''
-        Returns the mean values for the vector of N variables with M values per variable.
-
-        Before calculations all rows with at least one numpy.nan value are removed.
-        
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape (M, N).
-        ret_nonan : bool, default False
-            Specifies if the `X` cleaned from rows containing numpy.nan values should be returned.
-
-        Returns
-        -------
-        mu : numpy.ndarray
-            Mean values of the vector `X`, shape (N, ).
-        x_ : numpy.ndarray
-            If `ret_nonan = True`, returns `X` cleaned from rows containing numpy.nan values.
-        '''
-        x_ = self._remove_nan(X)
-        mu = np.array(x_.mean(axis = 0))
-        if ret_nonan:
-            return mu, x_
-        else:
-            return mu
-
-    def _remove_nan(self, X):
-        '''
-        Remove rows with numpy.nan values.
-
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape (M, N).
-        '''
-        try:
-            XX = X[~np.isnan(X).any(axis = 1)]
-            return XX
-        except:
-            XX = X[~np.isnan(X)]
-            return XX
-
-    def _get_covar_matrix(self, X):
-        '''
-        Return the covariance matrix for the vector of N variables, with M values per variable.
-
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas.DataFrame
-            Shape = (M x N), M > 1, otherwise returns matrix N x N filled with numpy.nan or numpy.nan if M = 1.
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Shape (N, N).
-        '''
-        mu, XX = self._get_mu(X, ret_nonan=True)
-        try:
-            covar_matrix = 1/(XX.shape[0] - 1) * np.dot((XX - mu).T,(XX - mu))
-            return covar_matrix
-        except ZeroDivisionError:
-            try:
-                res = np.empty((XX.shape[1],XX.shape[1]))
-                res.fill(np.nan)
-                return res
-            except IndexError:
-                res = np.nan
-                return res
-
-    def _get_disp(self, X):
-        '''
-        Return the square root of the diagonal elements of the covariance matrix (M x N) for the vector of N variables,
-        with M values per variable.
-        
-        Parameters
-        ----------
-        X : numpy.ndarray or pandas DataFrame
-            Shape = M x N, M > 1 otherwise returns array filled with nan.
-
-        Returns
-        -------
-        out : numpy.ndarray
-            Shape = (N, ).
-        '''
-        try:
-            covar_matrix = self._get_covar_matrix(X)
-            if not isinstance(covar_matrix, np.ndarray):
-                return np.sqrt(covar_matrix)
-            else:
-                disp = np.sqrt(np.diag(covar_matrix))
-            return disp
-        except ValueError:
-            XX = self._remove_nan(X)
-            disp = np.empty((XX.shape[1],))
-            disp.fill(np.nan)
-            return disp
-
     def _group_data(self, new_indexes, bins_dict, flag_x):
-        '''
+        """
         Group data according to id values in `new_indexes` and calculate mean values of the each group.
 
         'addData' and 'data' attributes of the new CitrosData object have two levels of indexes, 
@@ -578,11 +475,10 @@ class CitrosData:
         -------
         out : CitrosData
             New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.      
-        '''
+        """
         new_id = new_indexes.name
         new_label = new_id.split('_id')[0]
         bin_mean = new_indexes.apply(lambda x: bins_dict.get(x)).to_list()
-        # data_copy = self.data[self.filter.multiply(flag_x, axis = 0)].copy()
         data_copy = self.data[flag_x].copy()
         data_copy[new_id] = new_indexes.to_list()
         data_copy[self.sid_label] = self.addData[flag_x][self.sid_label]
@@ -599,82 +495,8 @@ class CitrosData:
                         inf_vals = self.inf_vals)
         return new_db
 
-    def bin_data(self, n_bins: int = 10, param_label: str = 'rid', min_lim: Optional[float] = None, max_lim: Optional[float] = None, 
-                 show_fig: bool = False):
-        '''
-        Bin values of column `param_label` in `n_bins` intervals, group data according to the binning and 
-        calculate mean data values of each group.
-
-        In order to establish a correspondence between the values of the data from different simulations, 
-        an independent variable `param_label` is selected and used to assign indexes. `param_label` values are divided into 
-        `n_bins` ranges, assigning index to each interval, and then for each simulation the averages of the data values 
-        is calculated in each bin.
-        'addData' and 'data' attributes of the new CitrosData object have two levels of indexes, 
-        with id values from binning as the first level and 'sid' as the second one.
-
-        Parameters
-        ----------
-        n_bins : int, default 10
-            Number of bins.
-        param_label : str, default 'rid'
-            Label of column on the basis of which the indices will be calculated.
-        min_lim : float
-            The minimum value of the range for binning, `min_lim` < `max_lim`.
-            If None then the minimum value of the entire range is selected.
-        max_lim : float
-            The maximum value of the range for binning, `min_lim` < `max_lim`.
-            If None then the maximum value of the entire range is selected.
-        show_fig : bool, default False
-            If the histogram that represents the distribution of the values in `param_label` should be shown.
-        
-        Returns
-        -------
-        out : CitrosData
-            New CitrosData object with two levels of indexes in 'addData' and 'data' attributes.
-
-        Examples
-        --------
-        Query some data from the topic 'A'
-
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
-        >>> print(df)
-
-        Construct CitrosData object with one data-column 'data.x.x_1':
-
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
-
-        Divide 'data.time' values in 50 bins and assign indexes to these intervals. For each simulation group 
-        'data.x.x_1' values according to the binning and calculate mean of the each group:
-
-        >>> db = dataset.bin_data(n_bins = 50, param_label = 'data.time')
-
-        The result is a CitrosData object with two levels of indexes:
-
-        >>> print(db.data)
-                            data.x.x_1
-        data.time_id  sid            
-        0             1     0.00000
-                      2     -0.04460
-                      3     -0.07900
-        1             1     0.01600
-        ...
-
-        >>> print(db.addData)
-                            data.time
-        data.time_id  sid           
-        0             1     8.458
-                      2     8.458
-                      3     8.458
-        1             1     24.774
-        ...
-        '''
-
-        new_indexes, bins_dict, bins, flag_x = self._get_index(n_bins, param_label, min_lim = min_lim, max_lim = max_lim, show_fig = show_fig)
-        new_db = self._group_data(new_indexes, bins_dict, flag_x)
-        return new_db
-
     def scale_data(self, n_points: int = 10, param_label: str = 'rid', show_fig: bool = False, intr_kind: str = 'linear'):
-        '''
+        """
         Scale parameter `param_label` for each of the 'sid' and interpolate data on the new scale.
 
         In order to establish a correspondence between the values of the data from different simulations, 
@@ -706,14 +528,20 @@ class CitrosData:
 
         Examples
         --------
-        Query some data from the topic 'A'
+        Query some data from the topic 'coords' of the batch 'star' of the simulation 'simulation_galaxy'
 
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.time'])
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB()
+        >>> df = citros.simulation('simulation_galaxy').batch('star').topic('coords').data(['data.x.x_1', 'data.time'])
         >>> print(df)
+            sid rid time    topic   type    data.x.x_1  data.time
+        0   0   0   17...   coords  Array   0.0         0.0
+        1   0   1   17...   coords  Array   0.005       0.1
+        ...
 
         Construct CitrosData object with one data-column 'data.x.x_1':
 
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1'], units = 'm')
 
         Scale 'data.time' to [0, 1] interval, define a new range of 50 points uniformly distributed from 0 to 1, 
         and interpolate data points over this new interval:
@@ -739,7 +567,7 @@ class CitrosData:
                       3     0.000000
         1             1     0.020408
         ...
-        '''
+        """
         if self.inf_vals is not None and self.inf_vals not in ['None', 'none']:
             flag_x = self.addData[param_label].notna() & ((self.addData[param_label].abs() - self.inf_vals) < 0)
         else:
@@ -787,11 +615,12 @@ class CitrosData:
                 fig.supylabel(new_db.data.columns[i]+', [' + self.units+']')
                 fig.suptitle(new_db.type)
                 fig.tight_layout()
-                fig.show()
         return new_db
+
+    # Statistics
     
     def get_statistics(self, return_format: str = 'pandas'):
-        '''
+        """
         Return table with statistics for CitrosData object.
 
         Parameters
@@ -801,7 +630,7 @@ class CitrosData:
 
         Returns
         -------
-        Statistics : pandas.DataFrame or citros_data_analysis.error_analysis.citros_stat.CitrosStat
+        Statistics : pandas.DataFrame or analysis.citros_stat.CitrosStat
             Collected statistics.
             If `return_format` is 'pandas', then returns pandas.DataFrame with the following columns:
             - (1) the independent variable column, its label matches `x_label` attribute; 
@@ -819,13 +648,12 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import and create CitrosDB object to query data from the batch 'star' of the simulation 'simulation_galaxy':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_galaxy', batch = 'star')
 
-        Let's consider a data of the topic 'A', json-data part of which has the following structure:
+        Let's consider a json-data part of the topic 'coords' has the following structure:
 
         ```python
         data
@@ -837,35 +665,35 @@ class CitrosData:
         Let's query data and pass it to CitrosData object to perform analysis.
         It is possible to query all columns separately:
 
-        >>> df = citros.topic('A').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
+        >>> df = citros.topic('coords').data(['data.x.x_1', 'data.x.x_2', 'data.x.x_3', 'data.time'])
         >>> print(df)
            sid   rid   time       topic   type   data.x.x_1   data.x.x_2   data.x.x_3   data.time
-        0  1     0     312751159  A       a      0.000        0.080        154.47       10.0
-        1  1     1     407264008  A       a      0.008        0.080        130.97       17.9
-        2  1     2     951279608  A       a      0.016        0.078        117.66       20.3
+        0  1     0     312751159  coords  Array  0.000        0.080        154.47       10.0
+        1  1     1     407264008  coords  Array  0.008        0.080        130.97       17.9
+        2  1     2     951279608  coords  Array  0.016        0.078        117.66       20.3
         ...
 
         and define data labels for the CitrosData object as follows:
 
-        >>> dataset = analysis.CitrosData(df,
-        ...                               data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
-        ...                               units = 'm')
+        >>> dataset = CitrosData(df,
+        ...                      data_label = ['data.x.x_1', 'data.x.x_2', 'data.x.x_3'],
+        ...                      units = 'm')
 
         or query 'data.x' as a one column:
 
-        >>> df = citros.topic('A').data(['data.x', 'data.time'])
+        >>> df = citros.topic('coords').data(['data.x', 'data.time'])
         >>> print(df)
            sid   rid   time       topic   type   data.x                                       data.time
-        0  1     0     312751159  A       a      {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
-        1  1     1     407264008  A       a      {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
-        2  1     2     951279608  A       a      {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
+        0  1     0     312751159  coords  Array  {'x_1': 0.0, 'x_2': 0.08, 'x_3': 154.47}     10.0
+        1  1     1     407264008  coords  Array  {'x_1': 0.008, 'x_2': 0.08, 'x_3': 130.97}   17.9
+        2  1     2     951279608  coords  Array  {'x_1': 0.016, 'x_2': 0.078, 'x_3': 117.66}  20.3
         ...
 
         and correspondingly set data_label:
 
-        >>> dataset = analysis.CitrosData(df,
-        ...                               data_label = 'data.x',
-        ...                               units = 'm')
+        >>> dataset = CitrosData(df,
+        ...                      data_label = 'data.x',
+        ...                      units = 'm')
 
         To analyze data of multiple simulations it is necessary to establish a correspondence between the values of the data 
         from these different simulations. One approach is to select an independent variable, define a scale that is common 
@@ -919,9 +747,9 @@ class CitrosData:
         [[1.69633333e-03 1.54366667e-03 2.60583167e+00]
         [1.54366667e-03 1.77733333e-03 2.93335333e+00]
         [2.60583167e+00 2.93335333e+00 4.85077763e+03]]
-        '''
+        """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
@@ -946,11 +774,11 @@ class CitrosData:
         elif return_format == 'pandas':
             return statistics
         else:
-            print('error: there is no return_format {return_format}, try "citrosStat" or "pandas"')
+            self.log.error('There is no return_format {return_format}, try "citrosStat" or "pandas"')
         
     def _plot_1Dstatistics(self, statistics, filter_st, ax = None, n_std = 3, num_data = 0, ylabel = None, std_color = 'r', 
                            std_area = False, std_lines = True, line_style_custom = '-'):
-        '''
+        """
         Plot data vs. `x_label` on a single ax for a one-dimensional data.
 
         Plots data vs. `x_label` for different 'sid', for mean value and shows `n_std`-sigma interval.
@@ -981,7 +809,7 @@ class CitrosData:
         Returns
         -------
         out : matplotlib.axes.Axes
-        '''
+        """
         sim_run_id = list(set(self.addData[self.filter.iloc[:, num_data]].index.get_level_values(self.sid_label)))
         N_run = len(sim_run_id)
         color_list =  [tuple(np.random.uniform(0,1, size=3)) for _ in range(N_run)]
@@ -1011,9 +839,9 @@ class CitrosData:
         ax.grid(True)
         return ax
 
-    def _plot_statistics(self, statistics, fig = None, fig_title = None, show_fig = True, return_fig = False, n_std = 3, 
+    def _plot_statistics(self, statistics, fig = None, fig_title = None, return_fig = False, n_std = 3, 
                          std_color = 'r', connect_nan_std = True, std_area = False, std_lines = True):
-        '''
+        """
         Plot data vs. `x_label` figure for a N multidimensional data on N axis.
 
         Parameters
@@ -1024,8 +852,6 @@ class CitrosData:
             figure to plot on. If None, then the new one is created.
         fig_title : str
             Title of the figure.
-        show_fig : bool, default True
-            If the figure should be shown, True by default.
         return_fig : bool, default False
             If True, return fig and list of ax.
         n_std : int, default 3
@@ -1046,16 +872,10 @@ class CitrosData:
             if `return_fig` set to True
         ax : list of matplotlib.axes.Axes
             if `return_fig` set to True
-        '''
-        if (not show_fig) and (not return_fig):
-            return
- 
+        """
         if isinstance(statistics, CitrosStat):
             statistics = statistics.to_pandas()
 
-        # if not isinstance(statistics['mean'].iloc[0], np.ndarray):
-        #     N = 1
-        # else:
         N = len(statistics['mean'].iloc[0])
         if fig is None:
             fig, ax = plt.subplots(nrows = N, ncols = 1,figsize=(6, 6))
@@ -1093,23 +913,19 @@ class CitrosData:
         fig.legend(handles, labels, bbox_to_anchor=(1.0, 0.94),loc ='upper left')
         fig.tight_layout()
 
-        if show_fig:
-            fig.show()
         if return_fig:
             return fig, ax
     
-    def show_statistics(self, fig: Optional[matplotlib.figure.Figure] = None, show_fig: bool = True, return_fig: bool = False, 
+    def show_statistics(self, fig: Optional[matplotlib.figure.Figure] = None, return_fig: bool = False, 
                         n_std: int = 3, fig_title: str = 'Statistics', std_color: str = 'r', connect_nan_std: bool = True, 
                         std_area: bool = False, std_lines: bool = True):
-        '''
+        """
         Collect statistics for CitrosData object and plot it.
 
         Parameters
         ----------
         fig : matplotlib.figure.Figure
             figure to plot on. If None, the new one will be created.
-        show_fig : bool
-            If the figure should be shown, True by default.
         return_fig : bool
             If the figure parameters fig, ax should be returned; 
             fig is matplotlib.figure.Figure and ax is matplotlib.axes.Axes
@@ -1136,71 +952,50 @@ class CitrosData:
 
         See Also
         --------
-        CitrosData.get_statistics(), CitrosData.bin_data(), CitrosData.scale_data()
+        CitrosData.get_statistics, CitrosData.bin_data, CitrosData.scale_data
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
         
-        Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time':
+        Download json-data column 'data.x', that contains data.x.x_1, data.x.x_2 and data.x.x_3 and column 'data.time'
+        from the topic 'A':
 
         >>> df = citros.topic('A').data(['data.x', 'data.time'])
 
         Construct CitrosData object with 3 data-columns from 'data.x':
 
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x'], units = 'm')
 
         Use method scale_data() or bin_data() to get correspondence between different simulation:
 
         >>> db_sc = dataset.scale_data(n_points = 150, 
-                                       param_label = 'data.time', 
-                                       show_fig = False)
+                                       param_label = 'data.time')
         
         Show statistics plot:
 
         >>> db_sc.show_statistics()
-        '''
+        """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
         statistics = self.get_statistics(return_format = 'pandas')
-        return self._plot_statistics(statistics, fig = fig, fig_title = fig_title, show_fig = show_fig, return_fig = return_fig, 
+        return self._plot_statistics(statistics, fig = fig, fig_title = fig_title, return_fig = return_fig, 
                                      n_std = n_std, std_color = std_color, connect_nan_std = connect_nan_std, std_area = std_area, 
                                      std_lines = std_lines)
 
-    def _get_id_by_val(self, val, cols):
-        '''
-        Return the nearest slice_id for the given `val` where corresponding value of the column `col` is not nan.
-        '''
-        flag = True
-        for col in cols:
-            if isinstance(col, str):
-                flag = self.filter.loc[:, col] & flag
-            elif isinstance(col, int):
-                flag = self.filter.iloc[:, col] & flag
-        return (self.addData[flag][self.x_label] - val).abs().idxmin()[0]
-        # if isinstance(col, str):
-        #     return (self.addData[self.filter.loc[:, col]][self.x_label] - val).abs().idxmin()[0]
-        # elif isinstance(col, int):
-        #     return (self.addData[self.filter.iloc[:, col]][self.x_label] - val).abs().idxmin()[0]
+    # Correlation
     
-    def _get_val_by_id(self, slice_id):
-        '''
-        Return value for the given `slice_id`.
-        '''
-        return self.addData.xs(slice_id, level = self.xid_label)[self.x_label].iloc[0]
-
     def show_correlation(self, db2: Optional[pd.DataFrame] = None, x_col: int = 0, y_col: int = 0, 
                          slice_id: Optional[int] = None, slice_val: Optional[float] = None, n_std: int = 3,
                          bounding_error: bool = False, fig: Optional[matplotlib.figure.Figure] = None, return_fig: bool = False, 
                          display_id: bool = True, return_ellipse_param: bool = False, **kwargs):
-        '''
+        """
         Show data correlation for the given `slice_id`. 
 
         Prepare data from one or more CitrosData objects and plot confidence ellipses for the specified id = `slice_id`.
@@ -1266,11 +1061,10 @@ class CitrosData:
 
         Examples
         --------
-        Import 'data_access' and 'error_analysis' modules and create CitrosDB object to query data:
+        Import and create CitrosDB object to query data from the batch 'star_types' of the simulation 'simulation_stars':
         
-        >>> from citros_data_analysis import data_access as da
-        >>> from citros_data_analysis import error_analysis as analysis
-        >>> citros = da.CitrosDB()
+        >>> from citros import CitrosDB, CitrosData
+        >>> citros = CitrosDB(simulation = 'simulation_stars', batch = 'star_types')
 
         For topic 'B' query json-data column 'data.x.x_1', 'data.x.x_2' and 'data.time':
 
@@ -1278,7 +1072,7 @@ class CitrosData:
 
         Construct CitrosData object with 2 data-columns 'data.x.x_1', 'data.x.x_2':
         
-        >>> dataset = analysis.CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
+        >>> dataset = CitrosData(df, data_label=['data.x.x_1', 'data.x.x_2'], units = 'm')
 
         Use method scale_data() or bin_data() to get correspondence between different simulation
         and assign indexes to 'data.time' axis:
@@ -1296,48 +1090,48 @@ class CitrosData:
         ...                        bounding_error= False)
         slice_id = 5,
         slice_val = 0.2632
-        '''
+        """
         if self.xid_label is None:
-            print('error: data must have two levels of indices: the first level corresponds to the independent variable\
+            self.log.error('data must have two levels of indices: the first level corresponds to the independent variable\
                   \n(such as time or height) and the second one is sid.\
                   \nTry bin_data() or scale_data() methods to prepare the data.')
             return None
         if isinstance(x_col, str):
             if x_col not in self.data.columns:
-                print(f"Column '{x_col}' does not exist")
+                self.log.error(f"Column '{x_col}' does not exist")
                 return None
         elif isinstance(x_col, int):
             if x_col > (len(self.data.columns)-1):
-                print(f"'x_col' must be <= {len(self.data.columns)-1}")
+                self.log.error(f"'x_col' must be <= {len(self.data.columns)-1}")
                 return None
         else:
-            print(f"'x_col' must be str or int")
+            self.log.error(f"'x_col' must be str or int")
             return None
         
         if db2 is None:
             if isinstance(y_col, str):
                 if y_col not in self.data.columns:
-                    print(f"Column '{y_col} does not exist'")
+                    self.log.error(f"Column '{y_col} does not exist'")
                     return None
             elif isinstance(x_col, int):
                 if y_col > (len(self.data.columns)-1):
-                    print(f"'y_col' must be <= {len(self.data.columns)-1}")
+                    self.log.error(f"'y_col' must be <= {len(self.data.columns)-1}")
                     return None
             else:
-                print(f"'y_col' must be str or int")
+                self.log.error(f"'y_col' must be str or int")
                 return None
         
         else:
             if isinstance(y_col, str):
                 if y_col not in db2.data.columns:
-                    print(f"Column '{y_col} does not exist'")
+                    self.log.error(f"Column '{y_col} does not exist'")
                     return None
             elif isinstance(x_col, int):
                 if y_col > (len(db2.data.columns)-1):
-                    print(f"'y_col' must be <= {len(db2.data.columns)-1}")
+                    self.log.error(f"'y_col' must be <= {len(db2.data.columns)-1}")
                     return None
             else:
-                print(f"'y_col' must be str or int")
+                self.log.error(f"'y_col' must be str or int")
                 return None
 
         if slice_id is None:
@@ -1347,7 +1141,7 @@ class CitrosData:
                 else:
                     slice_id = self._get_id_by_val(slice_val, (x_col,))
             else:
-                print('either `slice_id` or `slice_val` must be specified')
+                self.log.error('Either `slice_id` or `slice_val` must be specified')
                 return
         if db2 is None:
             try:
@@ -1356,9 +1150,6 @@ class CitrosData:
             except:
                 x_units = ''
                 y_units = ''
-            
-            # x_name = self.type
-            # y_name = self.type
             
             try :
                 if isinstance(x_col, str):
@@ -1374,10 +1165,10 @@ class CitrosData:
                     y = self.data.iloc[:,y_col].xs(slice_id, level = self.xid_label)
                     y_filter = self.filter.iloc[:, y_col].xs(slice_id, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
                 return
 
         else:
@@ -1385,8 +1176,6 @@ class CitrosData:
                 x_units = self.units
             except:
                 x_units = ''
-            
-            # x_name = self.type
 
             try:
                 if isinstance(x_col, str):
@@ -1396,17 +1185,15 @@ class CitrosData:
                     x = self.data.iloc[:,x_col].xs(slice_id, level = self.xid_label)
                     x_filter = self.filter.iloc[:, x_col].xs(slice_id, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db` has only {0} column{1}'.format(self.data.shape[1], np.where(self.data.shape[1] == 1,'','s')))
                 return
             try:
                 y_units = db2.units
             except:
                 y_units = ''
-            
-            # y_name = db2.type
 
             try:
                 if slice_val is not None:
@@ -1420,10 +1207,10 @@ class CitrosData:
                     y = db2.data[db2.filter.iloc[:, y_col]].iloc[:,y_col].xs(slice_id_2, level = self.xid_label)
                     y_filter = db2.filter.iloc[:, y_col].xs(slice_id_2, level = self.xid_label)
             except KeyError:
-                print('slice_id must be <= n_bins/points')
+                self.log.error('slice_id must be <= n_bins/points')
                 return
             except IndexError:
-                print('data in `db2` has only {0} column{1}'.format(db2.data.shape[1], np.where(db2.data.shape[1] == 1,'','s')))
+                self.log.error('data in `db2` has only {0} column{1}'.format(db2.data.shape[1], np.where(db2.data.shape[1] == 1,'','s')))
                 return
 
         result = pd.concat([x,y], axis = 1)
@@ -1454,12 +1241,12 @@ class CitrosData:
         slice_val = self._get_val_by_id(slice_id)
         if db2 is None:
             if display_id:
-                print('slice_id = {0},\nslice_val = {1}'.format(slice_id, slice_val))
+                self.log.error('slice_id = {0},\nslice_val = {1}'.format(slice_id, slice_val))
             title_slice_id = str(slice_id)
         else:
             slice_val_2 = db2._get_val_by_id(slice_id_2)
             if display_id:
-                print('slice_id = {0},\nslice_val = {1},\nslice_id_2 = {2},\nslice_val_2 = {3}'.format(slice_id, slice_val, slice_id_2, slice_val_2))
+                self.log.error('slice_id = {0},\nslice_val = {1},\nslice_id_2 = {2},\nslice_val_2 = {3}'.format(slice_id, slice_val, slice_id_2, slice_val_2))
             if slice_id == slice_id_2:
                 title_slice_id = str(slice_id)
             else:
@@ -1469,11 +1256,29 @@ class CitrosData:
             return_fig = return_fig, fig = fig, plot_points = plot_points, plot_ellipse = plot_ellipse,\
             return_ellipse_param = return_ellipse_param, **kwargs)
 
+    def _get_id_by_val(self, val, cols):
+        """
+        Return the nearest slice_id for the given `val` where corresponding value of the column `col` is not nan.
+        """
+        flag = True
+        for col in cols:
+            if isinstance(col, str):
+                flag = self.filter.loc[:, col] & flag
+            elif isinstance(col, int):
+                flag = self.filter.iloc[:, col] & flag
+        return (self.addData[flag][self.x_label] - val).abs().idxmin()[0]
+    
+    def _get_val_by_id(self, slice_id):
+        """
+        Return value for the given `slice_id`.
+        """
+        return self.addData.xs(slice_id, level = self.xid_label)[self.x_label].iloc[0]
+    
     def _plot_correlation(self, x: ArrayLike, y: ArrayLike, n_std: Union[int, list] = 3, axis_labels: Optional[str] = None, 
                           title: str = 'correlation', bounding_error: bool = True, return_fig: bool = False, 
                           fig: Optional[matplotlib.figure.Figure] = None, plot_points: bool = True, plot_ellipse: bool = True, 
                           return_ellipse_param: bool = False, **kwargs):
-        '''
+        """
         Plot and show figure with one or several confidence ellipses (`x`,`y`).
 
         Parameters
@@ -1526,7 +1331,7 @@ class CitrosData:
               If bounding_error set True:
             - bounding_error : float
                 Radius of the error circle.
-        '''
+        """
         if axis_labels is None:
             axis_labels=['col1','col2']
         if fig is None:
@@ -1563,9 +1368,9 @@ class CitrosData:
                         ax.plot(0,0,'k+',mew=10,ms=2, label='origin')
                     ax.plot(ellipse_par[3], ellipse_par[4],'r+',mew=10, ms=2, label='mean')
                 except np.linalg.LinAlgError:
-                    print('can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses')
+                    self.log.error('can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses')
             else:
-                print('the number of points is not enough to plot confidence ellipses')
+                self.log.error('the number of points is not enough to plot confidence ellipses')
         
             ax.set_xlabel(axis_labels[0])
             ax.set_ylabel(axis_labels[1])
@@ -1581,7 +1386,7 @@ class CitrosData:
                 ax.legend(bbox_to_anchor=(1.1, 0.9),bbox_transform=fig.transFigure)
 
         else:
-            print('there is no data to plot')
+            self.log.error('There is no data to plot')
         if return_ellipse_param:
             if len(ellipse_param) == 1:
                 ellipse_param = ellipse_param[0]
@@ -1594,10 +1399,9 @@ class CitrosData:
             return ellipse_param
         else:
             return None
-        
 
     def _plot_ellipse(self, x, y, n_std, ax, facecolor='none', edgecolor='red', **kwargs):
-        '''
+        """
         Calculate and plot on `ax` confidence ellipse for dataset (`x`, `y`).
 
         Parameters
@@ -1630,7 +1434,7 @@ class CitrosData:
                     Shift of the center along x axis.
                 n : float
                     Shift of the center along y axis.
-        '''
+        """
         X = np.array([x,y]).T
         cov = self._get_covar_matrix(X)
         lambda_, v = np.linalg.eig(cov)
@@ -1647,10 +1451,10 @@ class CitrosData:
         return ax.add_patch(ellipse), parameters
 
     def _plot_bounding_error(self, a, b, alpha, m, n, ax):
-        '''
+        """
         Add bounding error circle to a plot.
 
-        In order to find radious of bounding error circle, the absolute value of the first derivative of the function
+        In order to find radius of bounding error circle, the absolute value of the first derivative of the function
         D = D(phi) is minimized, where D is the distance from the origin to point on ellipse, phi - the angle of the point,
         measured from the longest ellipse axis in polar reference system associated with an ellipse. 
         Several initial guesses are used to avoid falling in minima or local maxima.
@@ -1674,7 +1478,7 @@ class CitrosData:
         -------
         out : float
             Radius of the bounding error circle.
-        '''
+        """
         init_guess_list = np.linspace(0, 360, 13)
         res_phi_list = []
         for init_guess in init_guess_list:
@@ -1687,7 +1491,7 @@ class CitrosData:
         return R
 
     def _abs_derivative(self, phi, a, b, alpha, m, n):
-        '''
+        """
         Calculate the absolute value of the first derivative of the the function D = D(phi), 
         where D is the distance from the origin to point on ellipse, `phi` - the angle of the point,
         measured from the longest ellipse axis in polar reference system associated with an ellipse.
@@ -1695,7 +1499,7 @@ class CitrosData:
         Parameters
         ----------
         phi : float or array-like
-            Angle coodinate, in radians.
+            Angle coordinate, in radians.
         a : float
             Length of the longer axis of the ellipse.
         b : float
@@ -1711,7 +1515,7 @@ class CitrosData:
         ------- 
         float or array-like
             Absolute value of the first derivative.
-        '''
+        """
         xl = a*np.cos(phi)
         yl = b*np.sin(phi)
         x = xl*np.cos(alpha) - yl*np.sin(alpha) + m
@@ -1722,14 +1526,14 @@ class CitrosData:
         return np.abs(f)
 
     def _dist(self, phi,a,b,alpha,m,n):
-        '''
+        """
         Calculate distance between the origin and the point on ellipse with angle `phi`, which is 
         measured from the longest ellipse axis in polar reference system associated with an ellipse.
 
         Parameters
         ----------
         phi : float
-            Angle coodinate, in radians.
+            Angle coordinate, in radians.
         a : float
             Length of the longer axis of the ellipse.
         b : float
@@ -1745,11 +1549,197 @@ class CitrosData:
         -------
         out : float or array-like
             Value of the distance.
-        '''
+        """
         xl = a*np.cos(phi)
         yl = b*np.sin(phi)
         x = (xl)*np.cos(alpha) - (yl)*np.sin(alpha) + m
         y = (xl)*np.sin(alpha) + (yl)*np.cos(alpha) + n
         r = np.sqrt(x**2 + y**2)
         return r
+
+    # Utilities
     
+    def to_pandas(self):
+        """
+        Concatenate `data` and `addData` attributes and return the result table as a pandas.DataFrame.
+
+        Returns
+        -------
+        df : pandas.DataFrame
+            Concatenated table.
+        """
+        return pd.concat([self.data, self.addData], axis = 1)
+
+    def set_parameter(self, key: Optional[str] = None, value: Optional[Union[int, float]] = None, item: Optional[dict] = None):
+        """
+        Set parameter value to a CitrosData object.
+
+        Parameters
+        ----------
+        key : str
+            Label of the parameter.
+        value : int or float
+            Parameter value.
+        item : dict
+            Dictionary with parameters.
+        """
+        if key is not None and value is not None:
+            if key in self.parameters.keys():
+                self.log.error('key "{}" already exists, its value will be set to {}'.format(key, value))
+            self.parameters[key] = value
+        if item is not None:
+            if isinstance(item, dict):
+                for k, v in item.items():
+                    if k in self.parameters.keys():
+                        self.log.error('key "{}" already exists, its value will be set to {}'.format(k, v))
+                    self.parameters[k] = v
+        
+    def drop_parameter(self, key: Optional[str] = None):
+        """
+        Delete parameter labeled `key` and associated value.
+
+        Parameters
+        ----------
+        key : str
+            Label of the parameter to remove.
+        """
+        if key in self.parameters:
+            self.parameters.pop(key)
+        else:
+            self.log.error('key "{}" does not exists'.format(key))
+
+    def add_addData(self, column: ArrayLike, column_label: str):
+        """
+        Add column to 'addData' attribute.
+
+        Parameters
+        ----------
+        column : array-like object
+            Column to add.
+        column_label : str
+            Label of the new column in 'addData'.
+        """
+        self.addData[column_label] = column
+
+    def drop_addData(self, column_label: str):
+        """
+        Delete column from 'addData' attribute.
+
+        Parameters
+        ----------
+        column_label : str
+            Label of the column to delete .
+        """
+        self.addData.drop(columns = column_label, inplace = True)
+    
+    def _set_index_levels(self, index_levels):
+        """
+        Set indexes to database.
+
+        Parameters
+        ----------
+        index_levels : list of str
+            Labels of columns in 'addData' to assign as indexes.
+        """
+        self.data.set_index([self.addData[p] for p in index_levels], inplace = True)
+        self.addData.set_index(index_levels, inplace = True)
+        self.filter = self.data.notna()
+        pass
+    
+    def _get_mu(self, X, ret_nonan = False):
+        """
+        Returns the mean values for the vector of N variables with M values per variable.
+
+        Before calculations all rows with at least one numpy.nan value are removed.
+        
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape (M, N).
+        ret_nonan : bool, default False
+            Specifies if the `X` cleaned from rows containing numpy.nan values should be returned.
+
+        Returns
+        -------
+        mu : numpy.ndarray
+            Mean values of the vector `X`, shape (N, ).
+        x_ : numpy.ndarray
+            If `ret_nonan = True`, returns `X` cleaned from rows containing numpy.nan values.
+        """
+        x_ = self._remove_nan(X)
+        mu = np.array(x_.mean(axis = 0))
+        if ret_nonan:
+            return mu, x_
+        else:
+            return mu
+
+    def _remove_nan(self, X):
+        """
+        Remove rows with numpy.nan values.
+
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape (M, N).
+        """
+        try:
+            XX = X[~np.isnan(X).any(axis = 1)]
+            return XX
+        except:
+            XX = X[~np.isnan(X)]
+            return XX
+
+    def _get_covar_matrix(self, X):
+        """
+        Return the covariance matrix for the vector of N variables, with M values per variable.
+
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas.DataFrame
+            Shape = (M x N), M > 1, otherwise returns matrix N x N filled with numpy.nan or numpy.nan if M = 1.
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Shape (N, N).
+        """
+        mu, XX = self._get_mu(X, ret_nonan=True)
+        try:
+            covar_matrix = 1/(XX.shape[0] - 1) * np.dot((XX - mu).T,(XX - mu))
+            return covar_matrix
+        except ZeroDivisionError:
+            try:
+                res = np.empty((XX.shape[1],XX.shape[1]))
+                res.fill(np.nan)
+                return res
+            except IndexError:
+                res = np.nan
+                return res
+
+    def _get_disp(self, X):
+        """
+        Return the square root of the diagonal elements of the covariance matrix (M x N) for the vector of N variables,
+        with M values per variable.
+        
+        Parameters
+        ----------
+        X : numpy.ndarray or pandas DataFrame
+            Shape = M x N, M > 1 otherwise returns array filled with nan.
+
+        Returns
+        -------
+        out : numpy.ndarray
+            Shape = (N, ).
+        """
+        try:
+            covar_matrix = self._get_covar_matrix(X)
+            if not isinstance(covar_matrix, np.ndarray):
+                return np.sqrt(covar_matrix)
+            else:
+                disp = np.sqrt(np.diag(covar_matrix))
+            return disp
+        except ValueError:
+            XX = self._remove_nan(X)
+            disp = np.empty((XX.shape[1],))
+            disp.fill(np.nan)
+            return disp

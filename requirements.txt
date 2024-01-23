@@ -48,3 +48,10 @@ reportlab
 cryptography
 weasyprint
 nbformat
+pandas
+matplotlib>=3.7
+scipy
+scikit-learn
+gmr
+prettytable
+termcolor

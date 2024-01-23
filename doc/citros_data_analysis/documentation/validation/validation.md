@@ -15,7 +15,7 @@ description: 'Documentation'
 
 
     
-## Class `Validation` {#citros_data_analysis.validation.validation.Validation}
+## Class `Validation` {#validation.validation.Validation}
 
 
 
@@ -57,25 +57,25 @@ Name|Type|Description
 Name|Type|Description
 --|--|--
 |**```df```**|**pandas.DataFrame** or **None**|Data table to perform validation tests on.
-|**```db```**|**[CitrosData](../error_analysis/citros_data.md#citros_data_analysis.error_analysis.citros_data.CitrosData "citros_data_analysis.error_analysis.citros_data.CitrosData")** or **None**|CitrosData object after binning or scaling.
-|**```stat```**|**[CitrosStat](../error_analysis/citros_stat.md#citros_data_analysis.error_analysis.citros_stat.CitrosStat "citros_data_analysis.error_analysis.citros_stat.CitrosStat")** or **None**|CitrosStat object that stores mean, standard deviation and covariance matrix as attributes.
+|**```db```**|**[CitrosData](../analysis/citros_data.md#analysis.citros_data.CitrosData "analysis.citros_data.CitrosData")** or **None**|CitrosData object after binning or scaling.
+|**```stat```**|**[CitrosStat](../analysis/citros_stat.md#analysis.citros_stat.CitrosStat "analysis.citros_stat.CitrosStat")** or **None**|CitrosStat object that stores mean, standard deviation and covariance matrix as attributes.
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' from json-data column download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
+From the batch 'albedo' of the simulation 'planetary_nebula' from the json-data column of the topic 'A' 
+download simulated data labeled as 'data.x.x_1' and column with time 'data.time'.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'planetary_nebula', batch = 'albedo')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
 >>> print(df)
     sid   rid   time        topic   type   data.x.x_1   data.time
@@ -90,8 +90,8 @@ Set 'data.time' as independent variable and 'data.x.x_1' as dependent one.
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> V = va.Validation(df, data_label = ['data.x.x_1'], param_label = 'data.time',
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = ['data.x.x_1'], param_label = 'data.time',
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -112,8 +112,8 @@ Set 'data.time' as independent variable and 'data.x' as dependent vector.
 and interpolate data on the new scale.
 
 ```python
->>> V = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-...                   method = 'scale', num = 50, units = 'm')
+>>> V = Validation(df, data_label = 'data.x', param_label = 'data.time',
+...                method = 'scale', num = 50, units = 'm')
 ```
 
 </details>
@@ -127,7 +127,7 @@ and interpolate data on the new scale.
 
 
     
-## Method `std_bound_test` {#citros_data_analysis.validation.validation.Validation.std_bound_test}
+## Method `std_bound_test` {#validation.validation.Validation.std_bound_test}
 
 
 
@@ -181,7 +181,7 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with validation test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with validation test results.
 |**```table```**|**pandas.DataFrame**|Table with test results for each of the standard deviation boundary point, indicating whether it passes or fails the test.
 |**```fig```**|**matplotlib.figure.Figure**|Figure with plotted simulations, mean values, standard deviation boundaries and limit boundaries.
 #### Other Parameters
@@ -201,25 +201,25 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
 Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
 **method** defines the method of data preparation and index assignment: method = 'bin' - bins values of column **param_label** in **num** intervals, 
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\
 ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
->>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -292,8 +292,8 @@ and interpolate data on the new scale.
 
 ```python
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
->>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-...                   method = 'scale', num = 50, units = 'm')
+>>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+...                 method = 'scale', num = 50, units = 'm')
 ```
 
 
@@ -309,7 +309,7 @@ std_bound_test: passed
 
 
     
-## Method `mean_test` {#citros_data_analysis.validation.validation.Validation.mean_test}
+## Method `mean_test` {#validation.validation.Validation.mean_test}
 
 
 
@@ -355,7 +355,7 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with validation test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with validation test results.
 |**```table```**|**pandas.DataFrame**|Table with test results for each of the mean point, indicating whether it passes or fails the test.
 |**```fig```**|**matplotlib.figure.Figure**|Figure with plotted simulations, mean values and limit boundaries.
 
@@ -363,25 +363,25 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
 Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
 **method** defines the method of data preparation and index assignment: method = 'bin' - bins values of column **param_label** in **num** intervals, 
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\
 ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
->>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -445,8 +445,8 @@ and interpolate data on the new scale.
 
 ```python
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
->>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-...                   method = 'scale', num = 50, units = 'm')
+>>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+...                 method = 'scale', num = 50, units = 'm')
 ```
 
 
@@ -454,7 +454,7 @@ Set different limits on 3-dimensional vector: [-0.5, 0.5] for the first element,
 [-20, 10] for the third:
 
 ```python
->>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]], n_std = 3)
+>>> log, table, fig = V3.mean_test(limits = [0.5, 1.5, [-20, 10]])
 mean_test: passed
 ```
 
@@ -462,7 +462,7 @@ mean_test: passed
 
 
     
-## Method `std_test` {#citros_data_analysis.validation.validation.Validation.std_test}
+## Method `std_test` {#validation.validation.Validation.std_test}
 
 
 
@@ -517,7 +517,7 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with validation test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with validation test results.
 |**```table```**|**pandas.DataFrame**|Table with test results for each of the standard deviation point, indicating whether it passes or fails the test.
 |**```fig```**|**matplotlib.figure.Figure**|Figure with standard deviations and limit boundaries.
 #### Other Parameters
@@ -537,25 +537,25 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
 Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
 **method** defines the method of data preparation and index assignment: method = 'bin' - bins values of column **param_label** in **num** intervals, 
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\
 ...                       .data(['data.x.x_1','data.x.x_2','data.time'])
->>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -601,8 +601,8 @@ and interpolate data on the new scale.
 
 ```python
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
->>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-...                   method = 'scale', num = 50, units = 'm')
+>>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+...                 method = 'scale', num = 50, units = 'm')
 ```
 
 
@@ -618,7 +618,7 @@ std_test: passed
 
 
     
-## Method `sid_test` {#citros_data_analysis.validation.validation.Validation.sid_test}
+## Method `sid_test` {#validation.validation.Validation.sid_test}
 
 
 
@@ -667,7 +667,7 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with validation test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with validation test results.
 |**```table```**|**pandas.DataFrame**|Table with test results for each point of the simulations, indicating whether it passes or fails the test.
 |**```fig```**|**matplotlib.figure.Figure**|Figure with plotted simulations, mean values and limit boundaries.
 
@@ -675,25 +675,25 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' download 2 columns of the simulated data labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 2 columns of the simulated data 
+labeled 'data.x.x_1' and 'data.x.x_2' and column with time 'data.time'.
 Set 'data.time' as independent variable and 'data.x.x_1' and 'data.x.x_2' as dependent 2-dimensional vector.
 **method** defines the method of data preparation and index assignment: method = 'bin' - bins values of column **param_label** in **num** intervals, 
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'})\
                           .data(['data.x.x_1','data.x.x_2','data.time'])
->>> V = va.Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = ['data.x.x_1', 'data.x.x_2'], param_label = 'data.time', 
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -757,8 +757,8 @@ and interpolate data on the new scale.
 
 ```python
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
->>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time', 
-...                   method = 'scale', num = 50, units = 'm')
+>>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time', 
+...                 method = 'scale', num = 50, units = 'm')
 ```
 
 
@@ -774,7 +774,7 @@ sid_test: passed
 
 
     
-## Method `norm_test` {#citros_data_analysis.validation.validation.Validation.norm_test}
+## Method `norm_test` {#validation.validation.Validation.norm_test}
 
 
 
@@ -821,7 +821,7 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with validation test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with validation test results.
 |**```table```**|**pandas.DataFrame**|Table with test results for each simulation, indicating whether it passes or fails the test.
 |**```fig```**|**matplotlib.figure.Figure**|Figure with plotted norm value and limits.
 
@@ -829,24 +829,24 @@ Name|Type|Description
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-For topic 'A' download 1 columns of the simulated data labeled 'data.x.x_1' and column with time 'data.time'.
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 1 columns of the simulated data 
+labeled 'data.x.x_1' and column with time 'data.time'.
 Set 'data.time' as independent variable and 'data.x.x_1' as a dependent one.
 **method** defines the method of data preparation and index assignment: method = 'bin' - bins values of column **param_label** in **num** intervals,
 set index to each of the interval, group data according to the binning and calculate mean data values for each group.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x.x_1','data.time'])
->>> V = va.Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
-...                   method = 'bin', num = 50, units = 'm')
+>>> V = Validation(df, data_label = 'data.x.x_1', param_label = 'data.time',
+...                method = 'bin', num = 50, units = 'm')
 ```
 
 
@@ -888,8 +888,8 @@ and interpolate data on the new scale.
 
 ```python
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
->>> V3 = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-...                   method = 'scale', num = 50, units = 'm')
+>>> V3 = Validation(df, data_label = 'data.x', param_label = 'data.time',
+...                method = 'scale', num = 50, units = 'm')
 ```
 
 
@@ -905,7 +905,7 @@ norm_test Linf: passed
 
 
     
-## Method `set_tests` {#citros_data_analysis.validation.validation.Validation.set_tests}
+## Method `set_tests` {#validation.validation.Validation.set_tests}
 
 
 
@@ -1044,31 +1044,31 @@ Name|Type|Description
 
 Name|Type|Description
 --|--|--
-|**```log```**|**[CitrosDict](../data_access/citros_dict.md#citros_data_analysis.data_access.citros_dict.CitrosDict "citros_data_analysis.data_access.citros_dict.CitrosDict")**|Dictionary with the test results.
+|**```log```**|**[CitrosDict](../access/citros_dict.md#access.citros_dict.CitrosDict "access.citros_dict.CitrosDict")**|Dictionary with the test results.
 |**```tables```**|**dict**|Dictionary with test methods as keys and pandas.DataFrame table with results of the test as values.
 |**```figures```**|**dict**|Dictionary with test methods as keys and matplotlib.figure.Figure with test results as values.
 #### See Also
 
-**[Validation.std_bound_test()](#citros_data_analysis.validation.validation.Validation.std_bound_test "citros_data_analysis.validation.validation.Validation.std_bound_test")**, **[Validation.mean_test()](#citros_data_analysis.validation.validation.Validation.mean_test "citros_data_analysis.validation.validation.Validation.mean_test")**, **[Validation.sid_test()](#citros_data_analysis.validation.validation.Validation.sid_test "citros_data_analysis.validation.validation.Validation.sid_test")**, **[Validation.norm_test()](#citros_data_analysis.validation.validation.Validation.norm_test "citros_data_analysis.validation.validation.Validation.norm_test")**
+**[Validation.std_bound_test()](#validation.validation.Validation.std_bound_test "validation.validation.Validation.std_bound_test")**, **[Validation.mean_test()](#validation.validation.Validation.mean_test "validation.validation.Validation.mean_test")**, **[Validation.std_test()](#validation.validation.Validation.std_test "validation.validation.Validation.std_test")**, **[Validation.sid_test()](#validation.validation.Validation.sid_test "validation.validation.Validation.sid_test")**, **[Validation.norm_test()](#validation.validation.Validation.norm_test "validation.validation.Validation.norm_test")**
 
 
 </details>
 <details>
   <summary>Examples</summary>
 
-Import validation and data_analysis packages:
+Import Validation and CitrosDB:
 
 ```python
->>> import data_analysis as da
->>> import validation as va
+>>> from citros import CitrosDB, Validation
 ```
 
 
-From topic 'A' download 3-dimensional json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
+From the batch 'density' of the simulation 'diffuse_nebula' from the topic 'A' download 3-dimensional 
+json-data 'data.x' that contains 'data.x.x_1', 'data.x.x_2' and 'data.x.x_3' columns,
 and column with time 'data.time'.
 
 ```python
->>> citros = da.CitrosDB()
+>>> citros = CitrosDB(simulation = 'diffuse_nebula', batch = 'density')
 >>> df = citros.topic('A').set_order({'sid':'asc','rid':'asc'}).data(['data.x','data.time'])
 >>> print(df['data.x'])
 0          {'x_1': 0.0, 'x_2': 0.08, 'x_3': 0.047}
@@ -1083,8 +1083,8 @@ Set 'data.time' as independent variable and 'data.x' as dependent vector.
 and interpolate data on the new scale.
 
 ```python
->>> V = va.Validation(df, data_label = 'data.x', param_label = 'data.time',
-...                   method = 'scale', num = 50, units = 'm')
+>>> V = Validation(df, data_label = 'data.x', param_label = 'data.time',
+...                method = 'scale', num = 50, units = 'm')
 ```
 
 
