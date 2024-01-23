@@ -67,4 +67,5 @@ __all__ = [
     "CitrosDataArray",
     "CitrosStat",
     "Validation",
+    "CitrosDB_old",
 ]
