@@ -29,7 +29,6 @@ from .report import Report, NoNotebookFoundException
 from .data import (
     CitrosDB,
     CitrosDict,
-    get_version,
     CitrosData,
     CitrosDataArray,
     CitrosStat,
@@ -40,34 +39,32 @@ from .database import CitrosDB as CitrosDB_old
 
 __all__ = [
     # citros
-    Citros,
+    "Citros",
     # citros_obj
-    CitrosException,
-    CitrosNotFoundException,
-    FileNotFoundException,
-    NoValidException,
+    "CitrosException",
+    "CitrosNotFoundException",
+    "FileNotFoundException",
+    "NoValidException",
     # utils
-    str_to_bool,
-    suppress_ros_lan_traffic,
+    "str_to_bool",
+    "suppress_ros_lan_traffic",
     # batch
-    Batch,
-    NoConnectionToCITROSDBException,
+    "Batch",
+    "NoConnectionToCITROSDBException",
     # logs
-    get_logger,
-    shutdown_log,
+    "get_logger",
+    "shutdown_log",
     # service
-    data_access_service,
-    NoDataFoundException,
+    "data_access_service",
+    "NoDataFoundException",
     # reporting
-    Report,
-    NoNotebookFoundException,
+    "Report",
+    "NoNotebookFoundException",
     # data
-    CitrosDB,
-    CitrosDict,
-    get_version,
-    CitrosData,
-    CitrosDataArray,
-    CitrosStat,
-    Validation,
-    "CitrosDB_old",
+    "CitrosDB",
+    "CitrosDict",
+    "CitrosData",
+    "CitrosDataArray",
+    "CitrosStat",
+    "Validation",
 ]

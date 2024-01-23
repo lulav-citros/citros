@@ -7,7 +7,7 @@ class Stat:
 
     Methods `get_stat()` and `print_stat()` return and display, correspondingly, information
     about how many connections and queries were done by all CitrosDB objects existing in the current session.
-    The information is recorded only for those CitrosDB that were created with parameter debug = True:
+    The information is recorded only for those CitrosDB that were created with parameter debug_connect = True:
 
     - `n_pg_connection` - number of postgres connections
     - `n_pg_queries` - number of postgres queries

@@ -10,4 +10,4 @@
 
 from .validation import Validation
 
-__all__ = [Validation]
+__all__ = ["Validation"]
