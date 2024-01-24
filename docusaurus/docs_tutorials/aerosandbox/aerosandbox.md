@@ -106,7 +106,7 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `aerosandbox_cessna`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation once.
+3. Run your simulation ** 5 times **.
 
 All the results will be saved under `.citros/data/simulation_aerosandbox_cessna` folder.
 
