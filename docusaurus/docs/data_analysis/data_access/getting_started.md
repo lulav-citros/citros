@@ -39,7 +39,8 @@ or set them up later.
  - database : database name. Default is citros.database.CitrosDB.db_name.
  - user : user name. Default is citros.database.CitrosDB.db_user.
  - password : password. Default is citros.database.CitrosDB.db_password.
- - debug : if `True`, the number of connections and queries which were done by all CitrosDB objects with `debug` set `True` existing in the current session is recorded. The information is recorded to the _stat.Stat() object. Default is `False`.
+ - debug_connect : if `True`, the number of connections and queries which were done by all CitrosDB objects with `debug_connect` set `True` existing in the current session is recorded. The information is recorded to the _stat.Stat() object. Default is `False`.
+ - log : Logger to record log. By default, then the new logger is created.
 
 Say, we would like to connect to a database "myDatabase" with the user name "user" and password "myPassword", to work with batch "batchName" which is located in the schema "mySchema", using port '5432'. Also we would like to check how many connections and queries we are making during the session:
 
@@ -51,7 +52,7 @@ Say, we would like to connect to a database "myDatabase" with the user name "use
                       schema = 'mySchema',
                       batch = 'batchName',
                       port = '5432',
-                      debug = True)
+                      debug_connect = True)
 >>> from citros.data.access._stat import Stat
 >>> stat = st.Stat()
 >>> stat.print_stat()
