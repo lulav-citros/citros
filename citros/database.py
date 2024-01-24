@@ -29,7 +29,7 @@ class CitrosDB:
         self.organization_name = organization_name
         self.verbose = verbose
         self.debug = debug
-        self._init_log(Path.cwd())
+        self._init_log(Path.cwd(), log)
 
     ###################
     ##### private #####

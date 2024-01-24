@@ -14,9 +14,9 @@ from .reader_sqlite import BagReaderSQL
 from .reader_with_custom_messages import BagReaderCustomMessages
 
 __all__ = [
-    generate_launch_description,
-    BagReader,
-    BagReaderMcap,
-    BagReaderSQL,
-    BagReaderCustomMessages,
+    "generate_launch_description",
+    "BagReader",
+    "BagReaderMcap",
+    "BagReaderSQL",
+    "BagReaderCustomMessages",
 ]

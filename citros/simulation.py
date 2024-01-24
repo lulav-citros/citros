@@ -105,7 +105,7 @@ class Simulation(CitrosObj):
             copy_files([msg_path], str(target_dir), self.log, True)
 
             # register custom messages
-            self._register_custom_messages(str(msg_path))
+            self._register_custom_message(str(msg_path))
 
     def _handle_msg_files(self, simulation_rec_dir):
         self._copy_msg_files(simulation_rec_dir)

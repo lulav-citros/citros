@@ -2,7 +2,123 @@
 
 
 
+## v0.2.18 (2024-01-23)
+
+### Fix
+
+* fix(1): sr Merge pull request #32 from lulav-citros/dev
+
+vova ([`b995064`](https://github.com/lulav-citros/citros/commit/b99506422ed423b8458f69c18160230c6810ef56))
+
+* fix(actions): yes ([`fbb553f`](https://github.com/lulav-citros/citros/commit/fbb553fd65d877065e35f55e7205a1c44f8d139c))
+
+* fix(?): 1 ([`eeeb876`](https://github.com/lulav-citros/citros/commit/eeeb876cc6e72f218c722cb790392650c049312b))
+
+* fix(?): 2 ([`9788040`](https://github.com/lulav-citros/citros/commit/9788040f994d88e7c40b952dc582453e77ad2536))
+
+### Unknown
+
+* fix(?) ([`bf046f7`](https://github.com/lulav-citros/citros/commit/bf046f7fb84068f28ffe7f094a33f83a26889a4c))
+
+* fix(1) ([`2a6a543`](https://github.com/lulav-citros/citros/commit/2a6a543b95b1deadb4b5beca7c3f823a42e4601c))
+
+* Remove unused GitHub workflows ([`4ff0602`](https://github.com/lulav-citros/citros/commit/4ff0602c5f47ed33eedab05756fe4976d0feaaad))
+
+* vova ([`8e92f2c`](https://github.com/lulav-citros/citros/commit/8e92f2cda3cd72d16676e61c11ffeb52628c5aab))
+
+* Merge pull request #31 from lulav-citros/dev
+
+fix(actions): yes ([`90a2400`](https://github.com/lulav-citros/citros/commit/90a240064379dd00c2d033ca3b87a4fe32e55b36))
+
+* Merge pull request #30 from lulav-citros/dev
+
+fix(?): 1 ([`7530e4e`](https://github.com/lulav-citros/citros/commit/7530e4e3a058b40983a7bceaa64ae5abde293b42))
+
+
+## v0.2.17 (2024-01-23)
+
+### Chore
+
+* chore(.github/workflows/make_docs): disable this action for now ([`25fe574`](https://github.com/lulav-citros/citros/commit/25fe574bb8418adec14896f021e0fa6a7acb64b8))
+
+* chore(.github/workflows/make_docs): docs action, need to be uncommented ([`7490a03`](https://github.com/lulav-citros/citros/commit/7490a03a3d9b223229347a4b560ef9fcbe633369))
+
+* chore(citros_data_analysis_doc.sh): docs are written to docusaurus/docs/data_analysis/ ([`ccbf46c`](https://github.com/lulav-citros/citros/commit/ccbf46cd64b2c3a2b94e677b8d6e3581b2251c07))
+
+* chore(requirements.txt): requirements for data_analysis ([`8a948e4`](https://github.com/lulav-citros/citros/commit/8a948e4f46ac492c02224ce2987a35ce5a8bf95d))
+
+### Documentation
+
+* docs(doc/): documentation in doc/ ([`2939cca`](https://github.com/lulav-citros/citros/commit/2939ccaac47a2594c3a6a395db3cdc3ac7469cc8))
+
+### Fix
+
+* fix(?): 1 ([`f74fe1f`](https://github.com/lulav-citros/citros/commit/f74fe1f54aafd77b89d797da1b4ba9eed7189d43))
+
+* fix(?): yes? ([`95a00eb`](https://github.com/lulav-citros/citros/commit/95a00eb7ce9176848381f4da68035abda05e900c))
+
+* fix(.github/workflows): fix ([`2811cc3`](https://github.com/lulav-citros/citros/commit/2811cc355b659b931e98c5a7de5adb7dd28aeb48))
+
+* fix(.github/workflows): fix ([`f40d0bb`](https://github.com/lulav-citros/citros/commit/f40d0bb33216a059b3efbc981c381a20661e7e97))
+
+* fix(citros/data): fix ([`c8638ed`](https://github.com/lulav-citros/citros/commit/c8638ed15493147d95c2dd0a0de6b83223639760))
+
+* fix(citros/data): logging ([`739bc82`](https://github.com/lulav-citros/citros/commit/739bc822a041a14c51188d2e2392aee5e411adb5))
+
+* fix(citros/data/access): log wip ([`e7b2fe1`](https://github.com/lulav-citros/citros/commit/e7b2fe1b0d5a7c306bb72dbfbe266a106d8bc860))
+
+* fix(citros/): __all__ items are turned to strings ([`5821e52`](https://github.com/lulav-citros/citros/commit/5821e526890276cb8c7faf7d044a26f732caea71))
+
+* fix(citros/data): fixes ([`81aa17f`](https://github.com/lulav-citros/citros/commit/81aa17ff334ffee3b9bbd23839e5442be9cc9d6a))
+
+### Refactor
+
+* refactor(citros/data/): remove get_version ([`1a6237d`](https://github.com/lulav-citros/citros/commit/1a6237da4be321d86aadf7a6c5dcfb3b5d80d6b9))
+
+### Test
+
+* test(.github/workflows/test_data_analysis.yaml): fix ([`f9898d2`](https://github.com/lulav-citros/citros/commit/f9898d2452c92b954c9285282188616bce19f84d))
+
+* test(.github/workflows/test_data_analysis.yaml): using decouple ([`62b73ef`](https://github.com/lulav-citros/citros/commit/62b73ef9a3f1b550870dea2c4d34be7f238fb5d6))
+
+* test(.github/workflows/test_data_analysis.yaml): add pip install citros ([`e1fe0b0`](https://github.com/lulav-citros/citros/commit/e1fe0b0102aef828736553973b9306fd92c4047c))
+
+* test(.github/workflows/test_data_analysis.yaml): rename py file for table creation ([`f910b11`](https://github.com/lulav-citros/citros/commit/f910b11efc021308846259920f7706fb836ed8c3))
+
+* test(.github/workflows/test_data_analysis.yaml): add password ([`5f50dd5`](https://github.com/lulav-citros/citros/commit/5f50dd57138030249882224d716a2806cee6c48a))
+
+* test(.github/workflows/test_data_analysis.yaml): github action ([`132bcd3`](https://github.com/lulav-citros/citros/commit/132bcd3e9f0a324d974962b637126b3cde0c335c))
+
+* test(tests/data_analysis_tests/): move tests to data_analysis_tests folder ([`fad96fd`](https://github.com/lulav-citros/citros/commit/fad96fd89dacf7aa2bc910a583eb5107522eb638))
+
+* test(tests/): validation tests ([`c447694`](https://github.com/lulav-citros/citros/commit/c44769427b97c1e34a081d8fca1c1a4a75f0abc0))
+
+* test(tests/): error_analysis tests ([`b282631`](https://github.com/lulav-citros/citros/commit/b282631de28af120b14dab2a294ca8ec425e5144))
+
+* test(tests/): create test table and data access tests ([`4a07429`](https://github.com/lulav-citros/citros/commit/4a07429a37fe8ab8e0c25790db81148d9d09fdbc))
+
+### Unknown
+
+* Merge pull request #29 from lulav-citros/dev
+
+Dev ([`6ad1701`](https://github.com/lulav-citros/citros/commit/6ad1701e7e03d6727030b861cbab73b37ba5fad0))
+
+* Merge pull request #26 from lulav-citros/lidia-data_analysis
+
+Lidia data analysis ([`f41273f`](https://github.com/lulav-citros/citros/commit/f41273fe65cadf6eea63f83ea566db747d87fd14))
+
+* Merge branch &#39;dev&#39; into lidia-data_analysis ([`d21ff09`](https://github.com/lulav-citros/citros/commit/d21ff090a7744751b169d072ea48f1e8eac9a36e))
+
+* Fix(simulation.py): typo in _register_custom_messages method ([`16a454a`](https://github.com/lulav-citros/citros/commit/16a454a1991efbac2cb803bb2be116d8f01bc4a7))
+
+
 ## v0.2.16 (2024-01-07)
+
+### Documentation
+
+* docs(doc/): documentation in doc/ ([`54e0f22`](https://github.com/lulav-citros/citros/commit/54e0f22642cec48dac37246eba08702b54a4ca41))
+
+* docs(doc/): documentation in doc/ ([`0735218`](https://github.com/lulav-citros/citros/commit/0735218d8e301588d64d526ac48854d23e2b7003))
 
 ### Fix
 
@@ -16,10 +132,16 @@ Dev ([`9ba1963`](https://github.com/lulav-citros/citros/commit/9ba1963b102b26189
 
 * Add scipy to requirements.txt ([`dec9127`](https://github.com/lulav-citros/citros/commit/dec9127057ec9f80abe2e18cc7639b4abc642970))
 
+* Merge branch &#39;dev&#39; into lidia-data_analysis ([`10b9902`](https://github.com/lulav-citros/citros/commit/10b9902b4e2892160cf64c50890e024e6cb48a07))
+
 * Update CITROS CLI documentation ([`1d8e231`](https://github.com/lulav-citros/citros/commit/1d8e231973214544bf22c25bf6f829fe92a22469))
 
 
 ## v0.2.15 (2024-01-03)
+
+### Documentation
+
+* docs(doc/citros_data_analysis/data_access): fix documentation ([`1fb688a`](https://github.com/lulav-citros/citros/commit/1fb688aeaba7b67245c81dcc0a7f60921bd348d3))
 
 ### Fix
 
@@ -44,11 +166,19 @@ Dev ([`4adf16f`](https://github.com/lulav-citros/citros/commit/4adf16fe899c5dae5
 
 ## v0.2.14 (2024-01-03)
 
+### Documentation
+
+* docs(citros/citros_data_analysis): fix documentation wip ([`8fa420a`](https://github.com/lulav-citros/citros/commit/8fa420a197ca0b4688974fa5a2a714afa0a9e98a))
+
+* docs(citros/citros_data_analysis): fix docstring ([`659c3cc`](https://github.com/lulav-citros/citros/commit/659c3cc001c9c50dc79b4ded5a713da664cfdb1d))
+
 ### Fix
 
 * fix(init): ovveride defualts ([`6e28072`](https://github.com/lulav-citros/citros/commit/6e28072dc6cb2a415f73cedb89f6ab1a316b6ae9))
 
 ### Unknown
+
+* fix merge conflicts ([`c4c4aae`](https://github.com/lulav-citros/citros/commit/c4c4aae6bf9fc0fb62e7a524fe7c527f547d6e28))
 
 * Fix( typo): in data management choice ([`d05b000`](https://github.com/lulav-citros/citros/commit/d05b000befdc42dd1f747d168a05e56ee6a00cb7))
 
@@ -58,6 +188,10 @@ Dev ([`4adf16f`](https://github.com/lulav-citros/citros/commit/4adf16fe899c5dae5
 ### Fix
 
 * fix(tree): Add data tree parser to CLI ([`a9076c8`](https://github.com/lulav-citros/citros/commit/a9076c81fd9aa81608b317e308c893a671801271))
+
+### Refactor
+
+* refactor(citros/citros_data_analysis): change order and grouping of methods ([`6870145`](https://github.com/lulav-citros/citros/commit/68701452517976ecfcf2c219b7e5f8a2a78bf40b))
 
 ### Unknown
 
@@ -169,6 +303,8 @@ Co-authored-by: MariaBerezansky &lt;63296447+MariaBerezansky@users.noreply.githu
 ### Fix
 
 * fix(dommands): dixes ([`9b17d58`](https://github.com/lulav-citros/citros/commit/9b17d585b6cbf35fbc28f0109c76fe271c643cda))
+
+* fix(citros/citros_data_analysis): adjustments and documentation generation ([`b93fa97`](https://github.com/lulav-citros/citros/commit/b93fa9757ac59e600ef83dcc1bc838b0aca1067c))
 
 ### Unknown
 
