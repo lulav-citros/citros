@@ -10,8 +10,15 @@ from citros.data.analysis import CitrosData
 
 from itertools import cycle
 
+from ._utils import _get_logger
+
 
 class _Plotter:
+    def __init__(self, log=None):
+        if log is None:            
+            self.log = _get_logger(__name__)
+        self.log = log
+
     def plot_graph(
         self,
         df,

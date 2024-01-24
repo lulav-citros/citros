@@ -206,17 +206,18 @@ class ParameterSetup(CitrosObj):
                 if value.get("args") is None:
                     value["args"] = []
 
+                args = [evaluate_value(arg) for arg in value["args"]]
+
                 try:
                     if (
                         function_name is not None
                         and "context" in inspect.signature(function).parameters
                     ):
-                        value["args"].append(context)
+                        args.append(context)
                 except Exception as e:
                     self.log.exception(e)
 
-                args = [evaluate_value(arg) for arg in value["args"]]
-
+                self.log.debug(f"function = {function_name}, args = {args}")
                 result = function(*args)
                 self.log.debug(
                     f"function = {function}, args = {args}, result = {result}"
