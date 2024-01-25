@@ -48,3 +48,6 @@ sed -i '9i'\#' Class CitrosDataArray' docusaurus/docs/data_analysis/documentatio
 sed -i '9i'\#' Class CitrosStat' docusaurus/docs/data_analysis/documentation/analysis/citros_stat.md
 
 sed -i '9i'\#' Class Validation' docusaurus/docs/data_analysis/documentation/validation/validation.md
+
+cp -r citros/data/doc/cli citros/docusaurus/docs/commands
+

@@ -1,6 +1,6 @@
 name: testing
 on: 
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,10 +14,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install git+https://github.com/lulav/pdoc.git@master
 
-      - name: make documentation
+      # - name: make documentation
+      #   run: |
+      #     chmod +x citros_data_analysis_doc.sh
+      #     ./citros_data_analysis_doc.sh
+      
+      name: make commands documentation
         run: |
-          chmod +x citros_data_analysis_doc.sh
-          ./citros_data_analysis_doc.sh
+          chmod +x citros_commands
+          ./citros_commands
 
       - name: Stage and push new files
         run: |
