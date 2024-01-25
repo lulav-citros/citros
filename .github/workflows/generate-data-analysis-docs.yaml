@@ -19,7 +19,7 @@ jobs:
       #     chmod +x citros_data_analysis_doc.sh
       #     ./citros_data_analysis_doc.sh
       
-      name: make commands documentation
+      name: make documentation
         run: |
           chmod +x citros_commands
           ./citros_commands
