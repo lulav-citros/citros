@@ -4,14 +4,21 @@ from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 import numpy as np
 
-# from ..analysis import CitrosData
 from citros.data.analysis import CitrosData
+
 # from citros import CitrosData, CitrosDataArray, CitrosStat
 
 from itertools import cycle
 
+from ._utils import _get_logger
+
 
 class _Plotter:
+    def __init__(self, log=None):
+        if log is None:            
+            self.log = _get_logger(__name__)
+        self.log = log
+
     def plot_graph(
         self,
         df,
@@ -377,7 +384,9 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != len(y_labels):
-                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None")
+                    self.log.warn(
+                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {len(y_labels)} labels or set 'set_y_label' = None"
+                    )
             else:
                 set_y_label = y_labels
 
@@ -554,7 +563,9 @@ class _Plotter:
                 set_x_label = [set_x_label]
             elif isinstance(set_x_label, list):
                 if len(set_x_label) != N:
-                    self.log.warn(f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None")
+                    self.log.warn(
+                        f"the number of labels in 'set_x_label' to set to x-axes do not match the number of graphs.\nProvide {N} labels or set 'set_x_label' = None"
+                    )
             else:
                 set_x_label = labels
 
@@ -565,7 +576,9 @@ class _Plotter:
                 set_y_label = [set_y_label]
             elif isinstance(set_y_label, list):
                 if len(set_y_label) != N:
-                    self.log.warn(f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None")
+                    self.log.warn(
+                        f"the number of labels in 'set_y_label' to set to y-axes do not match the number of graphs.\nProvide {N} labels or set 'set_y_label' = None"
+                    )
             else:
                 set_y_label = labels
 
@@ -578,7 +591,11 @@ class _Plotter:
                     if inf_vals is not None:
                         flag = flag & ((abs(df_copy[x_label]) - inf_vals) < 0)
                     if x_label != "sid":
-                        F = df_copy[[x_label, "sid"]].loc[flag].set_index("sid", drop=False)
+                        F = (
+                            df_copy[[x_label, "sid"]]
+                            .loc[flag]
+                            .set_index("sid", drop=False)
+                        )
                     else:
                         F = df_copy[["sid"]].loc[flag].set_index("sid", drop=False)
                     sid_list = list(set(F.index))
@@ -782,10 +799,14 @@ class _Plotter:
                 )
 
             except np.linalg.LinAlgError:
-                self.log.error("can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses")
+                self.log.error(
+                    "can not calculate eigenvalues and eigenvectors of the covariance matrix to plot confidence ellipses"
+                )
         else:
             bounding_error = False
-            self.log.warn("the number of points is not enough to plot confidence ellipses")
+            self.log.warn(
+                "the number of points is not enough to plot confidence ellipses"
+            )
 
         # plot center
         if plot_origin:
@@ -842,7 +863,16 @@ class _Plotter:
             return None
 
     def time_plot(
-        self, var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs,
+        self,
+        var_df,
+        ax,
+        var_name,
+        sids,
+        y_label,
+        title_text,
+        legend,
+        *args,
+        **kwargs,
     ):
         """
         Plot `var_name` vs. `Time` for each of the sids, where `Time` = `time_step` * rid.
