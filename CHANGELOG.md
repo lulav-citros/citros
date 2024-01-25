@@ -2,6 +2,23 @@
 
 
 
+## v0.2.19 (2024-01-25)
+
+### Fix
+
+* fix(ps): bugs ([`0b55f95`](https://github.com/lulav-citros/citros/commit/0b55f95219c3da0d030f390ba37046a63aa89f0d))
+
+### Unknown
+
+* Merge pull request #33 from lulav-citros/dev
+
+test ([`522a522`](https://github.com/lulav-citros/citros/commit/522a52213ace0a9a4784b4ae46ed87f9d43797a5))
+
+* fix ([`0c00287`](https://github.com/lulav-citros/citros/commit/0c00287c1e476d16d5c538a00adf2946fd68d726))
+
+* test ([`c04edf6`](https://github.com/lulav-citros/citros/commit/c04edf61075b7ec81dac86897ce9cfd18e733c55))
+
+
 ## v0.2.18 (2024-01-23)
 
 ### Fix
