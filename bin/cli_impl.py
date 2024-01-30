@@ -144,23 +144,32 @@ def run(args, argv):
 
     if not hasattr(args, "batch_name") or args.batch_name is None:
         is_interactive = True
-        batch_name = Prompt.ask("Please name this batch run", default="citros")
+        try:
+            batch_name = Prompt.ask("Please name this batch run", default="citros")
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         batch_name = args.batch_name
 
     if not hasattr(args, "batch_message") or args.batch_message is None:
-        batch_message = Prompt.ask(
-            "Enter a message for this batch run",
-            default="This is a default batch message from citros",
-        )
+        try:
+            batch_message = Prompt.ask(
+                "Enter a message for this batch run",
+                default="This is a default batch message from citros",
+            )
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         batch_message = args.batch_message
 
     if is_interactive or not hasattr(args, "completions"):
-        completions = Prompt.ask(
-            "How many times you want the simulation to run?",
-            default="1",
-        )
+        try:
+            completions = Prompt.ask(
+                "How many times you want the simulation to run?",
+                default="1",
+            )
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         completions = args.completions
 
