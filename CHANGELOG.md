@@ -2,6 +2,25 @@
 
 
 
+## v0.2.20 (2024-01-30)
+
+### Fix
+
+* fix(cli_impl): fix docker exception ([`b5f0ff3`](https://github.com/lulav-citros/citros/commit/b5f0ff3e8a9c2c25be1b40c45406e0b24bd06c96))
+
+* fix(python 3.8): support for python 3.8 ([`13f4ddd`](https://github.com/lulav-citros/citros/commit/13f4ddd8cdeeda89746ef1248f52db4edede9711))
+
+### Unknown
+
+* Merge pull request #36 from lulav-citros/dev
+
+fix(python 3.8): support for python 3.8 ([`139c998`](https://github.com/lulav-citros/citros/commit/139c998af31d85c20eb6ed2360cb873da968e26b))
+
+* fix(contol-c handler) ([`ca26bad`](https://github.com/lulav-citros/citros/commit/ca26bad97e67007109d35a51efb94545e0dccf01))
+
+* fix(upload eception handle) ([`6fc0faf`](https://github.com/lulav-citros/citros/commit/6fc0faf5fbc1eb0a465b2533d06573ccd79b2f2a))
+
+
 ## v0.2.19 (2024-01-25)
 
 ### Fix
