@@ -774,7 +774,14 @@ def data_db_status(args, argv):
             raise e
         return
 
-    container = client.containers.get(config.DB_CONTAINER_NAME)
+    try:
+        container = client.containers.get(config.DB_CONTAINER_NAME)
+    except docker.errors.NotFound:
+        print(f"Docker container {config.DB_CONTAINER_NAME} not found!, probably not running or not it this env.")
+        print(
+            f"[red]Please run 'citros data db create' to create a new DB."
+        )
+
     # print(container)
     if container:
         print(
