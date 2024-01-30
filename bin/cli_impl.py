@@ -1223,7 +1223,9 @@ def choose_batch(
     if chosen_simulation is None:
         simulations = []
         for simulation_path in glob.glob(f"{data_root}/[!_]*/"):
-            simulation = simulation_path.removesuffix("/").split("/")[-1]
+            if simulation_path.endswith("/"):
+                simulation_path = simulation_path[:-1]
+            simulation = simulation_path.split("/")[-1]
             simulations.append(simulation)
         # print(f"simulations: {simulations}")
         if simulations == []:
@@ -1246,7 +1248,9 @@ def choose_batch(
     if chosen_batch is None:
         batch_list = []
         for batch_path in glob.glob(f"{data_root}/{chosen_simulation}/[!_]*/"):
-            batch_name = batch_path.removesuffix("/").split("/")[-1]
+            if batch_path.endswith("/"):
+                batch_path = batch_path[:-1]
+            batch_name = batch_path.split("/")[-1]
             batch_list.append(batch_name)
 
         chosen_batch = inquirer.select(
@@ -1270,7 +1274,9 @@ def choose_batch(
         for version_path in glob.glob(
             f"{data_root}/{chosen_simulation}/{chosen_batch}/[!_]*/"
         ):
-            version = version_path.removesuffix("/").split("/")[-1]
+            if version_path.endswith("/"):
+                version_path = version_path[:-1]
+            version = version_path.split("/")[-1]
             version_list.append(version)
         if version_list == []:
             print("[yellow]Warning: No versions found for this batch.")
