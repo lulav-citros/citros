@@ -144,23 +144,32 @@ def run(args, argv):
 
     if not hasattr(args, "batch_name") or args.batch_name is None:
         is_interactive = True
-        batch_name = Prompt.ask("Please name this batch run", default="citros")
+        try:
+            batch_name = Prompt.ask("Please name this batch run", default="citros")
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         batch_name = args.batch_name
 
     if not hasattr(args, "batch_message") or args.batch_message is None:
-        batch_message = Prompt.ask(
-            "Enter a message for this batch run",
-            default="This is a default batch message from citros",
-        )
+        try:
+            batch_message = Prompt.ask(
+                "Enter a message for this batch run",
+                default="This is a default batch message from citros",
+            )
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         batch_message = args.batch_message
 
     if is_interactive or not hasattr(args, "completions"):
-        completions = Prompt.ask(
-            "How many times you want the simulation to run?",
-            default="1",
-        )
+        try:
+            completions = Prompt.ask(
+                "How many times you want the simulation to run?",
+                default="1",
+            )
+        except KeyboardInterrupt:
+            exit_citros_cli()
     else:
         completions = args.completions
 
@@ -250,7 +259,11 @@ source install/local_setup.bash""",
                 )
             )
         except Exception as e:
-            citros.logger.error(e)
+            citros.logger.debug(e)
+            if args.verbose == True:
+                print(e)
+
+            print(f"[red]Error:[/red] Failed to upload data to DB {type(e).__name__}.")
 
     print(f"[green]CITROS run completed successfully. ")
     print(
@@ -774,7 +787,14 @@ def data_db_status(args, argv):
             raise e
         return
 
-    container = client.containers.get(config.DB_CONTAINER_NAME)
+    try:
+        container = client.containers.get(config.DB_CONTAINER_NAME)
+    except docker.errors.NotFound:
+        print(
+            f"Docker container {config.DB_CONTAINER_NAME} not found!, probably not running or not it this env."
+        )
+        print(f"[red]Please run 'citros data db create' to create a new DB.")
+
     # print(container)
     if container:
         print(
@@ -1223,7 +1243,9 @@ def choose_batch(
     if chosen_simulation is None:
         simulations = []
         for simulation_path in glob.glob(f"{data_root}/[!_]*/"):
-            simulation = simulation_path.removesuffix("/").split("/")[-1]
+            if simulation_path.endswith("/"):
+                simulation_path = simulation_path[:-1]
+            simulation = simulation_path.split("/")[-1]
             simulations.append(simulation)
         # print(f"simulations: {simulations}")
         if simulations == []:
@@ -1246,7 +1268,9 @@ def choose_batch(
     if chosen_batch is None:
         batch_list = []
         for batch_path in glob.glob(f"{data_root}/{chosen_simulation}/[!_]*/"):
-            batch_name = batch_path.removesuffix("/").split("/")[-1]
+            if batch_path.endswith("/"):
+                batch_path = batch_path[:-1]
+            batch_name = batch_path.split("/")[-1]
             batch_list.append(batch_name)
 
         chosen_batch = inquirer.select(
@@ -1270,7 +1294,9 @@ def choose_batch(
         for version_path in glob.glob(
             f"{data_root}/{chosen_simulation}/{chosen_batch}/[!_]*/"
         ):
-            version = version_path.removesuffix("/").split("/")[-1]
+            if version_path.endswith("/"):
+                version_path = version_path[:-1]
+            version = version_path.split("/")[-1]
             version_list.append(version)
         if version_list == []:
             print("[yellow]Warning: No versions found for this batch.")
