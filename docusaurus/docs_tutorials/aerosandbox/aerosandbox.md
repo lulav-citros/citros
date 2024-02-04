@@ -106,9 +106,10 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `aerosandbox_cessna`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
+3. Run your simulation ** 10 times **.
 
-All the results will be saved under `.citros/data/simulation_aerosandbox_cessna` folder.
+All the results will be saved under `.citros/data/simulation_aerosandbox_cessna/[batch_name]` folder. <br/>
+*in this case, batch_name is aerosandbox_cessna*
 
 To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 

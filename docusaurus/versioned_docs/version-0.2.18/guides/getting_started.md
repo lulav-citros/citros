@@ -55,13 +55,9 @@ To clone the repository:
 2. Open and run Docker.
 3. Open the project in VScode.
 4. Press on the bottom left corner icon.
-
 ![Alt text](img/container_corner.png)
-
 5. Choose **Reopen in Container**
-
 ![Alt text](img/container_open_container.png)
-
 6. Open VScode terminal and make sure you are in the right location. <br />
  ```    
  ros@docker-desktop:/workspaces/[Project Name]$
@@ -249,18 +245,18 @@ citros data db create
    ```sh
    ? Select Action: 📊 Data: for data management 
    ? Select Action: 🌲 Tree: tree view of data
-   ? Select Simulation: simulation_cannon_analytic
-   ? Select Batch: citros
-   ? Select Version: 20240103083547
+   ? Select Simulation: [simulation_name]
+   ? Select Batch: [batch_name]
+   ? Select Version: [version ID]
    ```
 
 5. Choose the `Load` actions
    ```sh
    ? Select Action: 📊 Data: for data management 
    ? Select Action: 🌲 Tree: tree view of data
-   ? Select Simulation: simulation
-   ? Select Batch: citros
-   ? Select Version: 20240103083547
+   ? Select Simulation: [simulation_name]
+   ? Select Batch: [batch_name]
+   ? Select Version: [version ID]
    ? Select Action: 
    ┌─────────────────────────────────────────────────────────────────┐
    │  Info                                                           │

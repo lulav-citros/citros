@@ -54,8 +54,8 @@ spiceypy_cassini.launch.py		|SpiceyPy Cassini simulation launch file 	|spiceypy_
 
 ## CITROS Initialization
 
-1. [Install CITROS](https://citros.io/doc/docs_tutorials/getting_started/#installation).
-2. Follow [these steps](https://citros.io/doc/docs_tutorials/getting_started/#initialization) to Initialize CITROS.
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 Now you can see .citros directory in the explorer.
 
@@ -92,16 +92,18 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `spiceypy_cassini`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
+3. Run your simulation ** 10 times **.
 
-All the results will be saved under `.citros/data/simulation_spiceypy_cessna` folder.
+All the results will be saved under `.citros/data/simulation_spiceypy_cessna/[batch_name]` folder. <br/>
+*in this case, batch_name is spiceypy_cassini*
+
 
 ## Results
 
 1. [Create Database](../../docs/guides/getting_started#create-db)
 2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
 3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
-4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `spicypy_notebook_example.ipynb`. <br/>
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `SpiceyPy Notebook.ipynb`. <br/>
 You will find the notebook under `citros_template/notebooks` folder.
 
 The graph below shows us the Cassini altitude:

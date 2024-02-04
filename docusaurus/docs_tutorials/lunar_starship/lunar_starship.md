@@ -33,7 +33,7 @@ Through the Lunar Starship project, researchers are paving the way for sustainab
 ```bash
 git clone git@github.com:citros-garden/lunar_starship.git
 ```
-2. Open the repository in the [VScode Dev Container](https://citros.io/doc/docs_tutorials/getting_started/#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
 
 ## Workspace Overview
 
@@ -140,9 +140,10 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `Lunar_Starship`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
+3. Run your simulation ** 10 times **.
 
-All the results will be saved under `.citros/data/simulation_lunar_starship` folder.
+All the results will be saved under `.citros/data/simulation_lunar_starship/[batch_name]` folder. <br/>
+*in this case, batch_name is lunar_starship*
 
 To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 ![png](img/img0.png "FoxGlove example")

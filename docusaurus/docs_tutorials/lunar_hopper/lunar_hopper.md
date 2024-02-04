@@ -31,7 +31,7 @@ The Lunar Hopper project is a lunar exploration planning project aimed at solvin
 git clone git@github.com:citros-garden/lunar_hopper.git
 ```
 
-2. Open the repository in the [VScode Dev Container](https://citros.io/doc/docs_tutorials/getting_started/#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
 
 ## Workspace Overview
 
@@ -113,9 +113,10 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `Lunar_hopper`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
+3. Run your simulation ** 10 times **.
 
-All the results will be saved under `.citros/data/simulation_lunar_hopper` folder.
+All the results will be saved under `.citros/data/simulation_lunar_hopper/[simulation_name]` folder.<br/>
+*in this case, simulation_name is Lunar_hopper*
 
 To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
@@ -133,7 +134,7 @@ Use ```layout_controls.json``` for controls plots:
 1. [Create Database](../../docs/guides/getting_started#create-db)
 2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
 3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
-4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `aerosandbox_notebook_example.ipynb`. <br/>
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `lunar_hopper_notebook_example.ipynb`. <br/>
 You will find the notebook under `citros_template/notebooks` folder.
 
 ![png](img/citros3.png "CITROS example")
