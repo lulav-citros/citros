@@ -2,6 +2,17 @@
 
 
 
+## v0.2.22 (2024-02-05)
+
+### Fix
+
+* fix(automation): doc
+
+fix(automation): doc ([`847a1a5`](https://github.com/lulav-citros/citros/commit/847a1a570cde7be677c53f0133e5d9be90b3f761))
+
+* fix(automation): doc ([`352e7ba`](https://github.com/lulav-citros/citros/commit/352e7bab0e5fd2b2bbe3b54a737cb8d19e8a6e0f))
+
+
 ## v0.2.21 (2024-02-05)
 
 ### Fix
