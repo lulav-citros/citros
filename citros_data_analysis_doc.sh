@@ -15,7 +15,6 @@
 ######################################
 
 # rm old documentation and index.md
-rm docusaurus/docs/data_analysis/documentation/index.md
 rm -rf docusaurus/docs/data_analysis/documentation/access/*
 rm -rf docusaurus/docs/data_analysis/documentation/analysis/*
 rm -rf docusaurus/docs/data_analysis/documentation/validation/*
@@ -25,6 +24,7 @@ mkdir docusaurus/docs/data_analysis/documentation/
 PYTHONWARNINGS="ignore" pdoc --pdf --force --output-dir=docusaurus/docs/data_analysis/documentation -c show_type_annotations=False -c sort_identifiers=False citros/data/access citros/data/analysis citros/data/validation
 
 # mv documentation according to modules
+rm docusaurus/docs/data_analysis/documentation/index.md
 
 mkdir docusaurus/docs/data_analysis/documentation/access/
 mv docusaurus/docs/data_analysis/documentation/citros_db.md docusaurus/docs/data_analysis/documentation/citros_dict.md docusaurus/docs/data_analysis/documentation/access/
