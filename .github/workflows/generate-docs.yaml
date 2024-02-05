@@ -30,10 +30,10 @@ jobs:
           chmod +x citros_data_analysis_doc.sh
           ./citros_data_analysis_doc.sh
 
-      - name: debug-stage
-        run: |
-          cd docusaurus
-          ls -all
+      # - name: debug-stage
+      #   run: |
+      #     cd docusaurus
+      #     ls -all
 
       - name: create docusuros version
         run: |
@@ -43,8 +43,13 @@ jobs:
 
       - name: Stage and push new files
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
+          git config --global user.email "vovacooper@gmail.com"
+          git config --global user.name "vovacooper"          
           git add -A
-          git commit -m "docs(docusaurus/docs/data_analysis/documentation): action to make docs"
-          git push
+          git commit -m "docs(docusaurus): action to make docs"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
