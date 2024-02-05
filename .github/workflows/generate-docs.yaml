@@ -41,4 +41,7 @@ jobs:
           git commit -m "docs(docusaurus/docs/data_analysis/documentation): action to make docs"
           git push
 
-      - uses: ./.github/workflows/deploy-docs-gh-pages.yaml
+      - name: deploy to ghpages
+        uses: ./.github/workflows/deploy-docs-gh-pages.yaml
+        with:
+          version: ${{inputs.version}}
