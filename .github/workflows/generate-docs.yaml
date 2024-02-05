@@ -30,6 +30,9 @@ jobs:
           chmod +x citros_data_analysis_doc.sh
           ./citros_data_analysis_doc.sh
 
+      - name: debug-stage
+        run: ls -all
+
       - name: create docusuros version
         run: yarn docusaurus docs:version ${{inputs.version}}
 
