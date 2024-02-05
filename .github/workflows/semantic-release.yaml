@@ -34,3 +34,5 @@ jobs:
           echo ${{ steps.semantic.outputs.version }}
 
       - uses: ./.github/workflows/generate-docs.yaml
+        with:
+          version: ${{ steps.semantic.outputs.version }}
