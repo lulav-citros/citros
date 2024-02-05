@@ -38,9 +38,10 @@ jobs:
   generate-doc:
     needs: semantic-release
     uses: ./.github/workflows/generate-docs.yaml
+    secrets:
+      token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
     with:
       version: ${{ needs.semantic-release.outputs.version }}
-      token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
 
   deploy-docs:
     needs: generate-doc

@@ -6,10 +6,10 @@ on:
         description: "the new version after semantic release"
         required: true
         type: string
+    secrets:
       token:
         description: "github token"
         required: true
-        type: string
 
 jobs:
   build:
