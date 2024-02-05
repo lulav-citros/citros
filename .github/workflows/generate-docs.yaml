@@ -6,6 +6,10 @@ on:
         description: "the new version after semantic release"
         required: true
         type: string
+      token:
+        description: "github token"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -21,7 +25,7 @@ jobs:
         uses: actions/checkout@main
         with:
           fetch-depth: 0
-          token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
+          token: ${{ inputs.token }}
 
       - name: Installations
         run: |
@@ -55,5 +59,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
+          github_token: ${{ inputs.token }}
           branch: ${{ github.ref }}
