@@ -2,6 +2,21 @@
 
 
 
+## v0.2.37 (2024-02-05)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`34a6c08`](https://github.com/lulav-citros/citros/commit/34a6c08a9c604ef5c0d05d826ebfdc3296febac1))
+
+### Fix
+
+* fix(doc): ver ([`5d86c2a`](https://github.com/lulav-citros/citros/commit/5d86c2a3accb00dfe0de670b4ce18fbf66a167e8))
+
+### Unknown
+
+* Remove unused images and update versions.json ([`c89dce3`](https://github.com/lulav-citros/citros/commit/c89dce38e3fccf120ae4fbade018e1c8677b9223))
+
+
 ## v0.2.36 (2024-02-05)
 
 ### Documentation
