@@ -5,13 +5,17 @@ on:
   push:
     tags:
       - "v*"
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     steps:
+      - name: is main?
+        if: contains(env.BRANCH_NAME, 'main') == false
+        run: exit -1
+
       - name: Checkout
         uses: actions/checkout@v3
 
