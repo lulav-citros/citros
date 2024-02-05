@@ -2,6 +2,13 @@
 
 
 
+## v0.2.23 (2024-02-05)
+
+### Fix
+
+* fix(main): check automation ([`cd22084`](https://github.com/lulav-citros/citros/commit/cd220848a72d21f6eaf352dc1287bb589e96fd74))
+
+
 ## v0.2.22 (2024-02-05)
 
 ### Fix
