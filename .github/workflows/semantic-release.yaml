@@ -33,6 +33,12 @@ jobs:
           echo ${{ steps.semantic.outputs.tag }}
           echo ${{ steps.semantic.outputs.version }}
 
+      - name: Checkout again
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
+
       - uses: ./.github/workflows/generate-docs.yaml
         with:
           version: ${{ steps.semantic.outputs.version }}
