@@ -1,7 +1,7 @@
 # Quick Start
 
-citros is a suit of tools for ros2 development and production. 
-With this tool you can now easily run many monte carlo simulations scenarios by regenerating any of the parameters before running the simulation and then analyze the changes in the results using our built in tools.
+citros is a suilt of tools for ros2 development and production. 
+With this tool you can now easily run many monte carlo simulations scenarios by regenarating any of the parameters before running the simulation and then analyze the changes in the results using our built in tools.
 
 to install citros
 ```bash
@@ -24,7 +24,7 @@ citros run
 this will start a new batch run that will later can be used for analysis.
 
 you can now access the data for analysis from any postgres client or use our tool for python data analysis. 
-out python data analysis package will help you access the data and analyze it. we recommend using it from python notebook that later can be converted to a signed PDF report by running `citros report generate`. 
+out python data analysis package will help you access the data and analyze it. we recoment using it from python notebook that later can be converted to a signed PDF report by running `citros report generate`. 
 
 to analyze the results using citros
 ```bash
