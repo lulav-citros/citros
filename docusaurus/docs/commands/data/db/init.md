@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros data db init
-```
+TODO [doc]: implement

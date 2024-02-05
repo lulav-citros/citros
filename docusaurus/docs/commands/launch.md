@@ -1,6 +1,1 @@
-TODO 
-
-```bash
-citros launch
-   
-```
+TODO [doc]: implement

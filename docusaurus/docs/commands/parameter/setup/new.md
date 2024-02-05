@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros parameter sertup new
-```
+TODO [doc]: implement

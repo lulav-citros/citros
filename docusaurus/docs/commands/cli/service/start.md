@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros data list
-```
+TODO [doc]: implement

@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros data db clean
-```
+TODO [doc]: implement
