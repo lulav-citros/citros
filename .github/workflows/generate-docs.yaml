@@ -38,6 +38,7 @@ jobs:
       - name: create docusuros version
         run: |
           cd docusaurus
+          yarn install
           yarn docusaurus docs:version ${{inputs.version}}
 
       - name: Stage and push new files
