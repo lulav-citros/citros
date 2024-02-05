@@ -46,9 +46,9 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
 
 ## Prerequisites
 
-1. Please make sure you have all the [necessary softwares](../getting_started/getting_started.md#softwares-to-work-with-citros) to work with CITROS installed on your computer.
+1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#softwares-to-work-with-citros) to work with CITROS installed on your computer.
 2. Install [Visual Studio code](https://code.visualstudio.com/download).
-3. We strongly recommend that you work with [dockers](..//dockerfile_overview/dockerfile_overview.md). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/mass-spring-damper/tree/main/.devcontainer) directory in project's repo, the dependencies you need are in the `Dockerfile` file.
+3. We strongly recommend that you work with [dockers](../../docs/guides/dockerfile_overview). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/mass-spring-damper/tree/main/.devcontainer) directory in project's repo, the dependencies you need are in the `Dockerfile` file.
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -64,7 +64,7 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
  ```sh
  git clone git@github.com:citros-garden/mass_spring_damper.git
    ```
-2. Open the repository in the [VScode Dev Container](../getting_started/getting_started.md#open-project-in-vscode-dev-container).<br />
+2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).<br />
 *The Dockerfile contains all the necessary dependencies for the project.*
 
 ## Workspace Overview
@@ -93,8 +93,8 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
 
 ## CITROS Initialization
 
-1. [Install CITROS](../getting_started/getting_started.md#installation).
-2. Follow [these steps](/docs_tutorials/getting_started/getting_started.md#initialization) to Initialize CITROS.
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. Follow [these steps](../../docs/guides/getting_started#initialization) to Initialize CITROS.
 
 ## Scenario
 
@@ -134,7 +134,7 @@ We will define the following requirements:
 
 ## Running the Scenario using CITROS
 
-1. First [upload project to CITROS Server](../getting_started/getting_started.md#upload-to-citros-server)
+1. First [upload project to CITROS Server](../../docs/guides/getting_started#upload-to-citros-server)
 
 2. Lets run `50` simulations in the server
 ```bash
@@ -145,7 +145,7 @@ citros run -n "default" -m "default simulation" -r -c 50
 ```
 After running the command, choose the launch file you wish to run (if you'ld like to see the same [results](#results), choose `simulation_dynamics_controller`). The simulation will start and you could see the mass position and the control signal in the terminal's logs.
 
-You can read more about the [simulation basic running option](../getting_started/getting_started.md#simulation-running-options) or [check all `run` command options](/docs/cli/cli_commands#command-run)
+You can read more about the [simulation basic running option](../../docs/guides/getting_started#simulation-running-options) or [check all `run` command options](/docs/cli/cli_commands#command-run)
 
 ## Results
 Now we can analyze the results:

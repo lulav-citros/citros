@@ -11,7 +11,10 @@ export default function DocsVersionDropdownNavbarItemWrapper(props) {
   If the pathname contains the docsPluginId, we want to show the version dropdown. Otherwise, we don't want to show it.
   This gives us one, global, context-aware version dropdown that works with multi-instance setups.
   You want to declare a version dropdown for each plugin in your navbarItems config property for this to work well.*/
-  const doesPathnameContainDocsPluginId = pathname.includes(docsPluginId)
+  const doesPathnameContainDocsPluginId = pathname.includes("docs/")
+  // console.log("masha docsPluginId", docsPluginId);
+  // console.log("masha pathname", pathname);
+
   if (!doesPathnameContainDocsPluginId) {
     return null
   }

@@ -38,6 +38,7 @@ Two versions of the simulation are provided: an analytic solution and a numeric 
 7. [CITROS Initialization](#citros-initialization)
 8. [Simulations](#simulations)
 9. [Data analysis](#data-analysis)
+10. [Reports](#reports)
 
 ## Prerequisites
 
@@ -153,31 +154,29 @@ Output example:
 
 ## Working with CITROS
 
-Working with the CITROS CLI is pretty straight forward, since there are only two things you need to do - initialize your CITROS repository, and run your project. Additionally, you may configure your CITROS repository to fit your simulation needs, but if all you want to do is to run your project via CITROS with the default configuration, than only two commands are necessary.
+Working with the CITROS CLI is pretty straight forward, since there are only two things you need to do - initialize your ROS2 project with CITROS, and run your project. Additionally, you may [configure your simulations](#configuring-a-simulation) to fit your needs, but if all you want to do is to run your project via CITROS with the default configuration, then only two commands are necessary.
 
 ## CITROS Initialization
 
 ### Installation
-First, let's make sure we can run CITROS:
 
-1. Make sure the project (in this case Cannon) is opened inside a VS Code dev-container.
-2. Build and source your project by running:
-    ```bash
-    $ colcon build
-    $ source install/local_setup.bash
-    ```
-3. in the dev-container's terminal, run
-    ```bash
-    $ pip install citros
-    ```
+in the dev-container's terminal, run
+    
+```bash
+$ pip install citros --upgrade
+```
 
-    You can verify that the installation succeeded by running 
-    ```bash
-    $ citros -h
-    1.2.3
-    ```
-
-    to get the CITROS CLI version installed.
+:::tip
+If you ran the `pip install citros` command and you still getting 
+```bash
+ $ citros: command not found
+```
+Try running:
+```bash
+ $ source ~/.profile 
+```
+This should solve your problem and you should be able to run citros commands, otherwise [contact us](https://discord.com/).
+:::
 
 
 ### Initialization
@@ -204,10 +203,15 @@ Choose the `Run` action:
 
 ```sh
 ? Select Action: 
-Init: initialize .citros in current directory 
-❯ Run: new simulation                  
-Data: for data management                                            
-Report: generation and management                                               
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│❯ 🔥 Run: new simulation                                │
+│  📊 Data: for data management                          │
+│  📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Name the batch run (or press enter for *"citros"* as a default batch name):
@@ -238,7 +242,7 @@ Lastly choose *"simulation_cannon_analytic"*:
 
 :::note
 
-This command will run the simulation on your machine, and save all the results under `.citros/data/[simulation_name]` folder. The content of the [folder](/docs/cli/citros_structure#directory-runs) will contain 
+This command will run the simulation on your machine, and save all the results under `.citros/data/[simulation_name]/[batch_name]/[date]` folder.<br /> The content of the [folder](../docs/advanced_guides/citros_structure#directory-runs) will contain: 
 - recorded bags
 - logs from the simulation and citros itself
 - metadata about the run
@@ -247,38 +251,38 @@ This command will run the simulation on your machine, and save all the results u
 
 :::
 
-### Short Simulations Structure Overview
+### Concept Overview
 
 To fully understand what's going on, we need to familiarize ourselves with three concepts that are core to the way CITROS works:
-- ## **[simulation](/docs/cli/citros_structure#directory-simulations)** 
+- ## **[simulation](../docs/advanced_guides/citros_structure##directory-simulations)** 
     The simulation object is defining what you want to run and how. It is a set of the launch file (the what) and the parameter setup (the how) as well as the resources needed for it to run and after how much time it should be killed. 
 
     Defaults simulation files defined by a ROS 2 launch file. You may have as many launch files as you want in your project, as long as there is at least one. Each simulation will correspond to a launch file in your project. When you run a CITROS simulation, if you don't specify the name of the simulation (using the `-s` flag), a command-line menu will be presented, in which you can use the up and down arrows to choose the simulation you want. The simulation names will be of the form `simulation_<name of launch_file>`. In the case of the Cannon project, we have two launch files - `cannon_analytic.launch.py` and `cannon_numeric.launch.py`, and as you can see in the output above, we are prompted to choose between them. 
 
-    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](/docs/cli/citros_structure#directory-simulations) directory. You may use this file to configure the way your simulation runs. 
+    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](../docs/advanced_guides/citros_structure##directory-simulations) directory. You may use this file to configure the way your simulation runs. 
 
-    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/runs`](/docs/cli/citros_structure#directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
+    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/data`](../docs/advanced_guides/citros_structure##directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
 
 - ## **batch** 
 
-    Defined as a group of one or more simulation runs. Since you can specify one or more simulations runs ('*completions*') when running a CITROS simulation, a **batch** is simply a convenient way to group them together. For instance, in the case of the above example, if we choose `simulation_cannon_analytic` from the menu, the following folder structure will be created: `.citros/data/simulation_cannon_analytic/my_first_batch/20231231120623/0`. The last folder - `0`, is the folder corresponding to the only run for this batch - when you don't specify the number of completions (i.e. runs) using the `-c` flag, it will default to 1, and the name of each run is a zero based index, incremented by one for each additional run.
+    Defined as a group of one or more simulation runs. Since you can specify one or more simulations runs ('*completions*') when running a CITROS simulation, a **batch** is simply a convenient way to group them together. For instance, in the case of the above example, if we choose `simulation_cannon_analytic` from the menu, the following folder structure will be created: `.citros/data/simulation_cannon_analytic/my_first_batch/20231231120623/0`. The last folder - `0`, is the folder corresponding to the only run for this batch. the name of each run is a zero based index, incremented by one for each additional run.
 
 - ## **run**
 
-    Defined as a single execution of a simulation as defined by the chosen launch file. Launching CITROS simulations with multiple runs ('*completions*') is particularly advantageous when working online, in which case a large number of simulation runs can be simultaneously executed on the CITROS cloud.
+    Defined as a single execution of a simulation as defined by the chosen launch file. <br />
+    The folder corresponding to a simulation run will contain all the information relevant for that run. Look through such a folder after running a simulation and see for yourself.<br />For further details refer to the [CLI Documentation](https://citros.io/doc/docs_cli)
 
-    The folder corresponding to a simulation run will contain all the information relevant for that run. Look through such a folder after running a simulation and see for yourself. For further details refer to the [CLI Documentation](https://citros.io/doc/docs_cli)
 
 
-By default, when using the `run` command, you must provide a batch name (using the `-n` flag) and a message (using the `-m` flag). The name you provide will be used as the name of the directory in which all runs for this batch will be saved. If a batch by that name already exists - no worries, CITROS will simply add a new version under the simulation name you provided, thereby keeping the batch version unique for each simulation. 
+By default, when using the `run` command, you must provide a batch name and a message. The name you provide will be used as the name of the directory in which all runs for this batch will be saved. If a batch by that name already exists - no worries, CITROS will simply add a new version under the simulation name you provided, thereby keeping the batch version unique for each simulation. 
 
-Now that you understand what's going on, choose one of the simulations presented in the menu, press enter and see it run...
+Now that you understand what's going on, choose one of the simulations presented in the menu, press enter and see it runs...
 
 ### Configuring a Simulation
 
 We just ran a simulation with all the default configurations, which is admittedly not that exciting. Let's see how we can turn things up a notch by setting up dynamic parameter evaluation for our simulation, thereby allowing each run within the same batch to have different parameter values.
 
-The [`.citros/parameter_setups`](/docs/cli/citros_structure#directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
+The [`.citros/parameter_setups`](../docs/advanced_guides/citros_structure##directory-parameter_setups) directory stores your JSON-formatted parameter setup files. When you initialize your citros repository, a `default_param_setup.json` file is automatically generated. This file consolidates all the default parameters for every node across all the packages in your ROS project, providing a consolidated and easily accessible record of these parameters.
 
 The structured format of the parameter setup files streamlines both the understanding and alteration of parameters for each node in your ROS project. This becomes especially valuable when you're keen to explore the influence of different parameter values on your ROS project's behavior.
 
@@ -303,7 +307,7 @@ We can see we have 3 parameters to play around with - `init_speed`, `init_angle`
 }
 ```
 
-Let's say we want to find out the optimal initial angle for the cannon, which will provide the maximum range. Assuming we're completely blanking out on high-school physics, let's randomize the value for this parameter, execute several simulation runs, and see where we get the maximum range. To achieve this, we can simply replace the hard-coded default value with a [**function object**](/docs/cli/config_params). Function objects are json objects comprised of two fields - `function` and `args`. They come in two flavors - numpy and user-defined. For our purposes we can use numpy's random module to generate a normal distribution around a given value:
+Let's say we want to find out the optimal initial angle for the cannon, which will provide the maximum range. Assuming we're completely blanking out on high-school physics, let's randomize the value for this parameter, execute several simulation runs, and see where we get the maximum range. To achieve this, we can simply replace the hard-coded default value with a [**function object**](../docs/guides/config_params). Function objects are json objects comprised of two fields - `function` and `args`. They come in two flavors - numpy and user-defined. For our purposes we can use numpy's random module to generate a normal distribution around a given value:
 
     "init_angle": {
                     "function": "numpy.random.normal",
@@ -318,7 +322,7 @@ Another way to use the run command is writing the full command:
 citros run -n "test_params" -m "testing random initial angle" -c 10
 ```
 
-and choose `simulation_cannon_analytic` from the menu, the simulation will run 10 times (sequentially if working offline), and each time the cannon will have a different initial angle. By looking at the [results](#data-analysis-online-only), we can hopefully come to the conclusion that 45 degrees is the optimal angle. 
+and choose `simulation_cannon_analytic` from the menu, the simulation will run 10 times, and each time the cannon will have a different initial angle. By looking at the [results](#data-analysis-online-only), we can hopefully come to the conclusion that 45 degrees is the optimal angle. 
 
 ### Review All Simulations Data
 
@@ -330,22 +334,32 @@ $ citros
 
 Choose the `Data` action:
 
+
 ```sh
 ? Select Action: 
-Init: initialize .citros in current directory 
-Run: new simulation                  
-❯ Data: for data management                                            
-Report: generation and management                                            
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│  🔥 Run: new simulation                                │
+│❯ 📊 Data: for data management                          │
+│  📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose `List` to view all simulations
 
 ```sh
-❯ List: list all runs
-simulation_cannon_analytic
-simulation_cannon_numeric   
+┌────────────────────────────────────────────────────────┐
+│  🌲 Tree: tree view of data                            │
+│❯ *️⃣ List: reports list                                 │
+│  📂 DB: section                                        │
+│  🗳 Service: section                                   │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
-
 Table of all the simulations will be shown as output. <br />
 The table contains the following fields: Run name, Versions, message, status, completions, path
 
@@ -354,9 +368,101 @@ The table contains the following fields: Run name, Versions, message, status, co
 
 ## Data Analysis
 
+After you've run a batch using CITROS, your data is stored under the `.citros/data` directory.
+The data is accessible using all existing ROS2 tools (foxglove, grepROS, etc.). 
+
+**CITROS approach** is first to upload the recorded data into a local PGDB (Postgress Database) instance allowing you to access the data, query and analyze it more efficiently than the traditional tools.
+
+### CITROS DB
+
+To create an instance of CITROS DB run
+```bash
+citros data db create
+```
+
+For more commands to control the CITROS DB refer [here](../docs/cli/cli_commands.md).
+
+### Upload Data to DB
+
+Make sure that the data you want to access is uploaded:
+
+```bash 
+citros data list
+```
+
+In the image below you can see that the status of the batch run is `UNLOADED`
+
+![Alt text](img/data_unloaded.png)
+
+To load the data
+
+```bash
+$ citros
+```
+
+Choose the `Data` action:
+
+```sh
+? Select Action: 
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│  🔥 Run: new simulation                                │
+│❯ 📊 Data: for data managment                           │
+│  📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
+```
+
+choose the `Tree` action
+
+```sh
+? Select Action: 
+┌────────────────────────────────────────────────────────┐
+│❯ 🌲 Tree: tree view of data                            │
+│  *️⃣ List: reports list                                 │
+│  📂 DB: section                                        │
+│  🗳 Service: section                                   │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
+```
+Choose the simulation, batch and version you'ld like to upload:
+
+```sh
+? Select Action: 📊 Data: for data management 
+? Select Action: 🌲 Tree: tree view of data
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 20240103083547
+```
+Choose the `Load` actions
+```sh
+? Select Action: 
+┌─────────────────────────────────────────────────────────────────┐
+│  Info                                                           │
+│❯ Load                                                           │
+│  Unload                                                         │
+│  Delete                                                         │
+│  ---------------                                                │
+│  EXIT                                                           │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+To verify the data is loaded
+```bash 
+citros data list
+```
+
+In the image below you can see that the status of the batch run changed to `LOADED`
+
+![Alt text](img/data_loaded.png)
+
 ### Execute Notebook
-After you've run a batch run on CITROS, your data is stored on CITROS's servers.
-you can access the data using citros data analysis either from the Python [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb) or from a local kernel Python environment.
+
+CITROS provides a [citros data analysis package](https://pypi.org/project/citros-data-analysis/) that gives access and functionality to analyze the data.
+We recommend to use this package with a `python notebook` which allows you to generate reports down the line.
 
 :::note
 
@@ -364,9 +470,9 @@ citros data analysis package is installed while running `pip install citros`, so
 
 :::
 
-1. Open .citros directory
+So now, after we uploaded the data, we can execute the notebook
 
-2. Go to notebooks.
+2. Go to `notebooks` folder in your project.
 
 3. Open data_analysis.ipynb
 
@@ -376,7 +482,7 @@ citros data analysis package is installed while running `pip install citros`, so
 
 #### Results
 
-here is a sample from the provided [notebook](https://citros.io/cannon/blob/main/notebooks/data_analysis.ipynb):
+here is a sample of the notebook execution:
 ```python
 #import matplotlib
 import matplotlib.pyplot as plt
@@ -391,9 +497,11 @@ citros.batch(-1).topic('/cannon/state').sid([0,1,2,3,4]).\
 ![Alt text](img/nb_sample.png)
 
 
-### Generate Report
+## Reports
 
-After running the notebook and verifying that everything works properly you can generate a report from your Python Notebook signed by CITROS.
+Report is a combination of data and notebook generated into one immutable signed pdf. This is a great tool which can help you to track the metric of your project overtime.<br />For example, you can create a report that measures accuracy, this report can be generated each version so with time you can see the progress of the accuracy increases.<br />For additional info go to [report](../docs/cli/cli_commands.md).
+
+For this tutorial we will show you how to generate a report from the [notebook above](#execute-notebook).
 
 run citros command
 
@@ -404,26 +512,35 @@ $ citros
 Choose the `Report` action:
 
 ```sh
-? Select Action:                  
-Init: initialize .citros in current directory 
-Run: new simulation                  
-Data: for data management                                            
-❯ Report: generation and management                              
+? Select Action: 
+┌────────────────────────────────────────────────────────┐
+│  🍋 Init: initialize .citros in current directory      │
+│  🔥 Run: new simulation                                │
+│  📊 Data: for data management                          │
+│❯ 📝 Report: generation and management                  │
+│  🔖 Service: CITROS API service functions              │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose `Generate` to generate a report
 
 ```sh
-List: reports list
-❯ Generate: new report
-Validate: report integrity 
+┌────────────────────────────────────────────────────────┐
+│  *️⃣ List: reports list                                 │
+│❯ ⚡ Generate: new report                                │
+│  ❓ Validate: report integrity                         │
+│  ---------------                                       │
+│  EXIT                                                  │
+└────────────────────────────────────────────────────────┘
 ```
 
 Choose the simulation source for the report
 
 ```sh
-simulation_cannon_analytic 
-❯ simulation_cannon_numeric
+❯ simulation_cannon_analytic 
+simulation_cannon_numeric
 ```
 
 Select a batch from you batch list
@@ -458,7 +575,7 @@ To view your generated report go to .citros/reports/[report_name]
 
 :::note
 
-The content of the [Reports folder](/docs/cli/citros_structure#directory-reports) will contain 
+The content of the [Reports folder](../docs/advanced_guides/citros_structure##directory-reports) will contain 
 - output of the python notebook
 - Report info
 - Generated pdf report

@@ -13,7 +13,7 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: 'https://docs.citros.io',
+  url: 'https://citros.io',
 //   url: "http://localhost:3000",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -47,8 +47,9 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+
           path: "docs",
-          sidebarPath: require.resolve("./sidebarsCLI.js"),
+          sidebarPath: require.resolve("./sidebars.js"),
           remarkPlugins: [math],
           rehypePlugins: [katex],
         },
@@ -69,18 +70,18 @@ const config = {
   ],
 
   plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "docs_data_analysis",
-        path: "docs_data_analysis",
-        routeBasePath: "docs_data_analysis",
-        sidebarPath: require.resolve("./sidebarsDataAnalysis.js"),
-        remarkPlugins: [math],
-        rehypePlugins: [katex],
-        // includeCurrentVersion: false,
-      },
-    ],
+    // [
+    //   "@docusaurus/plugin-content-docs",
+    //   {
+    //     id: "docs_data_analysis",
+    //     path: "docs",
+    //     // routeBasePath: "docs_data_analysis",
+    //     sidebarPath: require.resolve("./sidebars.js"),
+    //     remarkPlugins: [math],
+    //     rehypePlugins: [katex],
+    //     // includeCurrentVersion: false,
+    //   },
+    // ],
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -123,7 +124,7 @@ const config = {
         logo: {
           alt: "CITROS Logo",
           src: "img/citros.png",
-          href: "https://docs.citros.io",
+          href: "https://citros.io",
         },
         items: [
           {
@@ -133,39 +134,26 @@ const config = {
             position: "left",
             activeBaseRegex: `/docs/`,
           },
-          // {
-          //   to: "/docs_cli", // ./docs-api/Intro.md
-          //   label: "CLI",
-          //   position: "left",
-          //   activeBaseRegex: `/docs_cli/`,
-          // },
           {
-            to: "/docs_data_analysis", // ./docs-api/Intro.md
-            label: "Data analysis",
-            position: "left",
-            activeBaseRegex: `/docs_data_analysis/`,
-          },
-          {
-            to: "/docs_tutorials", // ./docs-api/Intro.md
+            to: "/docs_tutorials",
             label: "Tutorials",
             position: "left",
             activeBaseRegex: `/docs_tutorials/`,
           },
           // { to: "/blog", label: "Blog", position: "left" },
-          // {
-          //   type: "docsVersionDropdown",
-          //   position: "right",
-          //   docsPluginId: "docs_cli",
-          //   // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
-          //   // dropdownActiveClassDisabled: true,
-          // },
           {
             type: "docsVersionDropdown",
+            docsPluginId: "default",
+            // label: "Latest",
             position: "right",
-            docsPluginId: "docs_data_analysis",
-            // dropdownItemsAfter: [{to: '/versions', label: 'All versions'}],
-            dropdownActiveClassDisabled: false,
+            // dropdownActiveClassDisabled: true,
+
+            // docsPluginId: `default`,
+            // to: '/path',
+
           },
+          
+          
         ],
       },
       footer: {

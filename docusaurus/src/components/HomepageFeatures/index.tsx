@@ -15,7 +15,7 @@ const FeatureList: FeatureItem[] = [
 
     {
       title: 'CITROS CLI',
-      url: "docs",
+      url: "docs/cli",
       Svg: require('@site/static/img/citros_home_cli.svg').default,
       description: (
         <div>
@@ -26,7 +26,7 @@ const FeatureList: FeatureItem[] = [
     },
     {
       title: 'CITROS Data Analysis',
-      url: "docs_data_analysis",
+      url: "docs/data_analysis",
       Svg: require('@site/static/img/citros_home_analysis.svg').default,
       description: (
         <div>

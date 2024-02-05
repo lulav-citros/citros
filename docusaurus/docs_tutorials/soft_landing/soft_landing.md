@@ -22,9 +22,9 @@ With CITROS, you can easily run multiple simulations and compare the results to 
 
 ## Prerequisites
 
-1. Please make sure you have all the [necessary softwares](../getting_started/getting_started.md#softwares-to-work-with-citros) to work with CITROS installed on your computer.
+1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#softwares-to-work-with-citros) to work with CITROS installed on your computer.
 2. Install [Visual Studio code](https://code.visualstudio.com/download).
-3. We strongly recommend that you work with [dockers](..//dockerfile_overview/dockerfile_overview.md). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/soft_landing/tree/main/.devcontainer) directory in project's repo, the dependencies you need are in the `Dockerfile` and `install.sh` files.
+3. We strongly recommend that you work with [dockers](../../docs/guides/dockerfile_overview). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/soft_landing/tree/main/.devcontainer) directory in project's repo, the dependencies you need are in the `Dockerfile` and `install.sh` files.
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -41,7 +41,7 @@ With CITROS, you can easily run multiple simulations and compare the results to 
  ```sh
  git clone git@github.com:citros-garden/soft_landing.git
    ```
-2. Open the repository in the [VScode Dev Container](../getting_started/getting_started.md#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
 
 ## Workspace Overview
 After all the prerequisites done, we can start configuring our project.  
@@ -62,7 +62,7 @@ This is a list of all the ROS 2 parameters that can be control by the user wish:
 | e | stoping condition value | controller |
 | dt | time interval | controller |
 
-[citros_cli](/docs/cli/config_params) provides more information about how to change the parameters by the user.
+[citros_cli](../../docs/guides/config_params) provides more information about how to change the parameters by the user.
 
 The launch files:  
  `dynamics_controller.launch.py` launch the dynamics with the controller and `dynamics.launch.py` launch only the dynamics.  
@@ -70,8 +70,8 @@ The launch files:
 
 ## CITROS Initialization
 
-1. [Install CITROS](../getting_started/getting_started.md#installation).
-2. Follow [these steps](/docs_tutorials/getting_started/getting_started.md#initialization) to Initialize CITROS.
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. Follow [these steps](../../docs/guides/getting_started#initialization) to Initialize CITROS.
 
 Now you can see ```.CITROS``` directory in the explorer. 
 
@@ -94,7 +94,7 @@ By configuring the velocity parameters using $\mu$ and $\sigma$, we can identify
 To configure the scenario described [above](#scenario), I created a `default_param_setup.json` file located in `.citros/parameter_setups` and a `function object` located in `.citros/parameter_setups/functions` to randomize the initial velocity with $\mu$ and $\sigma$ for each parameter.  
 For the initial validation of the controller, I chose random values of $\mu$ and $\sigma$.
 
-First ensure that the project has been [built and sourced](../getting_started/getting_started.md#build-the-project)
+First ensure that the project has been [built and sourced](../../docs/guides/getting_started#build-the-project)
 
 you're now ready to run a CITROS simulation, by using the run command:
 ```sh
@@ -110,7 +110,7 @@ Wait for the output in the terminal.
 
 ### Running on The Cloud
 
-[Upload project to CITROS Server](../getting_started/getting_started.md#upload-to-citros-server)
+[Upload project to CITROS Server](../../docs/guides/getting_started#upload-to-citros-server)
 
 Finally, we can run it in the cloud, simply add ```-r``` to the terminal command: 
 ```bash 
