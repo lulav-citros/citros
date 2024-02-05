@@ -46,3 +46,5 @@ jobs:
   deploy-docs:
     needs: generate-doc
     uses: ./.github/workflows/deploy-docs-gh-pages.yaml
+    secrets:
+      token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}

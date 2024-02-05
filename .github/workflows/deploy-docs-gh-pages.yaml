@@ -1,6 +1,10 @@
 name: 🦕 Deploy Docusaurus to GitHub Pages
 on:
   workflow_call:
+    secrets:
+      token:
+        description: "github token"
+        required: true
 
 permissions:
   contents: write
@@ -11,7 +15,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.token }}
 
       - name: Use Node.js
         uses: actions/setup-node@v3
