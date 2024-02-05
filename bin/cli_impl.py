@@ -492,6 +492,9 @@ def data_list(args, argv):
         else:
             status_clore = "red"
 
+        path = str(flat_batch["path"])
+        path = path[: -len(os.getcwd())] if path.startswith(os.getcwd()) else path
+        path = path[1:] if path.startswith("/") else path
         table.add_row(
             flat_batch["simulation"],
             flat_batch["name"],
@@ -499,9 +502,9 @@ def data_list(args, argv):
             flat_batch["message"],
             f"[{status_clore}]{flat_batch['status']}",
             flat_batch["completions"],
-            str(flat_batch["path"]).removeprefix(os.getcwd()).removeprefix("/"),
+            path,
         )
-
+    # (sim if sim[-1] != "/" else sim[:-1])
     console = Console()
     console.print(table)
 
@@ -1062,6 +1065,10 @@ def report_list(args, argv):
     )
     _name = None
     for flat in flat_repo:
+        path = str(flat["path"])
+        path = path[: -len(os.getcwd())] if path.startswith(os.getcwd()) else path
+        path = path[1:] if path.startswith("/") else path
+
         table.add_row(
             flat["started_at"],
             # flat["finished_at"],
@@ -1070,7 +1077,7 @@ def report_list(args, argv):
             flat["message"],
             str(flat["progress"]),
             flat["status"],
-            str(flat["path"]).removeprefix(os.getcwd()).removeprefix("/"),
+            path,
             # f"[link={flat['path']}]path[/link]",
         )
         _name = flat["name"]
@@ -1133,7 +1140,10 @@ def report_generate(args, argv):
     if not hasattr(args, "notebooks"):
         notebook_list = []
         for notebook in glob.glob(f"{os.getcwd()}/**/*.ipynb", recursive=True):
-            notebook_list.append(notebook.removeprefix(os.getcwd()).removeprefix("/"))
+            path = str(notebook)
+            path = path[: -len(os.getcwd())] if path.startswith(os.getcwd()) else path
+            path = path[1:] if path.startswith("/") else path
+            notebook_list.append(path)
 
         notebooks = inquirer.select(
             raise_keyboard_interrupt=False,
