@@ -159,7 +159,7 @@ class Batch(BatchUploader):
     # - all files is intact.
     # - if files is signed check all signings (sha)
     def _validate(self):
-        # TODO[critical]: add validations
+        # TODO[enhancement]: add validations
         return True, None
 
     def _new(self):

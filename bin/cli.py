@@ -107,10 +107,10 @@ def main():
         subparsers,
         epilog(),  # TODO(Masha): fill with correct doc URL
     )
-    parser_service(
-        subparsers,
-        epilog(),  # TODO(Masha): fill with correct doc URL
-    )
+    # parser_service(
+    #     subparsers,
+    #     epilog(),  # TODO(Masha): fill with correct doc URL
+    # )
 
     # parser_simulation(
     #     subparsers,

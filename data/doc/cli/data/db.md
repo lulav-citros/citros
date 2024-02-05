@@ -1,5 +1,3 @@
-creates and maintains postgres db for CITROS data analysis. 
+We use postgres DB to cash batch data for fast quering for data analysis. 
 
-```bash
-citros data db
-``
+This section cintrols citros DB functionality.

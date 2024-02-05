@@ -46,4 +46,23 @@ BEGIN
 END
 $do$;
 
+CREATE OR REPLACE FUNCTION public.drop_all () 
+   RETURNS VOID  AS
+   $$
+   DECLARE rec RECORD; 
+   BEGIN
+       -- Get all the schemas
+        FOR rec IN
+        SELECT nspname FROM pg_catalog.pg_namespace WHERE (nspname NOT LIKE 'pg_%') and (nspname != 'information_schema') and (nspname NOT LIKE 'public')
+           LOOP             
+             EXECUTE format('DROP SCHEMA "%s" CASCADE', rec.nspname);
+           END LOOP; 
+           RETURN; 
+   END;
+   $$ LANGUAGE plpgsql;
+
+GRANT EXECUTE ON FUNCTION public.drop_all() TO role_org_{{ ORGANIZATION_NAME }};
+
+
 GRANT role_org_{{ ORGANIZATION_NAME }} to {{ USER_NAME }};
+

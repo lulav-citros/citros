@@ -348,7 +348,7 @@ class Report:
             private_key_path (str): path to private key
             output_folder (str): path to folder where signed pdf should be saved
         """
-        # TODO[critical]: implement signing
+        # TODO[enhancement]: implement signing
         raise NotImplementedError
         self.log.debug(f"{self.__class__.__name__}.sign_pdf_with_key()")
         with open(private_key_path, "rb") as key_file:

@@ -100,7 +100,7 @@ class Citros(CitrosObj):
     def _validate(self):
         """Validate the json file."""
 
-        # TODO[critical]: check that the project.json file is valid
+        # TODO[enhancement]: check that the project.json file is valid
 
         return True
 

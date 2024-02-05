@@ -1,6 +1,0 @@
-TODO 
-
-```bash
-citros launch
-   
-```
