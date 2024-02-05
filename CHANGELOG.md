@@ -2,6 +2,13 @@
 
 
 
+## v0.2.28 (2024-02-05)
+
+### Fix
+
+* fix(automation): test ([`47a845f`](https://github.com/lulav-citros/citros/commit/47a845f19814b91dca57e57e3f1bb6bd9477c19f))
+
+
 ## v0.2.27 (2024-02-05)
 
 ### Fix
