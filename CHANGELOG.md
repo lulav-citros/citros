@@ -2,6 +2,13 @@
 
 
 
+## v0.2.30 (2024-02-05)
+
+### Fix
+
+* fix(yalla): 2 ([`dea636f`](https://github.com/lulav-citros/citros/commit/dea636f20794ec6d3c1a088634c3cb83c50aa66e))
+
+
 ## v0.2.29 (2024-02-05)
 
 ### Fix
