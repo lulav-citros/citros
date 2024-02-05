@@ -18,7 +18,10 @@ jobs:
         run: exit -1
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
 
       - name: Installations
         run: |
@@ -43,6 +46,7 @@ jobs:
 
       - name: Stage and push new files
         run: |
+          git pull
           git config --global user.email "vovacooper@gmail.com"
           git config --global user.name "vovacooper"          
           git add -A
@@ -51,5 +55,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
           branch: ${{ github.ref }}
