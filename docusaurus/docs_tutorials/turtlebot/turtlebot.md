@@ -31,7 +31,7 @@ All project installation, code overview and usage details are also available on 
 ```bash
 git clone git@github.com:citros-garden/turtlebot3.git
 ```
-2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
 
 ## Workspace Overview
 
@@ -53,7 +53,7 @@ turtlebot3_sim_cont.launch.py		|Gazebo headless TurtleBot world launch file 	|tu
 robot_state_publisher.launch.py		|Utility launch file for state publishing  |turtlebot3_gazebo
 
 
-### CITROS Initialization
+## CITROS Initialization
 1. [Install CITROS](../../docs/guides/getting_started#installation).
 2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 

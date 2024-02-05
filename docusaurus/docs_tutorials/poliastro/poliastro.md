@@ -36,7 +36,7 @@ All project installation, code overview and usage details are also available on 
 ```bash
 git clone git@github.com:citros-garden/poliastro.git
 ```
-2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
 
 ## Workspace Overview
 

@@ -29,9 +29,13 @@ However, if you wish to work without dockers, please refer to the .devcontainer 
 
 1. Open and run Docker.
 2. Press on the bottom left corner icon.
-![Alt text](img/container_corner.png)
+
+  ![img](img/container_corner.png)
+
 3. Choose **Reopen in Container**
+
 ![Alt text](img/container_open_container.png)
+
 4. Open VScode terminal and make sure you are in the right location. <br />
  
  ```    

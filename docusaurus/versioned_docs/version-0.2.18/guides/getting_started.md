@@ -34,50 +34,14 @@ Try running:
 ```
 This should solve your problem and you should be able to run citros commands, otherwise [contact us](https://discord.com/).
 :::
-## Clone CITROS Garden Project
 
-All the projects can be found [here](https://github.com/orgs/citros-garden/repositories)
-
-To clone the repository:
- ```sh
- git clone git@github.com:citros-garden/repository_name.git
-   ```
-## Run Project in VScode
-
-### Open Project in VScode Dev Container
-
-1. Open the cloned repository in VScode:
-
- ```sh
- cd ~/project-name
- code .
- ```
-2. Open and run Docker.
-3. Open the project in VScode.
-4. Press on the bottom left corner icon.
-![Alt text](img/container_corner.png)
-5. Choose **Reopen in Container**
-![Alt text](img/container_open_container.png)
-6. Open VScode terminal and make sure you are in the right location. <br />
- ```    
- ros@docker-desktop:/workspaces/[Project Name]$
- ```
-
-7. [Build the project](#build-the-project)
-
-### Build the project
- ```bash
- $ colcon build
- $ source install/local_setup.bash
- ```
 ## Initialization
 ```bash
 $ citros init
 ```
 As you can see, a lot more is happening when you initialize your repository while being logged in. We will not delve into all the details behind the scenes, but as always, feel free to roam through the [CLI Documentation](https://citros.io/doc/docs_cli) for further details.
 
-## Simulation
-### Run Simulation
+## Run Simulation
 After your `.citros` repository has been initialized, you're ready to run a CITROS simulation.
 
 1. type `citros` command

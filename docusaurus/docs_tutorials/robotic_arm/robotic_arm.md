@@ -31,7 +31,7 @@ This project is designed to wrap the [Robotic Arm Simulation project](https://gi
 ```bash
 git clone git@github.com:citros-garden/robotic_arm.git
 ```
-2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
 
 ## Workspace Overview
 
