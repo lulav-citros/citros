@@ -20,6 +20,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.token }}
 
+      - name: git pull new version
+        run: |
+          git pull
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
