@@ -2,6 +2,61 @@
 
 
 
+## v0.2.21 (2024-02-05)
+
+### Fix
+
+* fix(automation): doc
+
+fix(automation): doc ([`7cc3a7f`](https://github.com/lulav-citros/citros/commit/7cc3a7f5db4f77012a0799e99f3806e9ae7aca3a))
+
+* fix(automation): doc ([`b40041d`](https://github.com/lulav-citros/citros/commit/b40041d16ac32185b491604518b4361a4c30f47f))
+
+### Unknown
+
+* Merge pull request #42 from lulav-citros/dev
+
+fix(suport for python 3.9 &lt;) ([`8760537`](https://github.com/lulav-citros/citros/commit/8760537c0d344307b6c59239564d26e82ce5ed87))
+
+* fix(suport for python 3.9 &lt;) ([`018e296`](https://github.com/lulav-citros/citros/commit/018e2960b5642d99eca398de42f871bd3b02080d))
+
+
+## v0.2.20 (2024-01-30)
+
+### Fix
+
+* fix(cli_impl): fix docker exception ([`b5f0ff3`](https://github.com/lulav-citros/citros/commit/b5f0ff3e8a9c2c25be1b40c45406e0b24bd06c96))
+
+* fix(python 3.8): support for python 3.8 ([`13f4ddd`](https://github.com/lulav-citros/citros/commit/13f4ddd8cdeeda89746ef1248f52db4edede9711))
+
+### Unknown
+
+* Merge pull request #36 from lulav-citros/dev
+
+fix(python 3.8): support for python 3.8 ([`139c998`](https://github.com/lulav-citros/citros/commit/139c998af31d85c20eb6ed2360cb873da968e26b))
+
+* fix(contol-c handler) ([`ca26bad`](https://github.com/lulav-citros/citros/commit/ca26bad97e67007109d35a51efb94545e0dccf01))
+
+* fix(upload eception handle) ([`6fc0faf`](https://github.com/lulav-citros/citros/commit/6fc0faf5fbc1eb0a465b2533d06573ccd79b2f2a))
+
+
+## v0.2.19 (2024-01-25)
+
+### Fix
+
+* fix(ps): bugs ([`0b55f95`](https://github.com/lulav-citros/citros/commit/0b55f95219c3da0d030f390ba37046a63aa89f0d))
+
+### Unknown
+
+* Merge pull request #33 from lulav-citros/dev
+
+test ([`522a522`](https://github.com/lulav-citros/citros/commit/522a52213ace0a9a4784b4ae46ed87f9d43797a5))
+
+* fix ([`0c00287`](https://github.com/lulav-citros/citros/commit/0c00287c1e476d16d5c538a00adf2946fd68d726))
+
+* test ([`c04edf6`](https://github.com/lulav-citros/citros/commit/c04edf61075b7ec81dac86897ce9cfd18e733c55))
+
+
 ## v0.2.18 (2024-01-23)
 
 ### Fix

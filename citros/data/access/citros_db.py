@@ -12,6 +12,7 @@ from ._pg_cursor import _PgCursor
 from ._plotter import _Plotter
 from .citros_dict import CitrosDict
 
+
 class CitrosDB(_PgCursor):
     """
     CitrosDB object allows to get general information about the batch and make queries.
@@ -40,7 +41,7 @@ class CitrosDB(_PgCursor):
         Password.
         Default is citros.database.CitrosDB.db_password.
     debug_connect : bool, default False
-        If `True`, the number of connections and queries which were done by all CitrosDB objects with `debug_connect` set `True` 
+        If `True`, the number of connections and queries which were done by all CitrosDB objects with `debug_connect` set `True`
         existing in the current session is recorded.
         The information is recorded to the _stat.Stat() object.
     log : logging.Logger, default None
@@ -58,9 +59,8 @@ class CitrosDB(_PgCursor):
         user=None,
         password=None,
         debug_connect=False,
-        log = None,
+        log=None,
     ):
-        
         super().__init__(
             host=host,
             port=port,
@@ -70,7 +70,7 @@ class CitrosDB(_PgCursor):
             simulation=simulation,
             batch=batch,
             debug_connect=debug_connect,
-            log = log,
+            log=log,
         )
 
         if sid is None:
@@ -98,7 +98,7 @@ class CitrosDB(_PgCursor):
             user=self.db_user,
             password=self.db_password,
             debug_connect=self._debug_connect,
-            log = self.log,
+            log=self.log,
         )
 
         if self._sid is None:
@@ -179,7 +179,9 @@ class CitrosDB(_PgCursor):
             elif batch_status is None:
                 return False
             else:
-                self.log.error(f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database.")
+                self.log.error(
+                    f"The batch '{self._simulation}'/'{self._batch_name}' is not loaded into the database."
+                )
                 return False
 
     def get_connection(self):
@@ -204,9 +206,9 @@ class CitrosDB(_PgCursor):
         >>> D = curs.fetchall()
         >>> print(D)
         [(1, 0, 0, 0, '/config', '.citros/data/... ]
-          
+
         The result of the curs.fetchall() is a list, which can easily be converted into a pandas DataFrame if needed:
-          
+
         >>> import pandas as pd
         >>> df = pd.DataFrame(D)
         """
@@ -424,9 +426,9 @@ class CitrosDB(_PgCursor):
         if table_to_display is not None:
             table.add_rows(table_to_display)
         print(table)
-    
+
     # Filters
-    
+
     def topic(self, topic_name: Optional[Union[str, list]] = None) -> CitrosDB:
         """
         Select topic.
@@ -634,7 +636,7 @@ class CitrosDB(_PgCursor):
         ci = self._copy()
         _PgCursor.time(ci, start=start, end=end, duration=duration)
         return ci
-    
+
     def set_filter(self, filter_by: dict = None) -> CitrosDB:
         """
         Set constraints on query.
@@ -649,7 +651,7 @@ class CitrosDB(_PgCursor):
             - value_n  - in the case of equality: list of exact values,
                        in the case of inequality: dict with ">", ">=", "<" or "<=".
             Conditions, passed here, have higher priority over those defined by `topic()`, `rid()`, `sid()` and `time()` and will override them.
-            If one of the sampling method is used (`skip()`, `avg()` or `move_avg()`), constraints on additional columns (rid, sid, time) are applied 
+            If one of the sampling method is used (`skip()`, `avg()` or `move_avg()`), constraints on additional columns (rid, sid, time) are applied
             BEFORE sampling while constraints on columns from json-data are applied AFTER sampling.
 
         Returns
@@ -668,7 +670,7 @@ class CitrosDB(_PgCursor):
         Examples
         --------
         If the structure of the data column in the simulation 'simulation_cannon_analytic' is the following:
-        
+
         ```python
         {x: {x_1: 11}, note: [13, 34]}
         {x: {x_1: 22}, note: [11, 35]}
@@ -686,7 +688,7 @@ class CitrosDB(_PgCursor):
         ...
 
         get data where the value on the first position in the json-array 'note' equals 11 or 12:
-        
+
         >>> citros.batch('testing').topic('A').set_filter({'data.note[0]': [11, 12]}).data()
              sid  rid  time topic type  data.x.x_1     data.note
         0      0    1  4862     A    a          22      [11, 35]
@@ -694,7 +696,7 @@ class CitrosDB(_PgCursor):
         ...
         """
         ci = self._copy()
-        _PgCursor.set_filter(ci, filter_by = filter_by)
+        _PgCursor.set_filter(ci, filter_by=filter_by)
         return ci
 
     def set_order(self, order_by: Optional[Union[str, list, dict]] = None) -> CitrosDB:
@@ -731,11 +733,11 @@ class CitrosDB(_PgCursor):
         >>> df = citros.batch('aerodynamics').topic('A').set_order(['sid', 'rid']).data()
         """
         ci = self._copy()
-        _PgCursor.set_order(ci, order_by = order_by)
+        _PgCursor.set_order(ci, order_by=order_by)
         return ci
 
     # Sampling
-    
+
     def skip(self, s: int = None):
         """
         Select each `s`-th message.
@@ -769,16 +771,16 @@ class CitrosDB(_PgCursor):
         the 1th, the 4th, the 7th ... messages will be selected
         """
         ci = self._copy()
-        _PgCursor.skip(ci, n_skip = s)
+        _PgCursor.skip(ci, n_skip=s)
         return ci
-    
+
     def avg(self, n: int = None) -> CitrosDB:
         """
         Set the directive to group and average every set of `n` consecutive messages in the database before querying.
 
         `avg()` is aimed to reduce number of rows before querying.
         This method should be called before querying methods `data()` or `data_dict()`.
-        Messages with different sids are processed separately. 
+        Messages with different sids are processed separately.
         While averaging, the value in the 'rid' column is determined by taking the minimum 'rid' value from the rows being averaged.
         If any constraints on 'sid', 'rid', 'time', 'topic' and 'type' columns are set, they are applied before sampling, while constraints on data from json column are applied after sampling.
 
@@ -805,9 +807,9 @@ class CitrosDB(_PgCursor):
         >>> df = citros.simulation('mechanics').batch('velocity').topic('A').avg(3).data()
         """
         ci = self._copy()
-        _PgCursor.avg(ci, n_avg = n)
+        _PgCursor.avg(ci, n_avg=n)
         return ci
-    
+
     def move_avg(self, n: int = None, s: int = 1):
         """
         Set the directive to compute moving average with the window size equals `n` and then during querying select each `s`-th message of the result.
@@ -836,7 +838,7 @@ class CitrosDB(_PgCursor):
 
         Examples
         --------
-        In the batch 'coords' in the simulation 'pendulum' for data in topic 'A' calculate moving average with the window equals 5 
+        In the batch 'coords' in the simulation 'pendulum' for data in topic 'A' calculate moving average with the window equals 5
         and select every second row of the result:
 
         >>> from citros import CitrosDB
@@ -844,11 +846,11 @@ class CitrosDB(_PgCursor):
         >>> df = citros.simulation('pendulum').batch('coords').topic('A').move_avg(5,2).data()
         """
         ci = self._copy()
-        _PgCursor.move_avg(ci, n_avg = n, n_skip = s)
+        _PgCursor.move_avg(ci, n_avg=n, n_skip=s)
         return ci
-    
+
     # Data Information
-    
+
     def info(self) -> CitrosDict:
         """
         Return information about the batch, based on the configurations set by topic(), rid(), sid() and time() methods.
@@ -1085,11 +1087,13 @@ class CitrosDB(_PgCursor):
         """
         if not self._is_batch_available():
             return None
-        _PgCursor._pg_get_data_structure(self, topic = topic)
+        _PgCursor._pg_get_data_structure(self, topic=topic)
 
     # Query
-    
-    def data(self, data_names: list = None, additional_columns: list = None) -> pd.DataFrame:
+
+    def data(
+        self, data_names: list = None, additional_columns: list = None
+    ) -> pd.DataFrame:
         """
         Return pandas.DataFrame with data.
 
@@ -1724,7 +1728,7 @@ class CitrosDB(_PgCursor):
         if var_df is None:
             return
 
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         plotter.time_plot(
             var_df, ax, var_name, sids, y_label, title_text, legend, *args, **kwargs
         )
@@ -1830,7 +1834,7 @@ class CitrosDB(_PgCursor):
         if xy_df is None:
             return
 
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         plotter.xy_plot(
             xy_df,
             ax,
@@ -1934,7 +1938,7 @@ class CitrosDB(_PgCursor):
 
         ![plot_graph_2](../../img_documentation/plot_graph_2.png "plot_graph_2")
         """
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         return plotter.plot_graph(
             df,
             x_label,
@@ -2040,7 +2044,7 @@ class CitrosDB(_PgCursor):
 
         ![plot_3dgraph_1](../../img_documentation/plot_3dgraph_1.png "plot_3dgraph_1")
         """
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         return plotter.plot_3dgraph(
             df,
             x_label,
@@ -2144,7 +2148,7 @@ class CitrosDB(_PgCursor):
 
         ![multiple_y_plot_2](../../img_documentation/multiple_y_plot_2.png "multiple_y_plot_2")
         """
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         return plotter.multiple_y_plot(
             df,
             x_label,
@@ -2250,7 +2254,7 @@ class CitrosDB(_PgCursor):
 
         ![multiplot](../../img_documentation/multiplot.png "multiplot")
         """
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         return plotter.multiplot(
             df,
             labels,
@@ -2383,7 +2387,7 @@ class CitrosDB(_PgCursor):
 
         ![plot_sigma_ellipse_2](../../img_documentation/plot_sigma_ellipse_2.png "plot_sigma_ellipse_2")
         """
-        plotter = _Plotter()
+        plotter = _Plotter(self.log)
         return plotter.plot_sigma_ellipse(
             df,
             x_label,

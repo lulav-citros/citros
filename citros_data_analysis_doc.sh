@@ -39,7 +39,7 @@ sed -i '3isidebar_label: '\''Class CitrosStat'\''' docusaurus/docs/data_analysis
 
 sed -i '3isidebar_label: '\''Class Validation'\''' docusaurus/docs/data_analysis/documentation/validation/validation.md
 
-#write title
+# write title
 sed -i '9i'\#' Class CitrosDB' docusaurus/docs/data_analysis/documentation/access/citros_db.md
 sed -i '9i'\#' Class CitrosDict' docusaurus/docs/data_analysis/documentation/access/citros_dict.md
 
@@ -49,5 +49,5 @@ sed -i '9i'\#' Class CitrosStat' docusaurus/docs/data_analysis/documentation/ana
 
 sed -i '9i'\#' Class Validation' docusaurus/docs/data_analysis/documentation/validation/validation.md
 
+# copy cli documentation
 cp -r citros/data/doc/cli citros/docusaurus/docs/commands
-

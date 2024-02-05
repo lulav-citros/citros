@@ -461,7 +461,10 @@ class BatchUploader:
         citrosDB.create_table(connection, schema_name, table_name)
 
         for sid_path in glob(f"{self.batch_dir}/*/"):
-            sid = sid_path.removesuffix("/").split("/")[-1]
+            if sid_path.endswith("/"):
+                sid_path = sid_path[:-1]
+
+            sid = sid_path.split("/")[-1]
 
             # upload all parameters
             parameters = self._get_parameters(f"{self.batch_dir}/{sid}/config/")

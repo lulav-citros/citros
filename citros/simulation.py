@@ -241,8 +241,11 @@ class Simulation(CitrosObj):
         from rosbags.rosbag2 import Reader, Writer
         from rosbags.interfaces import ConnectionExtRosbag2, Connection
 
+        if src.endswith("/"):
+            src = src[:-1]
+
         # check id name of file contain .citros
-        if ".citros" in src.removesuffix("/").split("/")[-1]:
+        if ".citros" in src.split("/")[-1]:
             self.log.warning(f"CITROS bag already exist, skipping ...")
             return
 
