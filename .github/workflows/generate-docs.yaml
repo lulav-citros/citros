@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@main
         with:
           fetch-depth: 0
-          token: ${{ inputs.token }}
+          token: ${{ secrets.token }}
 
       - name: Installations
         run: |
@@ -59,5 +59,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ inputs.token }}
+          github_token: ${{ secrets.token }}
           branch: ${{ github.ref }}
