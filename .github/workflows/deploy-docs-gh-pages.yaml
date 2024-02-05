@@ -1,8 +1,11 @@
 name: 🦕 Deploy Docusaurus to GitHub Pages
+# on:
+#   push:
+#     branches:
+#       - maria-documentation
 on:
-  push:
-    branches:
-      - maria-documentation
+  workflow_call:
+
 permissions:
   contents: write
 jobs:
