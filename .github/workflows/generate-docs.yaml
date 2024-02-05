@@ -31,10 +31,14 @@ jobs:
           ./citros_data_analysis_doc.sh
 
       - name: debug-stage
-        run: ls -all
+        run: |
+          cd docusaurus
+          ls -all
 
       - name: create docusuros version
-        run: yarn docusaurus docs:version ${{inputs.version}}
+        run: |
+          cd docusaurus
+          yarn docusaurus docs:version ${{inputs.version}}
 
       - name: Stage and push new files
         run: |
