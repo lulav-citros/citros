@@ -2,6 +2,25 @@
 
 
 
+## v0.2.21 (2024-02-05)
+
+### Fix
+
+* fix(automation): doc
+
+fix(automation): doc ([`7cc3a7f`](https://github.com/lulav-citros/citros/commit/7cc3a7f5db4f77012a0799e99f3806e9ae7aca3a))
+
+* fix(automation): doc ([`b40041d`](https://github.com/lulav-citros/citros/commit/b40041d16ac32185b491604518b4361a4c30f47f))
+
+### Unknown
+
+* Merge pull request #42 from lulav-citros/dev
+
+fix(suport for python 3.9 &lt;) ([`8760537`](https://github.com/lulav-citros/citros/commit/8760537c0d344307b6c59239564d26e82ce5ed87))
+
+* fix(suport for python 3.9 &lt;) ([`018e296`](https://github.com/lulav-citros/citros/commit/018e2960b5642d99eca398de42f871bd3b02080d))
+
+
 ## v0.2.20 (2024-01-30)
 
 ### Fix
