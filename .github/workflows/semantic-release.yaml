@@ -35,6 +35,10 @@ jobs:
           echo ${{ steps.semantic.outputs.tag }}
           echo ${{ steps.semantic.outputs.version }}
 
+      - name: not output
+        if: steps.semantic.outputs.released == 'false'
+        run: exit -1
+
   generate-doc:
     needs: semantic-release
     uses: ./.github/workflows/generate-docs.yaml
@@ -47,4 +51,4 @@ jobs:
     needs: generate-doc
     uses: ./.github/workflows/deploy-docs-gh-pages.yaml
     secrets:
-      token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
