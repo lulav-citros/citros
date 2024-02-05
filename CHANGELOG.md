@@ -2,6 +2,13 @@
 
 
 
+## v0.2.29 (2024-02-05)
+
+### Fix
+
+* fix(yalla): cvar ([`6b31fbc`](https://github.com/lulav-citros/citros/commit/6b31fbcd508ea6beea0f642ccdf8a1432387c561))
+
+
 ## v0.2.28 (2024-02-05)
 
 ### Fix
