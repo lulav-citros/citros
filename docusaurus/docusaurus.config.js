@@ -13,7 +13,7 @@ const config = {
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: 'https://docs.citros.io',
+  url: 'https://citros.io',
 //   url: "http://localhost:3000",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -124,7 +124,7 @@ const config = {
         logo: {
           alt: "CITROS Logo",
           src: "img/citros.png",
-          href: "https://docs.citros.io",
+          href: "https://citros.io",
         },
         items: [
           {

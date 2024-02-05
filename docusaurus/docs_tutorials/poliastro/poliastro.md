@@ -160,7 +160,7 @@ After the above will run, go a head and run another simulation with the followin
 3. Run your simulation ** 10 times **.
 4. choose the `simulation_poliastro_atmo_drag` simulation
 
-All the results will be saved under `.citros/data/simulation_poliastro_atmo_drag` folder.<br/>
+All the results will be saved under `.citros/data/simulation_poliastro_atmo_drag/[batch_name]` folder.<br/>
 *in this case, batch_name is poliastro_atmo_drag*
 
 

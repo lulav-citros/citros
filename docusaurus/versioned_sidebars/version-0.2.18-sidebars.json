@@ -153,6 +153,11 @@
         },
         {
           "type": "doc",
+          "id": "guides/citros_garden",
+          "label": "CITROS Garden Projects"
+        },
+        {
+          "type": "doc",
           "id": "guides/foxglove_visual",
           "label": "Foxglove"
         }

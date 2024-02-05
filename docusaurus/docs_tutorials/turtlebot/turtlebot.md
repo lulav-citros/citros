@@ -53,11 +53,9 @@ turtlebot3_sim_cont.launch.py		|Gazebo headless TurtleBot world launch file 	|tu
 robot_state_publisher.launch.py		|Utility launch file for state publishing  |turtlebot3_gazebo
 
 
-## CITROS Initialization
-1. [Install CITROS](https://citros.io/doc/docs_tutorials/getting_started/#installation).
-2. Follow [these steps](https://citros.io/doc/docs_tutorials/getting_started/#initialization) to Initialize CITROS.
-
-Now you can see .citros directory in the explorer.
+### CITROS Initialization
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 In this scenario the ROS 2 node interfaces with the official TurtleBot3 simulation example, leveraging the TurtleBot3 robot model and simulated environment. <br/>
@@ -97,11 +95,13 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 ## Running the Scenario Using CITROS
 
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
-1. Name your  batch run simulation: `turtlebot3`
-2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
+1. Name your  batch run simulation: `turtlebot3`.
+2. Add a message to your batch run simulation: `test run`.
+3. Run your simulation ** 10 times **.
+4. choose the `simulation_turtlebot3_sim_cont` simulation.
 
-All the results will be saved under `.citros/data/simulation_turtlebot3` folder.
+All the results will be saved under `.citros/data/simulation_turtlebot3/[batch_name]` folder.<br/>
+*in this case, batch_name is turtlebot3*
 
 ## Results
 
