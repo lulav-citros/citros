@@ -2,6 +2,17 @@
 
 
 
+## v0.2.39 (2024-02-05)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`bbc2453`](https://github.com/lulav-citros/citros/commit/bbc2453c96cbafd5feac04fc0336ad6a544b0bbb))
+
+### Fix
+
+* fix(doc): test ([`75bc082`](https://github.com/lulav-citros/citros/commit/75bc082ac937394e4ada578ef9bfa796bf781f46))
+
+
 ## v0.2.38 (2024-02-05)
 
 ### Documentation
