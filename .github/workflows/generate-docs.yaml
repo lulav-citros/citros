@@ -1,10 +1,11 @@
 name: Doc's CI/CD
-# on:
-#   workflow_call:
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_call:
+    inputs:
+      version:
+        description: "the new version after semantic release"
+        required: true
+        type: string
 
 jobs:
   build:
@@ -28,6 +29,9 @@ jobs:
         run: |
           chmod +x citros_data_analysis_doc.sh
           ./citros_data_analysis_doc.sh
+
+      - name: create docusuros version
+        run: yarn docusaurus docs:version ${{inputs.version}}
 
       - name: Stage and push new files
         run: |
