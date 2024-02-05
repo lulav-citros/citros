@@ -1,8 +1,4 @@
 name: 🦕 Deploy Docusaurus to GitHub Pages
-# on:
-#   push:
-#     branches:
-#       - maria-documentation
 on:
   workflow_call:
 
@@ -26,11 +22,11 @@ jobs:
         run: |
           cd docusaurus
           yarn --frozen-lockfile
+          yarn install
 
       - name: Build
         run: |
-          cd docusaurus
-          yarn install                                  
+          cd docusaurus                                           
           yarn build
 
       - name: Deploy

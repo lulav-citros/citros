@@ -14,24 +14,31 @@
 
 ######################################
 
-PYTHONWARNINGS="ignore" pdoc --pdf --force --output-dir=docusaurus/docs/data_analysis/documentation -c show_type_annotations=False -c sort_identifiers=False citros/data/access citros/data/analysis citros/data/validation
-
 # rm old documentation and index.md
 rm docusaurus/docs/data_analysis/documentation/index.md
 rm -rf docusaurus/docs/data_analysis/documentation/access/*
 rm -rf docusaurus/docs/data_analysis/documentation/analysis/*
 rm -rf docusaurus/docs/data_analysis/documentation/validation/*
 
+mkdir docusaurus/docs/data_analysis/documentation/
+
+PYTHONWARNINGS="ignore" pdoc --pdf --force --output-dir=docusaurus/docs/data_analysis/documentation -c show_type_annotations=False -c sort_identifiers=False citros/data/access citros/data/analysis citros/data/validation
+
 # mv documentation according to modules
+
+mkdir docusaurus/docs/data_analysis/documentation/access/
 mv docusaurus/docs/data_analysis/documentation/citros_db.md docusaurus/docs/data_analysis/documentation/citros_dict.md docusaurus/docs/data_analysis/documentation/access/
 
+mkdir docusaurus/docs/data_analysis/documentation/analysis/
 mv docusaurus/docs/data_analysis/documentation/citros_data.md docusaurus/docs/data_analysis/documentation/citros_data_array.md docusaurus/docs/data_analysis/documentation/citros_stat.md docusaurus/docs/data_analysis/documentation/analysis/
 
+mkdir docusaurus/docs/data_analysis/documentation/validation/
 mv docusaurus/docs/data_analysis/documentation/validation.md docusaurus/docs/data_analysis/documentation/validation/
 
+
 # write sidebar label
-sed -i '3isidebar_label: '\''Class CitrosDB'\''' docusaurus/docs/data_analysis/documentation/access/citros_db.md
-sed -i '3isidebar_label: '\''Class CitrosDict'\''' docusaurus/docs/data_analysis/documentation/access/citros_dict.md
+sed -i '3isidebar_label: '\''Class CitrosDB'\''' docusaurus/docs/data_analysis/documentation/access/citros_db.md 
+sed -i '3isidebar_label: '\''Class CitrosDict'\''' docusaurus/docs/data_analysis/documentation/access/citros_dict.md 
 
 sed -i '3isidebar_label: '\''Class CitrosData'\''' docusaurus/docs/data_analysis/documentation/analysis/citros_data.md
 sed -i '3isidebar_label: '\''Class CitrosDataArray'\''' docusaurus/docs/data_analysis/documentation/analysis/citros_data_array.md
