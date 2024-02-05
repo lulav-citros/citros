@@ -2,6 +2,13 @@
 
 
 
+## v0.2.31 (2024-02-05)
+
+### Fix
+
+* fix(nooooo): 3 ([`785d422`](https://github.com/lulav-citros/citros/commit/785d422c83e74dd944a828e64a67effb60f1e632))
+
+
 ## v0.2.30 (2024-02-05)
 
 ### Fix
