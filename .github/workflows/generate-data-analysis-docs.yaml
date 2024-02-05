@@ -1,4 +1,4 @@
-name: testing
+name: Doc's CI/CD
 # on:
 #   workflow_call:
 on:
