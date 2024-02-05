@@ -18,7 +18,7 @@ jobs:
         run: exit -1
 
       - name: Checkout
-        uses: actions/checkout
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
           token: ${{ secrets.SEMANTIC_RELEASE_ACCESS_TOKEN }}
