@@ -57,4 +57,4 @@ sed -i '9i'\#' Class CitrosStat' docusaurus/docs/data_analysis/documentation/ana
 sed -i '9i'\#' Class Validation' docusaurus/docs/data_analysis/documentation/validation/validation.md
 
 # copy cli documentation
-cp -r data/doc/cli docusaurus/docs/commands
+# cp -r data/doc/cli docusaurus/docs/commands
