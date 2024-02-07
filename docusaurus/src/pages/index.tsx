@@ -26,17 +26,24 @@ function HomepageHeader() {
   );
 }
 
-export default function Home(): JSX.Element {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <Layout
-      title={`${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
-    </Layout>
-  );
+export default function Home() {
+  React.useEffect(() => {
+    window.location.href = '/docs/general/overview';
+  }, []);
+  return null;
 }
+
+// export default function Home(): JSX.Element {
+//   const {siteConfig} = useDocusaurusContext();
+//   return (
+//     <Layout
+//       title={`${siteConfig.title}`}
+//       description="Description will go into a meta tag in <head />">
+//       <HomepageHeader />
+//       <main>
+//         <HomepageFeatures />
+//       </main>
+//     </Layout>
+//   );
+// }
 
