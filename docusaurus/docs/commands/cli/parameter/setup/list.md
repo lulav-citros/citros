@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros parameter sertup list
-```
+TODO [doc]: implement

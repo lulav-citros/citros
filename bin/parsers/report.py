@@ -19,7 +19,7 @@ install()
 # citros report
 def parser_report_generate(subparser, epilog=None):
     description_path = "report/generate.md"
-    help = "citros report generate section"
+    help = "Generates a report out of the provided notebooks and simulations"
     parser = subparser.add_parser(
         "generate",
         description=Panel(
@@ -96,7 +96,7 @@ def parser_report_generate(subparser, epilog=None):
 # citros report list
 def parser_report_list(subparser, epilog=None):
     description_path = "report/list.md"
-    help = "citros report list section"
+    help = "List all reports in a table"
     parser = subparser.add_parser(
         "list",
         description=Panel(
@@ -177,7 +177,7 @@ def parser_report_validate(subparser, epilog=None):
 # citros report
 def parser_report(subparser, epilog=None):
     description_path = "report.md"
-    help = "report section"
+    help = "Reports related functionality"
     parser = subparser.add_parser(
         "report",
         description=Panel(
@@ -211,6 +211,6 @@ def parser_report(subparser, epilog=None):
     # report run/list
     parser_report_generate(subparser, epilog=epilog)
     parser_report_list(subparser, epilog=epilog)
-    parser_report_validate(subparser, epilog=epilog)
+    # parser_report_validate(subparser, epilog=epilog)
 
     return parser

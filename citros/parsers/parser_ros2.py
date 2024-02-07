@@ -576,8 +576,7 @@ class ParserRos2(ParserBase):
             self.log.error("Could not obtain git hash for local path " + project_path)
             return None
 
-    def get_project_description(self, project_path):
-        # TODO[low] implement get_project_description(self, project_path):
+    def get_project_description(self, project_path):        
         return ""
 
     def get_file_content(self, path):

@@ -1,4 +1,1 @@
-TODO 
-```bash
-citros data db status
-```
+TODO [doc]: implement

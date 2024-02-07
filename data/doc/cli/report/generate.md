@@ -1,3 +1,5 @@
+
+TODO [doc]: implement
 ## `citros report generate`
 
 ### Description
