@@ -28,7 +28,7 @@ def parser_init(main_sub, epilog=None):
             subtitle=f"[{citros_version}]",
         ),
         epilog=epilog,
-        help="init section",
+        help="Initialize CITROS under current folder",
         formatter_class=RichHelpFormatter,
     )
     parser.add_argument(

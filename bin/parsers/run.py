@@ -27,7 +27,7 @@ def parser_run(main_sub, epilog=None):
             ),
         ),
         epilog=epilog,
-        help="run section",
+        help="Run ROS simulation using CITROS",
         formatter_class=RichHelpFormatter,
     )
     parser.add_argument("-dir", default=".", help="The working dir of the project")

@@ -71,11 +71,11 @@ def citros(args, argv):
         keybindings=keybindings,
         message="Select Action:",
         choices=[
-            Choice("init", name="🍋 Init: initialize .citros in current directory"),
-            Choice("run", name="🔥 Run: new simulation"),
-            Choice("data", name="📊 Data: for data management "),
-            Choice("report", name="📝 Report: generation and management"),
-            Choice("service", name="🔖 Service: CITROS API service functions"),
+            Choice("init", name="Init: initialize .citros in current directory"),
+            Choice("run", name="Run: new simulation"),
+            Choice("data", name="Data: for data management "),
+            Choice("report", name="Report: generation and management"),
+            # Choice("service", name="Service: CITROS API service functions"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -321,28 +321,28 @@ def choose_simulation(citros: Citros, simulation_name=None):
 
 
 ############################# Simulation implementation ##############################
-# TODO[critical]: implement
+# TODO[enhancement]: implement
 def simulation_list(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-# TODO[critical]: implement
+# TODO[enhancement]: implement
 def simulation_run(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
 ####################### parameter setup implementation ##############################
-# TODO[critical]: implement
+# TODO[enhancement]: implement
 def parameter_setup_new(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-# TODO[critical]: implement
+# TODO[enhancement]: implement
 def parameter_setup_list(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-# TODO[critical]: implement
+# TODO[enhancement]: implement
 def parameter_setup(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
@@ -355,10 +355,10 @@ def data(args, argv):
         keybindings=keybindings,
         message="Select Action:",
         choices=[
-            Choice("tree", name="🌲 Tree: tree view of data"),
-            Choice("list", name="*️⃣  List: reports list"),
-            Choice("db", name="📂 DB: section"),
-            Choice("service", name="🗳  Service: section"),
+            Choice("tree", name="Tree view"),
+            Choice("list", name="List data"),
+            Choice("db", name="DB: section"),
+            # Choice("service", name="Service: section"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -425,6 +425,7 @@ def data_tree(args, argv):
         choices=[
             Choice("info", name="Info"),
             Choice("load", name="Load"),
+            # Choice("play", name="Play"), # TODO [enhancement]: implement playback
             Choice("unload", name="Unload"),
             Choice("delete", name="Delete"),
             Separator(),
@@ -673,13 +674,20 @@ def data_db(args, argv):
         message="Select Action:",
         choices=[
             Choice(
-                "create", name="▶ Create: create citros db instance and initializes it."
+                "create",
+                name="Create: create citros db docker instance and initializes it.",
             ),
-            Choice("remove", name="🗑  Remove: remove the db instance."),
-            Choice("init", name="✏  Init: initialize the db instance"),
-            Choice("logs", name="📝 Logs: show logs of DB instance"),
-            Choice("status", name="❓ Status: Show weather the serivce is up or not"),
-            Choice("stop", name="⏹  Stop: stops the citros db instance if running."),
+            Choice("remove", name="Remove: remove the db instance from docker."),
+            Choice("init", name="Init: initialize the db instance"),
+            Choice("clean", name="Clean: clears all data from DB."),
+            Choice("status", name="Status: Show weather the serivce is up or not"),
+            Choice(
+                "start", name="Start: starts the citros db docker instance if exists."
+            ),
+            Choice(
+                "stop", name="Stop: stops the citros db docker instance if running."
+            ),
+            Choice("logs", name="Logs: show logs of DB instance"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -696,6 +704,8 @@ def data_db(args, argv):
         data_db_remove(args, argv)
     elif action == "init":
         data_db_init(args, argv)
+    elif action == "clean":
+        data_db_clean(args, argv)
     elif action == "logs":
         data_db_logs(args, argv)
     elif action == "status":
@@ -727,6 +737,25 @@ def _init_db(verbose, debug):
     citrosDB.init_db()
 
 
+def _clean_db(verbose, debug):
+    """
+    initializing the DB
+    """
+    from citros import CitrosDB_old
+
+    citrosDB = CitrosDB_old(
+        config.POSTGRES_USERNAME,
+        config.POSTGRES_PASSWORD,
+        config.CITROS_DATA_HOST,
+        config.CITROS_DATA_PORT,
+        config.POSTGRES_DATABASE,
+        verbose=verbose,
+        debug=debug,
+    )
+
+    citrosDB.clean_db()
+
+
 def data_db_create(args, argv):
     import docker
 
@@ -743,13 +772,15 @@ def data_db_create(args, argv):
 
     try:
         container = client.containers.get(config.DB_CONTAINER_NAME)
+        print("found existing DB container, starting it...")
         container.start()
         # inspect(container)
-        print(f"[green]CITROS DB is created")
+        print(f"[green]DB is created")
         return
     except docker.errors.NotFound:
         container = None
 
+    print("creating DB container...")
     container = client.containers.run(
         "postgres",
         name=config.DB_CONTAINER_NAME,
@@ -761,19 +792,16 @@ def data_db_create(args, argv):
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
     )
-    # TODO: check container status instead of sleep.
+    # TODO [enhancement]: check container status instead of sleep.
     sleep(3)
     data_db_init(args, argv)
-    print(
-        f"[green]CITROS DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
-    )
 
 
 def data_db_init(args, argv):
-    print(f"[green]CITROS Initializing DB...")
+    print(f"Initializing DB...")
     _init_db(args.verbose, args.debug)
     print(
-        f"[green]CITROS DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
+        f"[green]DB is running at: {config.CITROS_DATA_HOST}:{config.CITROS_DATA_PORT}"
     )
 
 
@@ -808,18 +836,6 @@ def data_db_status(args, argv):
             f"[red]CITROS DB is not running. Please run 'citros data db create' to create a new DB."
         )
 
-    # console = Console()
-    # with console.screen(hide_cursor=False) as screen:
-    #     for line in container.stats(stream=True):
-    #         stat = line.strip()
-    #         stat = json.loads(stat)
-    #         stat = json.dumps(stat, indent=4)
-    #         # console.print(stat)
-    #         screen.update(Panel(str(stat)))
-    #         # inspect(stat)
-    #         # sleep(5)
-    #         #TODO: create status panel.
-
 
 def data_db_stop(args, argv):
     import docker
@@ -838,6 +854,27 @@ def data_db_stop(args, argv):
         container = client.containers.get(config.DB_CONTAINER_NAME)
         container.stop()
         print(f"[green]CITROS DB is stopped.")
+    except docker.errors.NotFound:
+        print(f"[green]CITROS DB is not running.")
+
+
+def data_db_start(args, argv):
+    import docker
+
+    try:
+        client = docker.from_env()
+    except Exception as e:
+        print(
+            "[red]Docker is not running. Please start docker and try again. exiting..."
+        )
+        if args.verbose:
+            raise e
+        return
+
+    try:
+        container = client.containers.get(config.DB_CONTAINER_NAME)
+        container.start()
+        print(f"[green]DB started.")
     except docker.errors.NotFound:
         print(f"[green]CITROS DB is not running.")
 
@@ -878,6 +915,12 @@ def data_db_logs(args, argv):
         )
 
 
+def data_db_clean(args, argv):
+    print(f"cleaning DB...")
+    _clean_db(args.verbose, args.debug)
+    print(f"[green]DB is clean")
+
+
 def data_db_remove(args, argv):
     import docker
 
@@ -889,11 +932,20 @@ def data_db_remove(args, argv):
         )
         if args.verbose:
             raise e
+        print(f"[red]no docker running. exiting...")
         return
 
-    container = client.containers.get(config.DB_CONTAINER_NAME)
+    print(f"locating DB container ")
     try:
+        container = client.containers.get(config.DB_CONTAINER_NAME)
+    except docker.errors.NotFound:
+        print(f"Docker container {config.DB_CONTAINER_NAME} not found!, exiting")
+        return
+    try:
+        container.stop()
+        print(f"stopping DB ")
         container.remove()
+        print(f"removing DB ")
     except docker.errors.APIError as e:
         if e.status_code == 409:
             print("[red]CITROS DB is running. Please stop it before clearing.")
@@ -905,6 +957,7 @@ def data_db_remove(args, argv):
             )
         else:
             raise e
+    print("[green]CITROS DB is removed successfully.")
 
 
 ############################# Service implementation ##############################
@@ -915,9 +968,9 @@ def service(args, argv):
         keybindings=keybindings,
         message="Select Action:",
         choices=[
-            Choice("start", name="▶  Start: starts CITROS API serivce."),
-            Choice("stop", name="⏹  Stop: Stops the CITROS API service."),
-            Choice("status", name="❓ Status: Show CITROS API status."),
+            Choice("start", name="Start: starts CITROS API serivce."),
+            Choice("stop", name="Stop: Stops the CITROS API service."),
+            Choice("status", name="Status: Show CITROS API status."),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -963,7 +1016,7 @@ Listening on: [green]{str(root)}""",
         )
     )
     try:
-        # TODO[important]: make async
+        # TODO[enhancement]: make async
         data_access_service(
             str(root),
             time=time,
@@ -979,12 +1032,12 @@ Listening on: [green]{str(root)}""",
         return
 
 
-# TODO[important]: implement
+# TODO[enhancement]: after making this sevice async.  implement stop function
 def service_stop(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
 
-# TODO[important]: implement  after making this sevice async. return status of service.
+# TODO[enhancement]: implement  after making this sevice async. return status of service.
 def service_status(args, argv):
     print(f"[red] 'citros {args.func.__name__}' is Not implemented yet")
 
@@ -1013,9 +1066,9 @@ def report(args, argv):
         keybindings=keybindings,
         message="Select Action:",
         choices=[
-            Choice("list", name="*️⃣  List: reports list "),
-            Choice("generate", name="⚡ Generate: new report"),
-            Choice("validate", name="❓ Validate: report integrity"),
+            Choice("list", name="List: reports list "),
+            Choice("generate", name="Generate: new report"),
+            Choice("validate", name="Validate: report integrity"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -1163,7 +1216,7 @@ def report_generate(args, argv):
         notebooks = args.notebooks
 
     if not hasattr(args, "sign"):
-        sign = False  # TODO: change to True and sign!
+        sign = False
     else:
         sign = args.sign
 

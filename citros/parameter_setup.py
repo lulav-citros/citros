@@ -75,7 +75,7 @@ class ParameterSetup(CitrosObj):
         self.data.update(default_parameter_setup)
         self._save()
 
-        # TODO[critical]: when addeing a parameter to a package/node, add/append it to the parameter setups that use it.
+        # TODO[enhancement]: when addeing a parameter to a package/node, add/append it to the parameter setups that use it.
 
     def _evaluate(self, context=None):
         """

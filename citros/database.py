@@ -50,6 +50,9 @@ class CitrosDB:
                 verbose=self.verbose,
             )
 
+    def reinit_db(self):
+        pass
+
     def init_db(self):
         """
         Initialize the database by creating the organization's database and executing SQL scripts.
@@ -191,6 +194,35 @@ class CitrosDB:
         except Exception as ex:
             self.log.error(ex)
             return
+
+    def clean_db(self):
+        from jinja2 import Environment, FileSystemLoader
+
+        self.log.debug(f"cleaning DB")
+
+        connection = self.connect()
+        cursor = connection.cursor()
+
+        context = {}
+
+        with open(
+            importlib_resources.files(f"data.sql").joinpath(
+                "templates/clean_db.sql.j2"
+            ),
+            "r",
+        ) as file_:
+            template = Template(file_.read())
+            # Render the template with the provided context
+            rendered_sql = template.render(context)
+
+        self.log.debug(f"rendered_sql: {rendered_sql}")
+
+        try:
+            cursor.execute(rendered_sql)
+            connection.commit()
+            self.log.debug(rendered_sql)
+        except Exception as ex:
+            self.log.error(ex)
 
     def drop_table(self, connection, schema_name, table_name):
         from jinja2 import Environment, FileSystemLoader

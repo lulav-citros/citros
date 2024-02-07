@@ -1,4 +1,4 @@
-# TODO VOVA - REVIEW
+TODO [doc]: implement
 
 # CLI Installation
 

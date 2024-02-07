@@ -1,6 +1,1 @@
-TODO 
-
-```bash
-citros parameter 
-    [-d | --destination] <repository folder>
-```
+TODO [doc]: implement
