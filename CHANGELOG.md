@@ -2,6 +2,39 @@
 
 
 
+## v0.2.41 (2024-02-07)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`a545a69`](https://github.com/lulav-citros/citros/commit/a545a697d6104b1bfdda3c61436302c6b19c5145))
+
+### Fix
+
+* fix(cli): added implicit run for data tree
+
+Dev ([`609cf9d`](https://github.com/lulav-citros/citros/commit/609cf9d6986b8d437bb217b8c9b420d016392310))
+
+* fix(cli): print command after interactive citros ([`3abe24d`](https://github.com/lulav-citros/citros/commit/3abe24db6f0e3c9f8e013aaefab528470bdc91f2))
+
+* fix(cli): implicit call for tree ([`10c7639`](https://github.com/lulav-citros/citros/commit/10c76397ff90c2ba783bf791cf656dce08639ad1))
+
+### Unknown
+
+* Merge pull request #46 from lulav-citros/dev
+
+Dev ([`0852107`](https://github.com/lulav-citros/citros/commit/0852107a1f969009ccfdde1be8746fe703bb586e))
+
+* for masha ([`19feb69`](https://github.com/lulav-citros/citros/commit/19feb69e3edb304fb893459d3d3efbfebf9e09ae))
+
+* Update CITROS CLI documentation ([`7afa882`](https://github.com/lulav-citros/citros/commit/7afa882957d8116576bfd340c7bb310e1383174b))
+
+* doc ([`f37ec38`](https://github.com/lulav-citros/citros/commit/f37ec381f759ad42ac9aaa71b2f7bf0f845eacac))
+
+* Implement TODOs ([`0d687e3`](https://github.com/lulav-citros/citros/commit/0d687e32f0bb5a29679f0f9ba4060acbd760806b))
+
+* doc ([`08e4b3b`](https://github.com/lulav-citros/citros/commit/08e4b3bca687d4fde1852f8a15d8efeb04c1cf08))
+
+
 ## v0.2.40 (2024-02-05)
 
 ### Documentation
