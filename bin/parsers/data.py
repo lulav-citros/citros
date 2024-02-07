@@ -86,6 +86,161 @@ def parser_data_tree(parent_subparser, epilog=None):
     )
     parser.set_defaults(func=data_tree)
 
+    subsubparser = parser.add_subparsers(dest="type")
+    parser_data_tree_info(subsubparser, epilog)
+    parser_data_tree_load(subsubparser, epilog)
+    parser_data_tree_unload(subsubparser, epilog)
+    parser_data_tree_delete(subsubparser, epilog)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_info(parent_subparser, epilog=None):
+    description_path = "data/tree/info.md"
+    help = "will show batch info "
+
+    parser = parent_subparser.add_parser(
+        "info",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("-t", "--version", help="batch version ")
+
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_load)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_load(parent_subparser, epilog=None):
+    description_path = "data/tree/load.md"
+    help = "will load the batch to db"
+
+    parser = parent_subparser.add_parser(
+        "load",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_load)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_unload(parent_subparser, epilog=None):
+    description_path = "data/tree/unload.md"
+    help = "will unload the batch from db"
+
+    parser = parent_subparser.add_parser(
+        "unload",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_load)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_delete(parent_subparser, epilog=None):
+    description_path = "data/tree/delete.md"
+    help = "will delete the batch"
+
+    parser = parent_subparser.add_parser(
+        "delete",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatter,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_load)
+
     return parser
 
 
