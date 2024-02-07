@@ -75,7 +75,7 @@ def citros(args, argv):
             Choice("run", name="Run: new simulation"),
             Choice("data", name="Data: for data management "),
             Choice("report", name="Report: generation and management"),
-            Choice("service", name="Service: CITROS API service functions"),
+            # Choice("service", name="Service: CITROS API service functions"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -425,6 +425,7 @@ def data_tree(args, argv):
         choices=[
             Choice("info", name="Info"),
             Choice("load", name="Load"),
+            # Choice("play", name="Play"), # TODO [enhancement]: implement playback
             Choice("unload", name="Unload"),
             Choice("delete", name="Delete"),
             Separator(),
