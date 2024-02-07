@@ -435,6 +435,13 @@ def data_tree(args, argv):
         border=True,
     ).execute()
 
+    console = Console()
+    console.rule(f"command")
+    print(
+        f'[white]citros data tree {action} --dir {args.dir} --simulation {args.simulation} --batch "{args.batch}" --version {args.version}'
+    )
+    console.rule(f"")
+
     if action is None:
         exit_citros_cli()
 
