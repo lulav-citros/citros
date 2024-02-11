@@ -2,6 +2,27 @@
 
 
 
+## v0.2.44 (2024-02-11)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`54b0b92`](https://github.com/lulav-citros/citros/commit/54b0b9242f9b00be7ff357cac2f05002baa8022e))
+
+### Fix
+
+* fix(cli): report
+
+Dev ([`ab4c6e0`](https://github.com/lulav-citros/citros/commit/ab4c6e0d4ff95839f297f525bc916600f6b882e0))
+
+* fix(report): bug ([`e6363fc`](https://github.com/lulav-citros/citros/commit/e6363fcc13eeaee396957a91ae1568eb844b7e43))
+
+### Unknown
+
+* Commented out print statement in report_generate function ([`893d391`](https://github.com/lulav-citros/citros/commit/893d391a3fb7c8a40bdff423375a1f2fdfccb4c2))
+
+* Refactor notebook path handling in report_generate function ([`e628e83`](https://github.com/lulav-citros/citros/commit/e628e832601caeda0262dc4f6b1343d744fbc1f4))
+
+
 ## v0.2.43 (2024-02-11)
 
 ### Documentation
