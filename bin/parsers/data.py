@@ -1,7 +1,6 @@
 import argparse
 import importlib_resources
 from bin.cli_impl import *
-from rich_argparse import RichHelpFormatter
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -9,9 +8,9 @@ from rich.padding import Padding
 from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
-from rich_argparse import RichHelpFormatter
 from rich.traceback import install
 from bin import __version__ as citros_version
+from .formatter import RichHelpFormatterCitros
 
 install()
 
@@ -37,7 +36,7 @@ def parser_data_list(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-dir", "--dir", default=".", help="The working dir of the project"
@@ -73,7 +72,7 @@ def parser_data_tree(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-dir", "--dir", default=".", help="The working dir of the project"
@@ -116,11 +115,11 @@ def parser_data_tree_info(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-s", "--simulation", help="simulation name")
     parser.add_argument("-b", "--batch", default="citros", help="batch name")
-    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument("--version", help="batch version ")
 
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
@@ -154,11 +153,11 @@ def parser_data_tree_load(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-s", "--simulation", help="simulation name")
     parser.add_argument("-b", "--batch", default="citros", help="batch name")
-    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument("--version", help="batch version ")
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
@@ -191,11 +190,11 @@ def parser_data_tree_unload(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-s", "--simulation", help="simulation name")
     parser.add_argument("-b", "--batch", default="citros", help="batch name")
-    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument("--version", help="batch version ")
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
@@ -228,11 +227,11 @@ def parser_data_tree_delete(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-s", "--simulation", help="simulation name")
     parser.add_argument("-b", "--batch", default="citros", help="batch name")
-    parser.add_argument("-t", "--version", help="batch version ")
+    parser.add_argument("--version", help="batch version ")
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
     )
@@ -265,7 +264,7 @@ def parser_data_db_create(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -302,7 +301,7 @@ def parser_data_db_init(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -339,7 +338,7 @@ def parser_data_db_status(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -376,7 +375,7 @@ def parser_data_db_stop(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -413,7 +412,7 @@ def parser_data_db_start(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -450,7 +449,7 @@ def parser_data_db_logs(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -487,7 +486,7 @@ def parser_data_db_clean(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -523,7 +522,7 @@ def parser_data_db_remove(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -560,7 +559,7 @@ def parser_data_db(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
@@ -605,7 +604,7 @@ def parser_data(main_sub, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-dir", default=".", help="The working dir of the project")
     parser.add_argument(
