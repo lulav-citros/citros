@@ -572,13 +572,15 @@ def parser_data_db(parent_subparser, epilog=None):
     subparser = parser.add_subparsers(dest="type")
 
     parser_data_db_create(subparser)
-    parser_data_db_init(subparser)
-    parser_data_db_status(subparser)
-    parser_data_db_stop(subparser)
-    parser_data_db_start(subparser)
-    parser_data_db_logs(subparser)
     parser_data_db_remove(subparser)
+
+    parser_data_db_init(subparser)
     parser_data_db_clean(subparser)
+
+    parser_data_db_status(subparser)
+    parser_data_db_start(subparser)
+    parser_data_db_stop(subparser)
+    parser_data_db_logs(subparser)
 
     return parser
 
