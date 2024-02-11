@@ -128,7 +128,7 @@ def parser_data_tree_info(parent_subparser, epilog=None):
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
-    parser.set_defaults(func=data_load)
+    parser.set_defaults(func=data_info)
 
     return parser
 
@@ -202,7 +202,7 @@ def parser_data_tree_unload(parent_subparser, epilog=None):
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
-    parser.set_defaults(func=data_load)
+    parser.set_defaults(func=data_unload)
 
     return parser
 
@@ -239,7 +239,7 @@ def parser_data_tree_delete(parent_subparser, epilog=None):
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
-    parser.set_defaults(func=data_load)
+    parser.set_defaults(func=data_delete)
 
     return parser
 
