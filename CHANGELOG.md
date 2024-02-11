@@ -2,6 +2,25 @@
 
 
 
+## v0.2.43 (2024-02-11)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`ead0ec1`](https://github.com/lulav-citros/citros/commit/ead0ec1cbdfe35e29abc3ca33034f25e9e6c57aa))
+
+### Fix
+
+* fix(list): fixed list
+
+fix(list): fixed list ([`4b5d839`](https://github.com/lulav-citros/citros/commit/4b5d839c6dfa945466d39a3bf555dad878df4990))
+
+* fix(db): command order ([`305fc52`](https://github.com/lulav-citros/citros/commit/305fc52c5d4798700db81f2a36f092225038d079))
+
+* fix(cli): beautify tabs ([`bda922f`](https://github.com/lulav-citros/citros/commit/bda922f2c857cd693762cc51d637f8a0d2330a22))
+
+* fix(list): fixed list ([`126444f`](https://github.com/lulav-citros/citros/commit/126444f85ed6f5e0480466f4e0f17a6c429bee2c))
+
+
 ## v0.2.42 (2024-02-11)
 
 ### Documentation
