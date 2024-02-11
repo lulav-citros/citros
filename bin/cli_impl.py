@@ -689,7 +689,7 @@ def data_db(args, argv):
             Choice("remove", name="Remove: remove the db instance from docker."),
             Choice("init", name="Init: initialize the db instance"),
             Choice("clean", name="Clean: clears all data from DB."),
-            Choice("status", name="Status: Show weather the serivce is up or not"),
+            Choice("status", name="Status: Show whether the service is up or not"),
             Choice(
                 "start", name="Start: starts the citros db docker instance if exists."
             ),
@@ -977,7 +977,7 @@ def service(args, argv):
         keybindings=keybindings,
         message="Select Action:",
         choices=[
-            Choice("start", name="Start: starts CITROS API serivce."),
+            Choice("start", name="Start: starts CITROS API service."),
             Choice("stop", name="Stop: Stops the CITROS API service."),
             Choice("status", name="Status: Show CITROS API status."),
             Separator(),

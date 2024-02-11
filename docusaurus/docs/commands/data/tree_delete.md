@@ -15,7 +15,7 @@ $ citros data tree delete [-h] [-s SIMULATION] [-b BATCH] [-t VERSION] [-d] [-v]
 ## Options
 Option|Description
 |--|--|
-|-h, --help       |       Show this help message and exit|
+|-h, --help       |       Show help message|
 |-s, --simulation_name [SIMULATION_NAME]       |       Simulation name|
 |-n, --batch_name [BATCH_NAME]       |       Sets a name for the run|
 |--version [VERSION]       |       The batch run version.<br/>.citros/data/{sim_name}/{batch_name}/{ **batch_version**}/{sid}|

@@ -25,7 +25,7 @@ $ citros run [-h] [-dir DIR] [-n [BATCH_NAME]] [-m [BATCH_MESSAGE]] [-l]
 
 Option|Description
 |--|--|
-|-h, --help       |       Show this help message and exit|
+|-h, --help       |       Show help message|
 |-dir DIR       |       The working dir of the project|
 |-n, --batch_name [BATCH_NAME]       |       Sets a name for the run|
 |-m, --batch_message [BATCH_MESSAGE]       |       Sets a message for the run|

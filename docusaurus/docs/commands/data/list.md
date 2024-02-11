@@ -25,7 +25,7 @@ Table Field|Description
 ## Options
 Option|Description
 |--|--|
-|-h, --help       |       Show this help message and exit|
+|-h, --help       |       Show help message|
 |-dir DIR       |       The working dir of the project|
 |-d, --debug       |       Set logging level to debug|
 |-v, --verbose       |       Use verbose console prints|

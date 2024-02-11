@@ -16,7 +16,7 @@ $ citros data db status [-h] [-d] [-v]
 ## Options
 Option|Description
 |--|--|
-|-h, --help       |       Show this help message and exit|
+|-h, --help       |       Show help message|
 |-d, --debug       |       Set logging level to debug|
 |-v, --verbose       |       Use verbose console prints|
 
@@ -66,7 +66,7 @@ $ citros
 │  Remove: remove the db instance from docker.                                       │
 │  Init: initialize the db instance                                                  │
 │  Clean: clears all data from DB.                                                   │
-│❯ Status: Show weather the serivce is up or not                                     │
+│❯ Status: Show whether the service is up or not                                     │
 │  Start: starts the citros db docker instance if exists.                            │
 │  Stop: stops the citros db docker instance if running.                             │
 │  Logs: show logs of DB instance                                                    │
