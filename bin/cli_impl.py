@@ -1219,7 +1219,7 @@ def report_generate(args, argv):
             mandatory_message="Please select at least one notebook",
         ).execute()
 
-        print(f"chosen_notebooks: {notebooks}")
+        # print(f"chosen_notebooks: {notebooks}")
 
     else:
         notebooks = args.notebooks
