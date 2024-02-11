@@ -1,7 +1,6 @@
 import argparse
 import importlib_resources
 from bin.cli_impl import *
-from rich_argparse import RichHelpFormatter
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -9,9 +8,9 @@ from rich.padding import Padding
 from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
-from rich_argparse import RichHelpFormatter
 from rich.traceback import install
 from bin import __version__ as citros_version
+from .formatter import RichHelpFormatterCitros
 
 install()
 
@@ -36,7 +35,7 @@ def parser_simulation_run(subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
@@ -69,7 +68,7 @@ def parser_simulation_list(subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
@@ -101,7 +100,7 @@ def parser_simulation(subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
         aliases=["sim"],
     )
     parser.add_argument("-n", "--name", default=None, help="name of simulation")

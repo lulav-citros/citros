@@ -16,7 +16,6 @@ from rich.padding import Padding
 from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
-from rich_argparse import RichHelpFormatter
 
 
 pretty.install()
@@ -120,8 +119,11 @@ def run(args, argv):
     :param args.index:
     :param args.completions:
 
-    :param args.batch_name:
-    :param args.batch_message:
+    :param args.dir:
+    :param args.simulation:
+    :param args.batch:
+    :param args.message:
+    :param args.version:
 
     :param args.lan_traffic:
 
@@ -142,16 +144,16 @@ def run(args, argv):
     if args.debug:
         print("[green]done initializing CITROS")
 
-    if not hasattr(args, "batch_name") or args.batch_name is None:
+    if not hasattr(args, "batch") or args.batch is None:
         is_interactive = True
         try:
             batch_name = Prompt.ask("Please name this batch run", default="citros")
         except KeyboardInterrupt:
             exit_citros_cli()
     else:
-        batch_name = args.batch_name
+        batch_name = args.batch
 
-    if not hasattr(args, "batch_message") or args.batch_message is None:
+    if not hasattr(args, "message") or args.message is None:
         try:
             batch_message = Prompt.ask(
                 "Enter a message for this batch run",
@@ -160,7 +162,7 @@ def run(args, argv):
         except KeyboardInterrupt:
             exit_citros_cli()
     else:
-        batch_message = args.batch_message
+        batch_message = args.message
 
     if is_interactive or not hasattr(args, "completions"):
         try:
@@ -206,7 +208,7 @@ def run(args, argv):
     console = Console()
     console.rule(f"command")
     print(
-        f'[white]citros run --dir {args.dir} --batch_name {batch_name} --batch_message "{batch_message}" --simulation_name {simulation_name} {"--version " + batch_version if batch_version is not None else ""} --completions {completions} --index {batch_index}'
+        f'[white]citros run --dir {args.dir} --batch {batch_name} --batch_message "{batch_message}" --simulation_name {simulation_name} {"--version " + batch_version if batch_version is not None else ""} --completions {completions} --index {batch_index}'
     )
     console.rule(f"")
 
@@ -434,6 +436,13 @@ def data_tree(args, argv):
         default="",
         border=True,
     ).execute()
+
+    console = Console()
+    console.rule(f"command")
+    print(
+        f'[white]citros data tree {action} --dir {args.dir} --simulation {args.simulation} --batch "{args.batch}" --version {args.version}'
+    )
+    console.rule(f"")
 
     if action is None:
         exit_citros_cli()

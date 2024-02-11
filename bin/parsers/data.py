@@ -1,7 +1,6 @@
 import argparse
 import importlib_resources
 from bin.cli_impl import *
-from rich_argparse import RichHelpFormatter
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -9,9 +8,9 @@ from rich.padding import Padding
 from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
-from rich_argparse import RichHelpFormatter
 from rich.traceback import install
 from bin import __version__ as citros_version
+from .formatter import RichHelpFormatterCitros
 
 install()
 
@@ -37,7 +36,7 @@ def parser_data_list(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-dir", "--dir", default=".", help="The working dir of the project"
@@ -73,7 +72,7 @@ def parser_data_tree(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-dir", "--dir", default=".", help="The working dir of the project"
@@ -85,6 +84,161 @@ def parser_data_tree(parent_subparser, epilog=None):
         "-v", "--verbose", action="store_true", help="use verbose console prints"
     )
     parser.set_defaults(func=data_tree)
+
+    subsubparser = parser.add_subparsers(dest="type")
+    parser_data_tree_info(subsubparser, epilog)
+    parser_data_tree_load(subsubparser, epilog)
+    parser_data_tree_unload(subsubparser, epilog)
+    parser_data_tree_delete(subsubparser, epilog)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_info(parent_subparser, epilog=None):
+    description_path = "data/tree/info.md"
+    help = "will show batch info "
+
+    parser = parent_subparser.add_parser(
+        "info",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatterCitros,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("--version", help="batch version ")
+
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_info)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_load(parent_subparser, epilog=None):
+    description_path = "data/tree/load.md"
+    help = "will load the batch to db"
+
+    parser = parent_subparser.add_parser(
+        "load",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatterCitros,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_load)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_unload(parent_subparser, epilog=None):
+    description_path = "data/tree/unload.md"
+    help = "will unload the batch from db"
+
+    parser = parent_subparser.add_parser(
+        "unload",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatterCitros,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_unload)
+
+    return parser
+
+
+# citros data tree load
+def parser_data_tree_delete(parent_subparser, epilog=None):
+    description_path = "data/tree/delete.md"
+    help = "will delete the batch"
+
+    parser = parent_subparser.add_parser(
+        "delete",
+        description=Panel(
+            Markdown(
+                open(
+                    importlib_resources.files(f"data.doc.cli").joinpath(
+                        description_path
+                    ),
+                    "r",
+                ).read()
+            ),
+            subtitle=f"[{citros_version}]",
+            title="description",
+        ),
+        epilog=epilog,
+        help=help,
+        formatter_class=RichHelpFormatterCitros,
+    )
+    parser.add_argument("-s", "--simulation", help="simulation name")
+    parser.add_argument("-b", "--batch", default="citros", help="batch name")
+    parser.add_argument("--version", help="batch version ")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="set logging level to debug"
+    )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="use verbose console prints"
+    )
+    parser.set_defaults(func=data_delete)
 
     return parser
 
@@ -110,7 +264,7 @@ def parser_data_db_create(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -147,7 +301,7 @@ def parser_data_db_init(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -184,7 +338,7 @@ def parser_data_db_status(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -221,7 +375,7 @@ def parser_data_db_stop(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -258,7 +412,7 @@ def parser_data_db_start(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -295,7 +449,7 @@ def parser_data_db_logs(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -332,7 +486,7 @@ def parser_data_db_clean(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -368,7 +522,7 @@ def parser_data_db_remove(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
 
     parser.add_argument(
@@ -405,7 +559,7 @@ def parser_data_db(parent_subparser, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument(
         "-d", "--debug", action="store_true", help="set logging level to debug"
@@ -418,13 +572,15 @@ def parser_data_db(parent_subparser, epilog=None):
     subparser = parser.add_subparsers(dest="type")
 
     parser_data_db_create(subparser)
-    parser_data_db_init(subparser)
-    parser_data_db_status(subparser)
-    parser_data_db_stop(subparser)
-    parser_data_db_start(subparser)
-    parser_data_db_logs(subparser)
     parser_data_db_remove(subparser)
+
+    parser_data_db_init(subparser)
     parser_data_db_clean(subparser)
+
+    parser_data_db_status(subparser)
+    parser_data_db_start(subparser)
+    parser_data_db_stop(subparser)
+    parser_data_db_logs(subparser)
 
     return parser
 
@@ -450,7 +606,7 @@ def parser_data(main_sub, epilog=None):
         ),
         epilog=epilog,
         help=help,
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
     )
     parser.add_argument("-dir", default=".", help="The working dir of the project")
     parser.add_argument(
