@@ -265,7 +265,7 @@ class Report:
             os.environ["PG_USER"] = "citros"
             os.environ["PG_PASSWORD"] = "password"
 
-            os.environ["CITROS_ROOT"] = self.reports_dir
+            os.environ["CITROS_ROOT"] = str(self.reports_dir)
 
             execute_preprocessor = ExecutePreprocessor(
                 timeout=timout, kernel_name="python3"

@@ -1202,8 +1202,8 @@ def report_generate(args, argv):
     if not hasattr(args, "notebooks"):
         notebook_list = []
         for notebook in glob.glob(f"{os.getcwd()}/**/*.ipynb", recursive=True):
-            path = str(notebook)
-            path = path[: -len(os.getcwd())] if path.startswith(os.getcwd()) else path
+            path = str(notebook)            
+            path = path[len(os.getcwd()) :] if path.startswith(os.getcwd()) else path            
             path = path[1:] if path.startswith("/") else path
             notebook_list.append(path)
 
@@ -1219,7 +1219,7 @@ def report_generate(args, argv):
             mandatory_message="Please select at least one notebook",
         ).execute()
 
-        # print(f"chosen_notebooks: {notebooks}")
+        print(f"chosen_notebooks: {notebooks}")
 
     else:
         notebooks = args.notebooks
