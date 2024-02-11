@@ -2,6 +2,21 @@
 
 
 
+## v0.2.42 (2024-02-11)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`8f3a635`](https://github.com/lulav-citros/citros/commit/8f3a635ecd1bef085a934ab753cd971b6ad28178))
+
+### Fix
+
+* fix(data.py): data tree functions
+
+fix(data.py): data tree functions ([`8e7481c`](https://github.com/lulav-citros/citros/commit/8e7481c48b1aec255bbab8c36aa223a6ca045de5))
+
+* fix(data.py): data tree functions ([`7e9bb76`](https://github.com/lulav-citros/citros/commit/7e9bb762b4947c86eb7074b39fe20fe94684348a))
+
+
 ## v0.2.41 (2024-02-07)
 
 ### Documentation
