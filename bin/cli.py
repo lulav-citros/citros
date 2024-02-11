@@ -1,7 +1,6 @@
 import argparse
 import importlib_resources
 from bin.cli_impl import *
-from rich_argparse import RichHelpFormatter
 from rich import print, inspect, print_json
 from rich.rule import Rule
 from rich.panel import Panel
@@ -9,8 +8,8 @@ from rich.padding import Padding
 from rich.logging import RichHandler
 from rich.console import Console
 from rich.markdown import Markdown
-from rich_argparse import RichHelpFormatter
 from rich.traceback import install
+from .parsers.formatter import RichHelpFormatterCitros
 
 install()
 
@@ -63,7 +62,7 @@ def main():
             title="description",
         ),
         epilog=epilog(),
-        formatter_class=RichHelpFormatter,
+        formatter_class=RichHelpFormatterCitros,
         # add_help=False
     )
 

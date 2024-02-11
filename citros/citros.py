@@ -391,7 +391,7 @@ class Citros(CitrosObj):
                     continue
                 versions = sorted(glob.glob(f"{name}/*/"), reverse=True)
                 # print(versions)
-                _name = (name if name[-1] != "/" else name).split("/")[-1]
+                _name = (name if name[-1] != "/" else name[:-1]).split("/")[-1]
                 try:
                     batch_hr_statu = json.loads((Path(name) / "hr.json").read_text())
                 except:
@@ -402,7 +402,9 @@ class Citros(CitrosObj):
                     status = "UNLOADED"
                     if (
                         batch_hr_statu.get("version", None)
-                        == (version if version[-1] != "/" else version).split("/")[-1]
+                        == (version if version[-1] != "/" else version[:-1]).split("/")[
+                            -1
+                        ]
                     ):
                         status = batch_hr_statu.get("status")
 
@@ -412,7 +414,7 @@ class Citros(CitrosObj):
                             "simulation": _simulation,
                             "name": _name,
                             "version": (
-                                version if version[-1] != "/" else version
+                                version if version[-1] != "/" else version[:-1]
                             ).split("/")[-1],
                             "message": batch["message"],
                             f"status": status,
@@ -462,11 +464,11 @@ class Citros(CitrosObj):
                         "started_at": report_version["started_at"],
                         "finished_at": report_version["finished_at"],
                         "name": report_version["name"],
-                        "version": (version if version[-1] != "/" else version).split(
-                            "/"
-                        )[-1],
+                        "version": (
+                            version if version[-1] != "/" else version[:-1]
+                        ).split("/")[-1],
                         "message": report_version["message"],
-                        "path": f'{str(self.root_citros / "reports" / report_version["name"]/ (version if version[-1] != "/" else version).split("/")[-1])}',
+                        "path": f'{str(self.root_citros / "reports" / report_version["name"]/ (version if version[-1] != "/" else version[:-1]).split("/")[-1])}',
                         "progress": report_version["progress"],
                         "status": report_version["status"],
                     }
