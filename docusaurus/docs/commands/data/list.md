@@ -35,8 +35,24 @@ Option|Description
 
 ```bash
 $ citros data list
+                          Simulation Runs in: .citros/data                           
+┌──────────────┬──────────┬──────────┬───────────┬──────────┬───────────┬────────────┐
+│ Simulation   │ Run name │ Versions │ message   │   status │ completi… │ path       │
+├──────────────┼──────────┼──────────┼───────────┼──────────┼───────────┼────────────┤
+│ simulation_1 │          │          │ batch     │ UNLOADED │     2     │ .citros/d  │
+│              │          │          │ message   │          │           │ ata/simul  │
+│              │          │          │           │          │           │ ation_1/b  │
+│              │          │          │           │          │           │ atch/2024  │
+│              │          │          │           │          │           │ 020719012  │
+│              │          │          │           │          │           │ 5/         │
+│ simulation_2 │          │          │ This is a │ UNLOADED │     1     │ .citros/d  │
+│              │          │          │ default   │          │           │ ata/simul  │
+│              │          │          │ batch     │          │           │ ation_2/c  │
+│              │          │          │ message   │          │           │ itros/202  │
+│              │          │          │ from      │          │           │ 402070906  │
+│              │          │          │ citros    │          │           │ 23/        │
+└──────────────┴──────────┴──────────┴───────────┴──────────┴───────────┴────────────┘
 ```
-![img](img/datalist.png)
 
 ## Interactive Mode
 
@@ -66,25 +82,4 @@ $ citros
 │  ---------------                                                                   │
 │  EXIT                                                                              │
 └────────────────────────────────────────────────────────────────────────────────────┘
-```
-```sh
-? Select Action: Data: for data management 
-? Select Action: List data
-                          Simulation Runs in: .citros/data                           
-┌──────────────┬──────────┬──────────┬───────────┬──────────┬───────────┬────────────┐
-│ Simulation   │ Run name │ Versions │ message   │   status │ completi… │ path       │
-├──────────────┼──────────┼──────────┼───────────┼──────────┼───────────┼────────────┤
-│ simulation_1 │          │          │ batch     │ UNLOADED │     2     │ .citros/d  │
-│              │          │          │ message   │          │           │ ata/simul  │
-│              │          │          │           │          │           │ ation_1/b  │
-│              │          │          │           │          │           │ atch/2024  │
-│              │          │          │           │          │           │ 020719012  │
-│              │          │          │           │          │           │ 5/         │
-│ simulation_2 │          │          │ This is a │ UNLOADED │     1     │ .citros/d  │
-│              │          │          │ default   │          │           │ ata/simul  │
-│              │          │          │ batch     │          │           │ ation_2/c  │
-│              │          │          │ message   │          │           │ itros/202  │
-│              │          │          │ from      │          │           │ 402070906  │
-│              │          │          │ citros    │          │           │ 23/        │
-└──────────────┴──────────┴──────────┴───────────┴──────────┴───────────┴────────────┘
 ```

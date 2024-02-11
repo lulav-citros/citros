@@ -16,9 +16,8 @@ The content of the [folder](../advanced_guides/citros_structure#directory-data) 
 - and more.
 
 ```bash
-$ citros run [-h] [-dir DIR] [-n [BATCH_NAME]] [-m [BATCH_MESSAGE]] [-l] 
-             [-s [SIMULATION_NAME]] [--version [VERSION]]
-             [-c [COMPLETIONS]] [-i [INDEX]] [-d] [-v]
+$ citros run [-h] [-dir DIR] [-s [SIMULATION]] [-b [BATCH]] [-m [MESSAGE]]
+                  [--version [VERSION]] [-l] [-c [COMPLETIONS]] [-i [INDEX]] [-d] [-v]
 ```
 
 ## Options
@@ -27,11 +26,11 @@ Option|Description
 |--|--|
 |-h, --help       |       Show help message|
 |-dir DIR       |       The working dir of the project|
-|-n, --batch_name [BATCH_NAME]       |       Sets a name for the run|
-|-m, --batch_message [BATCH_MESSAGE]       |       Sets a message for the run|
-|-l, --lan_traffic       |       Receive LAN ROS traffic in your simulation.|
-|-s, --simulation_name [SIMULATION_NAME]       |       Simulation name|
+|-s, --simulation [SIMULATION]       |       Simulation name|
+|-b, --batch [BATCH]       |       Sets a name for the batch run|
+|-m, --message [MESSAGE]       |       Sets a message for the run|
 |--version [VERSION]       |       The batch run version.<br/>.citros/data/{sim_name}/{batch_name}/{ **batch_version**}/{sid}|
+|-l, --lan_traffic       |       Receive LAN ROS traffic in your simulation.|
 |-c, --completions [COMPLETIONS]       |       Number of times to run the simulation|
 |-i, --index [INDEX]       |       The pard of the batch. if -1 will run all the batch|
 |-d, --debug       |       Set logging level to debug|
@@ -40,7 +39,7 @@ Option|Description
 
 ## Examples
 ```bash
-$ citros run --batch_name batch --batch_message "batch message" -c 2
+$ citros run --batch batch --message "batch message" -c 2
 ? Please choose the simulation you wish to run 
 ❯ simulation_name
 simulation_name_2

@@ -9,15 +9,15 @@ sidebar_label: 'citros data tree delete'
 The `delete` command is used to delete a simulation data.
 
 ```bash
-$ citros data tree delete [-h] [-s SIMULATION] [-b BATCH] [-t VERSION] [-d] [-v]
+$ citros data tree delete [-h] [-s SIMULATION] [-b BATCH] [--version VERSION] [-d] [-v]
 ```
 
 ## Options
 Option|Description
 |--|--|
 |-h, --help       |       Show help message|
-|-s, --simulation_name [SIMULATION_NAME]       |       Simulation name|
-|-n, --batch_name [BATCH_NAME]       |       Sets a name for the run|
+|-s, --simulation [SIMULATION]       |       Simulation name|
+|-b, --batch [BATCH]       |       Sets a name for the batch run|
 |--version [VERSION]       |       The batch run version.<br/>.citros/data/{sim_name}/{batch_name}/{ **batch_version**}/{sid}|
 |-d, --debug       |       Set logging level to debug|
 |-v, --verbose       |       Use verbose console prints|
@@ -25,7 +25,7 @@ Option|Description
 ## Examples
 
 ```sh
-$ citros data tree unload  -s simulation_1 -b batch -t 20240207190125
+$ citros data tree unload -s simulation_1 -b "batch" --version 20240207190125
 deleting data from simulation_1 / batch / 20240207190125
 ```
 

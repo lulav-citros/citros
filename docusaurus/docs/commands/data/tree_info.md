@@ -6,15 +6,15 @@ The `info` command prints the info.json of the simulation.
 The `info.json` can be found at .citros/data/[simulation_name]/[batch_name]/version directory
 
 ```bash
-$ citros data tree info [-h] [-s SIMULATION] [-b BATCH] [-t VERSION] [-d] [-v]
+$ citros data tree info [-h] [-s SIMULATION] [-b BATCH] [--version VERSION] [-d] [-v]
 ```
 
 ## Options
 Option|Description
 |--|--|
 |-h, --help       |       Show help message|
-|-s, --simulation_name [SIMULATION_NAME]       |       Simulation name|
-|-n, --batch_name [BATCH_NAME]       |       Sets a name for the run|
+|-s, --simulation [SIMULATION]       |       Simulation name|
+|-b, --batch [BATCH]       |       Sets a name for the batch run|
 |--version [VERSION]       |       The batch run version.<br/>.citros/data/{sim_name}/{batch_name}/{ **batch_version**}/{sid}|
 |-d, --debug       |       Set logging level to debug|
 |-v, --verbose       |       Use verbose console prints|
@@ -24,7 +24,7 @@ Option|Description
 ## Examples
 
 ```sh
-$ citros data tree info --simulation simulation_1 --batch "batch" --version 20240207190125
+$ citros data tree info -s simulation_1 -b "batch" --version 20240207190125
 ────────────────────── simulation_1 / batch / 20240207190125 ───────────────────────
 {
   "branch": "main",
