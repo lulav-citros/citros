@@ -34,10 +34,10 @@ def parser_run(main_sub, epilog=None):
         "-s", "--simulation", nargs="?", default=None, help="Simulation name"
     )
     parser.add_argument(
-        "-b", "--batch", nargs="?", default=None, help="a name for the batch run"
+        "-n", "--name", nargs="?", default=None, help="Name for the batch run"
     )
     parser.add_argument(
-        "-m", "--message", nargs="?", default=None, help="a message for the run"
+        "-m", "--message", nargs="?", default=None, help="Message for the batch run"
     )
     parser.add_argument(
         "--version",
