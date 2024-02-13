@@ -6,7 +6,7 @@ sidebar_label: 'citros data list'
 
 ## Description
 
-Shows a table of all batch runs in local `.citros/data` folder 
+Shows a table of all batch runs in `.citros/data` folder 
 
 ```bash
 citros data list [-h] [-dir DIR] [-d] [-v]
