@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcitros_doc=self.webpackChunkcitros_doc||[]).push([[53237],{13808:(e,c,o)=>{o.r(c),o.d(c,{default:()=>n});var r=o(67294);o(39960),o(52263);function n(){return r.useEffect((()=>{window.location.href="/docs/general/overview"}),[]),null}}}]);
