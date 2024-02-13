@@ -2,6 +2,21 @@
 
 
 
+## v0.2.47 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`b02bdd1`](https://github.com/lulav-citros/citros/commit/b02bdd1eee87ffacc07dc2f039c785ef49287c08))
+
+### Fix
+
+* fix(type): cli typo
+
+fix(type): cli typo ([`15dc104`](https://github.com/lulav-citros/citros/commit/15dc104ef8c12e2a78fef610a9db7e9da7e0fa94))
+
+* fix(type): cli typo ([`3abd50d`](https://github.com/lulav-citros/citros/commit/3abd50d8ffd78ca81906e8e9b6dfc63f04573000))
+
+
 ## v0.2.46 (2024-02-13)
 
 ### Documentation
