@@ -2,6 +2,21 @@
 
 
 
+## v0.2.48 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`dd7e028`](https://github.com/lulav-citros/citros/commit/dd7e028ef35c60f658584f0af6b3695a2b202b8d))
+
+### Fix
+
+* fix(cli): dep
+
+fix(cli): dep ([`c0738bd`](https://github.com/lulav-citros/citros/commit/c0738bd3e2937fa556dbaa999946c73781329bc4))
+
+* fix(cli): dep ([`755e07c`](https://github.com/lulav-citros/citros/commit/755e07cca38114284d244a98c0d94149b2fb00ed))
+
+
 ## v0.2.47 (2024-02-13)
 
 ### Documentation
