@@ -121,7 +121,7 @@ def run(args, argv):
 
     :param args.dir:
     :param args.simulation:
-    :param args.batch:
+    :param args.name:
     :param args.message:
     :param args.version:
 
@@ -144,14 +144,14 @@ def run(args, argv):
     if args.debug:
         print("[green]done initializing CITROS")
 
-    if not hasattr(args, "batch") or args.batch is None:
+    if not hasattr(args, "name") or args.name is None:
         is_interactive = True
         try:
             batch_name = Prompt.ask("Please name this batch run", default="citros")
         except KeyboardInterrupt:
             exit_citros_cli()
     else:
-        batch_name = args.batch
+        batch_name = args.name
 
     if not hasattr(args, "message") or args.message is None:
         try:
@@ -208,7 +208,7 @@ def run(args, argv):
     console = Console()
     console.rule(f"command")
     print(
-        f'[white]citros run --dir {args.dir} --batch {batch_name} --batch_message "{batch_message}" --simulation_name {simulation_name} {"--version " + batch_version if batch_version is not None else ""} --completions {completions} --index {batch_index}'
+        f'[white]citros run --dir {args.dir} --name {batch_name} --batch_message "{batch_message}" --simulation_name {simulation_name} {"--version " + batch_version if batch_version is not None else ""} --completions {completions} --index {batch_index}'
     )
     console.rule(f"")
 

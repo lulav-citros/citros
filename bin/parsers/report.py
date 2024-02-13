@@ -45,7 +45,7 @@ def parser_report_generate(subparser, epilog=None):
         "--name",
         nargs="?",
         default=None,
-        help="a name for the run",
+        help="Name of the report",
         # required=True,
     )
     parser.add_argument(
@@ -53,7 +53,7 @@ def parser_report_generate(subparser, epilog=None):
         "--message",
         nargs="?",
         default=None,
-        help="a message for the run",
+        help="Message for the report",
         # required=True,
     )
 
@@ -62,14 +62,14 @@ def parser_report_generate(subparser, epilog=None):
         "-s",
         "--simulation",
         nargs="?",
-        help="simulation name",
+        help="Simulation name",
         # required=True,
     )
     parser.add_argument(
         "-b",
         "--batch",
         nargs="?",
-        help="batch name",
+        help="Batch name",
         # required=True,
     )
     parser.add_argument("-ver", "--version", nargs="?", default=-1, help="version")
