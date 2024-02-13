@@ -72,7 +72,12 @@ def parser_report_generate(subparser, epilog=None):
         help="Batch name",
         # required=True,
     )
-    parser.add_argument("-ver", "--version", nargs="?", default=-1, help="version")
+    parser.add_argument(
+        "--version",
+        nargs="?",
+        default=-1,
+        help="Batch version, if not provided will take the last one.",
+    )
 
     # notebooks
     parser.add_argument(
