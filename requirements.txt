@@ -58,3 +58,4 @@ termcolor
 pytest
 nbmake
 pytest-html
+pytest-xdist
