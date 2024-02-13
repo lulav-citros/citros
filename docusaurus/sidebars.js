@@ -26,118 +26,21 @@ module.exports = {
       type: "category",
       label: "Commands",
       items: [
-        {
-          type: "doc",
-          id: "commands/init",
-          label: "Init",
-        },
-        // {
-        //   type: 'doc',
-        //   id: 'commands/launch',
-        //   label: 'Launch',
-        // },
-        {
-          type: "doc",
-          id: "commands/run",
-          label: "Run",
-        },
-        {
-          type: "category",
-          label: "Data",
-          link: {
-            type: "doc",
-            id: "commands/data",
-          },
-          items: [
-            {
-              type: "doc",
-              id: "commands/data/list",
-              label: "List",
-            },
-            {
-              type: "doc",
-              id: "commands/data/tree",
-              label: "Tree",
-            },
-            {
-              type: "category",
-              label: "DB",
-              link: {
-                type: "doc",
-                id: "commands/data/db",
-              },
-              items: [
-                "commands/data/db/create",
-                "commands/data/db/remove",
-                "commands/data/db/init",
-                "commands/data/db/clean",
-                "commands/data/db/status",
-                "commands/data/db/start",
-                "commands/data/db/stop",
-                "commands/data/db/logs",
-              ],
-            },
-          ],
-        },
-        // {
-        //   type: "category",
-        //   label: "Service",
-        //   link: {
-        //     type: "doc",
-        //     id: "commands/service",
-        //   },
-        //   items: [
-        //     "commands/service/status",
-        //     "commands/service/start",
-        //     "commands/service/stop",
-        //   ],
-        // },
-        // {
-        //   type: "category",
-        //   label: "Parameter",
-        //   link: {
-        //     type: "doc",
-        //     id: "commands/parameter",
-        //   },
-        //   items: [
-        //     {
-        //       type: "category",
-        //       label: "Setup",
-        //       link: {
-        //         type: "doc",
-        //         id: "commands/parameter/setup",
-        //       },
-        //       items: [
-        //         "commands/parameter/setup/list",
-        //         "commands/parameter/setup/new",
-        //       ],
-        //     },
-        //   ],
-        // },
-
-        {
-          type: "category",
-          label: "Report",
-          link: {
-            type: "doc",
-            id: "commands/report",
-          },
-          items: [
-            "commands/report/generate",
-            "commands/report/list",
-            "commands/report/validate",
-          ],
-        },
-
-        // {
-        //   type: "category",
-        //   label: "Simulation",
-        //   link: {
-        //     type: "doc",
-        //     id: "commands/simulation",
-        //   },
-        //   items: ["commands/simulation/list", "commands/simulation/run"],
-        // },
+        "commands/init",
+        "commands/run",
+        "commands/data/tree_info",
+        "commands/data/tree_load",
+        "commands/data/tree_unload",
+        "commands/data/tree_delete",
+        "commands/data/list",
+        "commands/data/db_create",
+        "commands/data/db_remove",
+        "commands/data/db_init",
+        "commands/data/db_clean",
+        "commands/data/db_status",
+        "commands/data/db_start",
+        "commands/data/db_stop",
+        "commands/data/db_logs",
       ],
     },
 
