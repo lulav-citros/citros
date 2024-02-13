@@ -2,6 +2,21 @@
 
 
 
+## v0.2.46 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`7265917`](https://github.com/lulav-citros/citros/commit/72659172798289777ffa1921bd076003bc54e28d))
+
+### Fix
+
+* fix(report): generate
+
+fix(report): generate ([`178e925`](https://github.com/lulav-citros/citros/commit/178e9258f88bd757ad3c17ba24452ffaf3d11961))
+
+* fix(report): generate ([`c75f2fc`](https://github.com/lulav-citros/citros/commit/c75f2fcc438b91a882a656d8b44c94069910011b))
+
+
 ## v0.2.45 (2024-02-13)
 
 ### Documentation
