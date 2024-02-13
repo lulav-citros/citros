@@ -1,0 +1,207 @@
+{
+  "gettingStartedSidebar": [
+    {
+      "type": "doc",
+      "label": "Introduction",
+      "id": "general/overview"
+    },
+    {
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "general/quickstart",
+          "label": "Quick Start"
+        },
+        {
+          "type": "doc",
+          "id": "general/install",
+          "label": "Installation"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Commands",
+      "items": [
+        "commands/init",
+        "commands/run",
+        "commands/data/tree_info",
+        "commands/data/tree_load",
+        "commands/data/tree_unload",
+        "commands/data/tree_delete",
+        "commands/data/list",
+        "commands/data/db_create",
+        "commands/data/db_remove",
+        "commands/data/db_init",
+        "commands/data/db_clean",
+        "commands/data/db_status",
+        "commands/data/db_start",
+        "commands/data/db_stop",
+        "commands/data/db_logs"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Guides",
+      "items": [
+        {
+          "type": "doc",
+          "id": "guides/getting_started"
+        },
+        {
+          "type": "doc",
+          "label": "Adding Functions to Parameter Setup",
+          "id": "guides/config_params"
+        },
+        {
+          "type": "doc",
+          "id": "guides/dockerfile_overview",
+          "label": "Installation"
+        },
+        {
+          "type": "doc",
+          "id": "guides/foxglove_visual",
+          "label": "Foxglove"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Advanced Guides",
+      "items": [
+        {
+          "type": "doc",
+          "label": "CITROS Overview",
+          "id": "advanced_guides/citros_overview"
+        },
+        {
+          "type": "doc",
+          "label": ".CITROS File Structure",
+          "id": "advanced_guides/citros_structure"
+        },
+        {
+          "type": "doc",
+          "label": "Advanced Installation",
+          "id": "advanced_guides/install_advanced"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Data Analysis",
+      "items": [
+        {
+          "type": "doc",
+          "id": "data_analysis/index"
+        },
+        {
+          "type": "category",
+          "label": "Snippets",
+          "items": [
+            {
+              "type": "category",
+              "label": "Data Access",
+              "items": [
+                "data_analysis/snippets_doc/data_access/snippets_batch_content",
+                "data_analysis/snippets_doc/data_access/snippets_query_data",
+                "data_analysis/snippets_doc/data_access/snippets_plotting"
+              ]
+            },
+            "data_analysis/snippets_doc/snippets_error_analysis",
+            "data_analysis/snippets_doc/snippets_validation"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Data Access",
+          "items": [
+            {
+              "type": "doc",
+              "id": "data_analysis/data_access/index"
+            },
+            {
+              "type": "category",
+              "label": "Examples",
+              "items": [
+                "data_analysis/data_access/getting_started",
+                "data_analysis/data_access/batch_overview",
+                "data_analysis/data_access/batch_content",
+                "data_analysis/data_access/query_data",
+                "data_analysis/data_access/plot_data"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Documentation",
+              "items": [
+                "data_analysis/documentation/access/citros_db",
+                "data_analysis/documentation/access/citros_dict"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Error Analysis",
+          "items": [
+            {
+              "type": "doc",
+              "id": "data_analysis/error_analysis/index"
+            },
+            {
+              "type": "category",
+              "label": "Examples",
+              "items": [
+                "data_analysis/error_analysis/getting_started_query_data",
+                "data_analysis/error_analysis/statistics",
+                "data_analysis/error_analysis/correlation",
+                "data_analysis/error_analysis/regression"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Documentation",
+              "items": [
+                "data_analysis/documentation/analysis/citros_data",
+                "data_analysis/documentation/analysis/citros_data_array",
+                "data_analysis/documentation/analysis/citros_stat"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Validation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "data_analysis/validation/index"
+            },
+            {
+              "type": "category",
+              "label": "Examples",
+              "items": [
+                "data_analysis/validation/getting_started",
+                "data_analysis/validation/standard_deviation_boundary_test",
+                "data_analysis/validation/mean_value_test",
+                "data_analysis/validation/standard_deviation_test",
+                "data_analysis/validation/norm_test",
+                "data_analysis/validation/testing_each_simulation",
+                "data_analysis/validation/set_multiple_tests"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Documentation",
+              "items": [
+                "data_analysis/documentation/validation/validation"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
