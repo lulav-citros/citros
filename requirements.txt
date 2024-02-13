@@ -57,3 +57,4 @@ prettytable
 termcolor
 pytest
 nbmake
+pytest-html
