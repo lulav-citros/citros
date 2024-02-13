@@ -1260,7 +1260,7 @@ def report_generate(args, argv):
         citros=citros,
         output=output,
         batch=batch,
-        notebooks=notebooks,
+        notebooks=[str(nb) for nb in notebooks],
         sign=sign,
         log=citros.log,
         debug=args.debug,
