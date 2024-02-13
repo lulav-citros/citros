@@ -246,7 +246,7 @@ class Report:
         # test code
         import pytest
 
-        report_path = output_folder / f"report.html"
+        report_path = str(output_folder / f"report.html")
         retcode = pytest.main(
             [
                 "--nbmake",
