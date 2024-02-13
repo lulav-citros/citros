@@ -2,6 +2,25 @@
 
 
 
+## v0.2.51 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`e9e200b`](https://github.com/lulav-citros/citros/commit/e9e200b82f9858d4e55bc55f762117ff8defac84))
+
+### Fix
+
+* fix(cli): typo
+
+Dev ([`028ef10`](https://github.com/lulav-citros/citros/commit/028ef100af9e0b45deb16c26d37c805b92ded2dd))
+
+* fix(typo): cli ([`9be0a9e`](https://github.com/lulav-citros/citros/commit/9be0a9e53ba0164dd668cc4026d4df8adb3e0526))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`8ac2bf9`](https://github.com/lulav-citros/citros/commit/8ac2bf9de9d30ba2102812bb7f76882c7b3404eb))
+
+
 ## v0.2.50 (2024-02-13)
 
 ### Documentation
