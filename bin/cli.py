@@ -92,36 +92,36 @@ def main():
 
     parser_init(
         subparsers,
-        epilog("https://docs.citros.io/docs/cli_commands#command-init"),
+        epilog("https://docs.citros.io/docs/next/commands/init"),
     )
     parser_run(
         subparsers,
-        epilog("https://docs.citros.io/docs/cli_commands#command-run"),
+        epilog("https://docs.citros.io/docs/next/commands/run"),
     )
     parser_data(
         subparsers,
-        epilog(),  # TODO(Masha): fill with correct doc URL
+        epilog("https://docs.citros.io/docs/next/commands"),
     )
     parser_report(
         subparsers,
-        epilog(),  # TODO(Masha): fill with correct doc URL
+        epilog(),
     )
     # parser_service(
     #     subparsers,
-    #     epilog(),  # TODO(Masha): fill with correct doc URL
+    #     epilog(),
     # )
 
     # parser_simulation(
     #     subparsers,
-    #     epilog(),  # TODO(Masha): fill with correct doc URL
+    #     epilog(),
     # )
     # parser_parameter(
     #     subparsers,
-    #     epilog(),  # TODO(Masha): fill with correct doc URL
+    #     epilog(),
     # )
     # parser_launch(
     #     subparsers,
-    #     epilog(),  # TODO(Masha): fill with correct doc URL
+    #     epilog(),
     # )
 
     args, argv = parser.parse_known_args()

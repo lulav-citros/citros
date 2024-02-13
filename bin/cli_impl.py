@@ -1077,7 +1077,7 @@ def report(args, argv):
         choices=[
             Choice("list", name="List: reports list "),
             Choice("generate", name="Generate: new report"),
-            Choice("validate", name="Validate: report integrity"),
+            # Choice("validate", name="Validate: report integrity"),
             Separator(),
             Choice("exit", name="EXIT"),
         ],
@@ -1092,8 +1092,8 @@ def report(args, argv):
         report_list(args, argv)
     elif action == "generate":
         report_generate(args, argv)
-    elif action == "validate":
-        report_validate(args, argv)
+    # elif action == "validate":
+    #     report_validate(args, argv)
     elif action == "exit":
         exit_citros_cli()
     else:
@@ -1114,22 +1114,37 @@ def report_list(args, argv):
     table = Table(
         title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
     )
-    table.add_column("date", style="cyan", no_wrap=False)
+    table.add_column("Date", style="cyan", no_wrap=False)
     # table.add_column("started_at", style="cyan", no_wrap=True)
     # table.add_column("finished_at", style="cyan", no_wrap=True)
-    table.add_column("name", style="magenta", justify="left")
+    table.add_column("Name", style="magenta", justify="left")
     table.add_column("Versions", justify="left", style="green")
-    table.add_column("message", style="magenta", justify="left")
-    table.add_column("progress", justify="right", style="green")
-    table.add_column("status", style="magenta", justify="left")
+    table.add_column("Message", style="magenta", justify="left")
+    table.add_column("Progress", justify="right", style="green")
+    table.add_column("Status", justify="left")
     table.add_column(
-        "path", style="cyan", justify="left", no_wrap=False, overflow="fold"
+        "Path", style="cyan", justify="left", no_wrap=False, overflow="fold"
     )
     _name = None
     for flat in flat_repo:
         path = str(flat["path"])
         path = path[: -len(os.getcwd())] if path.startswith(os.getcwd()) else path
         path = path[1:] if path.startswith("/") else path
+
+        # notebooks_table = Table(
+        #     padding=(0, 0),
+        #     show_header=False,
+        #     # show_lines=False,
+        #     box=box.MINIMAL,
+        #     show_edge=False,
+        #     # title=f"Reports from: [blue]{citros.root_citros / 'reports'}", box=box.SQUARE
+        # )
+        # notebooks_table.add_column("notebook")
+        # notebooks_table.add_column("status")
+        # for key, value in flat["status"].items():
+        #     notebooks_table.add_row(
+        #         key, f"[red]{value}" if value == "FAILED" else f"[green]{value}"
+        #     )
 
         table.add_row(
             flat["started_at"],
@@ -1138,7 +1153,11 @@ def report_list(args, argv):
             flat["version"],
             flat["message"],
             str(flat["progress"]),
-            flat["status"],
+            (
+                f"[red]{flat['status']}"
+                if flat["status"] == "FAILED"
+                else f"[green]{flat['status']}"
+            ),
             path,
             # f"[link={flat['path']}]path[/link]",
         )
@@ -1199,7 +1218,7 @@ def report_generate(args, argv):
     else:
         output = args.output
 
-    if not hasattr(args, "notebooks"):
+    if not hasattr(args, "notebooks") or args.notebooks is None:
         notebook_list = []
         for notebook in glob.glob(f"{os.getcwd()}/**/*.ipynb", recursive=True):
             path = str(notebook)
@@ -1218,9 +1237,6 @@ def report_generate(args, argv):
             instruction="Use [space] to select notebooks, [enter] to confirm selection.",
             mandatory_message="Please select at least one notebook",
         ).execute()
-
-        # print(f"chosen_notebooks: {notebooks}")
-
     else:
         notebooks = args.notebooks
 
