@@ -2,6 +2,19 @@
 
 
 
+## v0.2.45 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`038a5b3`](https://github.com/lulav-citros/citros/commit/038a5b3c032e11f8c0e3c6db4fb01c6ad522a971))
+
+### Performance
+
+* perf(documentation): update
+
+Maria documentation - commands added ([`b67fb91`](https://github.com/lulav-citros/citros/commit/b67fb91108a42d294f347f382a7642f6aed67a95))
+
+
 ## v0.2.44 (2024-02-11)
 
 ### Documentation
@@ -18,9 +31,17 @@ Dev ([`ab4c6e0`](https://github.com/lulav-citros/citros/commit/ab4c6e0d4ff95839f
 
 ### Unknown
 
+* update commands ([`7f8a1d9`](https://github.com/lulav-citros/citros/commit/7f8a1d9b55027306ea9736ec393ac85f1563cbd3))
+
 * Commented out print statement in report_generate function ([`893d391`](https://github.com/lulav-citros/citros/commit/893d391a3fb7c8a40bdff423375a1f2fdfccb4c2))
 
 * Refactor notebook path handling in report_generate function ([`e628e83`](https://github.com/lulav-citros/citros/commit/e628e832601caeda0262dc4f6b1343d744fbc1f4))
+
+* Update typos ([`3149458`](https://github.com/lulav-citros/citros/commit/3149458f9e0e659bc18e8e65ce2d0e4ff0e3bf96))
+
+* Merge branch &#39;dev&#39; into maria-documentation ([`4aaa046`](https://github.com/lulav-citros/citros/commit/4aaa046d57c8f8148af3a1f287ca6cf0d666bed0))
+
+* Update commands ([`28e4b8e`](https://github.com/lulav-citros/citros/commit/28e4b8e74050c4732da2e262518dbf8b6fc331ca))
 
 
 ## v0.2.43 (2024-02-11)
@@ -79,7 +100,15 @@ Dev ([`609cf9d`](https://github.com/lulav-citros/citros/commit/609cf9d6986b8d437
 
 Dev ([`0852107`](https://github.com/lulav-citros/citros/commit/0852107a1f969009ccfdde1be8746fe703bb586e))
 
+* Merge branch &#39;dev&#39; into maria-documentation ([`6a5fc61`](https://github.com/lulav-citros/citros/commit/6a5fc61b390ea19bf8cce9539e5bd51d0add669c))
+
 * for masha ([`19feb69`](https://github.com/lulav-citros/citros/commit/19feb69e3edb304fb893459d3d3efbfebf9e09ae))
+
+* Merge branch &#39;dev&#39; into maria-documentation ([`246b807`](https://github.com/lulav-citros/citros/commit/246b8076feabc536f0c05e48b07a91a8824d1ee4))
+
+*  init edit ([`5eee0cc`](https://github.com/lulav-citros/citros/commit/5eee0cc2574aa8c2c6ef7fd68e8a850ce3038e4e))
+
+* remove home page ([`862d097`](https://github.com/lulav-citros/citros/commit/862d0976fd1a75c21fe851ed3b6267a9dfcadd0d))
 
 * Update CITROS CLI documentation ([`7afa882`](https://github.com/lulav-citros/citros/commit/7afa882957d8116576bfd340c7bb310e1383174b))
 
