@@ -2,6 +2,21 @@
 
 
 
+## v0.2.50 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`fe4e023`](https://github.com/lulav-citros/citros/commit/fe4e023acf6c99a7ad98a0f626df2c0e24898307))
+
+### Fix
+
+* fix(req): requierment
+
+fix(req): requierment ([`7ce8fbc`](https://github.com/lulav-citros/citros/commit/7ce8fbc49cb25ba2398b71cb6222c02ba0d1c953))
+
+* fix(req): requierment ([`b997758`](https://github.com/lulav-citros/citros/commit/b9977582940d729d9be19aefb71e3ab932c12d57))
+
+
 ## v0.2.49 (2024-02-13)
 
 ### Documentation
