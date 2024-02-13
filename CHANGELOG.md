@@ -2,6 +2,21 @@
 
 
 
+## v0.2.49 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`928d24a`](https://github.com/lulav-citros/citros/commit/928d24a1dc59ae41512b265aa83835da3fd5353b))
+
+### Fix
+
+* fix(cli): support py 3.10
+
+fix(cli): support py 3.10 ([`1dfc00d`](https://github.com/lulav-citros/citros/commit/1dfc00d18088bbc14f9aea67697dc33654de83c3))
+
+* fix(cli): support py 3.10 ([`b432a4e`](https://github.com/lulav-citros/citros/commit/b432a4e89ec762ad2e95c3823e2f2e76e05de086))
+
+
 ## v0.2.48 (2024-02-13)
 
 ### Documentation
