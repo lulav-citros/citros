@@ -2,6 +2,21 @@
 
 
 
+## v0.2.53 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`84c2afd`](https://github.com/lulav-citros/citros/commit/84c2afde87d0ec4ebdd7b9ad04b9d66e3cd38165))
+
+### Fix
+
+* fix(db): commit sql
+
+fix(db): commit sql ([`0d6f5b9`](https://github.com/lulav-citros/citros/commit/0d6f5b989a074cbc7b756a9bac6efdca36de5aa4))
+
+* fix(db): commit sql ([`b1bae17`](https://github.com/lulav-citros/citros/commit/b1bae17aa2468fdfb40c9b673204686917cff347))
+
+
 ## v0.2.52 (2024-02-14)
 
 ### Documentation
