@@ -1,12 +1,38 @@
-# CLI Overview
+# CITROS Overview
 
-Welcome to CITROS CLI. [CITROS](https://citros.io/) serves as an innovative platform for executing ROS project simulations, automating integration, and conducting in-depth performance analysis.
+`CITROS`: Your All-in-One Robotic Development Toolkit
+`CITROS` is more than just a platform - it's a revolution for robotic development! Here's how it empowers you:
 
-CITROS offers ROS 2 developers a seamless interface to launch multiple ROS simulations for a specific project with just a single command. Beyond setting static parameter values, it empowers users with the flexibility to utilize function objects. This means you can craft dynamic simulation environments where each execution produces unique parameter values, whether they're sourced from standard numpy functions or tailored via user-defined computations. 
+## Effortless ROS2 Project Execution:
 
-After a successfull simulation runs we give the ability to investigate the recorded data using out build in `data analysis` package, and after 
+Run multiple ROS simulations with just one command.
+Craft dynamic environments with flexible parameter settings using functions.
+Say goodbye to tedious setups and hello to efficient testing.
 
-Additionally, `report` generation is a standout feature, aiding in effortless documentation of your work. 
+```python
+# To run your ros2 project 
+citros init 
+citros run 
+# citros will prompt an interactive mode to guid you trough the all the citros functionallity. 
+```
 
-We are dedicated to enriching your ROS project simulation experience, and this package is our contribution to that cause.
+## [Organized Data Management](../advanced_guides/citros_structure):
 
+Record simulation data seamlessly for convenient analysis later.
+Enjoy local, organized storage to keep your workflow tidy.
+
+## [In-Depth Analysis Tools](../data_analysis/):
+
+Dive into your data with built-in analysis tools.
+Uncover insights and optimize your robot's performance.
+Clear and Shareable Reports:
+
+## Report Generation and Testing:
+Generate reports directly from your analysis notebooks.
+Track project progress, share results with your team, and ensure compliance.
+
+## Beyond Limits:
+
+`CITROS` brings cutting-edge software development tools to the world of robotics.
+We're dedicated to accelerating your robot development journey.
+Ready to unlock the full potential of your projects? Start exploring `CITROS` today!

@@ -117,7 +117,7 @@ class Batch(BatchUploader):
         Returns:
             str: the element value
         """
-        return self.data[key]
+        return self.get(key)
 
     def get(self, key, default=None):
         """get element from object
@@ -128,6 +128,8 @@ class Batch(BatchUploader):
         Returns:
             str: the element value
         """
+        if key == "version":
+            return self.version
         return self.data.get(key, default)
 
     def __setitem__(self, key, newvalue):

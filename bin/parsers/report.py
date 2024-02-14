@@ -45,24 +45,39 @@ def parser_report_generate(subparser, epilog=None):
         "--name",
         nargs="?",
         default=None,
-        help="a name for the run",
-        required=True,
+        help="Name of the report",
+        # required=True,
     )
     parser.add_argument(
         "-m",
         "--message",
         nargs="?",
         default=None,
-        help="a message for the run",
-        required=True,
+        help="Message for the report",
+        # required=True,
     )
 
     # data source
     parser.add_argument(
-        "-s", "--simulation", nargs="?", help="simulation name", required=True
+        "-s",
+        "--simulation",
+        nargs="?",
+        help="Simulation name",
+        # required=True,
     )
-    parser.add_argument("-b", "--batch", nargs="?", help="batch name", required=True)
-    parser.add_argument("-ver", "--version", nargs="?", default=-1, help="version")
+    parser.add_argument(
+        "-b",
+        "--batch",
+        nargs="?",
+        help="Batch name",
+        # required=True,
+    )
+    parser.add_argument(
+        "--version",
+        nargs="?",
+        default=-1,
+        help="Batch version, if not provided will take the last one.",
+    )
 
     # notebooks
     parser.add_argument(
