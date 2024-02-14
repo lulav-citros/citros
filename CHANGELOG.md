@@ -2,6 +2,27 @@
 
 
 
+## v0.2.54 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`9b7aff2`](https://github.com/lulav-citros/citros/commit/9b7aff2695d9ab9ea6a2c49145f3e42d6306b5fa))
+
+### Fix
+
+* fix(exception): when there is no bag files in the batch. 
+
+Dev ([`6af68eb`](https://github.com/lulav-citros/citros/commit/6af68ebfb85d591c8430c0d70da5cb4e63c94183))
+
+### Unknown
+
+* Add error logging for empty bags directory ([`350d511`](https://github.com/lulav-citros/citros/commit/350d51144d860aa1f565dca798c4388c92a8af82))
+
+* Merge branch &#39;main&#39; into dev ([`c69cd07`](https://github.com/lulav-citros/citros/commit/c69cd0711ce6d1be67f368a8e3303102a24fc1c3))
+
+* Commented out exception for missing bags in BatchUploader ([`6af3f03`](https://github.com/lulav-citros/citros/commit/6af3f0399b1e0ffee36a2d326766d7d8091e5fac))
+
+
 ## v0.2.53 (2024-02-14)
 
 ### Documentation
