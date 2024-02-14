@@ -16,8 +16,8 @@ The content of the [folder](../advanced_guides/citros_structure#directory-data) 
 - and more.
 
 ```bash
-$ citros run [-h] [-dir DIR] [-s [SIMULATION]] [-b [BATCH]] [-m [MESSAGE]]
-                  [--version [VERSION]] [-l] [-c [COMPLETIONS]] [-i [INDEX]] [-d] [-v]
+$ citros run [-h] [-dir DIR] [-s [SIMULATION]] [-n [NAME]] [-m [MESSAGE]]
+             [--version [VERSION]] [-l] [-c [COMPLETIONS]] [-i [INDEX]] [-d] [-v]
 ```
 
 ## Options
@@ -27,7 +27,7 @@ Option|Description
 |-h, --help       |       Show help message|
 |-dir DIR       |       The working dir of the project|
 |-s, --simulation [SIMULATION]       |       Simulation name|
-|-b, --batch [BATCH]       |       Sets a name for the batch run|
+|-n, --name [NAME]       |       Sets a name for the batch run|
 |-m, --message [MESSAGE]       |       Sets a message for the run|
 |--version [VERSION]       |       The batch run version.<br/>.citros/data/{sim_name}/{batch_name}/{ **batch_version**}/{sid}|
 |-l, --lan_traffic       |       Receive LAN ROS traffic in your simulation.|
@@ -39,7 +39,7 @@ Option|Description
 
 ## Examples
 ```bash
-$ citros run --batch batch --message "batch message" -c 2
+$ citros run -n batch --message "batch message" -c 2
 ? Please choose the simulation you wish to run 
 ❯ simulation_name
 simulation_name_2
