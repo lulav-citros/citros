@@ -318,8 +318,8 @@ class BatchUploader:
                     )
                     self.log.exception(error)
                     return False, "Got exception from pgdb", str(error)
-
                 connection.commit()
+
             self.log.debug(
                 f"Done uploading {bag}, took {(time.time() - start_time):.3f} [sec]"
             )
@@ -329,6 +329,7 @@ class BatchUploader:
                 None,
             )
         except (Exception, psycopg2.Error) as error:
+            connection.commit()
             self.log.exception(
                 f" Failed to insert record into table, aborting upload to DB.", error
             )
@@ -479,6 +480,7 @@ class BatchUploader:
                         sid=sid,
                         parameter_file=parameter,
                     )
+                    connection.commit()
                 except Exception as e:
                     self.log.error(e)
                     connection = citrosDB.connect()
@@ -509,6 +511,7 @@ class BatchUploader:
 
         self.save_state("LOADED")
         cursor.close()
+        connection.commit()
         connection.close()
 
     def unload(self):
@@ -525,5 +528,7 @@ class BatchUploader:
             raise NoConnectionToCITROSDBException
 
         citrosDB.drop_table(connection, schema_name, table_name)
+
+        connection.close()
 
         self.save_state("UNLOADED")

@@ -191,6 +191,7 @@ class CitrosDB:
 
         try:
             cursor.execute(rendered_sql)
+            connection.commit()
         except Exception as ex:
             self.log.error(ex)
             return
@@ -221,6 +222,7 @@ class CitrosDB:
             cursor.execute(rendered_sql)
             connection.commit()
             self.log.debug(rendered_sql)
+            connection.close()
         except Exception as ex:
             self.log.error(ex)
 
