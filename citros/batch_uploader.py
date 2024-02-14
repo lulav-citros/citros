@@ -90,10 +90,10 @@ class BatchUploader:
                 else:
                     continue
                 bags.append(os.path.join(root, file))
-        if len(bags) < 1:
-            raise Exception(
-                f"Didn't find SQLITE3 or MCAP bag in the [{path}] folder ..."
-            )
+        # if len(bags) < 1:
+        #     raise Exception(
+        #         f"Didn't find SQLITE3 or MCAP bag in the [{path}] folder ..."
+        #     )
 
         return bags
 
