@@ -2,6 +2,29 @@
 
 
 
+## v0.2.52 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`afa0c6d`](https://github.com/lulav-citros/citros/commit/afa0c6de5c14a170dfdc6344e413d4f812e4d74d))
+
+### Fix
+
+* fix(doc): documentation update
+
+add report commands, add commands overview fix commands ([`846cd6b`](https://github.com/lulav-citros/citros/commit/846cd6bde9bd09bb47a29243806bd00a572ffaf8))
+
+### Unknown
+
+* Merge branch &#39;dev&#39; into maria-documentation ([`897c478`](https://github.com/lulav-citros/citros/commit/897c478b5f01ee28ff3e03e29a951129ad5a4b0c))
+
+* new doc ([`b31c8e8`](https://github.com/lulav-citros/citros/commit/b31c8e87391e55d6ef6c88e65235b6aa9d5516de))
+
+* run command ([`d3bcbad`](https://github.com/lulav-citros/citros/commit/d3bcbad49dbf2460caf38f4127c57993f99a12c0))
+
+* add report commands, add commands overview ([`f9033c2`](https://github.com/lulav-citros/citros/commit/f9033c21e1286bc85c12daf8bf07fe764783dce7))
+
+
 ## v0.2.51 (2024-02-13)
 
 ### Documentation
