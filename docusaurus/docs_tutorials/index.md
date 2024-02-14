@@ -95,10 +95,8 @@ From this point, all the actions should be typed in VScode terminal.
  ```
 
 ## Workspace Overview
-The project is made out of three ROS nodes - `cannon_analytic`, `cannon_numeric` and `scheduler`. The scheduler node is responsible for driving the simulation by publishing a `scheduler` topic at a given rate (say, 100Hz). The cannon nodes subscribe to this topic, and upon receiving it perform a single calculation step. The rate (`dt`) is a ROS parameter for the scheduler node, which means you may change its value in the `config/params.yaml` file, without the need to recompile. The two cannon nodes also have `params.yaml` files of their own, in which you can set the initial speed and angle, and also the time/integration delta (`dt`).
-
-Additionally, the `scheduler` node subscribes to a `debug` topic, which, together with the provided Foxglove layout, facilitates a play/pause/step/resume functionality.
-
+The project is made out of three ROS nodes - `cannon_analytic`, `cannon_numeric` and `scheduler`.<br/>The scheduler node is responsible for driving the simulation by publishing a `scheduler` topic at a given rate (say, 100Hz). The cannon nodes subscribe to this topic, and upon receiving it perform a single calculation step. The rate (`dt`) is a ROS parameter for the scheduler node, which means you may change its value in the `config/params.yaml` file, without the need to recompile. The two cannon nodes also have `params.yaml` files of their own, in which you can set the initial speed and angle, and also the time/integration delta (`dt`).<br/>
+Additionally, the `scheduler` node subscribes to a `debug` topic, which, together with the provided Foxglove layout, facilitates a play/pause/step/resume functionality.<br/>
 The output of the simulation, i.e. the topic containing the calculated results, is called `cannon/state` (in both analytic and numeric versions). It is a list of `float` of size 4, the layout being:
         
     [position_x, position_y, velocity_x, velocity_y]
@@ -109,7 +107,7 @@ The simulation will halt when `position_y` reaches zero (i.e. impact).
 
 The cannon project contains two launch files, one for each solution
 
-1. To Run the analytic solution
+1. To run the analytic solution
 
  ```bash
  $ ros2 launch scheduler cannon_analytic.launch.py
@@ -135,13 +133,13 @@ To view a graphical representation of the simulation:
 
  ![Alt text](img/foxglove_open.png)
 
-5. Choose `CITROS_Cannon.json` from the cannon project directory
+5. Choose `CITROS Cannon.json` from the cannon project directory
 
 6. Open a new Connection
 
  ![Alt text](img/foxglove_connection.png)
 
-7. Choose Rosbridge and press the 'Open' button
+7. Choose Rosbridge and press the `Open` button
  
  ![Alt text](img/foxglove_rosbridge.png)
 
@@ -187,7 +185,7 @@ $ citros init
 ```
 
 This command creates a folder named `.citros` under your project directory.<br />
-The `.citros` directory contains several files and folders that capture the state of your project and allow you to configure your simulations according to your needs. We will discuss some of them briefly later on. For a full and detailed description of the contents of the `.citros`  directory, refer to the [CLI Documentation](https://citros.io/doc/docs_cli).
+The `.citros` directory contains several files and folders that capture the state of your project and allow you to configure your simulations according to your needs. We will discuss some of them briefly later on. For a full and detailed description of the contents of the `.citros`  directory, refer to the [CITROS File Structure](../docs/advanced_guides/citros_structure).
 
 ## Simulations
 
@@ -203,40 +201,49 @@ Choose the `Run` action:
 
 ```sh
 ? Select Action: 
-┌────────────────────────────────────────────────────────┐
-│  🍋 Init: initialize .citros in current directory      │
-│❯ 🔥 Run: new simulation                                │
-│  📊 Data: for data management                          │
-│  📝 Report: generation and management                  │
-│  🔖 Service: CITROS API service functions              │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Init: initialize .citros in current directory                                      │
+│❯ Run: new simulation                                                                │
+│  Data: for data management                                                          │
+│  Report: generation and management                                                  │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Name the batch run (or press enter for *"citros"* as a default batch name):
+Name the batch: `my_first_batch`
 
 ```sh
-Please name this batch run: my_first_batch
+? Select Action: Run: new simulation
+? Please name this batch run (citros): my_first_batch
 ```
 
-Enter a message for the batch (or press enter for *"This is a default batch message from citros"* as a default batch name):
+Enter a message for the batch: `My first CITROS simulation!`
 
 ```sh
-Enter a message for this batch run: My first CITROS simulation!
+? Select Action: Run: new simulation
+Please name this batch run (citros): my_first_batch
+? Enter a message for this batch run (This is a default batch message from citros): My first CITROS simulation!
 ```
 
-Choose number of runs (or press enter to run once):
+Choose number of runs: `1`
 
 ```sh
-How many times you want the simulation to run?: 1
+? Select Action: Run: new simulation
+Please name this batch run (citros): my_first_batch
+Enter a message for this batch run (This is a default batch message from citros): My first CITROS simulation!
+? How many times you want the simulation to run? (1): 1
 ```
 
-Lastly choose *"simulation_cannon_analytic"*:
+Lastly choose "simulation_cannon_analytic":
 ```sh
+? Select Action: Run: new simulation
+Please name this batch run (citros): my_first_batch
+Enter a message for this batch run (This is a default batch message from citros): My first CITROS simulation!
+How many times you want the simulation to run? (1): 1
 ? Please choose the simulation you wish to run: 
-❯ simulation_cannon_analytic
   simulation_cannon_numeric
+❯ simulation_cannon_analytic
 ```
 
 
@@ -259,9 +266,9 @@ To fully understand what's going on, we need to familiarize ourselves with three
 
     Defaults simulation files defined by a ROS 2 launch file. You may have as many launch files as you want in your project, as long as there is at least one. Each simulation will correspond to a launch file in your project. When you run a CITROS simulation, if you don't specify the name of the simulation (using the `-s` flag), a command-line menu will be presented, in which you can use the up and down arrows to choose the simulation you want. The simulation names will be of the form `simulation_<name of launch_file>`. In the case of the Cannon project, we have two launch files - `cannon_analytic.launch.py` and `cannon_numeric.launch.py`, and as you can see in the output above, we are prompted to choose between them. 
 
-    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](../docs/advanced_guides/citros_structure##directory-simulations) directory. You may use this file to configure the way your simulation runs. 
+    Each simulation also corresponds to a json file of the same name, which resides under the [`.citros/simulations`](../docs/advanced_guides/citros_structure#directory-simulations) directory. You may use this file to configure the way your simulation runs. 
 
-    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/data`](../docs/advanced_guides/citros_structure##directory-runs) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
+    When you run a CITROS simulation, a directory for that simulation is created under the [`.citros/data`](../docs/advanced_guides/citros_structure#directory-data) directory. This directory will contain subdirectories corresponding to **batch**es, a new one created every time you run a simulation.
 
 - ## **batch** 
 
@@ -270,7 +277,7 @@ To fully understand what's going on, we need to familiarize ourselves with three
 - ## **run**
 
     Defined as a single execution of a simulation as defined by the chosen launch file. <br />
-    The folder corresponding to a simulation run will contain all the information relevant for that run. Look through such a folder after running a simulation and see for yourself.<br />For further details refer to the [CLI Documentation](https://citros.io/doc/docs_cli)
+    The folder corresponding to a simulation run will contain all the information relevant for that run. Look through such a folder after running a simulation and see for yourself.<br />For further details refer to the [.citros/data](../docs/advanced_guides/citros_structure#directory-data) directory.
 
 
 
@@ -319,10 +326,10 @@ This will cause a normal distribution with a standard deviation of 15 around 45 
 Another way to use the run command is writing the full command: 
 
 ```bash
-citros run -n "test_params" -m "testing random initial angle" -c 10
+citros run -n "citros" -m "testing random initial angle" -c 10
 ```
 
-and choose `simulation_cannon_analytic` from the menu, the simulation will run 10 times, and each time the cannon will have a different initial angle. By looking at the [results](#data-analysis-online-only), we can hopefully come to the conclusion that 45 degrees is the optimal angle. 
+and choose `simulation_cannon_analytic` from the menu, the simulation will run 10 times, and each time the cannon will have a different initial angle. By looking at the [results](#results), we can hopefully come to the conclusion that 45 degrees is the optimal angle. 
 
 ### Review All Simulations Data
 
@@ -337,28 +344,28 @@ Choose the `Data` action:
 
 ```sh
 ? Select Action: 
-┌────────────────────────────────────────────────────────┐
-│  🍋 Init: initialize .citros in current directory      │
-│  🔥 Run: new simulation                                │
-│❯ 📊 Data: for data management                          │
-│  📝 Report: generation and management                  │
-│  🔖 Service: CITROS API service functions              │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Init: initialize .citros in current directory                                      │
+│  Run: new simulation                                                                │
+│❯ Data: for data management                                                          │
+│  Report: generation and management                                                  │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Choose `List` to view all simulations
 
 ```sh
-┌────────────────────────────────────────────────────────┐
-│  🌲 Tree: tree view of data                            │
-│❯ *️⃣ List: reports list                                 │
-│  📂 DB: section                                        │
-│  🗳 Service: section                                   │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+? Select Action: Data: for data management 
+? Select Action: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Tree view                                                                          │
+│❯ List data                                                                          │
+│  DB: section                                                                        │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 Table of all the simulations will be shown as output. <br />
 The table contains the following fields: Run name, Versions, message, status, completions, path
@@ -379,8 +386,6 @@ To create an instance of CITROS DB run
 ```bash
 citros data db create
 ```
-
-For more commands to control the CITROS DB refer [here](../docs/cli/cli_commands.md).
 
 ### Upload Data to DB
 
@@ -404,50 +409,79 @@ Choose the `Data` action:
 
 ```sh
 ? Select Action: 
-┌────────────────────────────────────────────────────────┐
-│  🍋 Init: initialize .citros in current directory      │
-│  🔥 Run: new simulation                                │
-│❯ 📊 Data: for data managment                           │
-│  📝 Report: generation and management                  │
-│  🔖 Service: CITROS API service functions              │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Init: initialize .citros in current directory                                      │
+│  Run: new simulation                                                                │
+│❯ Data: for data management                                                          │
+│  Report: generation and management                                                  │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 choose the `Tree` action
 
 ```sh
+? Select Action: Data: for data management 
 ? Select Action: 
-┌────────────────────────────────────────────────────────┐
-│❯ 🌲 Tree: tree view of data                            │
-│  *️⃣ List: reports list                                 │
-│  📂 DB: section                                        │
-│  🗳 Service: section                                   │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ Tree view                                                                          │
+│  List data                                                                          │
+│  DB: section                                                                        │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
-Choose the simulation, batch and version you'ld like to upload:
+Choose the simulation:
 
 ```sh
-? Select Action: 📊 Data: for data management 
-? Select Action: 🌲 Tree: tree view of data
+? Select Action: Data: for data management 
+? Select Action: Tree view
+? Select Simulation: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ simulation_cannon_analytic                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+Choose the batch:
+```sh
+? Select Action: Data: for data management 
+? Select Action: Tree view
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  my_first_batch                                                                     │
+│❯ citros                                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+choose the version:
+```sh
+? Select Action: Data: for data management 
+? Select Action: Tree view
 ? Select Simulation: simulation_cannon_analytic
 ? Select Batch: citros
-? Select Version: 20240103083547
+? Select Version: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ 20240214110927                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 Choose the `Load` actions
 ```sh
+? Select Action: Data: for data management 
+? Select Action: Tree view
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 20240214110927
 ? Select Action: 
-┌─────────────────────────────────────────────────────────────────┐
-│  Info                                                           │
-│❯ Load                                                           │
-│  Unload                                                         │
-│  Delete                                                         │
-│  ---------------                                                │
-│  EXIT                                                           │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Info                                                                               │
+│❯ Load                                                                               │
+│  Unload                                                                             │
+│  Delete                                                                             │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 To verify the data is loaded
@@ -456,7 +490,6 @@ citros data list
 ```
 
 In the image below you can see that the status of the batch run changed to `LOADED`
-
 ![Alt text](img/data_loaded.png)
 
 ### Execute Notebook
@@ -501,6 +534,8 @@ citros.batch(-1).topic('/cannon/state').sid([0,1,2,3,4]).\
 
 Report is a combination of data and notebook generated into one immutable signed pdf. This is a great tool which can help you to track the metric of your project overtime.<br />For example, you can create a report that measures accuracy, this report can be generated each version so with time you can see the progress of the accuracy increases.<br />For additional info go to [report](../docs/cli/cli_commands.md).
 
+### Generate Report
+
 For this tutorial we will show you how to generate a report from the [notebook above](#execute-notebook).
 
 run citros command
@@ -513,69 +548,117 @@ Choose the `Report` action:
 
 ```sh
 ? Select Action: 
-┌────────────────────────────────────────────────────────┐
-│  🍋 Init: initialize .citros in current directory      │
-│  🔥 Run: new simulation                                │
-│  📊 Data: for data management                          │
-│❯ 📝 Report: generation and management                  │
-│  🔖 Service: CITROS API service functions              │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  Init: initialize .citros in current directory                                      │
+│  Run: new simulation                                                                │
+│  Data: for data management                                                          │
+│❯ Report: generation and management                                                  │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Choose `Generate` to generate a report
 
 ```sh
-┌────────────────────────────────────────────────────────┐
-│  *️⃣ List: reports list                                 │
-│❯ ⚡ Generate: new report                                │
-│  ❓ Validate: report integrity                         │
-│  ---------------                                       │
-│  EXIT                                                  │
-└────────────────────────────────────────────────────────┘
+? Select Action: Report: generation and management
+? Select Action: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  List: reports list                                                                 │
+│❯ Generate: new report                                                               │
+│  ---------------                                                                    │
+│  EXIT                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Choose the simulation source for the report
 
 ```sh
-❯ simulation_cannon_analytic 
-simulation_cannon_numeric
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ simulation_cannon_analytic                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Select a batch from you batch list
 
 ```sh
-Select Batch: numeric simulations
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│  my_first_batch                                                                     │
+│❯ citros                                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Select a version
 ```sh
-Select Batch: numeric simulations
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ 20240214113810                                                                     │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 Name your report *(or press enter for "citros" as a default report name)*:
 ```sh
-Please name this report: My first report
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 20240214113810
+Please name this report (citros): My first report
 ```
 
-Enter a message for the report (or press enter for "This is a default message message from citros" as a default report message):
+Enter a message for the report (or press enter for "This is a default report message from citros" as a default report message):
 ```sh
-Enter a message for this report: Best report ever
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 20240214113810
+Please name this report (citros): My first report
+Enter a message for this report (This is a default report message from citros): Best report ever
 ```
 
 choose the notebook for the report
 
 ```sh
-❯ citros_template/notebooks/data_analysis.ipynb
-citros_template/notebooks/test1.ipynb
+? Select Action: Report: generation and management
+? Select Action: Generate: new report
+? Select Simulation: simulation_cannon_analytic
+? Select Batch: citros
+? Select Version: 20240214113810
+Please name this report (citros): My first report
+Enter a message for this report (This is a default report message from citros): Best report ever
+? Select notebook: Use [space] to select notebooks, [enter] to confirm selection. 
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│❯ notebooks/data_analysis.ipynb                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-To view your generated report go to .citros/reports/[report_name]
+### Reports List 
+
+To view all created reports 
+
+```bash 
+citros report list
+```
+
+![Alt text](img/reports.png)
+
+All the reports are under [`.citros/reports`](../docs/advanced_guides/citros_structure##directory-reports) directory.
 
 :::note
 
-The content of the [Reports folder](../docs/advanced_guides/citros_structure##directory-reports) will contain 
+The content of the `report` folder will contain 
 - output of the python notebook
 - Report info
 - Generated pdf report
