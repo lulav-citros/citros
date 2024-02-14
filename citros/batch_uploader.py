@@ -90,10 +90,10 @@ class BatchUploader:
                 else:
                     continue
                 bags.append(os.path.join(root, file))
-        if len(bags) < 1:
-            raise Exception(
-                f"Didn't find SQLITE3 or MCAP bag in the [{path}] folder ..."
-            )
+        # if len(bags) < 1:
+        #     raise Exception(
+        #         f"Didn't find SQLITE3 or MCAP bag in the [{path}] folder ..."
+        #     )
 
         return bags
 
@@ -487,6 +487,11 @@ class BatchUploader:
 
             # uplaod bags
             bags = self._get_citros_bags(f"{self.batch_dir}/{sid}/bags/")
+            if len(bags) < 1:
+                self.log.error(
+                    f"No bags found in {self.batch_dir}/{sid}/bags/ . Perhaps the run didnt finish properly."
+                )
+                continue
 
             # print(bags)
             msgs = self._get_custom_message(f"{self.batch_dir}/{sid}/msgs/")
