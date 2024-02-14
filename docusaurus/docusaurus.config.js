@@ -140,6 +140,11 @@ const config = {
             position: "left",
             activeBaseRegex: `/docs_tutorials/`,
           },
+          {
+            href: 'https://github.com/lulav-citros/citros',
+            label: "Source",
+            position: "left",
+          },
           // { to: "/blog", label: "Blog", position: "left" },
           {
             type: "docsVersionDropdown",
