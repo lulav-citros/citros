@@ -2,6 +2,100 @@
 
 
 
+## v0.2.51 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`e9e200b`](https://github.com/lulav-citros/citros/commit/e9e200b82f9858d4e55bc55f762117ff8defac84))
+
+### Fix
+
+* fix(cli): typo
+
+Dev ([`028ef10`](https://github.com/lulav-citros/citros/commit/028ef100af9e0b45deb16c26d37c805b92ded2dd))
+
+* fix(typo): cli ([`9be0a9e`](https://github.com/lulav-citros/citros/commit/9be0a9e53ba0164dd668cc4026d4df8adb3e0526))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`8ac2bf9`](https://github.com/lulav-citros/citros/commit/8ac2bf9de9d30ba2102812bb7f76882c7b3404eb))
+
+
+## v0.2.50 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`fe4e023`](https://github.com/lulav-citros/citros/commit/fe4e023acf6c99a7ad98a0f626df2c0e24898307))
+
+### Fix
+
+* fix(req): requierment
+
+fix(req): requierment ([`7ce8fbc`](https://github.com/lulav-citros/citros/commit/7ce8fbc49cb25ba2398b71cb6222c02ba0d1c953))
+
+* fix(req): requierment ([`b997758`](https://github.com/lulav-citros/citros/commit/b9977582940d729d9be19aefb71e3ab932c12d57))
+
+
+## v0.2.49 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`928d24a`](https://github.com/lulav-citros/citros/commit/928d24a1dc59ae41512b265aa83835da3fd5353b))
+
+### Fix
+
+* fix(cli): support py 3.10
+
+fix(cli): support py 3.10 ([`1dfc00d`](https://github.com/lulav-citros/citros/commit/1dfc00d18088bbc14f9aea67697dc33654de83c3))
+
+* fix(cli): support py 3.10 ([`b432a4e`](https://github.com/lulav-citros/citros/commit/b432a4e89ec762ad2e95c3823e2f2e76e05de086))
+
+
+## v0.2.48 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`dd7e028`](https://github.com/lulav-citros/citros/commit/dd7e028ef35c60f658584f0af6b3695a2b202b8d))
+
+### Fix
+
+* fix(cli): dep
+
+fix(cli): dep ([`c0738bd`](https://github.com/lulav-citros/citros/commit/c0738bd3e2937fa556dbaa999946c73781329bc4))
+
+* fix(cli): dep ([`755e07c`](https://github.com/lulav-citros/citros/commit/755e07cca38114284d244a98c0d94149b2fb00ed))
+
+
+## v0.2.47 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`b02bdd1`](https://github.com/lulav-citros/citros/commit/b02bdd1eee87ffacc07dc2f039c785ef49287c08))
+
+### Fix
+
+* fix(type): cli typo
+
+fix(type): cli typo ([`15dc104`](https://github.com/lulav-citros/citros/commit/15dc104ef8c12e2a78fef610a9db7e9da7e0fa94))
+
+* fix(type): cli typo ([`3abd50d`](https://github.com/lulav-citros/citros/commit/3abd50d8ffd78ca81906e8e9b6dfc63f04573000))
+
+
+## v0.2.46 (2024-02-13)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`7265917`](https://github.com/lulav-citros/citros/commit/72659172798289777ffa1921bd076003bc54e28d))
+
+### Fix
+
+* fix(report): generate
+
+fix(report): generate ([`178e925`](https://github.com/lulav-citros/citros/commit/178e9258f88bd757ad3c17ba24452ffaf3d11961))
+
+* fix(report): generate ([`c75f2fc`](https://github.com/lulav-citros/citros/commit/c75f2fcc438b91a882a656d8b44c94069910011b))
+
+
 ## v0.2.45 (2024-02-13)
 
 ### Documentation

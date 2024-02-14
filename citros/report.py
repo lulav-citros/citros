@@ -92,12 +92,7 @@ class Report:
 
         # get version
         if not version:  # no version specified
-            if batch:  # create new report
-                self.version = datetime.today().strftime("%Y%m%d%H%M%S")
-            else:
-                versions = sorted(glob.glob(f"{str(self.reports_dir)}/*"))
-                # get version from index
-                self.version = versions[self.index].split("/")[-1]
+            self.version = datetime.today().strftime("%Y%m%d%H%M%S")
 
         self.folder = self.reports_dir / self.version
 
@@ -124,7 +119,7 @@ class Report:
         }
 
         Path(self.folder).mkdir(parents=True, exist_ok=True)
-        (Path(self.folder) / "output").mkdir(parents=True, exist_ok=True)
+        # (Path(self.folder) / "output").mkdir(parents=True, exist_ok=True)
         # (Path(self.folder) / "notebooks").mkdir(parents=True, exist_ok=True)
 
         self._save()
@@ -184,11 +179,32 @@ class Report:
     def run(self):
         self.log.debug(f"{self.__class__.__name__}.run()")
         self.start()
-        self.proccess(0)
+        self.progress(0)
         self.log.debug("Start executing notebooks")
-        self.execute(self.state["notebooks"], self.folder / "output")
 
-        notebooks = glob.glob(f"{self.folder / 'output'}/*")
+        # import os
+        os.environ["REPORT_NANE"] = self.state["name"]
+        os.environ["REPORT_MESSAGE"] = self.state["message"]
+        os.environ["REPORT_VERSION"] = self.version
+
+        os.environ["BATCH_SIMULATION"] = self.batch["simulation"]
+        os.environ["BATCH_NAME"] = self.batch["name"]
+        os.environ["BATCH_VERSION"] = self.batch["version"]
+        os.environ["BATCH_MESSAGE"] = self.batch["message"]
+
+        os.environ["PG_HOST"] = "localhost"
+        os.environ["PG_PORT"] = "5454"
+        os.environ["PG_DATABASE"] = "citros"
+        os.environ["PG_SCHEMA"] = "citros"
+        os.environ["PG_USER"] = "citros"
+        os.environ["PG_PASSWORD"] = "password"
+
+        os.environ["CITROS_ROOT"] = str(self.reports_dir)
+
+        report = self.test(self.state["notebooks"], self.folder)
+        self.execute(self.state["notebooks"], self.folder)
+
+        notebooks = glob.glob(f"{self.folder}/*.ipynb")
 
         self.log.debug("Start rendering notebooks")
         self.render(notebooks, self.folder)
@@ -197,7 +213,7 @@ class Report:
             self.sign()
             self.log.debug("Start validating notebooks")
             self.validate()
-        self.end()
+        self.end(report)
 
         return self.folder
 
@@ -206,12 +222,17 @@ class Report:
         self.log.debug(f"{self.__class__.__name__}.start()")
         self.state["status"] = "START"
 
-    def proccess(self, progress):
+    def progress(self, progress):
+        print(f"progress: {progress}")
         self.state["progress"] = progress
 
-    def end(self, status="END"):
+    def end(self, status={}):
         self.log.debug(f"{self.__class__.__name__}.end()")
-        self.proccess(100)
+
+        # tatal_passed = sum([1 for x in status.values() if x == "OK"])
+        # self.progress((float(tatal_passed) / float(len(status.keys()))) * 100.0)
+
+        self.progress(100)
         self["status"] = status
         self["finished_at"] = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -221,6 +242,27 @@ class Report:
     ###################
     ##### public ######
     ###################
+    def test(self, notebook_paths, output_folder, timout=600):
+        # test code
+        import pytest
+
+        report_path = str(output_folder / f"report.html")
+        retcode = pytest.main(
+            [
+                "--nbmake",
+                "--html",
+                report_path,
+                "--self-contained-html",
+                "-n=auto",
+                "--overwrite",
+            ]
+            + notebook_paths,
+        )
+        # retcode.name == "OK"
+        # retcode.name == "TESTS_FAILED"
+        test_result = "FAILED" if retcode.name == "TESTS_FAILED" else "OK"
+        return test_result
+
     def execute(self, notebook_paths, output_folder, timout=600):
         """
         This function executes jupiter notebooks provided
@@ -251,22 +293,23 @@ class Report:
                 self.log.error(f"The file {notebook_path} does not exist.")
                 raise NoNotebookFoundException
 
-            # import os
-            os.environ["REPORT_NANE"] = "CITROS"
-            os.environ["REPORT_VERSION"] = "REPORT_VERSION"
-            os.environ["BATCH_SIMULATION"] = "BATCH_SIMULATION"
-            os.environ["BATCH_NAME"] = "BATCH_NAME"
-            os.environ["BATCH_VERSION"] = "BATCH_VERSION"
+            # # import os
+            # os.environ["REPORT_NANE"] = "CITROS"
+            # os.environ["REPORT_VERSION"] = "REPORT_VERSION"
+            # os.environ["BATCH_SIMULATION"] = "BATCH_SIMULATION"
+            # os.environ["BATCH_NAME"] = "BATCH_NAME"
+            # os.environ["BATCH_VERSION"] = "BATCH_VERSION"
 
-            os.environ["PG_HOST"] = "localhost"
-            os.environ["PG_PORT"] = "5454"
-            os.environ["PG_DATABASE"] = "citros"
-            os.environ["PG_SCHEMA"] = "citros"
-            os.environ["PG_USER"] = "citros"
-            os.environ["PG_PASSWORD"] = "password"
+            # os.environ["PG_HOST"] = "localhost"
+            # os.environ["PG_PORT"] = "5454"
+            # os.environ["PG_DATABASE"] = "citros"
+            # os.environ["PG_SCHEMA"] = "citros"
+            # os.environ["PG_USER"] = "citros"
+            # os.environ["PG_PASSWORD"] = "password"
 
-            os.environ["CITROS_ROOT"] = str(self.reports_dir)
+            # os.environ["CITROS_ROOT"] = str(self.reports_dir)
 
+            # render
             execute_preprocessor = ExecutePreprocessor(
                 timeout=timout, kernel_name="python3"
             )
