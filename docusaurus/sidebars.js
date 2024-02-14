@@ -25,6 +25,10 @@ module.exports = {
     {
       type: "category",
       label: "Commands",
+      link: {
+        type: 'doc',
+        id: 'commands/overview',
+      },
       items: [
         "commands/init",
         "commands/run",
@@ -41,6 +45,9 @@ module.exports = {
         "commands/data/db_start",
         "commands/data/db_stop",
         "commands/data/db_logs",
+        "commands/report/report_list",
+        "commands/report/report_generate",
+      
       ],
     },
 
