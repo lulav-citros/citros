@@ -472,7 +472,7 @@ class BatchUploader:
             # print(parameters)
             for parameter in parameters:
                 try:
-                    cursor = connection.cursor()
+                    # cursor = connection.cursor()
                     self.upload_parameters_to_pg(
                         connection,
                         schema_name=schema_name,
@@ -515,7 +515,7 @@ class BatchUploader:
                     connection = citrosDB.connect()
 
         self.save_state("LOADED")
-        cursor.close()
+        # cursor.close()
         connection.commit()
         connection.close()
 
