@@ -1,5 +1,5 @@
 ---
-sidebar_position: 60
+sidebar_position: 40
 sidebar_label: 'Lunar Hopper'
 ---
 
@@ -102,7 +102,7 @@ def func_with_context(num, context):
 
 This function will set the ```Isp``` parameter in range from 200 to 200+10*n, where n = number of runs.
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 These parameters can be found in ```.citros/simulations/simulation_lunar_hopper.json```. <br/>
