@@ -1,1 +1,9 @@
+-- drop all tables
 SELECT public.drop_all();
+
+-- clear hot_reload
+DELETE FROM public.hot_reload
+WHERE EXISTS (SELECT FROM public.hot_reload
+    WHERE simulation = 'session'
+        and batch = 'copy'
+);

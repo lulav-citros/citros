@@ -2,6 +2,7 @@
 -- {{ ORGANIZATION_NAME }}
 -- {{ SCHEMA_NAME }}
 -- {{ TABLE_NAME }}
+-- {{ VERSION }}
 
 CREATE SCHEMA IF NOT EXISTS {{ SCHEMA_NAME }};
 
@@ -46,3 +47,16 @@ comment on column {{ SCHEMA_NAME }}."{{ TABLE_NAME }}".data is 'ros message data
 -- Permissions
 -- -- Users
 GRANT ALL privileges ON TABLE {{ SCHEMA_NAME }}."{{ TABLE_NAME }}" TO role_org_{{ ORGANIZATION_NAME }};
+
+
+-- remove the batch from hot reload info table. (just to be sure)
+DELETE FROM public.hot_reload
+WHERE EXISTS (SELECT FROM public.hot_reload
+    WHERE simulation = '{{ SCHEMA_NAME }}'
+        and batch = '{{ TABLE_NAME }}'
+);
+
+INSERT INTO public.hot_reload
+    (simulation, batch, version)
+VALUES
+    ('{{ SCHEMA_NAME }}', '{{ TABLE_NAME }}', '{{ VERSION }}');
