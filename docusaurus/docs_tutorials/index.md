@@ -532,7 +532,7 @@ citros.batch(-1).topic('/cannon/state').sid([0,1,2,3,4]).\
 
 ## Reports
 
-Report is a combination of data and notebook generated into one immutable signed pdf. This is a great tool which can help you to track the metric of your project overtime.<br />For example, you can create a report that measures accuracy, this report can be generated each version so with time you can see the progress of the accuracy increases.<br />For additional info go to [report](../docs/cli/cli_commands.md).
+Report is a combination of data and notebook generated into one immutable signed pdf. This is a great tool which can help you to track the metric of your project overtime.<br />For example, you can create a report that measures accuracy, this report can be generated each version so with time you can see the progress of the accuracy increases.
 
 ### Generate Report
 
