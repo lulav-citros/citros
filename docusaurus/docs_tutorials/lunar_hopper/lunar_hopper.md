@@ -27,11 +27,12 @@ The Lunar Hopper project is a lunar exploration planning project aimed at solvin
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/lunar_hopper.git
-```
 
+    ```bash
+    git clone git@github.com:citros-garden/lunar_hopper.git
+    ``` 
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 

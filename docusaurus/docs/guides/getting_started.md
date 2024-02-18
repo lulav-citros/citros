@@ -32,7 +32,7 @@ Try running:
 ```bash
  $ source ~/.profile 
 ```
-This should solve your problem and you should be able to run citros commands, otherwise [contact us](https://discord.com/).
+This should solve your problem and you should be able to run citros commands, otherwise [contact us](https://discord.gg/HhhTGHU6pw).
 :::
 ## Clone CITROS Garden Project
 
