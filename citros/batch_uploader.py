@@ -422,27 +422,8 @@ class BatchUploader:
         #         self.log.debug(f"PostgreSQL connection is closed")
         #         logging.shutdown()
 
-    def get_state(self):
-        return json.loads(
-            (Path(self.root) / self.simulation_name / self.name / "hr.json").read_text()
-        )
-
-    def save_state(self, status):
-        # print("_save self.path()", self.path())
-        with open(
-            Path(self.root) / self.simulation_name / self.name / "hr.json", "w"
-        ) as file:
-            json.dump(
-                {"status": status, "version": self.version},
-                file,
-                indent=4,
-                sort_keys=True,
-            )
-
     def upload(self):
         self.log.debug(f"{self.__class__.__name__}.upload()")
-
-        self.save_state("LOADING")
 
         # inspect(self)
         # print(f"self.batch_dir: {self.batch_dir}")
@@ -459,7 +440,7 @@ class BatchUploader:
             self.log.error("No creating connection to database. Aborting.")
             raise NoConnectionToCITROSDBException
 
-        citrosDB.create_table(connection, schema_name, table_name)
+        citrosDB.create_table(connection, schema_name, table_name, self.version)
 
         for sid_path in glob(f"{self.batch_dir}/*/"):
             if sid_path.endswith("/"):
@@ -472,7 +453,7 @@ class BatchUploader:
             # print(parameters)
             for parameter in parameters:
                 try:
-                    cursor = connection.cursor()
+                    # cursor = connection.cursor()
                     self.upload_parameters_to_pg(
                         connection,
                         schema_name=schema_name,
@@ -514,8 +495,10 @@ class BatchUploader:
                     self.log.error(e)
                     connection = citrosDB.connect()
 
-        self.save_state("LOADED")
-        cursor.close()
+        citrosDB.hot_reload_set_status(
+            connection, schema_name, table_name, self.version, "LOADED"
+        )
+        # cursor.close()
         connection.commit()
         connection.close()
 
@@ -535,5 +518,3 @@ class BatchUploader:
         citrosDB.drop_table(connection, schema_name, table_name)
 
         connection.close()
-
-        self.save_state("UNLOADED")

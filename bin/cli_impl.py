@@ -471,7 +471,7 @@ def data_list(args, argv):
 
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
-        flat_batches = citros.get_batches_flat()
+        flat_batches, hot_reload_info = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
@@ -517,6 +517,10 @@ def data_list(args, argv):
     # (sim if sim[-1] != "/" else sim[:-1])
     console = Console()
     console.print(table)
+    if hot_reload_info is None:
+        print(
+            '* [yellow]No connection to db, all status is [red]"UNKNOWN" [yellow]please start/create a db.'
+        )
 
 
 def data_info(args, argv):

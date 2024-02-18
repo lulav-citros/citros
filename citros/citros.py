@@ -379,55 +379,67 @@ class Citros(CitrosObj):
         return batches
 
     def get_batches_flat(self):
+
+        from .database import CitrosDB
+
+        hot_reload_info = {}
+        try:
+            citrosDB = CitrosDB(log=self.log, debug=self.debug, verbose=self.verbose)
+            hot_reload_info = citrosDB.hot_reload_get_info()
+        except Exception as ex:
+            self.log.error(ex)
+
+        # inspect(hot_reload_info)
+
         batches = []
         simulations = sorted(glob.glob(f"{str(self.root_citros / 'data')}/*/"))
         for sim in simulations:
             if not Path(sim).is_dir():
                 continue
             names = sorted(glob.glob(f"{sim}/*/"))
-            _simulation = (sim if sim[-1] != "/" else sim[:-1]).split("/")[-1]
+            simulation = (sim if sim[-1] != "/" else sim[:-1]).split("/")[-1]
+            _simulation_print = simulation
+
             for name in names:
                 if not Path(name).is_dir():
                     continue
                 versions = sorted(glob.glob(f"{name}/*/"), reverse=True)
                 # print(versions)
-                _name = (name if name[-1] != "/" else name[:-1]).split("/")[-1]
-                try:
-                    batch_hr_statu = json.loads((Path(name) / "hr.json").read_text())
-                except:
-                    batch_hr_statu = {"status": "UNLOADED"}
+                name = (name if name[-1] != "/" else name[:-1]).split("/")[-1]
+                name_print = name
 
                 for version in versions:
                     batch = json.loads((Path(version) / "info.json").read_text())
-                    status = "UNLOADED"
-                    if (
-                        batch_hr_statu.get("version", None)
-                        == (version if version[-1] != "/" else version[:-1]).split("/")[
-                            -1
-                        ]
-                    ):
-                        status = batch_hr_statu.get("status")
+
+                    version = (version if version[-1] != "/" else version[:-1]).split(
+                        "/"
+                    )[-1]
 
                     batches.append(
                         {
                             "created_at": batch["created_at"],
-                            "simulation": _simulation,
-                            "name": _name,
-                            "version": (
-                                version if version[-1] != "/" else version[:-1]
-                            ).split("/")[-1],
+                            "simulation": _simulation_print,
+                            "name": name_print,
+                            "version": version,
                             "message": batch["message"],
-                            f"status": status,
+                            f"status": (
+                                "UNKNOWN"
+                                if hot_reload_info is None
+                                else hot_reload_info.get(simulation, {})
+                                .get(name, {})
+                                .get(version, {})
+                                .get("status", "UNLOADED")
+                            ),
                             "completions": str(batch["completions"]),
                             "path": version,
                         }
                     )
 
                     # for printing.
-                    _simulation = None
-                    _name = None
+                    _simulation_print = None
+                    _name_print = None
 
-        return batches
+        return batches, hot_reload_info
 
     def get_reports_flat(self):
         ret = []
