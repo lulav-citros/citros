@@ -201,6 +201,8 @@ class Report:
 
         os.environ["CITROS_ROOT"] = str(self.reports_dir)
 
+        self.fix(self.state["notebooks"])
+
         report = self.test(self.state["notebooks"], self.folder)
         self.execute(self.state["notebooks"], self.folder)
 
@@ -263,6 +265,38 @@ class Report:
         test_result = "FAILED" if retcode.name == "TESTS_FAILED" else "OK"
         return test_result
 
+    def fix(self, notebook_paths):
+        for notebook_path in notebook_paths:
+            try:
+
+                # print(
+                #     "vpvavpvvovovvovovovovovovovovovovovovovovovovovovovovovovovovovovovo"
+                # )
+                # nb_node = nbformat.read(nb_file)
+                # a, nb = nbformat.validator.normalize(json.load(nb_file))
+                # print(a)
+                # nbformat.validate(nb, version=4)
+                # print(nb_file)
+                j = {}
+                with open(notebook_path) as data_file:
+                    j = json.load(data_file)
+
+                for cell in j.get("cells", []):
+                    t = (
+                        cell.get("metadata", {})
+                        .get("execution", {})
+                        .get("iopub.execute_input")
+                    )
+                    if type(t) == int:
+                        cell["metadata"]["execution"] = {}
+
+                with open(notebook_path, "w", encoding="utf-8") as f:
+                    json.dump(j, f, ensure_ascii=False, indent=4)
+
+            except FileNotFoundError:
+                self.log.error(f"The file {notebook_path} does not exist.")
+                raise NoNotebookFoundException
+
     def execute(self, notebook_paths, output_folder, timout=600):
         """
         This function executes jupiter notebooks provided
@@ -319,7 +353,7 @@ class Report:
                     {"metadata": {"path": output_folder}},
                 )
             except CellExecutionError as e:
-                self.log.exception(e)
+                self.log.error(e)
                 # raise
             finally:
                 with open(
