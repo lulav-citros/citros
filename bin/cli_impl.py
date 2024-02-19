@@ -783,6 +783,8 @@ def data_db_create(args, argv):
             raise e
         return
 
+    import requests
+
     try:
         container = client.containers.get(config.DB_CONTAINER_NAME)
         print("found existing DB container, starting it...")
@@ -792,6 +794,9 @@ def data_db_create(args, argv):
         return
     except docker.errors.NotFound:
         container = None
+    except requests.exceptions.HTTPError as er:
+        print(f"[red]could not start container: {er}.")
+        return
 
     print("creating DB container...")
     container = client.containers.run(
@@ -804,6 +809,7 @@ def data_db_create(args, argv):
         ],
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
+        network="host",
     )
     # TODO [enhancement]: check container status instead of sleep.
     sleep(3)
