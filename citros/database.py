@@ -259,7 +259,7 @@ class CitrosDB:
             return None
         except Exception as ex:
             self.log.error(ex)
-            return None
+            return {}
 
     def clean_db(self):
         from jinja2 import Environment, FileSystemLoader

@@ -77,7 +77,7 @@ class Simulation(CitrosObj):
             name = name.parent / "msg" / name.name
         return str(name)
 
-    def _register_custom_message(self, msgpath: str):
+    def _register_custom_message(self, msgpath):
         """
         Register custom message types from a given folder path.
 
@@ -85,6 +85,12 @@ class Simulation(CitrosObj):
             message_folder_path (str): The folder path where custom messages are stored.
         """
         from rosbags.typesys import get_types_from_msg, register_types
+
+        if type(msgpath) is str:
+            msgpath = Path(msgpath)
+
+        if type(msgpath) is not Path:
+            raise ValueError("msgpath must be a string or a Path object.")
 
         msgdef = msgpath.read_text(encoding="utf-8")
         add_types = get_types_from_msg(msgdef, self._guess_msgtype(msgpath))
@@ -98,6 +104,7 @@ class Simulation(CitrosObj):
         from .parsers import ParserRos2
 
         msg_paths = ParserRos2(self.log).get_msg_files(self.root)
+        self.log.debug(f"{'   '*self.level}msg_paths = {msg_paths}")
         for msg_path in msg_paths:
             # assuming msg files are under package_name/msg/
             package_name = Path(msg_path).parent.parent.name
@@ -394,22 +401,22 @@ class Simulation(CitrosObj):
             print(f"Copying ros logs...")
             self._copy_ros_log(simulation_rec_dir)
         except Exception as e:
-            self.log.error(e)
+            self.log.exception(e)
         try:
             print(f"Copying and registering messages logs...")
             self._handle_msg_files(simulation_rec_dir)
         except Exception as e:
-            self.log.error(e)
+            self.log.exception(e)
         try:
             print(f"Saving system vars...")
             self._save_system_vars(simulation_rec_dir)
         except Exception as e:
-            self.log.error(e)
+            self.log.exception(e)
         try:
             print(f"Preparing citros bags...")
             self._prepare_citros_bag(simulation_rec_dir)
         except Exception as e:
-            self.log.error(e)
+            self.log.exception(e)
 
         if ret != 0:
             events.error(
