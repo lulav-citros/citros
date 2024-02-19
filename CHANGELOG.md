@@ -2,6 +2,29 @@
 
 
 
+## v0.2.55 (2024-02-18)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`1f116ac`](https://github.com/lulav-citros/citros/commit/1f116acb878bca12a58dc342031551237861b53c))
+
+### Fix
+
+* fix(db): db related commands
+
+Dev ([`86c6cd1`](https://github.com/lulav-citros/citros/commit/86c6cd1703cfbd823176fcf9eae13142ce0415ce))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`6bef7a3`](https://github.com/lulav-citros/citros/commit/6bef7a3c662dc9336131111ede65d069056ce186))
+
+* Fix notebook execution and add new envtest notebook ([`f993ad8`](https://github.com/lulav-citros/citros/commit/f993ad86eae1ec9d166cc586eee6e5722084b9d0))
+
+* Update database scripts and CLI implementation ([`f98837e`](https://github.com/lulav-citros/citros/commit/f98837eb3feb48f8466e3d06d96c55260ca637eb))
+
+* Commented out unnecessary cursor.close() calls in batch_uploader.py ([`d617372`](https://github.com/lulav-citros/citros/commit/d6173723f831dd552b98565b9d09f012a931579d))
+
+
 ## v0.2.54 (2024-02-14)
 
 ### Documentation
