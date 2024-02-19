@@ -147,7 +147,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 All the results will be saved under `.citros/data/simulation_lunar_starship/[batch_name]` folder. <br/>
 *in this case, batch_name is Lunar_Starship*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 ![png](img/img0.png "FoxGlove example")
 
 

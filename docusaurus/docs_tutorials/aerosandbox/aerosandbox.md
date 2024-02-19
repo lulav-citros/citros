@@ -111,7 +111,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 All the results will be saved under `.citros/data/simulation_aerosandbox_cessna/[batch_name]` folder. <br/>
 *in this case, batch_name is aerosandbox_cessna*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 ![gif](img/gif0.gif "Foxglove example")
 

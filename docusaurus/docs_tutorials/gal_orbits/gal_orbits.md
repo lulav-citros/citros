@@ -168,18 +168,17 @@ Let's take a look on the results of the notebook.
 We made [simulations](#scenario) of the orbits of the globular cluster NGC 6316 for 5 different masses of the Galactic disk `M_disk`. To get some qualitative idea on how the mass of the Galactic disk affect the orbits, let's first display the projections of the simulated orbits onto the Galactic disk:
 
 ```python
-from citros_data_analysis import data_access as da
-citros = da.CitrosDB()
+from citros import CitrosDB
+citros = CitrosDB(simulation = 'simulation_gal_orbits', batch = 'galactic_orbits')
 
-# query data using citros_data_analysis package, get pandas.DataFrame
-F = citros.batch('galactic orbits').topic('/gal_orbits').data(['data.data[9]', 'data.data[10]'])
+# query data using citros, get pandas.DataFrame
+F = citros.topic('/gal_orbits').data(['data.data[0]', 'data.data[9]', 'data.data[10]'])
 
 # change, calculate, explore your data - take full advantage of working with pandas python package
-F.rename({'data.data[9]': 'xg', 'data.data[10]': 'yg'}, axis = 1, inplace = True)
+F.rename({'data.data[0]': 't', 'data.data[9]': 'xg', 'data.data[10]': 'yg'}, axis = 1, inplace = True)
 
-# plot with citros_data_analysis
-fig, ax = citros.plot_graph(F, 'xg', 'yg', '-', set_x_label='x, kpc', set_y_label='y, kpc', 
-                            title='Projection onto the Galactic plane, NGC 6316')
+# plot with citros:
+fig, ax = citros.plot_graph(F, 'xg', 'yg', '-', set_x_label='x, kpc', set_y_label='y, kpc', title='Projection onto the Galactic plane, NGC 6316')
 
 # add additional information on the graph: position of the Sun and start of the simulation
 ax.plot(0, 0, 'y*', markersize = 12)
@@ -199,13 +198,11 @@ fig, ax = citros.plot_sigma_ellipse(f, 'xg', 'yg', n_std = [1,2,3], plot_origin=
                                     set_x_label= 'x, kpc', set_y_label= 'y, kpc', title = 't = 200 Myr')
 ```
 
-![fig_ngc6316_ellipse](img/fig_ngc6316_ellipse.png "fig_ngc6316_ellipse")
-
 We can also obtain a quantitative understanding of the extent to which the mass of the Galactic disk influences the cluster's orbits. For example, we can check whether the standard deviation of the distance `d` from the Galactic center calculated across different simulations does not exceed 15 percent of the overall average distance `d_mean`. The distance `d` from the Galactic center to the cluster can be calculated as the square root of the sum of the squared values in the 'R' ('data.data[1]') and 'z' ('data.data[5]') columns.
 
 ```python
 # query data
-F = citros.batch('galactic orbits_1').topic('/gal_orbits').data(['data.data[0]', 'data.data[1]', 'data.data[5]'])
+F = citros.topic('/gal_orbits').data(['data.data[0]', 'data.data[1]', 'data.data[5]'])
 F.rename({'data.data[0]': 't', 'data.data[1]': 'R', 'data.data[5]': 'z'}, axis = 1, inplace = True)
 
 import numpy as np
@@ -218,9 +215,8 @@ To calculate the average distance from the Galactic center to the cluster, a sim
 Although the time range for all simulations is the same (0-20 Myr), the number of points and their corresponding time moments vary. Therefore, we need to establish a correspondence between the different simulations. This can be achieved using the `citros_data_analysis.error_analysis package`. To align the data from different simulations, we can divide the time into a certain number of intervals and assign indexes to these intervals. For each interval, we then calculate the mean distance for each simulation. This approach yields a common set of time values for all simulations, along with a corresponding set of distance values determined for these time points.
 
 ```python
-from citros_data_analysis import error_analysis as analysis
-
-dataset = analysis.CitrosData(F, data_label=['d'], units = 'kpc')
+from citros import CitrosData
+dataset = CitrosData(F, data_label=['d'], units = 'kpc')
 db = dataset.bin_data(n_bins = 50, param_label = 't')
 
 # calculate statistics among different simulations
@@ -233,11 +229,10 @@ d_mean = stat.mean.mean()
 Using the `citros_data_analysis.validation` package, we can check whether the standard deviation is not very significant and is less than 15 percent of the average distance from the Galactic center:
 
 ```python
-from citros_data_analysis import validation as va
-
-V = va.Validation(F, data_label = 'd', param_label = 't', method = 'bin', num = 50, units = 'kpc')
+from citros import Validation
+V = Validation(F, data_label = 'd', param_label = 't', method = 'bin', num = 50, units = 'kpc')
 log, table, fig = V.std_test(limits = d_mean*0.15, n_std = 1, nan_passed = True, 
-                             std_area = True, std_color = 'b')
+                            std_area = True, std_color = 'b')
 ```
 
 ![fig_ngc6316_test](img/fig_ngc6316_test.png "fig_ngc6316_test")

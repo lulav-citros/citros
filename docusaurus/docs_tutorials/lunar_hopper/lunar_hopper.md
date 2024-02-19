@@ -119,7 +119,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 All the results will be saved under `.citros/data/simulation_lunar_hopper/[simulation_name]` folder.<br/>
 *in this case, simulation_name is Lunar_hopper*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 Use ```layout_states.json``` for states plots:
 
