@@ -809,7 +809,7 @@ def data_db_create(args, argv):
         ],
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
-        network="host",
+        # network="host",
     )
     # TODO [enhancement]: check container status instead of sleep.
     sleep(3)
