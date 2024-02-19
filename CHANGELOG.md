@@ -2,6 +2,25 @@
 
 
 
+## v0.2.57 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`57b1dbc`](https://github.com/lulav-citros/citros/commit/57b1dbc7d11f19c8a101031c21a8bc840443c7e3))
+
+### Fix
+
+* fix(sim): added custom messages support
+
+Dev ([`439d9da`](https://github.com/lulav-citros/citros/commit/439d9dad560110a875bd9d75f219b4d9218fe2d7))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`066bbc5`](https://github.com/lulav-citros/citros/commit/066bbc5542943d63b6ae2d15293566ad26243f9f))
+
+* Fix msgpath validation in Simulation class ([`7563cde`](https://github.com/lulav-citros/citros/commit/7563cdecdbecfc00c91e113b4e4f2560330c7edd))
+
+
 ## v0.2.56 (2024-02-19)
 
 ### Documentation
