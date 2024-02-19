@@ -86,11 +86,13 @@ class Simulation(CitrosObj):
         """
         from rosbags.typesys import get_types_from_msg, register_types
 
-        if type(msgpath) is str:
+        if isinstance(msgpath, str):
             msgpath = Path(msgpath)
 
-        if type(msgpath) is not Path:
-            raise ValueError("msgpath must be a string or a Path object.")
+        if not isinstance(msgpath, Path):
+            raise ValueError(
+                f"msgpath: {type(msgpath)} must be a string or a Path object."
+            )
 
         msgdef = msgpath.read_text(encoding="utf-8")
         add_types = get_types_from_msg(msgdef, self._guess_msgtype(msgpath))
@@ -108,7 +110,7 @@ class Simulation(CitrosObj):
         for msg_path in msg_paths:
             # assuming msg files are under package_name/msg/
             package_name = Path(msg_path).parent.parent.name
-            target_dir = Path(destination, package_name, "msg")
+            target_dir = Path(destination, "msgs", package_name, "msg")
             copy_files([msg_path], str(target_dir), self.log, True)
 
             # register custom messages
