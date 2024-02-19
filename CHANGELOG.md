@@ -2,6 +2,25 @@
 
 
 
+## v0.2.56 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`7cb9b60`](https://github.com/lulav-citros/citros/commit/7cb9b600b5aeaa9779cc762051c9b3a2f4fdd015))
+
+### Fix
+
+* fix(simulation): upload msgs 
+
+Dev ([`48ea6ae`](https://github.com/lulav-citros/citros/commit/48ea6aef71a0dcea8e28483da5af6bee3781d1e7))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`84557b6`](https://github.com/lulav-citros/citros/commit/84557b6a4d30147bf54e89cbd4442ea15cf0a14d))
+
+* Add error handling for starting container ([`75f8cd9`](https://github.com/lulav-citros/citros/commit/75f8cd98ac24ad360027be1d471cd6a8e0930351))
+
+
 ## v0.2.55 (2024-02-18)
 
 ### Documentation
