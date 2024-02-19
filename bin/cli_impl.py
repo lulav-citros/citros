@@ -249,7 +249,7 @@ source install/local_setup.bash""",
     # if index != -1 then we run only a part of the batch, so we don't want to load to DB yet.
     if getattr(args, "index", -1) == -1:
         try:
-            print("Upoading data to DB...")
+            print("Uploading data to DB...")
             batch.unload()
             batch.upload()
         except NoConnectionToCITROSDBException:
