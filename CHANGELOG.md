@@ -2,6 +2,25 @@
 
 
 
+## v0.2.58 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`0b85156`](https://github.com/lulav-citros/citros/commit/0b85156fd3e2072831f83392bd20a0fb634266f0))
+
+### Fix
+
+* fix(db): create bug fix
+
+Dev ([`9bdbdfb`](https://github.com/lulav-citros/citros/commit/9bdbdfb35e1970692d0cb9ce927b56b6804bfb58))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`774d7df`](https://github.com/lulav-citros/citros/commit/774d7df1f997f1f65124f804401505de8588cf40))
+
+* Remove network=&#34;host&#34; from container creation ([`6385607`](https://github.com/lulav-citros/citros/commit/63856077dec97e385498188aa3bbfb6cd4d8ef7c))
+
+
 ## v0.2.57 (2024-02-19)
 
 ### Documentation
