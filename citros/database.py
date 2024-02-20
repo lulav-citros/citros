@@ -157,17 +157,10 @@ class CitrosDB:
                     port=self.db_port,
                     database=self.db_name,
                 )
-                # Creating a cursor object using the cursor() method
-                cursor = connection.cursor()
-
-                # Executing an MYSQL function using the execute() method
-                cursor.execute("select version()")
-
-                # Fetch a single row using fetchone() method.
-                data = cursor.fetchone()
-                # print("Connection established to: ", data)
-
-                self.log.info(f"Successfully connected to Postgres Database {data}")
+                with connection.cursor() as cursor:
+                    cursor.execute("select version();")
+                    data = cursor.fetchone()
+                    self.log.info(f"Successfully connected to Postgres Database {data}")
 
                 return connection
 
