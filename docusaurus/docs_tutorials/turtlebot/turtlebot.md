@@ -1,5 +1,5 @@
 ---
-sidebar_position: 50
+sidebar_position: 130
 sidebar_label: 'TurtleBot'
 ---
 
@@ -28,10 +28,14 @@ All project installation, code overview and usage details are also available on 
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/turtlebot3.git
-```
+
+    ```bash
+    git clone git@github.com:citros-garden/turtlebot3.git
+    ```
+
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
+
 
 ## Workspace Overview
 
@@ -86,7 +90,7 @@ For that, we need to set up parameters and launch CITROS simulation. The paramet
 }
 ```
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 This parameters can be found in ```.citros/simulations/simulation_turtlebot3_sim_cont.json```. <br/>
@@ -112,6 +116,7 @@ All the results will be saved under `.citros/data/simulation_turtlebot3/[batch_n
 You will find the notebook under `citros_template/notebooks` folder.
 
 As you can see, the traveled trajectory varies for different simulations:
+
 ![png](img/citros2.png "CITROS example")
 
 The graph below shows values from data attribute vs. independent parameter for each of the simulation, the mean value over all the simulations and 3 σ interval.
