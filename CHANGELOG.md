@@ -2,6 +2,31 @@
 
 
 
+## v0.2.59 (2024-02-20)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`5d0dc4d`](https://github.com/lulav-citros/citros/commit/5d0dc4d31c88064cf4cac6bd8c02afa5aa0bba94))
+
+### Fix
+
+* fix(python): support for python &gt;= 3.10 
+
+Dev ([`4cf2934`](https://github.com/lulav-citros/citros/commit/4cf2934da7a4d7f093527aaae1235225cc68920e))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`9886467`](https://github.com/lulav-citros/citros/commit/9886467474f7b754a635144262a9eb822bc582e6))
+
+* Add python_requires to setup.py ([`46cc708`](https://github.com/lulav-citros/citros/commit/46cc7083dc958993921034326627fcf5929788a3))
+
+* Refactor database connection code ([`98fba03`](https://github.com/lulav-citros/citros/commit/98fba03f6ad2d4ea3c650576a74d8030c9f64598))
+
+* Fix typo in print statement ([`d70aee0`](https://github.com/lulav-citros/citros/commit/d70aee08ef934737d811ee007fe09ac5cf9698f3))
+
+* Fix typo in print statement ([`fa93edf`](https://github.com/lulav-citros/citros/commit/fa93edfdb645a3a7d599a9c35351a3087acc5aae))
+
+
 ## v0.2.58 (2024-02-19)
 
 ### Documentation
