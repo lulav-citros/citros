@@ -17,8 +17,8 @@ To clone the repository:
 :::note
 For foxy based ROS projects run the commands 
 ```
-apt update
-apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
+sudo apt-get update
+sudo apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
 ```
 :::
 
