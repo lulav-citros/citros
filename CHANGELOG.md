@@ -2,6 +2,25 @@
 
 
 
+## v0.2.60 (2024-02-21)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`d824595`](https://github.com/lulav-citros/citros/commit/d824595edaa7eccca07849b8728a6080b392e132))
+
+### Fix
+
+* fix(ptyhon): 3.8 support
+
+Dev ([`13ef279`](https://github.com/lulav-citros/citros/commit/13ef279de1dc78b0dd7eaadb7f2d0ec0430513db))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`c0c3671`](https://github.com/lulav-citros/citros/commit/c0c36710291d0100b3faf38b776f6618c953d816))
+
+* Update setup.py and formatter.py, add asciinema readme ([`9b5411f`](https://github.com/lulav-citros/citros/commit/9b5411fd71b59b853e9374966a925fa7845b8efd))
+
+
 ## v0.2.59 (2024-02-20)
 
 ### Documentation
