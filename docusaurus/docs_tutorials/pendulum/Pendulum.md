@@ -258,7 +258,7 @@ All the results will be saved under `.citros/data/simulation_gal_orbits/[batch_n
 
 ## Results
 
-Check the results of the simulations using `notebook` and [citros_data_analysis package](../../docs/data_analysis/index) which allows you to query, visualize and analyze the results.
+Check the results of the simulations using `notebook` and [citros_data_analysis package](../../docs/data_analysis) which allows you to query, visualize and analyze the results.
 
 1. [Create Database](../../docs/guides/getting_started#create-db)
 2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)

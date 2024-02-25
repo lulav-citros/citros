@@ -162,7 +162,7 @@ Now when your simulation is complete, you're ready to check the results!
 4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `Disk mass variation.ipynb`. <br/>
 You will find the notebook under `citros_template/notebooks` folder.
 
-The notebook has examples prepared using the [citros_data_analysis package](../../docs/data_analysis/index) on how to query, analyze and present results. Feel free to use them or create your own!<br/>
+The notebook has examples prepared using the [citros_data_analysis package](../../docs/data_analysis) on how to query, analyze and present results. Feel free to use them or create your own!<br/>
 Let's take a look on the results of the notebook.
 
 We made [simulations](#scenario) of the orbits of the globular cluster NGC 6316 for 5 different masses of the Galactic disk `M_disk`. To get some qualitative idea on how the mass of the Galactic disk affect the orbits, let's first display the projections of the simulated orbits onto the Galactic disk:
