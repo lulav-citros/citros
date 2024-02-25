@@ -2,6 +2,23 @@
 
 
 
+## v0.2.62 (2024-02-25)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`0d58d8c`](https://github.com/lulav-citros/citros/commit/0d58d8c7729cedc20606d643b75a16096b1083fc))
+
+### Fix
+
+* fix(doc): added blog back
+
+build fix, add blog ([`0011f2f`](https://github.com/lulav-citros/citros/commit/0011f2fec050d92d5c749a619468553624689fbf))
+
+### Unknown
+
+* build fix, add blog ([`9c96b30`](https://github.com/lulav-citros/citros/commit/9c96b30b60015d5a04f9ecf2cb190d763107f87d))
+
+
 ## v0.2.61 (2024-02-25)
 
 ### Documentation
