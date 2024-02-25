@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>CITROS Blog</title>
+        <link>https://docs.citros.io/blog</link>
+        <description>CITROS Blog</description>
+        <lastBuildDate>Sun, 25 Feb 2024 16:49:23 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <language>en</language>
+        <item>
+            <title><![CDATA[Presented at ROSCon 2023 by Noam Leiter of Lulav Space Ltd.]]></title>
+            <link>https://docs.citros.io/blog/noam-talk-roscon</link>
+            <guid>https://docs.citros.io/blog/noam-talk-roscon</guid>
+            <pubDate>Sun, 25 Feb 2024 16:49:23 GMT</pubDate>
+            <description><![CDATA[Inspired by the Beresheet lunar mission, Lulav Space, an Israeli startup specializing in space applications, has developed CITROS, a cloud-based robotic software validation platform. Built on ROS 2, CITROS allows easy integration of various robotic systems, provides parallel simulation on the cloud and powerful data analysis and reporting capabilities with an intuitive Python-based API. In this talk, we will present CITROS to the ROS community, highlighting its benefits, CI/CD capabilities, and open source contributions. The talk targets individuals interested in ROS, cloud computing, DevOps, and simulation.]]></description>
+            <content:encoded><![CDATA[<iframe width="675" height="380" src="https://vimeo.com/showcase/10775523/video/879001126/embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe><p>Inspired by the Beresheet lunar mission, Lulav Space, an Israeli startup specializing in space applications, has developed CITROS, a cloud-based robotic software validation platform. Built on ROS 2, CITROS allows easy integration of various robotic systems, provides parallel simulation on the cloud and powerful data analysis and reporting capabilities with an intuitive Python-based API. In this talk, we will present CITROS to the ROS community, highlighting its benefits, CI/CD capabilities, and open source contributions. The talk targets individuals interested in ROS, cloud computing, DevOps, and simulation.</p>]]></content:encoded>
+        </item>
+    </channel>
+</rss>

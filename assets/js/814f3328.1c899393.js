@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcitros_doc=self.webpackChunkcitros_doc||[]).push([[52535],{45641:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Presented at ROSCon 2023 by Noam Leiter of Lulav Space Ltd.","permalink":"/blog/noam-talk-roscon"}]}')}}]);
