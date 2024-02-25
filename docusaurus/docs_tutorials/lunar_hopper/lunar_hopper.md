@@ -1,5 +1,5 @@
 ---
-sidebar_position: 60
+sidebar_position: 40
 sidebar_label: 'Lunar Hopper'
 ---
 
@@ -27,11 +27,12 @@ The Lunar Hopper project is a lunar exploration planning project aimed at solvin
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/lunar_hopper.git
-```
 
+    ```bash
+    git clone git@github.com:citros-garden/lunar_hopper.git
+    ``` 
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
@@ -102,7 +103,7 @@ def func_with_context(num, context):
 
 This function will set the ```Isp``` parameter in range from 200 to 200+10*n, where n = number of runs.
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 These parameters can be found in ```.citros/simulations/simulation_lunar_hopper.json```. <br/>
@@ -118,7 +119,7 @@ Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-sim
 All the results will be saved under `.citros/data/simulation_lunar_hopper/[simulation_name]` folder.<br/>
 *in this case, simulation_name is Lunar_hopper*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 Use ```layout_states.json``` for states plots:
 

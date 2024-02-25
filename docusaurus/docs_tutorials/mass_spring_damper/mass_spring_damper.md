@@ -1,5 +1,5 @@
 ---
-sidebar_position: 25
+sidebar_position: 60
 sidebar_label: 'Mass Spring Damper'
 
 ---
@@ -30,7 +30,7 @@ $$
 
 where the natural frequency $\omega_n = \sqrt{k \over m}$
 
-You can choose the system's parameters `m`, `k` and `c` and choose the initial condition `x0`, `v0` and `a0`, all configured as ROS 2 parameters.
+You can choose the system's parameters `m`, `k` and `c` and choose the initial condition `x0`, `v0` and `a0`, all configured as ROS 2 parameters.  
 
 ### The Controller
 
@@ -61,15 +61,16 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
 ## Installation
 
 1. Clone the repository from Github:
+
  ```sh
  git clone git@github.com:citros-garden/mass_spring_damper.git
    ```
-2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).<br />
-*The Dockerfile contains all the necessary dependencies for the project.*
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
-### Parameters
+#### Parameters
 
 | Parameter | Description | Package
 | --------|  --------|  --------|
@@ -84,7 +85,7 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
 |v | The mass initial velocity |  dynamics
 |a | The mass initial acceleration |  dynamics
 
-### Launch Files
+#### Launch Files
 
 |Launch file| Description
 | --------|  --------|
@@ -94,12 +95,11 @@ you can tune the controller gains, $k_p$, $k_i$, $k_d$, configured as ROS 2 para
 ## CITROS Initialization
 
 1. [Install CITROS](../../docs/guides/getting_started#installation).
-2. Follow [these steps](../../docs/guides/getting_started#initialization) to Initialize CITROS.
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 
-Supposed we tune the PID gains of the controller for the nominal mass, and we reached a satisfying results.
-
+Supposed we tune the PID gains of the controller for the nominal mass, and we reached a satisfying results.<br />
 Now we want to know how robust was the tuning for a normal distributed mass:
 
 $$ 
@@ -113,7 +113,7 @@ $$
 \sigma = 0.3 
 $$
 
-All the parameters can be set following the CITROS [parameter guide](https://citros.io/doc/docs_cli/structure/citros_structure#directory-parameter_setups).
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups).
 
 
 The initial condition are:
@@ -127,35 +127,33 @@ $$
 With $setpoint = 0.0 [m]$.
 
 We will define the following requirements:
-
 * Maximum overshoot of `30%`.
 * Settling time is `2.0` [sec].
 * Settling to `10%` of the steady-state value.
 
-## Running the Scenario using CITROS
+## Running the Scenario Using CITROS
 
-1. First [upload project to CITROS Server](../../docs/guides/getting_started#upload-to-citros-server)
+Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
+1. Name your  batch run simulation: `dynamics_controller`
+2. Add a message to your batch run simulation: `dynamics simulation`
+3. Run your simulation ** 50 times **.
+4. choose the `simulation_dynamics_controller` simulation
 
-2. Lets run `50` simulations in the server
-```bash
-citros run -n "default" -m "default simulation" -r -c 50
-? Please choose the simulation you wish to run: 
-  simulation_dynamics
-❯ simulation_dynamics_controller
-```
-After running the command, choose the launch file you wish to run (if you'ld like to see the same [results](#results), choose `simulation_dynamics_controller`). The simulation will start and you could see the mass position and the control signal in the terminal's logs.
-
-You can read more about the [simulation basic running option](../../docs/guides/getting_started#simulation-running-options) or [check all `run` command options](/docs/cli/cli_commands#command-run)
+All the results will be saved under `.citros/data/simulation_dynamics_controller/[simulation_name]` folder.<br/>
+*in this case, simulation_name is dynamics_controller*
 
 ## Results
+
+1. [Create Database](../../docs/guides/getting_started#create-db)
+2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
+3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `normal_distributed_mass.ipynb`. <br/>
+You will find the notebook under `citros_template/notebooks` folder.
+
 Now we can analyze the results:
 
-![jpeg](img/analysis.jpeg)
+![Alt text](img/analysis.png)
 
-The full report with the data access and error analysis was generated using the data analysis package, can be found [here](https://citros.io/mass_spring_damper/blob/main/notebooks/normal_distributed_mass.ipynb)
-
-We can see that `43` tests were passed the requirements, `6` failed and `1` was generated invalid mass $(<0)$.
-
-The maximum mass that still meeting the requirements is equal to $1.335 [kg]$
-
+We can see that `43` tests were passed the requirements, `6` failed and `1` was generated invalid mass $(<0)$.<br />
+The maximum mass that still meeting the requirements is equal to $1.335 [kg]$<br />
 Can you do better?

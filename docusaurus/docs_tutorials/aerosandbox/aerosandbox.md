@@ -1,5 +1,5 @@
 ---
-sidebar_position: 40
+sidebar_position: 10
 sidebar_label: 'Aerosandbox'
 ---
 
@@ -31,11 +31,11 @@ You can find more information about this useful aerodynamics library on [Aerosan
 ## Installation
 1. Clone the repository:
 
-```bash
-git clone git@github.com:citros-garden/aerosandbox_cessna.git
-```
-
+    ```bash
+    git clone git@github.com:citros-garden/aerosandbox_cessna.git
+    ```
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
@@ -93,7 +93,7 @@ def func_with_context(num, citros_context):
 
 This function will set the ```h_0``` parameter in range from 1000 to 1000+1000*n, where n = number of runs.
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 This parameters can be found in ```.citros/simulations/simulation_aerosandbox_cessna.json```. <br/>
@@ -105,13 +105,13 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `aerosandbox_cessna`
-2. Add a message to your batch run simulation: `local test run`
+2. Add a message to your batch run simulation: `test run`
 3. Run your simulation ** 10 times **.
 
 All the results will be saved under `.citros/data/simulation_aerosandbox_cessna/[batch_name]` folder. <br/>
 *in this case, batch_name is aerosandbox_cessna*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 ![gif](img/gif0.gif "Foxglove example")
 

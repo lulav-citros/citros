@@ -6,6 +6,7 @@
     "loggedin",
     "lulav",
     "numpy",
+    "Offboard",
     "rosbag",
     "sleeptime"
   ],

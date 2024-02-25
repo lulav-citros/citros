@@ -1,5 +1,5 @@
 ---
-sidebar_position: 170
+sidebar_position: 70
 sidebar_label: 'Pendulum'
 ---
 
@@ -9,47 +9,36 @@ sidebar_label: 'Pendulum'
 Pendulum systems, encompassing setups from simple single pendulums to complex multi-pendulum arrangements, are governed by the principles of classical mechanics.
 The double pendulum, a classic example of a chaotic system, exhibits intricate and unpredictable behavior that is highly sensitive to its initial conditions. This system consists of two pendulums attached end to end, where the motion of the second pendulum depends on the first. One of the most fascinating aspects of a double pendulum is its sensitivity to initial parameters, including the starting angles and velocities of the pendulums. Small changes in these initial parameters can lead to vastly different trajectories. That means, if one double pendulum starts at a slightly different angle than an identical pendulum, their motions will diverge significantly over time.
 
-Setting a range of simulations with various initial parameters and exploring the behavior of the systems is convenient with CITROS: 
-
-- you can easily set new parameters for the simulations using [command line](https://citros.io/doc/docs_cli) or [web interface](https://citros.io/doc/docs/) and immediately send the scenario to be executed in the cloud;
-- have access to all your simulated data from the different devices;
-- set the analysis of the results to a pipeline by preparing notebooks using [**citros_data_analysis**](https://citros.io/doc/docs_data_analysis/) package.
-
 In the current project we suggest to explore two systems: double pendulum and system with spring, where the second component of the double pendulum is connected to an ordinary pendulum by a spring. In both models, all rods are considered weightless and inextensible, the weights are point masses, and air resistance is neglected (thus, no energy losses).
 
 ![systems_schema](img/systems_schema.png)
 
 ## Prerequisites
 
-If you are working inside the docker development container, everything is already installed. Otherwise, please check the dependencies in Dockerfile in [.devcontainer](https://github.com/citros-garden/pendulum/tree/main/.devcontainer) folder.
+1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#softwares-to-work-with-citros) to work with CITROS installed on your computer.
+2. To calculate orbits the Python package [GalOrb](https://github.com/ChemelAA/GalOrb-Package) was adopted. It is automatically installed when the docker development container of the project is build. We strongly recommend that you work with [dockers](/../../docs/guides/dockerfile_overview). However, If you are working without docker please check other dependencies in Dockerfile in [.devcontainer](https://github.com/citros-garden/gal_orbits/tree/main/.devcontainer) folder.
 
 ## Table of Contents
 1. [Installation](#installation)
 2. [Workspace Overview](#workspace-overview)
-    1. [Input Parameters](#input-parameters)
-    2. [Source Code and Launch File](#source-code-and-launch-file)
-    3. [Output of the Simulation](#output-of-the-simulation)
 3. [CITROS Initialization](#citros-initialization)
 4. [Scenario](#scenario)
-    1. [Parameter Setup](#parameter-setup)
-    2. [Simulation Setup](#simulation-setup)
 5. [Running the Scenario Using CITROS](#running-the-scenario-using-citros)
 6. [Results](#results)
 
 ## Installation
 
-Clone the repository:
+1. Clone the repository:
 
-```bash
-git clone git@github.com:citros-garden/pendulum.git
-```
-
-If you are working with devcontainer, make sure you installed [Visual Studio code](https://code.visualstudio.com/download) and then open the repository in the [VScode Dev Container](https://citros.io/doc/docs_tutorials/getting_started/#open-project-in-vscode-dev-container).
+ ```bash
+ git clone git@github.com:citros-garden/pendulum.git
+ ``` 
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
-### Input Parameters
 
-#### Double Pendulum
+#### Double Pendulum Input Parameters
 
 ![double_pendulum_schema](img/double_pendulum_schema.png)
 
@@ -69,7 +58,7 @@ v2_0 | 0.0| Initial angular velocity of the second pendulum, counted countercloc
 T | 10.0 | Time of the simulation, seconds
 h | 0.01 | Step of the simulation, seconds
 
-#### System with Spring
+#### System with Spring Input Parameters
 
 ![system_with_spring_schema](img/system_with_spring_schema.png)
 
@@ -97,7 +86,7 @@ l0 | 0.05 | Unstretched spring length, m
 T | 10.0 | Time of the simulation, seconds
 h | 0.01 | Step of the simulation, seconds
 
-### Source Code and Launch File
+#### Source Code and Launch File
 
 In the `src/double_pendulum/double_pendulum/` folder the source files for the double pendulum system are located:
 - `system_model.py` - Python code of the double pendulum model,
@@ -111,9 +100,7 @@ Two other folders - `src/double_pendulum_interfaces` and `src/system_with_spring
 
 The launch files are located in `src/double_pendulum/launch/double_pendulum.launch.py` and `src/system_with_spring/launch/system_with_spring.launch.py`.
 
-### Output of the Simulation
-
-#### Double Pendulum
+#### Double Pendulum Simulation Output
 The simulated data is published to a topic `'/coordinates'`. Each message has the custom message type that is defined in `src/double_pendulum_interfaces/`:
 
 ```js
@@ -139,7 +126,7 @@ p1.y|y coordinate of the first pendulum, m
 p2.x|x coordinate of the second pendulum, m
 p2.y|y coordinate of the second pendulum, m
 
-#### System with Spring
+#### System with Spring Simulation Output
 
 The simulated data is published to a topic named `'/coordinates'` too. Each message has the custom message type that is defined in `src/system_with_spring_interfaces/`:
 
@@ -185,15 +172,14 @@ spr.y1|x coordinate of the spring attachment to the second pendulum, m
 
 ## CITROS Initialization
 
-To start working with CITROS you need to install CITROS CLI package, log in, set ssh key and initialize the `.citros` repository. To do this please follow:
-1. [Install CITROS](https://citros.io/doc/docs_tutorials/getting_started/#installation)
-2. [Initialize CITROS](https://citros.io/doc/docs_tutorials/getting_started/#initialization)
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 
 Let's investigate whether minor changes in initial parameters have a significant impact on the motion of the pendulum.
 
-### Parameter Setup
+#### Parameter Setup
 
 Parameters are listed in file `.citros/parameter_setups/default_param_setup.json`. We can randomize, for example, the initial angles and try the system simulations with the following parameters:
 
@@ -253,37 +239,37 @@ Parameters are listed in file `.citros/parameter_setups/default_param_setup.json
 ```
 For double pendulum system we randomize the initial angle of the first pendulum using normal distribution with mean equals 120 degrees and standard deviation equals 5 degrees. For the system with spring the angle of the second pendulum (the bottom component of the double pendulum) is randomly chosen from the normal distribution where mean = 20 degrees and standard deviation = 5 degrees.
 
-Learn more about parameter setup in [Directory parameter_setups](https://citros.io/doc/docs_cli/structure/citros_structure/#directory-parameter_setups)
+Learn more about parameter setup in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups).
 
-### Simulation Setup
+#### Simulation Setup
 
 Check the `.citros/simulations/simulation_double_pendulum.json` and `.citros/simulations/simulation_system_with_spring.json` files. They are used to set the parameter setup files, launch files, memory to use and so on, please look in [Directory simulations page](https://citros.io/doc/docs_cli/structure/citros_structure#directory-simulations) for more information.
 
 ## Running the Scenario Using CITROS
 
-Next step is to [Upload project to CITROS Server](https://citros.io/doc/docs_tutorials/getting_started/#upload-to-citros-server).
-
-After the following steps everything is ready to run the simulations in the cloud. Let's run two scenarios - one for the system of the double pendulum and one for the system with spring, the names of the resulting batches are set by `-n` key. Let's set 7 simulation runs for each of them by `-c` key. `-r` defines that the runs will be processed remotely. After typing the following command you will be asked to select the corresponding simulation scenario:
-
-```bash
-citros run -n "double_pendulum_angles" -m "first run" -c 7 -r
-```
-
-```bash
-citros run -n "spring_system_angles" -m "first run" -c 7 -r
-```
+follow these steps to [Run each Simulation](../../docs/guides/getting_started#run-simulation):
+Simulation1:
+1. Name your  batch run simulation: `double_pendulum`
+2. Add a message to your batch run simulation: `first run`
+3. Run your simulation ** 7 times **.
+4. choose the `simulation_double_pendulum` simulation
+All the results will be saved under `.citros/data/simulation_gal_orbits/[batch_name]` folder. <br/>
+*in this case, batch_name is double_pendulum_angles*
 
 ## Results
 
-Check the results of the simulations using [`notebooks`](https://citros.io/pendulum/tree/main/notebooks) and [citros_data_analysis package](https://citros.io/doc/docs_data_analysis) which allows you to query, visualize and analyze the results.
+Check the results of the simulations using `notebook` and [citros_data_analysis package](../../docs/data_analysis/index) which allows you to query, visualize and analyze the results.
+
+1. [Create Database](../../docs/guides/getting_started#create-db)
+2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
+3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `double_pendulum.ipynb`. <br/>
+You will find the notebook under `citros_template/notebooks` folder.
 
 Let's query data from the batch `double_pendulum_angles` that we have just [created](#running-the-scenario-using-citros) and plot the trajectory of the second component of the double pendulum. As we mentioned in [Output of the Simulation](#output-of-the-simulation) section, the data is published to a topic `'/coordinates'`.
 
 ```python
-from citros_data_analysis import data_access as da
-citros = da.CitrosDB()
-
-F = citros.batch('double_pendulum_angles').topic('/coordinates').data()
+F = citros.topic('/coordinates').data()
 citros.plot_graph(F, 'data.p2.x', 'data.p2.y')
 ```
 
@@ -294,7 +280,7 @@ Let's print the initial angles of the second pendulum that were set randomly. Th
 ```python
 col_name = 'data.double_pendulum.ros__parameters.a1_0'
 
-a1_0 = citros.batch('double_pendulum_angles').topic('/config').data(col_name, additional_columns='sid').rename({col_name: 'a1_0'}, axis = 1)
+a1_0 = citros.topic('/config').data(col_name, additional_columns='sid').rename({col_name: 'a1_0'}, axis = 1)
 a1_0 = a1_0 [a1_0 ['a1_0'].notna()].set_index('sid')
 a1_0
 ```
@@ -309,8 +295,5 @@ sid	|a1_0
 6|	115.255676
 
 As we can see, the trajectories differ significantly and unpredictably although the initial parameters have quite close values.
-
-Refer to the notebook [notebooks/double_pendulum.ipynb](https://citros.io/pendulum/blob/main/notebooks/double_pendulum.ipynb) for more detailed information about batches and additional ideas on visualization, such as plotting the animation of the pendulum's motion.<br/>
-Additionally, examine [notebooks/system_with_spring.ipynb](https://citros.io/pendulum/blob/main/notebooks/system_with_spring.ipynb) for a detailed view of the spring system behavior.
 
 Feel free to set up your own simulations varying different parameters, create your own notebooks and explore pendulum systems with CITROS!

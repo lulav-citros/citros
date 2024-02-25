@@ -14,6 +14,14 @@ To clone the repository:
  git clone git@github.com:citros-garden/repository_name.git
    ```
 
+:::note
+For foxy based ROS projects run the commands 
+```
+sudo apt-get update
+sudo apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
+```
+:::
+
 ## Run Project in VScode
 1. Open the cloned repository in VScode:
 
@@ -21,6 +29,7 @@ To clone the repository:
  cd ~/project-name
  code .
  ```
+
 
 ## Open Project in VScode Dev Container
 
@@ -41,12 +50,12 @@ However, if you wish to work without dockers, please refer to the .devcontainer 
  ```    
  ros@docker-desktop:/workspaces/[Project Name]$
  ```
-5. [Build the project](#build-the-project)
-
+ 
 ## Build the project
 
  ```bash
  $ colcon build
  $ source install/local_setup.bash
  ```
+
 

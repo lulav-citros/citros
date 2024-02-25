@@ -1,5 +1,5 @@
 ---
-sidebar_position: 40
+sidebar_position: 90
 sidebar_label: 'Robotic Arm'
 ---
 
@@ -28,10 +28,12 @@ This project is designed to wrap the [Robotic Arm Simulation project](https://gi
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/robotic_arm.git
-```
+
+    ```bash
+    git clone git@github.com:citros-garden/robotic_arm.git
+    ````````
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
@@ -70,10 +72,8 @@ simulation_inverse_kinematic_pkg.launch.py	|Gazebo Robotic Arm launch file for I
 
 ## CITROS Initialization
 
-1. [Install CITROS](https://citros.io/doc/docs_tutorials/getting_started/#installation).
-2. Follow [these steps](https://citros.io/doc/docs_tutorials/getting_started/#initialization) to Initialize CITROS.
-
-Now you can see .citros directory in the explorer.
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 * Inverse kinematics <br/>
@@ -110,7 +110,7 @@ Now you can see .citros directory in the explorer.
 }
 ```
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 These parameters can be found in ```.citros/simulations/simulation_my_doosan_gazebo_controller.json``` for Forward Kinematic or ```.citros/simulations/simulation_inverse_kinematic_pkg.json``` for Inverse Kinematic. <br/>
@@ -121,11 +121,12 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `robotic_arm`
 2. Add a message to your batch run simulation: `local test run`
-3. Run your simulation ** 5 times **.
-
+3. Run your simulation ** 10 times **.
+4. choose the `simulation_my_doosan_gazebo_controller` simulation
 All the results will be saved under `.citros/data/simulation_robotic_arm_cessna` folder.
+*in this case, batch_name is robotic_arm*
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the layout file existing in `foxglove_layout` folder.
 
 ![gif](img/foxglove1.gif "Foxglove example")
 

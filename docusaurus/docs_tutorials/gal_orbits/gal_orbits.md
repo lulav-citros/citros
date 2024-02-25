@@ -7,17 +7,7 @@ sidebar_label: 'Galactic Orbits'
 
 ## Overview
 
-CITROS offers multiple advantages that can streamline your workflow:
-
-- Seamless pipeline from setting parameters and running simulations to analyzing output results with the [**citros_data_analysis**](https://citros.io/doc/docs_data_analysis/) package, and generating the final report;
-- Opportunity to run multiple simulations simultaneously;
-- Convenient and well-organized data storage system: you can store all your simulation data in the cloud, track their status via the CITROS website, and access this data from different devices;
-- Two options for organizing your work: manage and run simulations through a [web interface](https://citros.io/doc/docs/) or use the [command line](https://citros.io/doc/docs_cli).
-
-All these features make CITROS exceptionally useful and user-friendly for projects involving large data sets, diverse simulation scenarios, and complex analyses, which are common in various scientific research fields.
-
-The current project is dedicated to calculations of orbits of the globular star cluster for five different values of the Galactic disk mass: 95, 97.5, 100, 102.5 and 105 billions of the Sun masses.
-
+The current project is dedicated to calculations of orbits of the globular star cluster for five different values of the Galactic disk mass: 95, 97.5, 100, 102.5 and 105 billions of the Sun masses.<br/>
 Globular star clusters are gravitationally bound, dense and rich aggregations of stars, that can be found nearly in every galaxy, including our own Milky Way. In comparison with another type of star clusters, the open clusters, globular clusters are populated with older stars and can have up to millions of members. Another notable difference is that they are not part of the disk component but belong to the halo. This means they can be located far from both the thin and thick disks of the Galaxy, which have thicknesses of about 300 pc and 2.6 kpc, respectively.
 
 ![figNGC6316](img/NGC6316.png "NGC6316")
@@ -25,36 +15,31 @@ Globular star clusters are gravitationally bound, dense and rich aggregations of
 *globular star cluster NGC 6316, Atlas Image [or Atlas Image mosaic] obtained as part of the Two Micron All Sky Survey (2MASS), a joint project of the University of Massachusetts and the Infrared Processing and Analysis Center/California Institute of Technology, funded by the National Aeronautics and Space Administration and the National Science Foundation*.
 
 ## Prerequisites
-To calculate orbits the Python package [GalOrb](https://github.com/ChemelAA/GalOrb-Package) was adopted. It is automatically installed when the docker development container of the project is build. The orbits are calculated in a non-axisymmetric gravitational potential, using an adopted model of the Galaxy with four components: disk, spheroid, dark-matter halo, and a bar. Details on this package, as well as parameters required for simulations, can be found in the article [Globular Clusters: Absolute Proper Motions and Galactic Orbits](https://link.springer.com/article/10.1134/S1990341318020049), [arXiv](https://arxiv.org/pdf/1804.07086.pdf).
 
 1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#softwares-to-work-with-citros) to work with CITROS installed on your computer.
-2. We strongly recommend that you work with [dockers](/../../docs/guides/dockerfile_overview). However, If you are working without docker please check other dependencies in Dockerfile in [.devcontainer](https://github.com/citros-garden/gal_orbits/tree/main/.devcontainer) folder.
+2. To calculate orbits the Python package [GalOrb](https://github.com/ChemelAA/GalOrb-Package) was adopted. It is automatically installed when the docker development container of the project is build. We strongly recommend that you work with [dockers](/../../docs/guides/dockerfile_overview). However, If you are working without docker please check other dependencies in Dockerfile in [.devcontainer](https://github.com/citros-garden/gal_orbits/tree/main/.devcontainer) folder.
 
 ## Table of Contents
 1. [Installation](#installation)
 2. [Workspace Overview](#workspace-overview)
-    1. [Input Parameters](#input-parameters)
-    2. [Source Code and Launch File](#source-code-and-launch-file)
-    3. [Output of the Simulation](#output-of-the-simulation)
 3. [CITROS Initialization](#citros-initialization)
 4. [Scenario](#scenario)
-    1. [Parameter Setup](#parameter-setup)
-    2. [Simulation Setup](#simulation-setup)
 5. [Running the Scenario Using CITROS](#running-the-scenario-using-citros)
 6. [Results](#results)
 
+
 ## Installation
+1. Clone the repository:
 
-Clone the repository:
-
- ```bash
- git clone git@github.com:citros-garden/gal_orbits.git
- ```
-If you are working with devcontainer, make sure you installed [Visual Studio code](https://code.visualstudio.com/download) and then open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
+    ```bash
+    git clone git@github.com:citros-garden/gal_orbits.git
+    ``` 
+2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
-### Input Parameters
 
+#### Input Parameters
 Parameters of the simulation with their default values are listed in `src/gal_orbits/config/params.yaml` file:
 
 Parameter | Default | Description
@@ -76,38 +61,41 @@ atol | 1e-9| absolute value  of the error of the numerical integration scheme, a
 
 The table with the parameters for the 115 globular clusters may be found in article, mentioned above: [Globular Clusters: Absolute Proper Motions and Galactic Orbits](https://link.springer.com/article/10.1134/S1990341318020049), [arXiv](https://arxiv.org/pdf/1804.07086.pdf).
 
-### Source Code and Launch File
+#### Source Code and Launch File
 The source code is located in `src/gal_orbits/gal_orbits/`: `gal_orbits.py` - written in Python script that calculates orbits of the globular clusters and `__init__.py` file.
 
 The launch file is located in `src/gal_orbits/launch/gal_orbits.launch.py`.
 
-### Output of the Simulation
+#### Output of the Simulation
 
 The simulated data is published to a topic '/gal_orbits'. Each message is an [`Float64MultiArray`](https://docs.ros2.org/galactic/api/std_msgs/msg/Float64MultiArray.html) containing 11 variables:
 
-- t - time coordinate (in units of 10^7 years),
-- R - distance from the galactic axis (in kpc),
-- Vr - dR/dt, radial component of the velocity (in 100 km/s),
-- fi - the position angle relative to Sun direction, counting clockwise if seen from North Galactic Pole (in radians),
-- Vfi - R*d(fi)/dt, tangential velocity (in 100 km/s),
-- z - vertical distance from the galactic plane (in kpc),
-- Vz - dz/dt, vertical velocity (in 100 km/s),
-- E - total energy (in (100 km/s)^2),
-- C - angular momentum (in 100 kpc*km/s),
-- xg - R*cos(fi), X galactocentric coordinates (in kpc),
-- yg - R*sin(fi), Y galactocentric coordinates (in kpc)
+Variables | Description
+|--|--|
+t | time coordinate (in units of 10^7 years),
+R | distance from the galactic axis (in kpc),
+Vr | dR/dt, radial component of the velocity (in 100 km/s),
+fi | the position angle relative to Sun direction, counting clockwise if seen from North Galactic Pole (in radians),
+Vfi | R*d(fi)/dt, tangential velocity (in 100 km/s),
+z | vertical distance from the galactic plane (in kpc),
+Vz | dz/dt, vertical velocity (in 100 km/s),
+E | total energy (in (100 km/s)^2),
+C | angular momentum (in 100 kpc*km/s),
+xg | R*cos(fi), X galactocentric coordinates (in kpc),
+yg | R*sin(fi), Y galactocentric coordinates (in kpc)
 
 ## CITROS Initialization
 
-To start working with CITROS you need to install CITROS CLI package, log in, set ssh key and initialize the `.citros` repository. To do this please follow:
-1. [Install CITROS](../../docs/guides/getting_started#installation)
-2. [Initialize CITROS](../../docs/guides/getting_started#initialization)
+1. [Install CITROS](../../docs/guides/getting_started#installation).
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 
+The orbits are calculated in a non-axisymmetric gravitational potential, using an adopted model of the Galaxy with four components: disk, spheroid, dark-matter halo, and a bar. Details on this package, as well as parameters required for simulations, can be found in the article [Globular Clusters: Absolute Proper Motions and Galactic Orbits](https://link.springer.com/article/10.1134/S1990341318020049), [arXiv](https://arxiv.org/pdf/1804.07086.pdf).
+
 Let's check how the mass of the Galactic disk affects the orbit of the globular clusters. For this purpose we can run several simulations with different values of `M_disc` parameter.
 
-### Parameter Setup
+#### Parameter Setup
 
 Parameters are listed in file `.citros/parameter_setups/default_param_setup.json`. For example, to set simulation parameters for cluster **NGC 6316** and calculate its orbits with 5 slightly different masses of the Galaxy disk (95, 97.5, 100, 102.5 and 105 billions of the Sun masses), the following setup may be used:
 
@@ -148,44 +136,49 @@ Function *my_func.py:return_next_value* returns the next listed in `args` value 
 def return_next_value(arr, citros_context):
     return arr[citros_context['run_id']]
 ```
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](https://citros.io/doc/docs_cli/structure/citros_structure/#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
-### Simulation Setup
+#### Simulation Setup
 
 In `.citros/simulations/simulation_gal_orbits.json` you can define parameter setup files, launch files, memory to use and so on, please look in [Directory simulations page](https://citros.io/doc/docs_cli/structure/citros_structure#directory-simulations) for more information.
 
 ## Running the Scenario Using CITROS
 
-After adjusting [parameter](#parameter-setup) and [simulation](#simulation-setup) setups, you need to [Upload project to CITROS Server](../../docs/guides/getting_started#upload-to-citros-server)
+After adjusting [parameter](#parameter-setup) and [simulation](#simulation-setup) setups, follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
+1. Name your  batch run simulation: `galactic_orbits`
+2. Add a message to your batch run simulation: `first run`
+3. Run your simulation ** 5 times **.
 
-commit and push your changes and also build and push a docker image. To do this please follow the [Getting Started tutorial](https://citros.io/doc/docs_tutorials/getting_started/).
-
-And now it's time to run the simulation in the cloud! Do the following command to run simulation 5 times in the cloud and assign the results to a "galactic orbits" batch:
-
-```bash
-citros run -n "galactic orbits" -m "first run" -c 5 -r
-```
+All the results will be saved under `.citros/data/simulation_gal_orbits/[batch_name]` folder. <br/>
+*in this case, batch_name is galactic_orbits*
 
 ## Results
 
-Now when your simulation is complete, you're ready to check the results! Explore the notebooks in [`notebooks`](https://citros.io/gal_orbits/tree/main/notebooks). There, you'll find examples prepared using the [citros_data_analysis package](https://citros.io/doc/docs_data_analysis) on how to query, analyze and present results. Feel free to use them or create your own!
+Now when your simulation is complete, you're ready to check the results! 
 
-Let's take a look on the results of the following [notebook](https://citros.io/gal_orbits/blob/main/notebooks/Disk%20mass%20variation.ipynb).
+1. [Create Database](../../docs/guides/getting_started#create-db)
+2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
+3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `Disk mass variation.ipynb`. <br/>
+You will find the notebook under `citros_template/notebooks` folder.
+
+The notebook has examples prepared using the [citros_data_analysis package](../../docs/data_analysis/index) on how to query, analyze and present results. Feel free to use them or create your own!<br/>
+Let's take a look on the results of the notebook.
+
 We made [simulations](#scenario) of the orbits of the globular cluster NGC 6316 for 5 different masses of the Galactic disk `M_disk`. To get some qualitative idea on how the mass of the Galactic disk affect the orbits, let's first display the projections of the simulated orbits onto the Galactic disk:
 
 ```python
-from citros_data_analysis import data_access as da
-citros = da.CitrosDB()
+from citros import CitrosDB
+citros = CitrosDB(simulation = 'simulation_gal_orbits', batch = 'galactic_orbits')
 
-# query data using citros_data_analysis package, get pandas.DataFrame
-F = citros.batch('galactic orbits').topic('/gal_orbits').data(['data.data[9]', 'data.data[10]'])
+# query data using citros, get pandas.DataFrame
+F = citros.topic('/gal_orbits').data(['data.data[0]', 'data.data[9]', 'data.data[10]'])
 
 # change, calculate, explore your data - take full advantage of working with pandas python package
-F.rename({'data.data[9]': 'xg', 'data.data[10]': 'yg'}, axis = 1, inplace = True)
+F.rename({'data.data[0]': 't', 'data.data[9]': 'xg', 'data.data[10]': 'yg'}, axis = 1, inplace = True)
 
-# plot with citros_data_analysis
-fig, ax = citros.plot_graph(F, 'xg', 'yg', '-', set_x_label='x, kpc', set_y_label='y, kpc', 
-                            title='Projection onto the Galactic plane, NGC 6316')
+# plot with citros:
+fig, ax = citros.plot_graph(F, 'xg', 'yg', '-', set_x_label='x, kpc', set_y_label='y, kpc', title='Projection onto the Galactic plane, NGC 6316')
 
 # add additional information on the graph: position of the Sun and start of the simulation
 ax.plot(0, 0, 'y*', markersize = 12)
@@ -205,13 +198,11 @@ fig, ax = citros.plot_sigma_ellipse(f, 'xg', 'yg', n_std = [1,2,3], plot_origin=
                                     set_x_label= 'x, kpc', set_y_label= 'y, kpc', title = 't = 200 Myr')
 ```
 
-![fig_ngc6316_ellipse](img/fig_ngc6316_ellipse.png "fig_ngc6316_ellipse")
-
 We can also obtain a quantitative understanding of the extent to which the mass of the Galactic disk influences the cluster's orbits. For example, we can check whether the standard deviation of the distance `d` from the Galactic center calculated across different simulations does not exceed 15 percent of the overall average distance `d_mean`. The distance `d` from the Galactic center to the cluster can be calculated as the square root of the sum of the squared values in the 'R' ('data.data[1]') and 'z' ('data.data[5]') columns.
 
 ```python
 # query data
-F = citros.batch('galactic orbits_1').topic('/gal_orbits').data(['data.data[0]', 'data.data[1]', 'data.data[5]'])
+F = citros.topic('/gal_orbits').data(['data.data[0]', 'data.data[1]', 'data.data[5]'])
 F.rename({'data.data[0]': 't', 'data.data[1]': 'R', 'data.data[5]': 'z'}, axis = 1, inplace = True)
 
 import numpy as np
@@ -224,9 +215,8 @@ To calculate the average distance from the Galactic center to the cluster, a sim
 Although the time range for all simulations is the same (0-20 Myr), the number of points and their corresponding time moments vary. Therefore, we need to establish a correspondence between the different simulations. This can be achieved using the `citros_data_analysis.error_analysis package`. To align the data from different simulations, we can divide the time into a certain number of intervals and assign indexes to these intervals. For each interval, we then calculate the mean distance for each simulation. This approach yields a common set of time values for all simulations, along with a corresponding set of distance values determined for these time points.
 
 ```python
-from citros_data_analysis import error_analysis as analysis
-
-dataset = analysis.CitrosData(F, data_label=['d'], units = 'kpc')
+from citros import CitrosData
+dataset = CitrosData(F, data_label=['d'], units = 'kpc')
 db = dataset.bin_data(n_bins = 50, param_label = 't')
 
 # calculate statistics among different simulations
@@ -239,11 +229,10 @@ d_mean = stat.mean.mean()
 Using the `citros_data_analysis.validation` package, we can check whether the standard deviation is not very significant and is less than 15 percent of the average distance from the Galactic center:
 
 ```python
-from citros_data_analysis import validation as va
-
-V = va.Validation(F, data_label = 'd', param_label = 't', method = 'bin', num = 50, units = 'kpc')
+from citros import Validation
+V = Validation(F, data_label = 'd', param_label = 't', method = 'bin', num = 50, units = 'kpc')
 log, table, fig = V.std_test(limits = d_mean*0.15, n_std = 1, nan_passed = True, 
-                             std_area = True, std_color = 'b')
+                            std_area = True, std_color = 'b')
 ```
 
 ![fig_ngc6316_test](img/fig_ngc6316_test.png "fig_ngc6316_test")

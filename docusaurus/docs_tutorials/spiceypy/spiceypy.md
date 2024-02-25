@@ -1,5 +1,5 @@
 ---
-sidebar_position: 80
+sidebar_position: 120
 sidebar_label: 'SpiceyPy'
 ---
 
@@ -29,11 +29,13 @@ All project installation, code overview and usage details are also available on 
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/spiceypy.git
-```
+
+    ```bash
+    git clone git@github.com:citros-garden/spiceypy.git
+    ```
 
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
@@ -57,8 +59,6 @@ spiceypy_cassini.launch.py		|SpiceyPy Cassini simulation launch file 	|spiceypy_
 1. [Install CITROS](../../docs/guides/getting_started#installation).
 2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
-Now you can see .citros directory in the explorer.
-
 ## Scenario
 This simple scenario can be used to find the Cassini Spacecraft trajectory relative to Saturn's barycenter within specified time intervals. <br/>
 Users can input the desired time bounds, and the output of the simulation will contain critical flight data, such as altitude, velocity, and other relevant parameters, recorded over time intervals. <br/>
@@ -81,7 +81,7 @@ The parameter setup is listed in ```.citros/parameter_setups/default_param_setup
 }
 ```
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 This parameters can be found in ```.citros/simulations/simulation_spiceypy_cassini.json```. <br/>
@@ -91,7 +91,7 @@ Look in [Directory simulations page](../../docs/advanced_guides/citros_structure
 
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
 1. Name your  batch run simulation: `spiceypy_cassini`
-2. Add a message to your batch run simulation: `local test run`
+2. Add a message to your batch run simulation: `test run`
 3. Run your simulation ** 10 times **.
 
 All the results will be saved under `.citros/data/simulation_spiceypy_cessna/[batch_name]` folder. <br/>

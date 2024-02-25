@@ -1,5 +1,5 @@
 ---
-sidebar_position: 150
+sidebar_position: 80
 sidebar_label: 'Poliastro'
 ---
 
@@ -33,10 +33,12 @@ All project installation, code overview and usage details are also available on 
 
 ## Installation
 1. Clone the repository:
-```bash
-git clone git@github.com:citros-garden/poliastro.git
-```
+
+    ```bash
+    git clone git@github.com:citros-garden/poliastro.git
+    ```
 2. Open the repository in the [VScode Dev Container](../../docs/guides/citros_garden#run-project-in-vscode).
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
@@ -86,10 +88,9 @@ poliastro_simple_orbit.launch.py		|Poliastro Maneuver simulation launch file |po
 
 
 ## CITROS Initialization
+
 1. [Install CITROS](../../docs/guides/getting_started#installation).
 2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
-
-Now you can see .citros directory in the explorer.
 
 ## Scenario
 The Poliastro project consists of three packages suitable for orbital mechanics calculations:
@@ -132,7 +133,7 @@ The parameter will be set by a NumPy random function and its setup is listed inÂ
         },
 ```
 
-Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-simulations) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
+Learn more about parameter setup and defining custom functions in [Directory parameter_setups](../../docs/advanced_guides/citros_structure#directory-parameter_setups) and [Adding Functions to Parameter Setup](../../docs/guides/config_params) pages.
 
 In addition to parameter setup, you can configure the simulation performance setup (timeout, CPU, GPU and Memory) as well.
 This parameters can be found in ```.citros/simulations/simulation_poliastro_atmo_drag.json```. <br/>
@@ -144,37 +145,34 @@ We will run two simulations of the three exist in the project - `simulation_poli
 
 Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation)
 
+#### Simple Orbit Simulation
 run the simulation with the following details:
 1. Name your batch run simulation: `poliastro_simple_orbit`
 2. Add a message to your batch run simulation: `simple orbit run`
 3. Run your simulation ** 10 times **.
 4. choose the `simulation_poliastro_simple_orbit` simulation
-
 All the results will be saved under `.citros/data/simulation_poliastro_simple_orbit` folder.<br/>
 *in this case, batch_name is poliastro_simple_orbit*
 
-
+#### Atmo Drag Simulation
 After the above will run, go a head and run another simulation with the following details:
 1. Name your batch run simulation: `poliastro_atmo_drag`
 2. Add a message to your batch run simulation: `atmo drag run`
 3. Run your simulation ** 10 times **.
 4. choose the `simulation_poliastro_atmo_drag` simulation
-
 All the results will be saved under `.citros/data/simulation_poliastro_atmo_drag/[batch_name]` folder.<br/>
 *in this case, batch_name is poliastro_atmo_drag*
 
 
-To plot the local run results you can use [Foxglove](../../docs/guides/foxglove_visual) with the `atmo_drag_layout.json` layout file existing in `foxglove_layout` folder.
+To plot the results you can use [Foxglove](../../docs/guides/foxglove_visual) with the `atmo_drag_layout.json` layout file existing in `foxglove_layout` folder.
 
 ![gif](img/main.gif "Foxglove example")
-
 
 
 ## Results
 
 1. [Create Database](../../docs/guides/getting_started#create-db)
-2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)<br/>
-*Don't forget uploading both simulation*
+2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
 3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
 4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `pliastro_notebook_example.ipynb`. <br/>
 You will find the notebook under `citros_template/notebooks` folder.

@@ -74,6 +74,13 @@ module.exports = {
           id: "guides/foxglove_visual",
           label: "Foxglove",
         },
+        {
+          type: "doc",
+          id: "guides/citros_garden",
+          label: "CITROS Garden",
+        },
+
+        
       ],
     },
 

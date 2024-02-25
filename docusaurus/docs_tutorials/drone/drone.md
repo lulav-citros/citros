@@ -20,10 +20,9 @@ The repository contains launch file which launch:
 
 ## Prerequisites
 
-1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#softwares-to-work-with-citros) to work with CITROS installed on your computer.
+1. Please make sure you have all the [necessary softwares](../../docs/guides/getting_started#prerequisites-for-working-with-citros) to work with CITROS installed on your computer.
 2. Install [Visual Studio code](https://code.visualstudio.com/download).
-3. We strongly recommend that you work with [dockers](../../docs/guides/dockerfile_overview). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/drone/tree/main/.devcontainer) directory in project's repo, the dependencies you need are in the `Dockerfile` and `install.sh` files.
-
+3. We strongly recommend that you work with [dockers](../../docs/guides/dockerfile_overview). However, if you wish to work without dockers, please refer to the [.devcontainer](https://github.com/citros-garden/drone/tree/main/.devcontainer) directory in project's repo, the Dockerfile contains all the necessary dependencies for the project, and the install script will clone PX4-Autopilot and build the firmware, along with building ROS 2 workspace.
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -36,24 +35,22 @@ The repository contains launch file which launch:
 
 ## Installation
 1. Clone the repository from Github:
+ 
  ```sh
  git clone git@github.com:citros-garden/drone.git
  ```
-
+ 
 2. Open the repository in the [VScode Dev Container](../../docs/guides/getting_started#open-project-in-vscode-dev-container).
-
-The Dockerfile contains all the necessary dependencies for the project, and the install script will clone PX4-Autopilot and build the firmware, along with building ROS 2 workspace.
+3. [Build the project](../../docs/guides/citros_garden#build-the-project).
 
 ## Workspace Overview
 
 After installation the project, we can start configuring it.
 The Workspace contains the PX4-Autopilot repository (v1.14), which few modifications to the DDS setup, and a ROS 2 workspace containing the required DDS packages for the communication, along with drone-related packages for setting up different parameters and an offboard node.
 
-### Parameters 	
-[citros_cli](../../docs/guides/config_params) provides more information about how to change the parameters by the user.
 This is a list of all the ROS 2 parameters that can be control by the user wish:
 
-|     Parameter     | Description | Package |
+| Parameter| Description | Package |
 | -------- |    ------- |  ------- | 
 | MC_PITCHRATE_D | Pitch rate d | px4_config |
 | MC_PITCHRATE_I | Pitch rate i |  px4_config |
@@ -100,9 +97,12 @@ This is a list of all the ROS 2 parameters that can be control by the user wish:
 | windGustDirectionMean | The mean direction of the gust wind|  world |
 | windGustDirectionVariance | The direction variance of the wind gust|  world |
 
+You can find [here](../../docs/guides/config_params) more information about how to change the parameters by the user.
+
 ## CITROS Initialization
+
 1. [Install CITROS](../../docs/guides/getting_started#installation).
-2. Follow [these steps](../../docs/guides/getting_started#initialization) to Initialize CITROS.
+2. [Initialize CITROS](../../docs/guides/getting_started#initialization).
 
 ## Scenario
 We assign four points: `p1`, `p2`, `p3`, and `p4` to the drone. The drone starts hovering at each point in order of 1-2-3-4. When it reaches point 4, it goes back to point 1 and repeats the process as many times as the value of the `repeats` parameter that we have provided.
@@ -111,25 +111,22 @@ You can see the parameters file for that simulation under the code section insid
 
 ## Running the Scenario Using CITROS
 
-After completing the configuration of the parameters file, we proceeded to execute it with CITROS.
+Follow these steps to [Run Simulation](../../docs/guides/getting_started#run-simulation):
+1. Name your  batch run simulation: `drone_offboard_simulation`
+2. Add a message to your batch run simulation: `drone test simulation`
+3. Run your simulation ** 50 times **.
+4. Choose the `simulation_offboard_position_control` simulation
 
-1. First ensure that the project has been [built and sourced](../../docs/guides/getting_started#build-the-project)
-2. [Upload project to CITROS Server](../../docs/guides/getting_started#upload-to-citros-server)
-3. Open the [drone](https://citros.io/drone) project.
-4. Navigate to the [`Runs` tab](https://citros.io/drone/batch).
-5. Click on the `Run simulation` button on the right.
-6. Configure your simulation. In this example we will run the [scenario](#scenario) 50 times:
-    1. Simulation: simulation_offboard_position_control.json
-    2. Repeats: 50
-    3. Parallelism: 10
-    4. name: Tutorial-scenario-simulation
-7. Press red `Run Simulation` button.
-
-![Alt text](img/drone_simulation.png)  
-
-Once the simulations are complete, we can execute the [notebook](https://citros.io/drone/blob/main/notebooks/wind_analysis.ipynb).  
+All the results will be saved under `.citros/data/simulation_offboard_position_control/[batch_name]` folder. <br/>
+*in this case, batch_name is Tutorial-scenario-simulation*
 
 ## Results
+
+1. [Create Database](../../docs/guides/getting_started#create-db)
+2. [Upload data to the database](../../docs/guides/getting_started#load-data-to-db)
+3. [Verify the data was loaded](../../docs/guides/getting_started#verify-data-loaded)
+4. [Execute the Notebook](../../docs/guides/getting_started#execute-notebook) `wind_analysis.ipynb`. <br/>
+You will find the notebook under `citros_template/notebooks` folder.
 
 These are part of the results you will receive in the notebook:
 
