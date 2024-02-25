@@ -2,6 +2,23 @@
 
 
 
+## v0.2.63 (2024-02-25)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`e6697e0`](https://github.com/lulav-citros/citros/commit/e6697e080aa85b984e4df2342cc1cc3405efae01))
+
+### Fix
+
+* fix(link): image
+
+Update citros-link.png ([`4170674`](https://github.com/lulav-citros/citros/commit/41706748089207a82bc859a9cf9a6eb3f0efc81c))
+
+### Unknown
+
+* Update citros-link.png ([`2b19f16`](https://github.com/lulav-citros/citros/commit/2b19f166708f1bcee1aa73d0f90162db9b39fc69))
+
+
 ## v0.2.62 (2024-02-25)
 
 ### Documentation
