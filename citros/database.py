@@ -146,9 +146,11 @@ class CitrosDB:
 
         """
         connection = None
+        MAX_RETRIES = 6
         retries = 0
-        sleep_durations = [2**x for x in range(10)]
+        sleep_durations = [2**x for x in range(MAX_RETRIES)]
         while not connection:
+            self.log.info(f"Trying to connected to Postgres Database...")
             try:
                 connection = psycopg2.connect(
                     user=self.db_user,
@@ -165,15 +167,21 @@ class CitrosDB:
                 return connection
 
             except psycopg2.OperationalError as e:
-                if "too many clients" in str(e).lower():
-                    time.sleep(sleep_durations[retries])
-                    retries = retries + 1 if retries < 9 else 9
+                if "Too many clients" in str(e).lower():
                     self.log.warning(e)
                 if "Connection refused" in str(e).lower():
                     raise NoDBConnection()
                 else:
                     self.log.error(e)
-                    break
+
+                time.sleep(sleep_durations[retries])
+                retries = retries + 1
+
+                if retries > MAX_RETRIES:
+                    self.log.error(
+                        f"Failed to connect to Postgres Database after {retries} retries"
+                    )
+                    raise NoDBConnection()
 
     def create_table(self, connection, schema_name, table_name, version):
         from jinja2 import Environment, FileSystemLoader
