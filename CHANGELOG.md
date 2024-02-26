@@ -2,6 +2,23 @@
 
 
 
+## v0.2.64 (2024-02-26)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`54cee28`](https://github.com/lulav-citros/citros/commit/54cee28a02c23e6520371de6265de34bd26867b9))
+
+### Fix
+
+* fix(db): connection loop
+
+Fix connection retry logic in CitrosDB class ([`4938031`](https://github.com/lulav-citros/citros/commit/493803106b2686ef3eedb0e4aea207e8d3961b20))
+
+### Unknown
+
+* Fix connection retry logic in CitrosDB class ([`7489c61`](https://github.com/lulav-citros/citros/commit/7489c61256a0c10f71badfc8e7d63302a4f61b9b))
+
+
 ## v0.2.63 (2024-02-25)
 
 ### Documentation
