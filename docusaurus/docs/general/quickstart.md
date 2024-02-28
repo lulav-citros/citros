@@ -7,6 +7,14 @@ to install citros
 ```bash
 pip install citros --upgrade
 ```
+:::note
+For foxy and/or humble based ROS projects you may need to pre-install mcap support before running citros.
+```
+sudo apt-get update
+sudo apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
+```
+:::
+
 go to your ros2 workspace and run citros init, this will create a `.citros` folder with all the required files.
 ```bash
 citros init
