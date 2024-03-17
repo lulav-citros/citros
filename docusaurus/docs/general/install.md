@@ -21,14 +21,24 @@ to make sure the installation was successful, run
 
 to get the installed version. 
 
-In some environments you **might** also need to make sure the installation directory is in your `PATH` environment variable, either by 
+### Notes
+1. In some environments you **might** also need to make sure the installation directory is in your `PATH` environment variable, either by 
 
+    ```bash
     $ source ~/.profile
+    ```
+ 
+    or 
 
-or 
-
+    ```bash
     $ set PATH=/usr/local/bin:$PATH
+    ```
 
+2. For foxy and/or humble based ROS projects you may need to pre-install mcap support before running citros.
+    ```bash
+    sudo apt-get update
+    sudo apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
+    ```
 ## Environment Variables
    
    `citros_cli` uses several environment variables, some of which you may change according to your needs, although for the most part, the defaults are likely to be what you want. Generally speaking, most of these are only used by developers of the package, and should not be used.

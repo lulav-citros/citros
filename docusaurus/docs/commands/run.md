@@ -20,6 +20,14 @@ $ citros run [-h] [-dir DIR] [-s [SIMULATION]] [-n [NAME]] [-m [MESSAGE]]
              [--version [VERSION]] [-l] [-c [COMPLETIONS]] [-i [INDEX]] [-d] [-v]
 ```
 
+:::note
+For foxy and/or humble based ROS projects you may need to pre-install mcap support before running citros.
+```
+sudo apt-get update
+sudo apt-get install -y ros-humble-rosbridge-suite ros-humble-rosbag2-storage-mcap
+```
+:::
+
 ## Options
 
 Option|Description
