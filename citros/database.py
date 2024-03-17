@@ -1,11 +1,16 @@
 import os
 import time
 import psycopg2
+import psycopg2.extras
 import importlib_resources
 
 from jinja2 import Template
 from pathlib import Path
 from .logger import get_logger, shutdown_log
+
+
+class NoDBConnection(Exception):
+    pass
 
 
 class CitrosDB:
@@ -73,8 +78,8 @@ class CitrosDB:
         """
 
         connection = self.connect()
+        # connection.autocommit = True
         cursor = connection.cursor()
-        connection.autocommit = True
 
         # Define variables for rendering the template
         context = {
@@ -98,9 +103,11 @@ class CitrosDB:
         try:
             self.log.debug(rendered_sql)
             cursor.execute(rendered_sql)
+
         except psycopg2.DatabaseError as e:
             self.log.error(f"Database already exist ... log: {e}")
 
+        connection.commit()
         connection.close()
 
     def connect(self):
@@ -139,9 +146,11 @@ class CitrosDB:
 
         """
         connection = None
+        MAX_RETRIES = 6
         retries = 0
-        sleep_durations = [2**x for x in range(10)]
+        sleep_durations = [2**x for x in range(MAX_RETRIES)]
         while not connection:
+            self.log.info(f"Trying to connected to Postgres Database...")
             try:
                 connection = psycopg2.connect(
                     user=self.db_user,
@@ -150,20 +159,31 @@ class CitrosDB:
                     port=self.db_port,
                     database=self.db_name,
                 )
-                self.log.info("Successfully connected to Postgres Database")
+                with connection.cursor() as cursor:
+                    cursor.execute("select version();")
+                    data = cursor.fetchone()
+                    self.log.info(f"Successfully connected to Postgres Database {data}")
 
                 return connection
 
             except psycopg2.OperationalError as e:
-                if "too many clients" in str(e).lower():
-                    time.sleep(sleep_durations[retries])
-                    retries = retries + 1 if retries < 9 else 9
+                if "Too many clients" in str(e).lower():
                     self.log.warning(e)
+                if "Connection refused" in str(e).lower():
+                    raise NoDBConnection()
                 else:
                     self.log.error(e)
-                    break
 
-    def create_table(self, connection, schema_name, table_name):
+                time.sleep(sleep_durations[retries])
+                retries = retries + 1
+
+                if retries > MAX_RETRIES:
+                    self.log.error(
+                        f"Failed to connect to Postgres Database after {retries} retries"
+                    )
+                    raise NoDBConnection()
+
+    def create_table(self, connection, schema_name, table_name, version):
         from jinja2 import Environment, FileSystemLoader
 
         if connection is None:
@@ -177,6 +197,7 @@ class CitrosDB:
             "ORGANIZATION_NAME": self.organization_name,
             "SCHEMA_NAME": schema_name,
             "TABLE_NAME": table_name,
+            "VERSION": version,
         }
 
         with open(
@@ -191,9 +212,55 @@ class CitrosDB:
 
         try:
             cursor.execute(rendered_sql)
+            connection.commit()
         except Exception as ex:
             self.log.error(ex)
             return
+
+    def hot_reload_set_status(self, connection, simulation, batch, version, status):
+        cursor = connection.cursor()
+        sql = f"""
+        UPDATE public.hot_reload
+            SET status = '{status}'
+        WHERE simulation = '{simulation}' AND batch = '{batch}' AND version = '{version}';    
+        """
+        try:
+            cursor.execute(sql)
+            connection.commit()
+        except Exception as ex:
+            self.log.error(ex)
+            return
+
+    def hot_reload_get_info(self):
+
+        info = {}
+
+        sql = f"select simulation,batch,version,status,updated_at,total_size,data_size,index_size,rows, total_row_size, row_size from hot_reload join db_info on hot_reload.simulation = db_info.schema and hot_reload.batch = db_info.table;"
+
+        try:
+            connection = self.connect()
+            cursor = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+            cursor.execute(sql)
+            result = cursor.fetchall()
+
+            for row in result:
+                if info.get(row["simulation"]) is None:
+                    info[row["simulation"]] = {}
+                if info.get(row["simulation"]).get(row["batch"]) is None:
+                    info[row["simulation"]][row["batch"]] = {}
+
+                info[row["simulation"]][row["batch"]][row["version"]] = dict(row)
+
+            connection.commit()
+            connection.close()
+            return info
+        except NoDBConnection:
+            self.log.error("No connection to database, cant get info.")
+            return None
+        except Exception as ex:
+            self.log.error(ex)
+            return {}
 
     def clean_db(self):
         from jinja2 import Environment, FileSystemLoader
@@ -221,6 +288,7 @@ class CitrosDB:
             cursor.execute(rendered_sql)
             connection.commit()
             self.log.debug(rendered_sql)
+            connection.close()
         except Exception as ex:
             self.log.error(ex)
 

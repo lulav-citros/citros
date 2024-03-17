@@ -2,6 +2,279 @@
 
 
 
+## v0.2.64 (2024-02-26)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`54cee28`](https://github.com/lulav-citros/citros/commit/54cee28a02c23e6520371de6265de34bd26867b9))
+
+### Fix
+
+* fix(db): connection loop
+
+Fix connection retry logic in CitrosDB class ([`4938031`](https://github.com/lulav-citros/citros/commit/493803106b2686ef3eedb0e4aea207e8d3961b20))
+
+### Unknown
+
+* Fix connection retry logic in CitrosDB class ([`7489c61`](https://github.com/lulav-citros/citros/commit/7489c61256a0c10f71badfc8e7d63302a4f61b9b))
+
+
+## v0.2.63 (2024-02-25)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`e6697e0`](https://github.com/lulav-citros/citros/commit/e6697e080aa85b984e4df2342cc1cc3405efae01))
+
+### Fix
+
+* fix(link): image
+
+Update citros-link.png ([`4170674`](https://github.com/lulav-citros/citros/commit/41706748089207a82bc859a9cf9a6eb3f0efc81c))
+
+### Unknown
+
+* Update citros-link.png ([`2b19f16`](https://github.com/lulav-citros/citros/commit/2b19f166708f1bcee1aa73d0f90162db9b39fc69))
+
+
+## v0.2.62 (2024-02-25)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`0d58d8c`](https://github.com/lulav-citros/citros/commit/0d58d8c7729cedc20606d643b75a16096b1083fc))
+
+### Fix
+
+* fix(doc): added blog back
+
+build fix, add blog ([`0011f2f`](https://github.com/lulav-citros/citros/commit/0011f2fec050d92d5c749a619468553624689fbf))
+
+### Unknown
+
+* build fix, add blog ([`9c96b30`](https://github.com/lulav-citros/citros/commit/9c96b30b60015d5a04f9ecf2cb190d763107f87d))
+
+
+## v0.2.61 (2024-02-25)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`3613607`](https://github.com/lulav-citros/citros/commit/3613607d1c6e03f20ab790e1d36dc33e09a6beb4))
+
+### Fix
+
+* fix(doc): added some tutorials
+
+Maria documentation - tutorials updates ([`81f6558`](https://github.com/lulav-citros/citros/commit/81f65584b5d61c60ebaf491d95254c3050544cbd))
+
+### Unknown
+
+* comit tutorials ([`dc671dd`](https://github.com/lulav-citros/citros/commit/dc671ddea27cbc07a2a8f8710323f23d8a8d2e75))
+
+
+## v0.2.60 (2024-02-21)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`d824595`](https://github.com/lulav-citros/citros/commit/d824595edaa7eccca07849b8728a6080b392e132))
+
+### Fix
+
+* fix(ptyhon): 3.8 support
+
+Dev ([`13ef279`](https://github.com/lulav-citros/citros/commit/13ef279de1dc78b0dd7eaadb7f2d0ec0430513db))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`c0c3671`](https://github.com/lulav-citros/citros/commit/c0c36710291d0100b3faf38b776f6618c953d816))
+
+* Update setup.py and formatter.py, add asciinema readme ([`9b5411f`](https://github.com/lulav-citros/citros/commit/9b5411fd71b59b853e9374966a925fa7845b8efd))
+
+* tutorials updates ([`3bfc851`](https://github.com/lulav-citros/citros/commit/3bfc85122ec6f0745450992987c0e8d545fc225a))
+
+* tutorials updates ([`a98d6bc`](https://github.com/lulav-citros/citros/commit/a98d6bc5467d5e8a2dc18606966390433fe2ef1d))
+
+
+## v0.2.59 (2024-02-20)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`5d0dc4d`](https://github.com/lulav-citros/citros/commit/5d0dc4d31c88064cf4cac6bd8c02afa5aa0bba94))
+
+### Fix
+
+* fix(python): support for python &gt;= 3.10 
+
+Dev ([`4cf2934`](https://github.com/lulav-citros/citros/commit/4cf2934da7a4d7f093527aaae1235225cc68920e))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`9886467`](https://github.com/lulav-citros/citros/commit/9886467474f7b754a635144262a9eb822bc582e6))
+
+* Add python_requires to setup.py ([`46cc708`](https://github.com/lulav-citros/citros/commit/46cc7083dc958993921034326627fcf5929788a3))
+
+* tutorials update ([`517c61e`](https://github.com/lulav-citros/citros/commit/517c61e68311f2e358e7b83ae7ca6fbbfd17883f))
+
+* Refactor database connection code ([`98fba03`](https://github.com/lulav-citros/citros/commit/98fba03f6ad2d4ea3c650576a74d8030c9f64598))
+
+* Fix typo in print statement ([`d70aee0`](https://github.com/lulav-citros/citros/commit/d70aee08ef934737d811ee007fe09ac5cf9698f3))
+
+* Fix typo in print statement ([`fa93edf`](https://github.com/lulav-citros/citros/commit/fa93edfdb645a3a7d599a9c35351a3087acc5aae))
+
+* small updates ([`fa1065a`](https://github.com/lulav-citros/citros/commit/fa1065a8b18b2d843281c3034297de6a9f6db90f))
+
+
+## v0.2.58 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`0b85156`](https://github.com/lulav-citros/citros/commit/0b85156fd3e2072831f83392bd20a0fb634266f0))
+
+### Fix
+
+* fix(db): create bug fix
+
+Dev ([`9bdbdfb`](https://github.com/lulav-citros/citros/commit/9bdbdfb35e1970692d0cb9ce927b56b6804bfb58))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`774d7df`](https://github.com/lulav-citros/citros/commit/774d7df1f997f1f65124f804401505de8588cf40))
+
+* Remove network=&#34;host&#34; from container creation ([`6385607`](https://github.com/lulav-citros/citros/commit/63856077dec97e385498188aa3bbfb6cd4d8ef7c))
+
+
+## v0.2.57 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`57b1dbc`](https://github.com/lulav-citros/citros/commit/57b1dbc7d11f19c8a101031c21a8bc840443c7e3))
+
+### Fix
+
+* fix(sim): added custom messages support
+
+Dev ([`439d9da`](https://github.com/lulav-citros/citros/commit/439d9dad560110a875bd9d75f219b4d9218fe2d7))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`066bbc5`](https://github.com/lulav-citros/citros/commit/066bbc5542943d63b6ae2d15293566ad26243f9f))
+
+* Fix msgpath validation in Simulation class ([`7563cde`](https://github.com/lulav-citros/citros/commit/7563cdecdbecfc00c91e113b4e4f2560330c7edd))
+
+* small fixes ([`1b6cc4a`](https://github.com/lulav-citros/citros/commit/1b6cc4ab1093f51670b51db05cbc369d6e8560f3))
+
+
+## v0.2.56 (2024-02-19)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`7cb9b60`](https://github.com/lulav-citros/citros/commit/7cb9b600b5aeaa9779cc762051c9b3a2f4fdd015))
+
+### Fix
+
+* fix(simulation): upload msgs 
+
+Dev ([`48ea6ae`](https://github.com/lulav-citros/citros/commit/48ea6aef71a0dcea8e28483da5af6bee3781d1e7))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`84557b6`](https://github.com/lulav-citros/citros/commit/84557b6a4d30147bf54e89cbd4442ea15cf0a14d))
+
+* Add error handling for starting container ([`75f8cd9`](https://github.com/lulav-citros/citros/commit/75f8cd98ac24ad360027be1d471cd6a8e0930351))
+
+* tutorials fix ([`3368c1b`](https://github.com/lulav-citros/citros/commit/3368c1b9cbda885cab98bf08204bfd63e1723cfb))
+
+
+## v0.2.55 (2024-02-18)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`1f116ac`](https://github.com/lulav-citros/citros/commit/1f116acb878bca12a58dc342031551237861b53c))
+
+### Fix
+
+* fix(db): db related commands
+
+Dev ([`86c6cd1`](https://github.com/lulav-citros/citros/commit/86c6cd1703cfbd823176fcf9eae13142ce0415ce))
+
+### Unknown
+
+* Merge branch &#39;main&#39; into dev ([`6bef7a3`](https://github.com/lulav-citros/citros/commit/6bef7a3c662dc9336131111ede65d069056ce186))
+
+* Fix notebook execution and add new envtest notebook ([`f993ad8`](https://github.com/lulav-citros/citros/commit/f993ad86eae1ec9d166cc586eee6e5722084b9d0))
+
+* Update database scripts and CLI implementation ([`f98837e`](https://github.com/lulav-citros/citros/commit/f98837eb3feb48f8466e3d06d96c55260ca637eb))
+
+* lunar hopper checked ([`efbd2c7`](https://github.com/lulav-citros/citros/commit/efbd2c7517d6a4711b82338cc8206710f7ccb9b8))
+
+* updated tutorials, git link ([`97db041`](https://github.com/lulav-citros/citros/commit/97db041bf9d21b2a0207d0d9357cf758a34f5023))
+
+* Commented out unnecessary cursor.close() calls in batch_uploader.py ([`d617372`](https://github.com/lulav-citros/citros/commit/d6173723f831dd552b98565b9d09f012a931579d))
+
+
+## v0.2.54 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`9b7aff2`](https://github.com/lulav-citros/citros/commit/9b7aff2695d9ab9ea6a2c49145f3e42d6306b5fa))
+
+### Fix
+
+* fix(exception): when there is no bag files in the batch. 
+
+Dev ([`6af68eb`](https://github.com/lulav-citros/citros/commit/6af68ebfb85d591c8430c0d70da5cb4e63c94183))
+
+### Unknown
+
+* Add error logging for empty bags directory ([`350d511`](https://github.com/lulav-citros/citros/commit/350d51144d860aa1f565dca798c4388c92a8af82))
+
+* Merge branch &#39;main&#39; into dev ([`c69cd07`](https://github.com/lulav-citros/citros/commit/c69cd0711ce6d1be67f368a8e3303102a24fc1c3))
+
+* Commented out exception for missing bags in BatchUploader ([`6af3f03`](https://github.com/lulav-citros/citros/commit/6af3f0399b1e0ffee36a2d326766d7d8091e5fac))
+
+* Merge remote-tracking branch &#39;refs/remotes/origin/maria-documentation&#39; into maria-documentation ([`f3cbb2d`](https://github.com/lulav-citros/citros/commit/f3cbb2d5e56806de52b7dd8e271deb1feb7a0d65))
+
+* add source ([`90c67de`](https://github.com/lulav-citros/citros/commit/90c67de43b50acbe8ee08c7a2e04a5eac04dfe87))
+
+* update introduction tutorial ([`87db91f`](https://github.com/lulav-citros/citros/commit/87db91fc24fd40ec4849039cac1fa99e16dc4ddc))
+
+
+## v0.2.53 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`84c2afd`](https://github.com/lulav-citros/citros/commit/84c2afde87d0ec4ebdd7b9ad04b9d66e3cd38165))
+
+### Fix
+
+* fix(db): commit sql
+
+fix(db): commit sql ([`0d6f5b9`](https://github.com/lulav-citros/citros/commit/0d6f5b989a074cbc7b756a9bac6efdca36de5aa4))
+
+* fix(db): commit sql ([`b1bae17`](https://github.com/lulav-citros/citros/commit/b1bae17aa2468fdfb40c9b673204686917cff347))
+
+
+## v0.2.52 (2024-02-14)
+
+### Documentation
+
+* docs(docusaurus): action to make docs ([`afa0c6d`](https://github.com/lulav-citros/citros/commit/afa0c6de5c14a170dfdc6344e413d4f812e4d74d))
+
+### Fix
+
+* fix(doc): documentation update
+
+add report commands, add commands overview fix commands ([`846cd6b`](https://github.com/lulav-citros/citros/commit/846cd6bde9bd09bb47a29243806bd00a572ffaf8))
+
+### Unknown
+
+* Merge branch &#39;dev&#39; into maria-documentation ([`897c478`](https://github.com/lulav-citros/citros/commit/897c478b5f01ee28ff3e03e29a951129ad5a4b0c))
+
+* new doc ([`b31c8e8`](https://github.com/lulav-citros/citros/commit/b31c8e87391e55d6ef6c88e65235b6aa9d5516de))
+
+* run command ([`d3bcbad`](https://github.com/lulav-citros/citros/commit/d3bcbad49dbf2460caf38f4127c57993f99a12c0))
+
+* add report commands, add commands overview ([`f9033c2`](https://github.com/lulav-citros/citros/commit/f9033c21e1286bc85c12daf8bf07fe764783dce7))
+
+
 ## v0.2.51 (2024-02-13)
 
 ### Documentation

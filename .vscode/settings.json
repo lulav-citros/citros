@@ -16,7 +16,7 @@
       "server": "localhost",
       "port": 5454,
       "driver": "PostgreSQL",
-      "name": "localhost",
+      "name": "citros",
       "database": "citros",
       "username": "citros"
     }

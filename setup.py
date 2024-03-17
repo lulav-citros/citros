@@ -53,4 +53,5 @@ setup(
         "Source Code": "https://github.com/lulav/citros_cli",
         "Bug Tracker": "https://github.com/lulav/citros_cli/issues",
     },
+    # python_requires=">=3.10",
 )

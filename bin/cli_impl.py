@@ -249,7 +249,7 @@ source install/local_setup.bash""",
     # if index != -1 then we run only a part of the batch, so we don't want to load to DB yet.
     if getattr(args, "index", -1) == -1:
         try:
-            print("Upoading data po DB...")
+            print("Uploading data to DB...")
             batch.unload()
             batch.upload()
         except NoConnectionToCITROSDBException:
@@ -471,7 +471,7 @@ def data_list(args, argv):
 
     try:
         citros = Citros(root=args.dir, verbose=args.verbose, debug=args.debug)
-        flat_batches = citros.get_batches_flat()
+        flat_batches, hot_reload_info = citros.get_batches_flat()
     except CitrosNotFoundException:
         print(
             f"[red]Error:[/red] {Path(args.dir).expanduser().resolve()} has not been initialized with citros."
@@ -517,6 +517,10 @@ def data_list(args, argv):
     # (sim if sim[-1] != "/" else sim[:-1])
     console = Console()
     console.print(table)
+    if hot_reload_info is None:
+        print(
+            '* [yellow]No connection to db, all status is [red]"UNKNOWN" [yellow]please start/create a db.'
+        )
 
 
 def data_info(args, argv):
@@ -779,6 +783,8 @@ def data_db_create(args, argv):
             raise e
         return
 
+    import requests
+
     try:
         container = client.containers.get(config.DB_CONTAINER_NAME)
         print("found existing DB container, starting it...")
@@ -788,6 +794,9 @@ def data_db_create(args, argv):
         return
     except docker.errors.NotFound:
         container = None
+    except requests.exceptions.HTTPError as er:
+        print(f"[red]could not start container: {er}.")
+        return
 
     print("creating DB container...")
     container = client.containers.run(
@@ -800,6 +809,7 @@ def data_db_create(args, argv):
         ],
         detach=True,
         ports={"5432/tcp": config.CITROS_DATA_PORT},
+        # network="host",
     )
     # TODO [enhancement]: check container status instead of sleep.
     sleep(3)
