@@ -199,19 +199,19 @@ const config = {
               },
             ],
           },
-          {
-            title: "Legal",
-            items: [
-              {
-                label: "Terms and Conditions",
-                to: "https://www.lulav.space",
-              },
-              {
-                label: "Privacy Policy",
-                to: "https://www.lulav.space",
-              },
-            ],
-          },
+          // {
+          //   title: "Legal",
+          //   items: [
+          //     {
+          //       label: "Terms and Conditions",
+          //       to: "https://www.lulav.space",
+          //     },
+          //     {
+          //       label: "Privacy Policy",
+          //       to: "https://www.lulav.space",
+          //     },
+          //   ],
+          // },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Lulav Space.`,
       },
